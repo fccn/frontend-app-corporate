@@ -8,8 +8,10 @@ import {
 import App from './App';
 import messages from './i18n';
 
+import './index.scss';
+
 subscribe(APP_READY, () => {
-  const root = createRoot(document.getElementById('root'));
+  const root = createRoot(document.getElementById('root') as HTMLElement);
 
   root.render(
     <StrictMode>
@@ -19,7 +21,7 @@ subscribe(APP_READY, () => {
 });
 
 subscribe(APP_INIT_ERROR, (error) => {
-  const root = createRoot(document.getElementById('root'));
+  const root = createRoot(document.getElementById('root') as HTMLElement);
 
   root.render(
     <StrictMode>
