@@ -1,7 +1,9 @@
 import { useContext } from 'react';
+import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   DataTable, DataTableContext, Dropdown, TablePaginationMinimal,
 } from '@openedx/paragon';
+import messages from './messages';
 
 type DataTableContextValue = {
   state: {
@@ -17,13 +19,14 @@ type TableFooterProps = {
 const TableFooter = ({
   pageSizeOptions = [10, 20, 30, 40],
 }: TableFooterProps) => {
+  const intl = useIntl();
   const { setPageSize, state } = useContext<DataTableContextValue>(DataTableContext);
 
   return (
     <DataTable.TableFooter>
       <div className="row w-100">
         <Dropdown className="col col-6">
-          Rows per page:
+          {intl.formatMessage(messages.tableFooterRowSelector)}
           <Dropdown.Toggle
             id="table-number-rows-selector"
             className="small ml-1 p-1"

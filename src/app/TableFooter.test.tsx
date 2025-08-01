@@ -1,6 +1,6 @@
-import { IntlProvider } from '@edx/frontend-platform/i18n';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
 import { DataTableContext } from '@openedx/paragon';
+import { renderWrapper } from '@src/setupTest';
 import TableFooter from './TableFooter';
 
 const mockSetPageSize = jest.fn();
@@ -18,12 +18,10 @@ const renderWithContext = (pageSize = 10, pageSizeOptions = [10, 20, 30, 40]) =>
     setPageSize: mockSetPageSize,
   };
 
-  return render(
-    <IntlProvider locale="en">
-      <DataTableContext.Provider value={contextValue}>
-        <TableFooter pageSizeOptions={pageSizeOptions} />
-      </DataTableContext.Provider>
-    </IntlProvider>,
+  return renderWrapper(
+    <DataTableContext.Provider value={contextValue}>
+      <TableFooter pageSizeOptions={pageSizeOptions} />
+    </DataTableContext.Provider>,
   );
 };
 

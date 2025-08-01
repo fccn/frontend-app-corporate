@@ -1,13 +1,15 @@
-import { IntlProvider } from '@edx/frontend-platform/i18n';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { renderWrapper } from '@src/setupTest';
 import CorporatePartnerList from './CorporatePartnerList';
 
 jest.mock('@tanstack/react-query');
 jest.mock('../api');
 
 // Mock component to avoid Paragon-specific rendering issues
-jest.mock('../../app/TableFooter', () => <div data-testid="table-footer" />);
+jest.mock('../../app/TableFooter', () => function TableFooter() {
+  return <div data-testid="table-footer" />;
+});
 
 const mockPartners = [
   {
@@ -45,7 +47,7 @@ describe('CorporatePartnerList', () => {
   });
 
   it('renders a table with partner data', () => {
-    render(<IntlProvider locale="en"><CorporatePartnerList /></IntlProvider>);
+    renderWrapper(<CorporatePartnerList />);
 
     // Check if partner names are rendered
     expect(screen.getByText('Example University')).toBeInTheDocument();
@@ -72,9 +74,7 @@ describe('CorporatePartnerList', () => {
       isLoading: true,
     });
 
-    render(<IntlProvider locale="en"><CorporatePartnerList /></IntlProvider>);
-
-    // You might want to update this depending on how `isLoading` is reflected
-    expect(screen.getByRole('status')).toBeInTheDocument(); // assuming DataTable uses progressbar
+    renderWrapper(<CorporatePartnerList />);
+    expect(screen.getByRole('status')).toBeInTheDocument();
   });
 });

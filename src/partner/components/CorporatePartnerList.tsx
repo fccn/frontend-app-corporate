@@ -1,4 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   DataTable, Hyperlink, Icon, OverlayTrigger, TextFilter, Tooltip, Truncate,
 } from '@openedx/paragon';
@@ -7,6 +8,8 @@ import { CorporatePartner } from '@src/app/types';
 import { getPartners } from '../api';
 import TableFooter from '../../app/TableFooter';
 
+import messages from '../messages';
+
 type CellValue = {
   row: {
     original: CorporatePartner;
@@ -14,6 +17,7 @@ type CellValue = {
 };
 
 const CorpotatePartnerList = () => {
+  const intl = useIntl();
   const { data, isLoading } = useSuspenseQuery({
     queryKey: ['partners'],
     queryFn: () => getPartners(),
@@ -32,7 +36,7 @@ const CorpotatePartnerList = () => {
       additionalColumns={[
         {
           id: 'action',
-          Header: 'Action',
+          Header: intl.formatMessage(messages.headerAction),
           Cell: ({ row }: CellValue) => (
             <OverlayTrigger
               key="view"
@@ -51,7 +55,7 @@ const CorpotatePartnerList = () => {
       data={data}
       columns={[
         {
-          Header: 'Partner Name',
+          Header: intl.formatMessage(messages.headerName),
           accessor: 'name',
           Cell: ({ row }: CellValue) => (
             <Hyperlink className="d-block" destination={row.original.homepage} variant="muted">
@@ -63,19 +67,19 @@ const CorpotatePartnerList = () => {
           ),
         },
         {
-          Header: 'Catalogs',
+          Header: intl.formatMessage(messages.headerCatalogs),
           accessor: 'catalogs',
         },
         {
-          Header: 'Courses',
+          Header: intl.formatMessage(messages.headerCourses),
           accessor: 'courses',
         },
         {
-          Header: 'Enrollments',
+          Header: intl.formatMessage(messages.headerEnrollments),
           accessor: 'enrollments',
         },
         {
-          Header: 'Certified Learners',
+          Header: intl.formatMessage(messages.headerAction),
           accessor: 'certified',
         },
       ]}
