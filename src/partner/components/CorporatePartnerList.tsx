@@ -35,16 +35,16 @@ const CorpotatePartnerList = () => {
           Header: 'Action',
           Cell: ({ row }: CellValue) => (
             <OverlayTrigger
-              key={'view'}
-              overlay={
-                <Tooltip id={`tooltip-view`}>
+              key="view"
+              overlay={(
+                <Tooltip id="tooltip-view">
                   View
                 </Tooltip>
-              }
+              )}
             >
-              <Hyperlink destination={`/${row.original.code}/catalogs`}  aria-label="view-action"><Icon src={Visibility} /></Hyperlink>
+              <Hyperlink destination={`/${row.original.code}/catalogs`} aria-label="view-action"><Icon src={Visibility} /></Hyperlink>
             </OverlayTrigger>
-          )
+          ),
         },
       ]}
       itemCount={data.length}
@@ -56,7 +56,7 @@ const CorpotatePartnerList = () => {
           Cell: ({ row }: CellValue) => (
             <Hyperlink className="d-block" destination={row.original.homepage} variant="muted">
               <div className="d-flex align-items-center">
-                <img src={row.original.logo} style={{ maxWidth: '100px', marginRight: '8px' }} />
+                <img alt={`${row.original.name} logo`} src={row.original.logo} style={{ maxWidth: '100px', marginRight: '8px' }} />
                 <Truncate.Deprecated lines={2}>{row.original.name}</Truncate.Deprecated>
               </div>
             </Hyperlink>

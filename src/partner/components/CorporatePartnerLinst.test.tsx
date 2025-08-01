@@ -2,14 +2,12 @@ import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { render, screen } from '@testing-library/react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import CorporatePartnerList from './CorporatePartnerList';
-import { getPartners } from '../api';
-import '@testing-library/jest-dom';
 
 jest.mock('@tanstack/react-query');
 jest.mock('../api');
 
 // Mock component to avoid Paragon-specific rendering issues
-jest.mock('../../app/TableFooter', () => () => <div data-testid="table-footer" />);
+jest.mock('../../app/TableFooter', () => <div data-testid="table-footer" />);
 
 const mockPartners = [
   {
