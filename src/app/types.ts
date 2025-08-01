@@ -3,6 +3,10 @@ export type CorporatePartner = {
   name: string;
   logo: string;
   homepage: string;
+  catalogs: number;
+  courses: number;
+  enrollments: number;
+  certified: number;
 };
 
 export type Learner = {
@@ -21,12 +25,16 @@ export type CorporateCourse = {
 
 export type CorporateCatalog = {
   name: string;
-  isPublic: boolean;
   supportEmail: string;
+  emailDomainRegex: string[];
   userLimit: number;
   enrollmentLimit: number;
   availableStartDate: Date;
   availableEndDate: Date;
   alternativeLink: string;
-  courses: number;
+  isSelfEnrollment: boolean;
+  isPublic: boolean;
+  enableCustomCourses: boolean;
+  additionalAuthorizationMessage: string;
+  courses: CorporateCourse[];
 };

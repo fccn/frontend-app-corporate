@@ -1,7 +1,6 @@
 import { Route } from 'wouter';
-import AppLayout from './app/AppLayout';
+import CorpotatePartnerPage from './partner/CorporatePartnerPage';
 
-const Component = () => <AppLayout title="Corporate Partner"><div>testing</div></AppLayout>;
-const Router = () => <Route component={Component} />;
+const Router = () => <Route component={CorpotatePartnerPage} />;
 
 export default Router;

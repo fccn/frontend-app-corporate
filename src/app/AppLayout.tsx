@@ -2,7 +2,7 @@ import { ReactNode, useContext } from 'react';
 import { AppContext } from '@edx/frontend-platform/react';
 import { Container } from '@openedx/paragon';
 import Header from '@edx/frontend-component-header';
-import Footer from '@edx/frontend-component-footer';
+import { FooterSlot } from '@edx/frontend-component-footer';
 
 type AppLayoutProps = {
   children: ReactNode;
@@ -16,12 +16,12 @@ const AppLayout = ({ children, title, withFooter = true }: AppLayoutProps) => {
   return (
     <>
       <Header mainMenuItems={[]} />
-      <Container size="xl">
-        {title && <h1 className="mb-4">{title}</h1>}
+      <Container size="xl" className="p-4">
+        {title && <h1 className="my-4">{title}</h1>}
         {children}
       </Container>
 
-      {withFooter && <Footer />}
+      {withFooter && <FooterSlot />}
     </>
   );
 };
