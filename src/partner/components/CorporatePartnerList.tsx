@@ -1,20 +1,25 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
-  DataTable, Hyperlink, Icon, OverlayTrigger, TextFilter, Tooltip, Truncate,
+  DataTable, TextFilter,
 } from '@openedx/paragon';
-import { Visibility } from '@openedx/paragon/icons';
+
 import { CorporatePartner } from '@src/app/types';
+import { navigate } from 'wouter/use-browser-location';
+import TableName from '@src/app/TableName';
 import { getPartners } from '../api';
 import TableFooter from '../../app/TableFooter';
 
 import messages from '../messages';
+import ActionItem from '../../app/ActionItem';
 
 type CellValue = {
   row: {
     original: CorporatePartner;
   }
 };
+
+const tableActions = ['view'];
 
 const CorpotatePartnerList = () => {
   const intl = useIntl();
@@ -37,18 +42,13 @@ const CorpotatePartnerList = () => {
         {
           id: 'action',
           Header: intl.formatMessage(messages.headerAction),
-          Cell: ({ row }: CellValue) => (
-            <OverlayTrigger
-              key="view"
-              overlay={(
-                <Tooltip id="tooltip-view">
-                  View
-                </Tooltip>
-              )}
-            >
-              <Hyperlink destination={`/${row.original.code}/catalogs`} aria-label="view-action"><Icon src={Visibility} /></Hyperlink>
-            </OverlayTrigger>
-          ),
+          Cell: ({ row }: CellValue) => tableActions.map((type) => (
+            <ActionItem
+              key={`action-${type}-${row.original.code}`}
+              type={type}
+              onClick={() => navigate(`/catalogs/${row.original.code}/`)}
+            />
+          )),
         },
       ]}
       itemCount={data.length}
@@ -58,12 +58,12 @@ const CorpotatePartnerList = () => {
           Header: intl.formatMessage(messages.headerName),
           accessor: 'name',
           Cell: ({ row }: CellValue) => (
-            <Hyperlink className="d-block" destination={row.original.homepage} variant="muted">
-              <div className="d-flex align-items-center">
-                <img alt={`${row.original.name} logo`} src={row.original.logo} style={{ maxWidth: '100px', marginRight: '8px' }} />
-                <Truncate.Deprecated lines={2}>{row.original.name}</Truncate.Deprecated>
-              </div>
-            </Hyperlink>
+            <TableName
+              key={`description-view-${row.original.code}`}
+              name={row.original.name}
+              destination={row.original.homepage}
+              image={row.original.logo}
+            />
           ),
         },
         {
@@ -79,7 +79,7 @@ const CorpotatePartnerList = () => {
           accessor: 'enrollments',
         },
         {
-          Header: intl.formatMessage(messages.headerAction),
+          Header: intl.formatMessage(messages.headerCertified),
           accessor: 'certified',
         },
       ]}
