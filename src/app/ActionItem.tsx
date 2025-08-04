@@ -37,7 +37,6 @@ export const actionConfig: Record<string, ActionConfigItem> = {
   analytics: {
     tooltip: messages.tableActionAnalytics,
     icon: InsertChartOutlined,
-    color: 'info',
   },
 };
 
