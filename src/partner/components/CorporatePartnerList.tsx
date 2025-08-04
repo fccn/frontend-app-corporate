@@ -57,6 +57,7 @@ const CorpotatePartnerList = () => {
         {
           Header: intl.formatMessage(messages.headerName),
           accessor: 'name',
+          // eslint-disable-next-line react/no-unstable-nested-components
           Cell: ({ row }: CellValue) => (
             <TableName
               key={`description-view-${row.original.code}`}
