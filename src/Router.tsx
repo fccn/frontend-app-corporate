@@ -26,7 +26,6 @@ const Router = () => (
         </Route>
       </Switch>
     </WouterRouter>
-
   </Suspense>
 );
 
