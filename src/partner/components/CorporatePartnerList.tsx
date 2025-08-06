@@ -5,8 +5,8 @@ import {
 } from '@openedx/paragon';
 
 import { CorporatePartner } from '@src/app/types';
-import { navigate } from 'wouter/use-browser-location';
 import TableName from '@src/app/TableName';
+import { useNavigate } from '@src/hooks';
 import { getPartners } from '../api';
 import TableFooter from '../../app/TableFooter';
 
@@ -22,6 +22,7 @@ type CellValue = {
 const tableActions = ['view'];
 
 const CorpotatePartnerList = () => {
+  const navigate = useNavigate();
   const intl = useIntl();
   const { data, isLoading } = useSuspenseQuery({
     queryKey: ['partners'],
