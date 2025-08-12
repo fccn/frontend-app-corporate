@@ -18,10 +18,16 @@ export type Learner = {
 };
 
 export type CorporateCourse = {
+  courseId: string;
   name: string;
   link: string;
   logo: string;
-  students: Learner[];
+  enrollments: number;
+  certified: number;
+  completionRate: number;
+  position: number;
+  courseDates: string;
+  enrollmentDates: string;
 };
 
 export type CorporateCatalog = {
@@ -55,3 +61,8 @@ export interface PaginatedResponse<T> {
   start: number;
   results: T[];
 }
+export interface CellValue {
+  row: {
+    original: object;
+  }
+};
