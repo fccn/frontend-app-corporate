@@ -7,6 +7,7 @@ import {
 import { CorporatePartner } from '@src/app/types';
 import TableName from '@src/app/TableName';
 import { useNavigate } from '@src/hooks';
+import { paths } from '@src/constants';
 import { getPartners } from '../api';
 import TableFooter from '../../app/TableFooter';
 
@@ -47,7 +48,7 @@ const CorpotatePartnerList = () => {
             <ActionItem
               key={`action-${type}-${row.original.code}`}
               type={type}
-              onClick={() => navigate(`/catalogs/${row.original.code}/`)}
+              onClick={() => navigate(paths.catalogs.buildPath(row.original.code))}
             />
           )),
         },
