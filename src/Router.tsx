@@ -1,6 +1,5 @@
 import { Route, Router as WouterRouter, Switch } from 'wouter';
 
-import { getConfig } from '@edx/frontend-platform';
 import { lazy, Suspense } from 'react';
 import { paths } from '@src/constants';
 
@@ -8,7 +7,7 @@ const CorporatePartnerPage = lazy(() => import('@src/partner/CorporatePartnerPag
 
 const Router = () => (
   <Suspense fallback={<div>Loading...</div>}>
-    <WouterRouter base={getConfig().PUBLIC_PATH}>
+    <WouterRouter base={paths.base}>
       <Switch>
         <Route path={paths.partners.path} component={CorporatePartnerPage} />
 
