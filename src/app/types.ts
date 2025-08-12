@@ -17,10 +17,16 @@ export type Learner = {
 };
 
 export type CorporateCourse = {
+  courseId: string;
   name: string;
   link: string;
   logo: string;
-  students: Learner[];
+  enrollments: number;
+  certified: number;
+  completionRate: number;
+  position: number;
+  courseDates: string;
+  enrollmentDates: string;
 };
 
 export type CorporateCatalog = {
@@ -37,4 +43,10 @@ export type CorporateCatalog = {
   enableCustomCourses: boolean;
   additionalAuthorizationMessage: string;
   courses: CorporateCourse[];
+};
+
+export interface CellValue {
+  row: {
+    original: object;
+  }
 };

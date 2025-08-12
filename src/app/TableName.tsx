@@ -2,15 +2,15 @@ import {
   Hyperlink, Image, Truncate, Row,
 } from '@openedx/paragon';
 
-interface TableNameProps {
+interface TableNameProps extends React.HTMLAttributes<HTMLDivElement> {
   name: string;
-  destination: string;
+  destination?: string;
   image?: null | string;
 }
 
-const TableName = ({ name, destination, image = null }: TableNameProps) => (
+const TableName = ({ name, destination, image = null, className }: TableNameProps) => (
   <Hyperlink
-    className="d-block"
+    className={`d-block ${className || ''}`}
     destination={destination}
     variant="muted"
   >
