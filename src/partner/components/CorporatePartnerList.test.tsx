@@ -4,8 +4,8 @@ import { renderWrapper } from '@src/setupTest';
 import CorporatePartnerList from './CorporatePartnerList';
 
 jest.mock('@tanstack/react-query');
-jest.mock('wouter/use-browser-location', () => ({
-  navigate: jest.fn(),
+jest.mock('@src/hooks', () => ({
+  useNavigate: () => jest.fn(),
 }));
 jest.mock('../api');
 
