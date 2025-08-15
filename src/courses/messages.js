@@ -3,7 +3,7 @@ import { defineMessages } from '@edx/frontend-platform/i18n';
 const messages = defineMessages({
   headerAction: {
     id: 'corporate.partner.table.header.action',
-    defaultMessage: 'Action',
+    defaultMessage: 'Actions',
     description: 'Header for the action column',
   },
   headerName: {
@@ -38,7 +38,7 @@ const messages = defineMessages({
   },
   headerCompletion: {
     id: 'corporate.partner.table.header.completion',
-    defaultMessage: 'Certified Learners',
+    defaultMessage: 'Completion Rate',
     description: 'Header for the completion rate column, describing the percentage of students who completed the course',
   },
 });

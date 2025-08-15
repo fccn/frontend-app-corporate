@@ -1,3 +1,5 @@
+import { useQueryClient } from '@tanstack/react-query';
+import { useParams } from 'wouter';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import AppLayout from '../app/AppLayout';
 import CoursesList from './CoursesList';
@@ -7,16 +9,21 @@ import PageHeader from '@src/app/PageHeader';
 
 const CoursesPage = () => {
   const intl = useIntl();
+  const { catalogId } = useParams<{ catalogId?: string }>();
+  const queryClient = useQueryClient();
+  const courseContext = queryClient.getQueryData(['catalogs', catalogId]);
+  
   return (
     <AppLayout>
       <PageHeader
-        context={intl.formatMessage({ id: 'courses.page.context', defaultMessage: 'Corporate Training Courses' })}
-        title={intl.formatMessage({ id: 'courses.page.title', defaultMessage: 'Corporate Training Courses' })}
-        subtitle={intl.formatMessage({ id: 'courses.page.subtitle', defaultMessage: 'Explore our range of corporate training courses designed to enhance employee skills and productivity.' })}
-        imageUrl="https://corporatetraining.com/assets/images/courses-header.jpg"
+        title={'courseContext.name'}
+        subtitle={'courseContext.name'}
+        imageUrl={'courseContext.logo'}
         stats={[
-          { title: intl.formatMessage({ id: 'courses.page.totalCourses', defaultMessage: 'Total Courses' }), value: '50' },
-          { title: intl.formatMessage({ id: 'courses.page.enrolledEmployees', defaultMessage: 'Enrolled Employees' }), value: '10,000+' },
+          { title: intl.formatMessage({ id: 'courses.page.totalCourses', defaultMessage: 'Courses' }), value: '50' },
+          { title: intl.formatMessage({ id: 'courses.page.enrolledEmployees', defaultMessage: 'Enrollments' }), value: '10,000+' },
+          { title: intl.formatMessage({ id: 'courses.page.totalCourses', defaultMessage: 'Certified Students' }), value: '50' },
+          { title: intl.formatMessage({ id: 'courses.page.enrolledEmployees', defaultMessage: 'Completion Rate' }), value: '10,000+' },
         ]}
         actions={
           <button className="btn btn-primary">
@@ -24,7 +31,7 @@ const CoursesPage = () => {
           </button>
         }
       />
-      <CoursesList />
+      <CoursesList catalog={catalogId}/>
     </AppLayout>
   );
 };
