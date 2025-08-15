@@ -36,17 +36,17 @@ const PageHeader: React.FC<PageHeaderProps> = ({
         srcAlt="Card image"
       />
       <Card.Body className="row">
-        <Card.Header
-          title={title}
-          subtitle="Subtitle"
-        />
         <Card.Section>
-          <Stack direction="horizontal" gap={3}>
+          <h4>{title}</h4>
+          {subtitle}
+        </Card.Section>
+        <Card.Section>
+          <Stack direction="horizontal" sm gap={3} className="text-center flex-wrap">
             {stats.map((stat, idx) => (
               <React.Fragment key={idx}>
                 <div>
-                  <div className='text-gray-800'>{stat.title}</div>
-                  <div style={{ fontWeight: 600, fontSize: '1.1rem' }}>{stat.value}</div>
+                  <div className='x-small'>{stat.title}</div>
+                  <div>{stat.value}</div>
                 </div>
                 {idx < stats.length - 1 && (
                   <div style={{ borderLeft: '1px solid #e0e0e0', height: '2.5rem', margin: '0 1rem' }} />
@@ -55,10 +55,10 @@ const PageHeader: React.FC<PageHeaderProps> = ({
             ))}
           </Stack>
         </Card.Section>
-        <Card.Section orientation={isExtraSmall ? "horizontal" : "vertical"}>
-          <Button>Action 1</Button>
-          <Button>Action 2</Button>
+        {actions && <Card.Section orientation={isExtraSmall ? "horizontal" : "vertical"}>
+          {actions}
         </Card.Section>
+        }
       </Card.Body>
 
     </Card>

@@ -24,7 +24,7 @@ const mockData: CorporateCourse[] =  [
     "courseId": "CC101",
     "name": "Effective Communication in the Workplace",
     "link": "https://corporatetraining.com/courses/cc101",
-    "logo": "https://corporatetraining.com/assets/logos/communication.png",
+    "logo": "https://via.placeholder.com/150",
     "enrollments": 1200,
     "certified": 950,
     "completionRate": 79.2,
@@ -36,7 +36,7 @@ const mockData: CorporateCourse[] =  [
     "courseId": "CC102",
     "name": "Project Management Fundamentals",
     "link": "https://corporatetraining.com/courses/cc102",
-    "logo": "https://corporatetraining.com/assets/logos/project-management.png",
+    "logo": "https://via.placeholder.com/150",
     "enrollments": 870,
     "certified": 720,
     "completionRate": 82.7,
@@ -48,7 +48,7 @@ const mockData: CorporateCourse[] =  [
     "courseId": "CC103",
     "name": "Cybersecurity Essentials for Employees",
     "link": "https://corporatetraining.com/courses/cc103",
-    "logo": "https://corporatetraining.com/assets/logos/cybersecurity.png",
+    "logo": "https://via.placeholder.com/150",
     "enrollments": 1500,
     "certified": 1300,
     "completionRate": 86.7,
@@ -60,7 +60,7 @@ const mockData: CorporateCourse[] =  [
     "courseId": "CC104",
     "name": "Diversity and Inclusion Training",
     "link": "https://corporatetraining.com/courses/cc104",
-    "logo": "https://corporatetraining.com/assets/logos/diversity.png",
+    "logo": "https://via.placeholder.com/150",
     "enrollments": 980,
     "certified": 840,
     "completionRate": 85.7,
@@ -72,7 +72,7 @@ const mockData: CorporateCourse[] =  [
     "courseId": "CC105",
     "name": "Time Management for Professionals",
     "link": "https://corporatetraining.com/courses/cc105",
-    "logo": "https://corporatetraining.com/assets/logos/time-management.png",
+    "logo": "https://via.placeholder.com/150",
     "enrollments": 1100,
     "certified": 960,
     "completionRate": 87.3,
@@ -82,15 +82,15 @@ const mockData: CorporateCourse[] =  [
   }
 ]
 
-const CoursesList = () => {
+const CoursesList = ({catalogId}) => {
   const intl = useIntl();
-  // const {
-  //   data= mockData,
-  //   isLoading,
-  //   isError,
-  //   error,
-  // } = useCatalogCourses('course-1');
-  const data = mockData; // For testing purposes, replace with actual data fetching
+  const {
+    data= mockData,
+    isLoading,
+    isError,
+    error,
+  } = useCatalogCourses(catalogId);
+  // const data = mockData; // For testing purposes, replace with actual data fetching
   console.debug('CoursesList data', data);
   return (
     <DataTable

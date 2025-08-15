@@ -3,7 +3,8 @@ import { logError } from '@edx/frontend-platform/logging';
 
 export const getCourses = async (catalogId) => {
   try {
-    const { data } = getAuthenticatedHttpClient().get(`/api/courses/${catalogId}`);
+    console.debug('Fetching courses for catalogId:', catalogId);
+    const { data } = await getAuthenticatedHttpClient().get(`/api/courses/${catalogId}`);
     return data.courses;
   } catch (error) {
     logError(error);
