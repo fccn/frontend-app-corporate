@@ -25,27 +25,17 @@ const CatalogsList = () => {
   const navigate = useNavigate();
   const intl = useIntl();
 
-  //   const { partnerId } = useParams<{ partnerId: string }>();
+  const { partnerId } = useParams<{ partnerId: string }>();
 
   const { data: partnerCatalogs, isLoading: isLoadingCatalogs } = useSuspenseQuery({
     queryKey: ['partnerCatalogs'],
     queryFn: () => getPartnerCatalogs(),
   });
 
-  //   const { data: partnerDetails, isLoading: isLoadingDetails } = useSuspenseQuery({
-  //     queryKey: ['partnerDetails', partnerId],
-  //     queryFn: () => getPartnerDetails(partnerId),
-  //   });
-
-  const partnerDetails = {
-    name: 'Centro Nacional de Cibersegurança PORTUGAL',
-    description: 'Manage your catalogs effectively.',
-    image: 'https://www.uc.pt/site/assets/files/545679/cncs_2.1685x774-cropx1314-is.1082x0-is-pid619177.jpg',
-    catalogsQuantity: 14,
-    coursesQuantity: 120,
-    enrollmentsQuantity: 2503,
-    certifiedLearnersQuantity: 260,
-  };
+  const { data: partnerDetails, isLoading: isLoadingDetails } = useSuspenseQuery({
+    queryKey: ['partnerDetails'],
+    queryFn: () => getPartnerDetails(),
+  });
 
   const tableActions = [{
     type: 'view',
@@ -112,21 +102,21 @@ const CatalogsList = () => {
           {
             Header: intl.formatMessage(messages.headerCourses),
             accessor: 'courses',
-            Cell: ({ row }: CellValue) => (
-              <>{row.original.courses.length}</>
-            ),
           },
           {
             Header: intl.formatMessage(messages.headerEnrollments),
-            accessor: 'userLimit',
+            accessor: 'enrollments',
           },
           {
             Header: intl.formatMessage(messages.headerCertified),
-            accessor: 'certified',
+            accessor: 'certifiedLearners',
           },
           {
             Header: intl.formatMessage(messages.headerCompletion),
-            accessor: 'completion',
+            accessor: 'completionRate',
+            Cell: ({ row }: CellValue) => (
+              <>{row.original.completionRate * 100}%</>
+            ),
           },
         ]}
       >
