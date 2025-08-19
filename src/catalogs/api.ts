@@ -12,9 +12,9 @@ export const getPartnerCatalogs = async (partnerId?: string): Promise<CorporateC
   }
 };
 
-export const getPartnerDetails = async (partnerId: string): Promise<CorporateDetails> => {
+export const getPartnerDetails = async (partnerId?: string): Promise<CorporateDetails> => {
   try {
-    const response = await getAuthenticatedHttpClient().get(`/api/partners/${partnerId}`);
+    const response = await getAuthenticatedHttpClient().get(`/api/partner${partnerId ? `/${partnerId}` : ''}`);
     return response.data;
   } catch (error) {
     logError(error);
