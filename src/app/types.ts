@@ -16,27 +16,12 @@ export type Learner = {
   assesmentToComplete: number;
 };
 
-export type CorporateCourse = {
-  name: string;
-  link: string;
-  logo: string;
-  students: Learner[];
-};
-
 export type CorporateCatalog = {
   name: string;
-  supportEmail: string;
-  emailDomainRegex: string[];
-  userLimit: number;
-  enrollmentLimit: number;
-  availableStartDate: Date;
-  availableEndDate: Date;
-  alternativeLink: string;
-  isSelfEnrollment: boolean;
-  isPublic: boolean;
-  enableCustomCourses: boolean;
-  additionalAuthorizationMessage: string;
-  courses: CorporateCourse[];
+  courses: number;
+  enrollments: number;
+  certifiedLearners: number;
+  completionRate: number;
 };
 
 export type CorporateDetails = {
