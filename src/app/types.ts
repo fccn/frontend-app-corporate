@@ -39,3 +39,13 @@ export type CorporateCatalog = {
   additionalAuthorizationMessage: string;
   courses: CorporateCourse[];
 };
+
+export type CorporateDetails = {
+  name: string;
+  description?: string;
+  image: string;
+  catalogsQuantity: number;
+  coursesQuantity: number;
+  enrollmentsQuantity: number;
+  certifiedLearnersQuantity: number;
+};

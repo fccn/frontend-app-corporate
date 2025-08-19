@@ -10,7 +10,8 @@ import HeaderDescription from '@src/app/HeaderDescription';
 import TableFooter from '@src/app/TableFooter';
 import ActionItem from '@src/app/ActionItem';
 
-import { getPartnerCatalogs } from '../api';
+import { useParams } from 'wouter';
+import { getPartnerCatalogs, getPartnerDetails } from '../api';
 
 import messages from '../messages';
 
@@ -24,10 +25,27 @@ const CatalogsList = () => {
   const navigate = useNavigate();
   const intl = useIntl();
 
-  const { data, isLoading } = useSuspenseQuery({
+  //   const { partnerId } = useParams<{ partnerId: string }>();
+
+  const { data: partnerCatalogs, isLoading: isLoadingCatalogs } = useSuspenseQuery({
     queryKey: ['partnerCatalogs'],
     queryFn: () => getPartnerCatalogs(),
   });
+
+  //   const { data: partnerDetails, isLoading: isLoadingDetails } = useSuspenseQuery({
+  //     queryKey: ['partnerDetails', partnerId],
+  //     queryFn: () => getPartnerDetails(partnerId),
+  //   });
+
+  const partnerDetails = {
+    name: 'Centro Nacional de Cibersegurança PORTUGAL',
+    description: 'Manage your catalogs effectively.',
+    image: 'https://www.uc.pt/site/assets/files/545679/cncs_2.1685x774-cropx1314-is.1082x0-is-pid619177.jpg',
+    catalogsQuantity: 14,
+    coursesQuantity: 120,
+    enrollmentsQuantity: 2503,
+    certifiedLearnersQuantity: 260,
+  };
 
   const tableActions = [{
     type: 'view',
@@ -41,20 +59,20 @@ const CatalogsList = () => {
     <>
       <HeaderDescription
         context={{
-          title: 'Centro Nacional de Cibersegurança PORTUGAL',
-          imageUrl: 'https://www.uc.pt/site/assets/files/545679/cncs_2.1685x774-cropx1314-is.1082x0-is-pid619177.jpg',
-        //   description: 'Manage your catalogs effectively.',
+          title: partnerDetails.name,
+          imageUrl: partnerDetails.image,
+          description: partnerDetails.description,
         }}
         info={[
-          { title: 'Catalogs', value: 14 },
-          { title: 'Courses', value: 120 },
-          { title: 'Enrollment', value: 2503 },
-          { title: 'Certified Learners', value: 260 },
+          { title: 'Catalogs', value: partnerDetails.catalogsQuantity },
+          { title: 'Courses', value: partnerDetails.coursesQuantity },
+          { title: 'Enrollment', value: partnerDetails.enrollmentsQuantity },
+          { title: 'Certified Learners', value: partnerDetails.certifiedLearnersQuantity },
         ]}
       />
 
       <DataTable
-        isLoading={isLoading}
+        isLoading={isLoadingCatalogs}
         isPaginated
         isFilterable
         defaultColumnValues={{ Filter: TextFilter }}
@@ -75,8 +93,8 @@ const CatalogsList = () => {
             )),
           },
         ]}
-        itemCount={data.length}
-        data={data}
+        itemCount={partnerCatalogs.length}
+        data={partnerCatalogs}
         columns={[
           {
             Header: intl.formatMessage(messages.headerName),
