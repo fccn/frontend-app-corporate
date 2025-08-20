@@ -1,0 +1,31 @@
+import { Skeleton } from '@openedx/paragon';
+import React, { FC } from 'react';
+
+interface ImageWithSkeletonProps {
+  src: string;
+  alt: string;
+  width: number | string;
+  height: number | string;
+  className?: string;
+}
+
+const ImageWithSkeleton: FC<ImageWithSkeletonProps> = ({
+  src, alt, width, height, className,
+}) => {
+  const [isImageLoaded, setImageLoaded] = React.useState(false);
+
+  return (
+    <>
+      <img
+        src={src}
+        alt={alt}
+        onLoad={() => setImageLoaded(true)}
+        className={className ?? ''}
+        style={{ maxHeight: height, display: isImageLoaded ? 'block' : 'none' }}
+      />
+      {!isImageLoaded && <Skeleton width={width} height={height} />}
+    </>
+  );
+};
+
+export default ImageWithSkeleton;

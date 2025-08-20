@@ -24,7 +24,13 @@ export type CorporateCourse = {
 };
 
 export type CorporateCatalog = {
+  id: string | number;
   name: string;
+  logo: string;
+  homepage: string;
+  enrollments: number;
+  certifiedLearners: number;
+  completionRate: number;
   supportEmail: string;
   emailDomainRegex: string[];
   userLimit: number;
