@@ -2,7 +2,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { DataTable, TextFilter } from '@openedx/paragon';
 
-import { CorporatePartner } from '@src/app/types';
+import { CorporateCatalog } from '@src/app/types';
 import TableName from '@src/app/TableName';
 import { useNavigate } from '@src/hooks';
 import { paths } from '@src/constants';
@@ -11,13 +11,14 @@ import TableFooter from '@src/app/TableFooter';
 import ActionItem from '@src/app/ActionItem';
 
 import { useParams } from 'wouter';
+import { useState } from 'react';
 import { getPartnerCatalogs, getPartnerDetails } from '../api';
 
 import messages from '../messages';
 
 type CellValue = {
   row: {
-    original: CorporatePartner;
+    original: CorporateCatalog;
   }
 };
 
@@ -26,23 +27,26 @@ const CatalogsList = () => {
   const intl = useIntl();
 
   const { partnerId } = useParams<{ partnerId: string }>();
+  const [selectedCatalogId, setSelectedCatalogId] = useState<number | string | null>(null);
 
   const { data: partnerCatalogs, isLoading: isLoadingCatalogs } = useSuspenseQuery({
     queryKey: ['partnerCatalogs'],
     queryFn: () => getPartnerCatalogs(),
   });
 
-  const { data: partnerDetails, isLoading: isLoadingDetails } = useSuspenseQuery({
+  const { data: partnerDetails } = useSuspenseQuery({
     queryKey: ['partnerDetails'],
     queryFn: () => getPartnerDetails(),
   });
 
   const tableActions = [{
     type: 'view',
-    onClick: (partner: CorporatePartner) => navigate(paths.courses.buildPath(partner.code)),
+    onClick: (partner: CorporateCatalog) => navigate(paths.courses.buildPath(String(partner.id))),
   }, {
     type: 'edit',
-    onClick: (partner: CorporatePartner) => navigate(paths.catalogs.buildPath(partner.code)),
+    onClick: (partner: CorporateCatalog) => {
+      setSelectedCatalogId(partner.id);
+    },
   }];
 
   return (
@@ -50,14 +54,14 @@ const CatalogsList = () => {
       <HeaderDescription
         context={{
           title: partnerDetails.name,
-          imageUrl: partnerDetails.image,
-          description: partnerDetails.description,
+          imageUrl: partnerDetails.logo,
+          description: partnerDetails.homepage,
         }}
         info={[
-          { title: 'Catalogs', value: partnerDetails.catalogsQuantity },
-          { title: 'Courses', value: partnerDetails.coursesQuantity },
-          { title: 'Enrollment', value: partnerDetails.enrollmentsQuantity },
-          { title: 'Certified Learners', value: partnerDetails.certifiedLearnersQuantity },
+          { title: 'Catalogs', value: partnerDetails.catalogs },
+          { title: 'Courses', value: partnerDetails.courses },
+          { title: 'Enrollment', value: partnerDetails.enrollments },
+          { title: 'Certified Learners', value: partnerDetails.certified },
         ]}
       />
 
@@ -76,7 +80,7 @@ const CatalogsList = () => {
             Header: intl.formatMessage(messages.headerAction),
             Cell: ({ row }: CellValue) => tableActions.map(({ type, onClick }) => (
               <ActionItem
-                key={`action-${type}-${row.original.code}`}
+                key={`action-${type}-${row.original.id}`}
                 type={type}
                 onClick={() => onClick(row.original)}
               />
@@ -92,16 +96,18 @@ const CatalogsList = () => {
             // eslint-disable-next-line react/no-unstable-nested-components
             Cell: ({ row }: CellValue) => (
               <TableName
-                key={`description-view-${row.original.code}`}
+                key={`description-view-${row.original.id}`}
                 name={row.original.name}
                 destination={row.original.homepage}
-                image={row.original.logo}
               />
             ),
           },
           {
             Header: intl.formatMessage(messages.headerCourses),
             accessor: 'courses',
+            Cell: ({ row }: CellValue) => (
+              <>{row.original.courses.length}</>
+            ),
           },
           {
             Header: intl.formatMessage(messages.headerEnrollments),
