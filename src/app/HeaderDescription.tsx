@@ -32,6 +32,7 @@ const HeaderDescription: FC<HeaderDescriptionProps> = ({ context, info, children
           src={context.imageUrl}
           width={150}
           height={70}
+          alt={context.title}
         />
 
         <Stack className="justify-content-center">
