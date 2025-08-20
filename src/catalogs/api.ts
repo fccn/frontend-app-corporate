@@ -1,6 +1,6 @@
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { logError } from '@edx/frontend-platform/logging';
-import { CorporateCatalog, CorporateDetails } from '../app/types';
+import { CorporateCatalog, CorporatePartner } from '../app/types';
 
 export const getPartnerCatalogs = async (partnerId?: string): Promise<CorporateCatalog[]> => {
   try {
@@ -12,14 +12,14 @@ export const getPartnerCatalogs = async (partnerId?: string): Promise<CorporateC
   }
 };
 
-export const getPartnerDetails = async (partnerId?: string): Promise<CorporateDetails> => {
+export const getPartnerDetails = async (partnerId?: string): Promise<CorporatePartner> => {
   try {
     const response = await getAuthenticatedHttpClient().get(`/api/partner${partnerId ? `/${partnerId}` : ''}`);
     return response.data;
   } catch (error) {
     logError(error);
     return {
-      name: '', image: '', catalogsQuantity: 0, coursesQuantity: 0, enrollmentsQuantity: 0, certifiedLearnersQuantity: 0,
+      code: '0', name: '', logo: '', homepage: '', catalogs: 0, courses: 0, enrollments: 0, certified: 0,
     };
   }
 };
