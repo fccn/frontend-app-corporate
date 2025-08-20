@@ -31,6 +31,11 @@ const messages = defineMessages({
     defaultMessage: 'Analytics',
     description: 'Tooltip text for analytics action',
   },
+  downloadReport: {
+    id: 'app.download.report',
+    defaultMessage: 'Download Report',
+    description: 'Text for the download report button',
+  },
 });
 
 export default messages;
