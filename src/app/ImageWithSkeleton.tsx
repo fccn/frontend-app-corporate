@@ -3,19 +3,24 @@ import React, { FC } from 'react';
 
 interface ImageWithSkeletonProps {
   src: string;
+  alt: string;
   width: number | string;
   height: number | string;
+  className?: string;
 }
 
-const ImageWithSkeleton: FC<ImageWithSkeletonProps> = ({ src, width, height }) => {
+const ImageWithSkeleton: FC<ImageWithSkeletonProps> = ({
+  src, alt, width, height, className,
+}) => {
   const [isImageLoaded, setImageLoaded] = React.useState(false);
 
   return (
     <>
       <img
         src={src}
-        alt="Header Description"
+        alt={alt}
         onLoad={() => setImageLoaded(true)}
+        className={className ?? ''}
         style={{ maxHeight: height, display: isImageLoaded ? 'block' : 'none' }}
       />
       {!isImageLoaded && <Skeleton width={width} height={height} />}
