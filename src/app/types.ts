@@ -17,20 +17,31 @@ export type Learner = {
   assesmentToComplete: number;
 };
 
-export type CorporateCatalog = {
+export type CorporateCourse = {
   name: string;
-  courses: number;
+  link: string;
+  logo: string;
+  students: Learner[];
+};
+
+export type CorporateCatalog = {
+  id: string | number;
+  name: string;
+  logo: string;
+  homepage: string;
   enrollments: number;
   certifiedLearners: number;
   completionRate: number;
-};
-
-export type CorporateDetails = {
-  name: string;
-  description?: string;
-  image: string;
-  catalogsQuantity: number;
-  coursesQuantity: number;
-  enrollmentsQuantity: number;
-  certifiedLearnersQuantity: number;
+  supportEmail: string;
+  emailDomainRegex: string[];
+  userLimit: number;
+  enrollmentLimit: number;
+  availableStartDate: Date;
+  availableEndDate: Date;
+  alternativeLink: string;
+  isSelfEnrollment: boolean;
+  isPublic: boolean;
+  enableCustomCourses: boolean;
+  additionalAuthorizationMessage: string;
+  courses: CorporateCourse[];
 };
