@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AppProvider } from '@edx/frontend-platform/react';
 import Router from './Router';
+import { CatalogEditModalProvider } from './hooks/useCatalogFormModal';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -13,7 +14,9 @@ const queryClient = new QueryClient({
 const App = () => (
   <AppProvider wrapWithRouter={false}>
     <QueryClientProvider client={queryClient}>
-      <Router />
+      <CatalogEditModalProvider>
+        <Router />
+      </CatalogEditModalProvider>
     </QueryClientProvider>
   </AppProvider>
 );
