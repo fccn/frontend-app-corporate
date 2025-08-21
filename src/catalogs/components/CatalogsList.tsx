@@ -7,6 +7,7 @@ import ActionItem from '@src/app/ActionItem';
 import TableFooter from '@src/app/TableFooter';
 import { paths } from '@src/constants';
 import { useNavigate, usePagination } from '@src/hooks';
+import { useCatalogFormModal } from '@src/hooks/useCatalogFormModal';
 
 import messages from '../messages';
 import { usePartnerCatalogs } from '../hooks';
@@ -25,6 +26,8 @@ const CatalogsList: FC<CatalogsListProps> = ({ partnerId }) => {
   const navigate = useNavigate();
   const intl = useIntl();
 
+  const { handleChangeSelectedCatalog } = useCatalogFormModal();
+
   const { pageIndex, pageSize, onPaginationChange } = usePagination();
 
   const { partnerCatalogs, isLoadingCatalogs } = usePartnerCatalogs({
@@ -35,11 +38,11 @@ const CatalogsList: FC<CatalogsListProps> = ({ partnerId }) => {
 
   const tableActions = [{
     type: 'view',
-    onClick: (catalog: CorporateCatalog) => navigate(paths.courses.buildPath(partnerId, catalog.id)),
+    onClick: (catalog: CorporateCatalog) => navigate(paths.courses.buildPath(String(catalog.id))),
   }, {
     type: 'edit',
     onClick: (catalog: CorporateCatalog) => {
-      console.log(catalog.id);
+      handleChangeSelectedCatalog(catalog.id);
     },
   }];
 
