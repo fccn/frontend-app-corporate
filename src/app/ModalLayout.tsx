@@ -35,7 +35,7 @@ const ModalLayout: FC<ModalLayoutProps> = ({
         {children}
       </ModalDialog.Body>
 
-      <ModalDialog.Footer className="py-4 px-6">
+      <ModalDialog.Footer className="py-4 px-5">
         <ActionRow>
           <ModalDialog.CloseButton className="px-5" variant="outline-primary">
             {intl.formatMessage(messages.cancelButton)}
