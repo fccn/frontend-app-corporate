@@ -36,6 +36,11 @@ const messages = defineMessages({
     defaultMessage: 'Back',
     description: 'Text for the back button in the app layout',
   },
+  cancelButton: {
+    id: 'app.cancel.button',
+    defaultMessage: 'Cancel',
+    description: 'Text for the cancel button in the app layout',
+  },
 });
 
 export default messages;

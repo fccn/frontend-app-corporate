@@ -11,7 +11,7 @@ import TableFooter from '@src/app/TableFooter';
 import ActionItem from '@src/app/ActionItem';
 
 import { useParams } from 'wouter';
-import { useState } from 'react';
+import { useCatalogFormModal } from '@src/hooks/useCatalogFormModal';
 import { getPartnerCatalogs, getPartnerDetails } from '../api';
 
 import messages from '../messages';
@@ -26,8 +26,9 @@ const CatalogsList = () => {
   const navigate = useNavigate();
   const intl = useIntl();
 
+  const { handleChangeSelectedCatalog } = useCatalogFormModal();
+
   const { partnerId } = useParams<{ partnerId: string }>();
-  const [selectedCatalogId, setSelectedCatalogId] = useState<number | string | null>(null);
 
   const { data: partnerCatalogs, isLoading: isLoadingCatalogs } = useSuspenseQuery({
     queryKey: ['partnerCatalogs'],
@@ -41,11 +42,11 @@ const CatalogsList = () => {
 
   const tableActions = [{
     type: 'view',
-    onClick: (partner: CorporateCatalog) => navigate(paths.courses.buildPath(String(partner.id))),
+    onClick: (catalog: CorporateCatalog) => navigate(paths.courses.buildPath(String(catalog.id))),
   }, {
     type: 'edit',
-    onClick: (partner: CorporateCatalog) => {
-      setSelectedCatalogId(partner.id);
+    onClick: (catalog: CorporateCatalog) => {
+      handleChangeSelectedCatalog(catalog.id);
     },
   }];
 
