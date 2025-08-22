@@ -7,6 +7,7 @@ import { Button, useToggle } from '@openedx/paragon';
 import ModalLayout from '@src/app/ModalLayout';
 import { CatalogEditionModalContext } from '@src/context/CatalogEditionModalContext';
 
+import CatalogEditForm from '@src/app/CatalogEditForm';
 import messages from './messages';
 
 interface CatalogEditModalProviderProps {
@@ -45,22 +46,16 @@ export const CatalogEditModalProvider: FC<CatalogEditModalProviderProps> = ({ ch
   return (
     <CatalogEditionModalContext.Provider value={value}>
       <ModalLayout
-        title={`Edit Catalog - ${selectedCatalogId}`}
+        title="Edit Catalog"
         isOpen={isOpen}
         onClose={handleCloseModal}
         actions={(
-          <Button variant="primary" onClick={handleCloseModal}>
+          <Button className="px-5" variant="primary" onClick={handleCloseModal}>
             {intl.formatMessage(messages.saveButton)}
           </Button>
         )}
       >
-        <p>
-          I&apos;m baby palo santo ugh celiac fashion axe. La croix lo-fi venmo whatever.
-          Beard man braid migas single-origin coffee forage ramps. Tumeric messenger
-          bag bicycle rights wayfarers, try-hard cronut blue bottle health goth.
-          Sriracha tumblr cardigan, cloud bread succulents tumeric copper mug marfa
-          semiotics woke next level organic roof party +1 try-hard.
-        </p>
+        <CatalogEditForm selectedCatalog={selectedCatalogId} />
       </ModalLayout>
 
       {children}
