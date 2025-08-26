@@ -12,17 +12,17 @@ export const paths = {
   },
 
   catalogs: {
-    path: '/catalogs/:partnerId/',
-    buildPath: (partnerId: string) => `/catalogs/${partnerId}/`,
+    path: '/:partnerId/',
+    buildPath: (partnerId: string) => `/${partnerId}/`,
   },
 
   courses: {
-    path: '/catalogs/:partnerId/courses',
-    buildPath: (partnerId: string) => `/catalogs/${partnerId}/courses`,
+    path: '/:partnerId/:catalogId/',
+    buildPath: (partnerId: string, catalogId: string) => `/${partnerId}/${catalogId}/`,
   },
 
   courseDetail: {
-    path: '/catalogs/:partnerId/courses/:courseId/',
-    buildPath: (partnerId: string, courseId: string) => `/catalogs/${partnerId}/courses/${courseId}/`,
+    path: '/:partnerId/:catalogId/:courseId/',
+    buildPath: (partnerId: string, catalogId: string, courseId: string) => `/${partnerId}/${catalogId}/${courseId}/`,
   },
 } as const;
