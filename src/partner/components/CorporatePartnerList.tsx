@@ -48,7 +48,7 @@ const CorpotatePartnerList = () => {
             <ActionItem
               key={`action-${type}-${row.original.code}`}
               type={type}
-              onClick={() => navigate(paths.catalogs.buildPath(row.original.code))}
+              onClick={() => navigate(paths.catalogs.buildPath(row.original.id))}
             />
           )),
         },
@@ -64,8 +64,8 @@ const CorpotatePartnerList = () => {
             <TableName
               key={`description-view-${row.original.code}`}
               name={row.original.name}
-              destination={row.original.homepage}
-              image={row.original.logo}
+              destination={row.original.homepageUrl}
+              image={row.original.logoUrl}
             />
           ),
         },
