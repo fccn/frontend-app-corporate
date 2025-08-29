@@ -7,7 +7,7 @@ import ImageWithSkeleton from './ImageWithSkeleton';
 interface HeaderDescriptionProps {
   context: {
     title: string;
-    imageUrl: string;
+    imageUrl: string | null;
     description?: string;
   },
   info: {
@@ -28,12 +28,14 @@ const HeaderDescription: FC<HeaderDescriptionProps> = ({ context, info, children
       gap={4}
     >
       <Stack direction={isSmall ? 'vertical' : 'horizontal'} gap={3}>
-        <ImageWithSkeleton
-          src={context.imageUrl}
-          width={150}
-          height={70}
-          alt={context.title}
-        />
+        {context.imageUrl && (
+          <ImageWithSkeleton
+            src={context.imageUrl}
+            width={150}
+            height={70}
+            alt={context.title}
+          />
+        )}
 
         <Stack className="justify-content-center">
           <h3 className="mb-0">{context.title}</h3>
