@@ -3,8 +3,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { DataTable, TextFilter } from '@openedx/paragon';
 
 import { CorporateCatalog } from '@src/app/types';
-import TableName from '@src/app/TableName';
-import { useNavigate } from '@src/hooks';
+import { useNavigate, usePagination } from '@src/hooks';
 import { paths } from '@src/constants';
 import HeaderDescription from '@src/app/HeaderDescription';
 import TableFooter from '@src/app/TableFooter';
@@ -29,23 +28,25 @@ const CatalogsList = () => {
   const { partnerId } = useParams<{ partnerId: string }>();
   const [selectedCatalogId, setSelectedCatalogId] = useState<number | string | null>(null);
 
+  const { pageIndex, pageSize, onPaginationChange } = usePagination();
+
   const { data: partnerCatalogs, isLoading: isLoadingCatalogs } = useSuspenseQuery({
-    queryKey: ['partnerCatalogs'],
-    queryFn: () => getPartnerCatalogs(),
+    queryKey: ['partnerCatalogs', partnerId, pageIndex, pageSize],
+    queryFn: () => getPartnerCatalogs(partnerId, pageIndex, pageSize),
   });
 
   const { data: partnerDetails } = useSuspenseQuery({
     queryKey: ['partnerDetails'],
-    queryFn: () => getPartnerDetails(),
+    queryFn: () => getPartnerDetails(partnerId),
   });
 
   const tableActions = [{
     type: 'view',
-    onClick: (partner: CorporateCatalog) => navigate(paths.courses.buildPath(String(partner.id))),
+    onClick: (catalog: CorporateCatalog) => navigate(paths.courses.buildPath(partnerId, catalog.id)),
   }, {
     type: 'edit',
-    onClick: (partner: CorporateCatalog) => {
-      setSelectedCatalogId(partner.id);
+    onClick: (catalog: CorporateCatalog) => {
+      setSelectedCatalogId(catalog.id);
     },
   }];
 
@@ -55,7 +56,7 @@ const CatalogsList = () => {
         context={{
           title: partnerDetails.name,
           imageUrl: partnerDetails.logo,
-          description: partnerDetails.homepage,
+          description: partnerDetails.homepageUrl,
         }}
         info={[
           { title: 'Catalogs', value: partnerDetails.catalogs },
@@ -74,6 +75,9 @@ const CatalogsList = () => {
           pageSize: 30,
           pageIndex: 0,
         }}
+        manualPagination
+        fetchData={onPaginationChange}
+        pageCount={partnerCatalogs.numPages}
         additionalColumns={[
           {
             id: 'action',
@@ -87,27 +91,17 @@ const CatalogsList = () => {
             )),
           },
         ]}
-        itemCount={partnerCatalogs.length}
-        data={partnerCatalogs}
+        itemCount={partnerCatalogs.count}
+        data={partnerCatalogs.results}
         columns={[
           {
             Header: intl.formatMessage(messages.headerName),
             accessor: 'name',
-            // eslint-disable-next-line react/no-unstable-nested-components
-            Cell: ({ row }: CellValue) => (
-              <TableName
-                key={`description-view-${row.original.id}`}
-                name={row.original.name}
-                destination={row.original.homepage}
-              />
-            ),
+
           },
           {
             Header: intl.formatMessage(messages.headerCourses),
             accessor: 'courses',
-            Cell: ({ row }: CellValue) => (
-              <>{row.original.courses.length}</>
-            ),
           },
           {
             Header: intl.formatMessage(messages.headerEnrollments),
@@ -115,14 +109,11 @@ const CatalogsList = () => {
           },
           {
             Header: intl.formatMessage(messages.headerCertified),
-            accessor: 'certifiedLearners',
+            accessor: 'certified',
           },
           {
             Header: intl.formatMessage(messages.headerCompletion),
             accessor: 'completionRate',
-            Cell: ({ row }: CellValue) => (
-              <>{row.original.completionRate * 100}%</>
-            ),
           },
         ]}
       >
