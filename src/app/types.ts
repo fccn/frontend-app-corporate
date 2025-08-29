@@ -25,23 +25,33 @@ export type CorporateCourse = {
 };
 
 export type CorporateCatalog = {
-  id: string | number;
+  id: string;
   name: string;
-  logo: string;
-  homepage: string;
+  slug: string;
   enrollments: number;
-  certifiedLearners: number;
+  certified: number;
   completionRate: number;
   supportEmail: string;
-  emailDomainRegex: string[];
+  emailRegexes: string[];
+  courseEnrollmentLimit: number;
   userLimit: number;
-  enrollmentLimit: number;
   availableStartDate: Date;
   availableEndDate: Date;
-  alternativeLink: string;
+  catalogAlternativeLink: string;
   isSelfEnrollment: boolean;
+  customCourses: boolean;
+  authorizationAdditionalMessage: string;
   isPublic: boolean;
-  enableCustomCourses: boolean;
-  additionalAuthorizationMessage: string;
-  courses: CorporateCourse[];
+  courses: number;
+  corporatePartner: number;
 };
+
+export interface Paginated<T> {
+  next: string | null;
+  previous: string | null;
+  count: number;
+  numPages: number;
+  currentPage: number;
+  start: number;
+  results: T[];
+}
