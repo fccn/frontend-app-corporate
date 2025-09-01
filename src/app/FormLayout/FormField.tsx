@@ -8,15 +8,6 @@ const FormField: FC<BaseFormField> = ({
 }) => {
   const { register, control } = useFormContext();
 
-  if (type === 'text' || type === 'number' || type === 'date' || type === 'email') {
-    return (
-      <Form.Group as={as} controlId={name}>
-        <Form.Label className="font-weight-bold">{label}</Form.Label>
-        <Form.Control id={name} {...register(name)} type={type} {...props} />
-      </Form.Group>
-    );
-  }
-
   if (type === 'multiple-text') {
     return (
       <Controller
@@ -53,7 +44,12 @@ const FormField: FC<BaseFormField> = ({
     );
   }
 
-  return null;
+  return (
+    <Form.Group as={as} controlId={name}>
+      <Form.Label className="font-weight-bold">{label}</Form.Label>
+      <Form.Control id={name} {...register(name)} type={type} {...props} />
+    </Form.Group>
+  );
 };
 
 export default FormField;
