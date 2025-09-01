@@ -1,7 +1,7 @@
-import { getConfig } from '@edx/frontend-platform';
+import { getConfig, camelCaseObject } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { logError } from '@edx/frontend-platform/logging';
-import camelcaseKeys from 'camelcase-keys';
+
 import { CorporateCatalog, CorporatePartner, Paginated } from '../app/types';
 
 export const getPartnerCatalogs = async (
@@ -19,7 +19,7 @@ export const getPartnerCatalogs = async (
       numPages: response.data.num_pages,
       currentPage: response.data.current_page,
       start: response.data.start,
-      results: camelcaseKeys(response.data.results),
+      results: camelCaseObject(response.data.results),
     };
   } catch (error) {
     logError(error);
@@ -39,7 +39,7 @@ export const getPartnerDetails = async (partnerId?: string): Promise<CorporatePa
   try {
     const url = `${getConfig().LMS_BASE_URL}/corporate_access/api/v1/partners/${partnerId}/`;
     const response = await getAuthenticatedHttpClient().get(url);
-    return camelcaseKeys(response.data);
+    return camelCaseObject(response.data);
   } catch (error) {
     logError(error);
     return {
