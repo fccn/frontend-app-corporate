@@ -2,12 +2,12 @@ import { FC } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useParams } from 'wouter';
 import { useCatalogDetails } from '@src/catalogs/hooks';
-import { useCatalogFormModal } from '@src/hooks/useCatalogFormModal';
 import FormLayout from '../FormLayout';
 import { FormElement } from '../FormLayout/types';
 
 interface CatalogEditFormProps {
   selectedCatalog: string | number | null;
+  queryKeyVariables: (string | number)[];
 }
 
 const CATALOG_FORM_CONFIG: FormElement[] = [
@@ -41,10 +41,8 @@ const CATALOG_FORM_CONFIG: FormElement[] = [
   { name: 'isSelfEnrollment', type: 'switch', label: 'Self Enrollment' },
 ];
 
-const CatalogEditForm: FC<CatalogEditFormProps> = ({ selectedCatalog }) => {
+const CatalogEditForm: FC<CatalogEditFormProps> = ({ selectedCatalog, queryKeyVariables }) => {
   const { partnerId } = useParams<{ partnerId: string }>();
-  const { queryKeyVariables } = useCatalogFormModal();
-
   const { partnerDetails } = useCatalogDetails({ partnerId, selectedCatalog, queryKeyVariables });
 
   const methods = useForm({
