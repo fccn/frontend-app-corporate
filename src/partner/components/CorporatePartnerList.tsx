@@ -65,7 +65,7 @@ const CorpotatePartnerList = () => {
               key={`description-view-${row.original.code}`}
               name={row.original.name}
               destination={row.original.homepageUrl}
-              image={row.original.logoUrl}
+              image={row.original.logo}
             />
           ),
         },
