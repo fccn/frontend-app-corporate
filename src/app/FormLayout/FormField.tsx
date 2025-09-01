@@ -44,6 +44,27 @@ const FormField: FC<BaseFormField> = ({
     );
   }
 
+  if (type === 'date') {
+    return (
+      <Controller
+        control={control}
+        name={name}
+        render={({ field: { value, onChange } }) => (
+          <Form.Group as={as} controlId={name}>
+            <Form.Label className="font-weight-bold">{label}</Form.Label>
+            <Form.Control
+              id={name}
+              value={new Date(value).toISOString().split('T')[0]}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
+              type="date"
+              {...props}
+            />
+          </Form.Group>
+        )}
+      />
+    );
+  }
+
   return (
     <Form.Group as={as} controlId={name}>
       <Form.Label className="font-weight-bold">{label}</Form.Label>
