@@ -38,11 +38,11 @@ const CatalogsList: FC<CatalogsListProps> = ({ partnerId }) => {
 
   const tableActions = [{
     type: 'view',
-    onClick: (catalog: CorporateCatalog) => navigate(paths.courses.buildPath(String(catalog.id))),
+    onClick: (catalog: CorporateCatalog) => navigate(paths.courses.buildPath(partnerId, catalog.id)),
   }, {
     type: 'edit',
     onClick: (catalog: CorporateCatalog) => {
-      handleChangeSelectedCatalog(catalog.id);
+      handleChangeSelectedCatalog(catalog.id, [pageIndex + 1, pageSize]);
     },
   }];
 

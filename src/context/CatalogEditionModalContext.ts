@@ -5,11 +5,16 @@ import { CorporateCatalog } from '@src/app/types';
 export interface TCatalogEditionModalContext {
   isOpen: boolean;
   selectedCatalog: CorporateCatalog | null;
-  handleChangeSelectedCatalog: (catalogId: number | string | null) => void;
+  queryKeyVariables: (number | string)[];
+  handleChangeSelectedCatalog: (
+    catalogId: number | string | null,
+    queryKeyVariables: (number | string)[]
+  ) => void;
 }
 
 export const CatalogEditionModalContext = createContext<TCatalogEditionModalContext>({
   isOpen: false,
   selectedCatalog: null,
+  queryKeyVariables: [],
   handleChangeSelectedCatalog: () => {},
 });

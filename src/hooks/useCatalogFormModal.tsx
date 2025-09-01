@@ -19,9 +19,11 @@ export const CatalogEditModalProvider: FC<CatalogEditModalProviderProps> = ({ ch
 
   const [isOpen, open, close] = useToggle(false);
   const [selectedCatalogId, setSelectedCatalogId] = useState<number | string | null>(null);
+  const [queryKeyVariables, setQueryKeyVariables] = useState<(number | string)[]>([]);
 
-  const handleChangeSelectedCatalog = (catalogId: number | string | null) => {
+  const handleChangeSelectedCatalog = (catalogId: number | string | null, queryKeyVariables: (number | string)[]) => {
     setSelectedCatalogId(catalogId);
+	setQueryKeyVariables(queryKeyVariables);
   };
 
   const handleCloseModal = () => {
@@ -38,6 +40,7 @@ export const CatalogEditModalProvider: FC<CatalogEditModalProviderProps> = ({ ch
     () => ({
       isOpen,
       selectedCatalog: null,
+      queryKeyVariables,
       handleChangeSelectedCatalog,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
