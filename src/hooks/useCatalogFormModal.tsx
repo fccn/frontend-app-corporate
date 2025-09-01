@@ -19,8 +19,19 @@ export const CatalogEditModalProvider: FC<CatalogEditModalProviderProps> = ({ ch
 
   const [isOpen, open, close] = useToggle(false);
   const [selectedCatalogId, setSelectedCatalogId] = useState<number | string | null>(null);
+  /** Saved in case needed to fetch catalog details from cache */
   const [queryKeyVariables, setQueryKeyVariables] = useState<(number | string)[]>([]);
 
+
+  /**
+   * Called when a catalog is selected from the list.
+   * It saves the selected catalog ID and the query key variables (page index and page size)
+   * needed to fetch the catalog details from cache.
+   *
+   * @param {number|string|null} catalogId The ID of the selected catalog.
+   * @param {(number|string)[]} queryKeyVariables The query key variables (page index and page size)
+   * needed to fetch the catalog details from cache.
+   */
   const handleChangeSelectedCatalog = (catalogId: number | string | null, queryKeyVariables: (number | string)[]) => {
     setSelectedCatalogId(catalogId);
 	setQueryKeyVariables(queryKeyVariables);
@@ -49,7 +60,7 @@ export const CatalogEditModalProvider: FC<CatalogEditModalProviderProps> = ({ ch
   return (
     <CatalogEditionModalContext.Provider value={value}>
       <ModalLayout
-        title="Edit Catalog"
+        title={intl.formatMessage(messages.editCatalogTitle)}
         isOpen={isOpen}
         onClose={handleCloseModal}
         actions={(
