@@ -11,9 +11,10 @@ import ActionItem from '@src/app/ActionItem';
 
 import { useParams } from 'wouter';
 import { useState } from 'react';
-import { getPartnerCatalogs, getPartnerDetails } from '../api';
+import { getPartnerDetails } from '../api';
 
 import messages from '../messages';
+import { usePartnerCatalogs } from '../hooks';
 
 type CellValue = {
   row: {
@@ -30,9 +31,10 @@ const CatalogsList = () => {
 
   const { pageIndex, pageSize, onPaginationChange } = usePagination();
 
-  const { data: partnerCatalogs, isLoading: isLoadingCatalogs } = useSuspenseQuery({
-    queryKey: ['partnerCatalogs', partnerId, pageIndex, pageSize],
-    queryFn: () => getPartnerCatalogs(partnerId, pageIndex + 1, pageSize),
+  const { partnerCatalogs, isLoadingCatalogs } = usePartnerCatalogs({
+    partnerId,
+    pageIndex: pageIndex + 1,
+    pageSize,
   });
 
   const { data: partnerDetails } = useSuspenseQuery({
