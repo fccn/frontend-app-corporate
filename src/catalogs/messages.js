@@ -31,6 +31,11 @@ const messages = defineMessages({
     defaultMessage: 'Completion Rate',
     description: 'Header for the completion rate column',
   },
+  infoCatalog: {
+    id: 'corporate.catalog.table.info.name',
+    defaultMessage: 'Catalog',
+    description: 'Info for the catalog name',
+  },
 });
 
 export default messages;

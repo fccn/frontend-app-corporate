@@ -1,4 +1,3 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { DataTable, TextFilter } from '@openedx/paragon';
 
@@ -11,10 +10,9 @@ import ActionItem from '@src/app/ActionItem';
 
 import { useParams } from 'wouter';
 import { useState } from 'react';
-import { getPartnerDetails } from '../api';
 
 import messages from '../messages';
-import { usePartnerCatalogs } from '../hooks';
+import { usePartnerCatalogs, usePartnerDetails } from '../hooks';
 
 type CellValue = {
   row: {
@@ -31,15 +29,11 @@ const CatalogsList = () => {
 
   const { pageIndex, pageSize, onPaginationChange } = usePagination();
 
+  const { partnerDetails, isLoadingPartnerDetails } = usePartnerDetails({ partnerId });
   const { partnerCatalogs, isLoadingCatalogs } = usePartnerCatalogs({
     partnerId,
     pageIndex: pageIndex + 1,
     pageSize,
-  });
-
-  const { data: partnerDetails } = useSuspenseQuery({
-    queryKey: ['partnerDetails'],
-    queryFn: () => getPartnerDetails(partnerId),
   });
 
   const tableActions = [{
@@ -54,22 +48,24 @@ const CatalogsList = () => {
 
   return (
     <>
-      <HeaderDescription
-        context={{
-          title: partnerDetails.name,
-          imageUrl: partnerDetails.logo,
-          description: partnerDetails.homepageUrl,
-        }}
-        info={[
-          { title: 'Catalogs', value: partnerDetails.catalogs },
-          { title: 'Courses', value: partnerDetails.courses },
-          { title: 'Enrollment', value: partnerDetails.enrollments },
-          { title: 'Certified Learners', value: partnerDetails.certified },
-        ]}
-      />
+      {partnerDetails && (
+        <HeaderDescription
+          context={{
+            title: partnerDetails.name,
+            imageUrl: partnerDetails.logo,
+            description: partnerDetails.homepageUrl,
+          }}
+          info={[
+            { title: intl.formatMessage(messages.infoCatalog), value: partnerDetails.catalogs },
+            { title: intl.formatMessage(messages.headerCourses), value: partnerDetails.courses },
+            { title: intl.formatMessage(messages.headerEnrollments), value: partnerDetails.enrollments },
+            { title: intl.formatMessage(messages.headerCertified), value: partnerDetails.certified },
+          ]}
+        />
+      )}
 
       <DataTable
-        isLoading={isLoadingCatalogs}
+        isLoading={isLoadingCatalogs || isLoadingPartnerDetails}
         isPaginated
         isFilterable
         defaultColumnValues={{ Filter: TextFilter }}
