@@ -1,4 +1,3 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   DataTable, TextFilter,
@@ -8,11 +7,12 @@ import { CorporatePartner } from '@src/app/types';
 import TableName from '@src/app/TableName';
 import { useNavigate } from '@src/hooks';
 import { paths } from '@src/constants';
-import { getPartners } from '../api';
+import { useCallback, useState } from 'react';
 import TableFooter from '../../app/TableFooter';
 
 import messages from '../messages';
 import ActionItem from '../../app/ActionItem';
+import { usePartners } from '../hooks';
 
 type CellValue = {
   row: {
@@ -22,13 +22,24 @@ type CellValue = {
 
 const tableActions = ['view'];
 
-const CorpotatePartnerList = () => {
+const CorporatePartnerList = () => {
   const navigate = useNavigate();
   const intl = useIntl();
-  const { data, isLoading } = useSuspenseQuery({
-    queryKey: ['partners'],
-    queryFn: () => getPartners(),
-  });
+  const [pageSize, setPageSize] = useState(10);
+  const [pageIndex, setPageIndex] = useState(0);
+  const {
+    partners, isLoading, count, pages,
+  } = usePartners({ pageSize, pageIndex: pageIndex + 1 });
+
+  // This function will be called by DataTable when pagination, filters, or sorting change
+  const fetchData = useCallback((tableState) => {
+    if (pageIndex !== tableState.pageIndex) {
+      setPageIndex(tableState.pageIndex);
+    }
+    if (pageSize !== tableState.pageSize) {
+      setPageSize(tableState.pageSize);
+    }
+  }, [pageIndex, pageSize]);
 
   return (
     <DataTable
@@ -37,9 +48,15 @@ const CorpotatePartnerList = () => {
       isFilterable
       defaultColumnValues={{ Filter: TextFilter }}
       initialState={{
-        pageSize: 30,
-        pageIndex: 0,
+        pageSize: 10,
+        pageIndex,
       }}
+      autoResetPageIndex={false} // turn off auto reset of pageIndex
+      data={partners}
+      itemCount={count}
+      pageCount={pages}
+      fetchData={fetchData}
+      manualPagination
       additionalColumns={[
         {
           id: 'action',
@@ -53,8 +70,6 @@ const CorpotatePartnerList = () => {
           )),
         },
       ]}
-      itemCount={data.length}
-      data={data}
       columns={[
         {
           Header: intl.formatMessage(messages.headerName),
@@ -94,4 +109,4 @@ const CorpotatePartnerList = () => {
   );
 };
 
-export default CorpotatePartnerList;
+export default CorporatePartnerList;

@@ -17,7 +17,7 @@ type TableFooterProps = {
 };
 
 const TableFooter = ({
-  pageSizeOptions = [10, 20, 30, 40],
+  pageSizeOptions = [10, 25, 50, 100],
 }: TableFooterProps) => {
   const intl = useIntl();
   const { setPageSize, state } = useContext<DataTableContextValue>(DataTableContext);
