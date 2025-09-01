@@ -46,7 +46,7 @@ export type CorporateCatalog = {
   corporatePartner: number;
 };
 
-export interface Paginated<T> {
+export interface PaginatedResponse<T> {
   next: string | null;
   previous: string | null;
   count: number;

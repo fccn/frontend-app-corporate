@@ -2,15 +2,15 @@ import { getConfig, camelCaseObject } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { logError } from '@edx/frontend-platform/logging';
 
-import { CorporateCatalog, CorporatePartner, Paginated } from '../app/types';
+import { CorporateCatalog, CorporatePartner, PaginatedResponse } from '../app/types';
 
 export const getPartnerCatalogs = async (
   partnerId: string,
   page: number,
   pageSize: number,
-): Promise<Paginated<CorporateCatalog>> => {
+): Promise<PaginatedResponse<CorporateCatalog>> => {
   try {
-    const url = `${getConfig().LMS_BASE_URL}/corporate_access/api/v1/partners/${partnerId}/catalogs/?page=${page + 1}&page_size=${pageSize}`;
+    const url = `${getConfig().LMS_BASE_URL}/corporate_access/api/v1/partners/${partnerId}/catalogs/?page=${page}&page_size=${pageSize}`;
     const response = await getAuthenticatedHttpClient().get(url);
     return {
       next: response.data.next,

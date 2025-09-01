@@ -32,7 +32,7 @@ const CatalogsList = () => {
 
   const { data: partnerCatalogs, isLoading: isLoadingCatalogs } = useSuspenseQuery({
     queryKey: ['partnerCatalogs', partnerId, pageIndex, pageSize],
-    queryFn: () => getPartnerCatalogs(partnerId, pageIndex, pageSize),
+    queryFn: () => getPartnerCatalogs(partnerId, pageIndex + 1, pageSize),
   });
 
   const { data: partnerDetails } = useSuspenseQuery({
