@@ -1,9 +1,10 @@
-import { getPartnerCatalogs } from '@src/catalogs/api';
-import { useSuspenseQuery } from '@tanstack/react-query';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import FormLayout from './FormLayout';
-import { FormElement } from './FormLayout/types';
+import { useParams } from 'wouter';
+import { useCatalogDetails } from '@src/catalogs/hooks';
+import { useCatalogFormModal } from '@src/hooks/useCatalogFormModal';
+import FormLayout from '../FormLayout';
+import { FormElement } from '../FormLayout/types';
 
 interface CatalogEditFormProps {
   selectedCatalog: string | number | null;
@@ -48,16 +49,13 @@ const CATALOG_FORM_CONFIG: FormElement[] = [
 ];
 
 const CatalogEditForm: FC<CatalogEditFormProps> = ({ selectedCatalog }) => {
-  // TODO: Point to an endpoint that returns the catalog details
-  const { data: partnerCatalogs } = useSuspenseQuery({
-    queryKey: ['partnerCatalogs'],
-    queryFn: () => getPartnerCatalogs(),
-  });
+  const { partnerId } = useParams<{ partnerId: string }>();
+  const { queryKeyVariables } = useCatalogFormModal();
 
-  const selectedCatalogData = partnerCatalogs.find(catalog => catalog.id === selectedCatalog);
+  const { partnerDetails } = useCatalogDetails({ partnerId, selectedCatalog, queryKeyVariables });
 
   const methods = useForm({
-    defaultValues: selectedCatalogData,
+    defaultValues: partnerDetails,
     mode: 'onChange',
   });
 
