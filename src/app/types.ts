@@ -70,3 +70,12 @@ export interface CellValue<T> {
     original: T;
   };
 }
+
+export interface ApiResponse<T = any> {
+  count: number;
+  next?: string | null;
+  previous?: string | null;
+  results: T[];
+  currentPage?: number;
+  numPages?: number;
+}

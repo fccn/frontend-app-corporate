@@ -1,5 +1,5 @@
 import { screen } from '@testing-library/react';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { renderWrapper } from '@src/setupTest';
 import CorporatePartnerList from './CorporatePartnerList';
 
@@ -14,33 +14,38 @@ jest.mock('../../app/TableFooter', () => function TableFooter() {
   return <div data-testid="table-footer" />;
 });
 
-const mockPartners = [
-  {
-    code: 1,
-    name: 'Example University',
-    homepage: 'https://exampleu.com/university',
-    logo: 'https://exampleu.com/logo.png',
-    catalogs: 5,
-    courses: 12,
-    enrollments: 1000,
-    certified: 400,
-  },
-  {
-    code: 2,
-    name: 'Test Institute',
-    homepage: 'https://test.com/institute',
-    logo: 'https://test.com/logo.png',
-    catalogs: 2,
-    courses: 8,
-    enrollments: 700,
-    certified: 300,
-  },
-];
+const mockApiResponse = {
+  results: [
+    {
+      code: 1,
+      name: 'Example University',
+      homepage: 'https://exampleu.com/university',
+      logo: 'https://exampleu.com/logo.png',
+      catalogs: 5,
+      courses: 12,
+      enrollments: 1000,
+      certified: 400,
+    },
+    {
+      code: 2,
+      name: 'Test Institute',
+      homepage: 'https://test.com/institute',
+      logo: 'https://test.com/logo.png',
+      catalogs: 2,
+      courses: 8,
+      enrollments: 700,
+      certified: 300,
+    },
+  ],
+  count: 2,
+  next: null,
+  previous: null,
+};
 
 describe('CorporatePartnerList', () => {
   beforeEach(() => {
-    (useSuspenseQuery as jest.Mock).mockReturnValue({
-      data: mockPartners,
+    (useQuery as jest.Mock).mockReturnValue({
+      data: mockApiResponse,
       isLoading: false,
     });
   });
@@ -72,7 +77,7 @@ describe('CorporatePartnerList', () => {
   });
 
   it('shows loading state if data is still loading', () => {
-    (useSuspenseQuery as jest.Mock).mockReturnValue({
+    (useQuery as jest.Mock).mockReturnValue({
       data: [],
       isLoading: true,
     });

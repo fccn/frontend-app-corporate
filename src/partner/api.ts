@@ -1,17 +1,20 @@
-import { getConfig, camelCaseObject } from '@edx/frontend-platform';
-import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import { getConfig } from '@edx/frontend-platform';
+import { getAuthenticatedHttpClient, camelCaseObject } from '@edx/frontend-platform/auth';
 import { logError } from '@edx/frontend-platform/logging';
 
-import { CorporatePartner } from '../app/types';
+import { CorporatePartner, ApiResponse } from '../app/types';
 
-export const getPartners = async (): Promise<CorporatePartner[]> => {
-  const url = `${getConfig().LMS_BASE_URL}/corporate_access/api/v1/partners/`;
+interface PartnersApiResponse extends ApiResponse {
+  results: CorporatePartner[];
+}
+export const getPartners = async ({ pageSize, pageIndex }): Promise<PartnersApiResponse> => {
+  const url = `${getConfig().LMS_BASE_URL}/corporate_access/api/v1/partners/?page_size=${pageSize}&page=${pageIndex}`;
   try {
     const response = await getAuthenticatedHttpClient().get(url);
-    return camelCaseObject(response.data.results);
+    return response.data;
   } catch (error) {
     logError(error);
-    return [];
+    return { results: [], count: 0 };
   }
 };
 
