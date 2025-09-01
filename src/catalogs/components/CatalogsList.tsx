@@ -70,8 +70,8 @@ const CatalogsList = () => {
         isFilterable
         defaultColumnValues={{ Filter: TextFilter }}
         initialState={{
-          pageSize: 30,
-          pageIndex: 0,
+          pageSize,
+          pageIndex,
         }}
         manualPagination
         fetchData={onPaginationChange}

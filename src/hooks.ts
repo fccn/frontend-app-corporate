@@ -19,11 +19,11 @@ export const useNavigate = () => useLocation()[1];
  */
 export const usePagination = () => {
   const [pageIndex, setPageIndex] = useState(0);
-  const [pageSize, setPageSize] = useState(30);
+  const [pageSize, setPageSize] = useState(10);
 
-  const onPaginationChange = (paginationState) => {
-    setPageIndex(paginationState.pageIndex);
-    setPageSize(paginationState.pageSize);
+  const onPaginationChange = (paginationState: { pageIndex: number; pageSize: number }) => {
+    if (paginationState.pageIndex !== pageIndex) { setPageIndex(paginationState.pageIndex); }
+    if (paginationState.pageSize !== pageSize) { setPageSize(paginationState.pageSize); }
   };
 
   return {
