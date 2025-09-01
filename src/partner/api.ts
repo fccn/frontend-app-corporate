@@ -1,7 +1,6 @@
-import { getConfig } from '@edx/frontend-platform';
+import { getConfig, camelCaseObject } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { logError } from '@edx/frontend-platform/logging';
-import camelCaseObject from 'camelcase-keys';
 
 import { CorporatePartner } from '../app/types';
 

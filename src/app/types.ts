@@ -2,7 +2,7 @@ export type CorporatePartner = {
   id: number;
   code: string;
   name: string;
-  logoUrl: string;
+  logo: string;
   homepageUrl: string;
   catalogs: number;
   courses: number;
