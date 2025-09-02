@@ -13,16 +13,16 @@ export const paths = {
 
   catalogs: {
     path: '/:partnerId/',
-    buildPath: (partnerId: string) => `/${partnerId}/`,
+    buildPath: (partnerId: string | number) => `/${partnerId}/`,
   },
 
   courses: {
     path: '/:partnerId/:catalogId/',
-    buildPath: (partnerId: string, catalogId: string) => `/${partnerId}/${catalogId}/`,
+    buildPath: (partnerId: string | number, catalogId: string) => `/${partnerId}/${catalogId}/`,
   },
 
   courseDetail: {
     path: '/:partnerId/:catalogId/:courseId/',
-    buildPath: (partnerId: string, catalogId: string, courseId: string) => `/${partnerId}/${catalogId}/${courseId}/`,
+    buildPath: (partnerId: string | number, catalogId: string, courseId: string) => `/${partnerId}/${catalogId}/${courseId}/`,
   },
 } as const;
