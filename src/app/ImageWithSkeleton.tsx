@@ -1,5 +1,5 @@
+import { FC, useState } from 'react';
 import { Skeleton } from '@openedx/paragon';
-import React, { FC } from 'react';
 
 interface ImageWithSkeletonProps {
   src: string;
@@ -12,7 +12,7 @@ interface ImageWithSkeletonProps {
 const ImageWithSkeleton: FC<ImageWithSkeletonProps> = ({
   src, alt, width, height, className,
 }) => {
-  const [isImageLoaded, setImageLoaded] = React.useState(false);
+  const [isImageLoaded, setImageLoaded] = useState(false);
 
   return (
     <>

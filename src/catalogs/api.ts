@@ -2,7 +2,7 @@ import { getConfig, camelCaseObject } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { logError } from '@edx/frontend-platform/logging';
 
-import { CorporateCatalog, CorporatePartner, PaginatedResponse } from '../app/types';
+import { CorporateCatalog, PaginatedResponse } from '../app/types';
 
 export const getPartnerCatalogs = async (
   partnerId: string,
@@ -10,17 +10,12 @@ export const getPartnerCatalogs = async (
   pageSize: number,
 ): Promise<PaginatedResponse<CorporateCatalog>> => {
   try {
-    const url = `${getConfig().LMS_BASE_URL}/corporate_access/api/v1/partners/${partnerId}/catalogs/?page=${page}&page_size=${pageSize}`;
+    const url = new URL(`${getConfig().LMS_BASE_URL}/corporate_access/api/v1/partners/${partnerId}/catalogs/`);
+    url.searchParams.append('page', page.toString());
+    url.searchParams.append('page_size', pageSize.toString());
+
     const response = await getAuthenticatedHttpClient().get(url);
-    return {
-      next: response.data.next,
-      previous: response.data.previous,
-      count: response.data.count,
-      numPages: response.data.num_pages,
-      currentPage: response.data.current_page,
-      start: response.data.start,
-      results: camelCaseObject(response.data.results),
-    };
+    return camelCaseObject(response.data);
   } catch (error) {
     logError(error);
     return {
@@ -31,27 +26,6 @@ export const getPartnerCatalogs = async (
       currentPage: 0,
       start: 0,
       results: [],
-    };
-  }
-};
-
-export const getPartnerDetails = async (partnerId?: string): Promise<CorporatePartner> => {
-  try {
-    const url = `${getConfig().LMS_BASE_URL}/corporate_access/api/v1/partners/${partnerId}/`;
-    const response = await getAuthenticatedHttpClient().get(url);
-    return camelCaseObject(response.data);
-  } catch (error) {
-    logError(error);
-    return {
-      id: 0,
-      code: '',
-      name: '',
-      logo: '',
-      homepageUrl: '',
-      catalogs: 0,
-      courses: 0,
-      enrollments: 0,
-      certified: 0,
     };
   }
 };

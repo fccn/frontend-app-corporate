@@ -1,10 +1,10 @@
-import { useIntl } from '@edx/frontend-platform/i18n';
 import { ReactNode, useContext } from 'react';
+import { useIntl } from '@edx/frontend-platform/i18n';
 import { AppContext } from '@edx/frontend-platform/react';
 import { Button, Container } from '@openedx/paragon';
+import { ArrowBack } from '@openedx/paragon/icons';
 import Header from '@edx/frontend-component-header';
 import { FooterSlot } from '@edx/frontend-component-footer';
-import { ArrowBack } from '@openedx/paragon/icons';
 
 import { useNavigate } from '@src/hooks';
 import messages from './messages';

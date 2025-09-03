@@ -1,7 +1,8 @@
+import { FC, ReactNode } from 'react';
 import {
   breakpoints, Stack, useMediaQuery,
 } from '@openedx/paragon';
-import React, { FC } from 'react';
+
 import ImageWithSkeleton from './ImageWithSkeleton';
 
 interface HeaderDescriptionProps {
@@ -14,7 +15,7 @@ interface HeaderDescriptionProps {
     title: string;
     value: string | number;
   }[],
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 const HeaderDescription: FC<HeaderDescriptionProps> = ({ context, info, children }) => {
@@ -47,8 +48,8 @@ const HeaderDescription: FC<HeaderDescriptionProps> = ({ context, info, children
         {info.map((item, index) => (
           <>
             <div key={item.title} className="d-flex flex-column">
-              <span className="x-small text-primary-400">{item.title}</span>
-              <span className="small text-primary-300">{item.value}</span>
+              <span className="x-small text-primary-500">{item.title}</span>
+              <span className="small text-primary-400">{item.value}</span>
             </div>
             {index < info.length - 1 && !isSmall && <hr className="border border-left-1 h-25 m-0" />}
           </>
