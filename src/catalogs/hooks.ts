@@ -13,22 +13,26 @@ export const usePartnerCatalogs = (
   return { partnerCatalogs, isLoadingCatalogs };
 };
 
-export const useCatalogDetails = ({ partnerId, selectedCatalog, queryKeyVariables }) => {
+export const useCatalogDetails = ({
+  partnerId,
+  selectedCatalog,
+}: { partnerId: string; selectedCatalog: string | number; }) => {
   const queryClient = useQueryClient();
-  const partnerCatalogsCached: PaginatedResponse<CorporateCatalog> | undefined = queryClient.getQueryData(
-    ['partnerCatalogs', partnerId, ...queryKeyVariables],
-  );
+
+  const allCatalogs = queryClient
+    .getQueriesData({ queryKey: ['partnerCatalogs', partnerId] })
+    .flatMap(([, data]) => (data as PaginatedResponse<CorporateCatalog>)?.results ?? []);
+
+  const catalogFromCache = allCatalogs.find((c) => c.id === selectedCatalog);
 
   const { data: catalogDetails, isLoading } = useQuery({
-    queryKey: ['catalogDetails'],
+    queryKey: ['catalogDetails', partnerId, selectedCatalog],
     queryFn: () => getCatalogDetails(partnerId, selectedCatalog),
-    enabled: !partnerCatalogsCached,
+    enabled: !catalogFromCache && !!partnerId && !!selectedCatalog,
   });
 
   return {
-    partnerDetails: partnerCatalogsCached
-      ? partnerCatalogsCached.results?.find((catalog) => catalog.id === selectedCatalog)
-      : catalogDetails,
+    catalogDetails: catalogFromCache || catalogDetails || null,
     isLoadingCatalogDetails: isLoading,
   };
 };

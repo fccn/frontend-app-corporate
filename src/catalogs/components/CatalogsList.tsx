@@ -42,7 +42,7 @@ const CatalogsList: FC<CatalogsListProps> = ({ partnerId }) => {
   }, {
     type: 'edit',
     onClick: (catalog: CorporateCatalog) => {
-      handleChangeSelectedCatalog(catalog.id, [pageIndex + 1, pageSize]);
+      handleChangeSelectedCatalog(catalog.id);
     },
   }];
 

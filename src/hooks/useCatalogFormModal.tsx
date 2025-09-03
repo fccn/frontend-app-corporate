@@ -19,21 +19,15 @@ export const CatalogEditModalProvider: FC<CatalogEditModalProviderProps> = ({ ch
 
   const [isOpen, open, close] = useToggle(false);
   const [selectedCatalogId, setSelectedCatalogId] = useState<number | string | null>(null);
-  /** Saved in case needed to fetch catalog details from cache */
-  const [queryKeyVariables, setQueryKeyVariables] = useState<(number | string)[]>([]);
 
   /**
    * Called when a catalog is selected from the list.
-   * It saves the selected catalog ID and the query key variables (page index and page size)
-   * needed to fetch the catalog details from cache.
+   * Opens the edit modal for the selected catalog.
    *
    * @param {number|string|null} catalogId The ID of the selected catalog.
-   * @param {(number|string)[]} queryKey The query key variables (page index and page size)
-   * needed to fetch the catalog details from cache.
    */
-  const handleChangeSelectedCatalog = (catalogId: number | string | null, queryKey: (number | string)[]) => {
+  const handleChangeSelectedCatalog = (catalogId: number | string | null) => {
     setSelectedCatalogId(catalogId);
-    setQueryKeyVariables(queryKey);
   };
 
   const handleCloseModal = () => {
@@ -50,7 +44,6 @@ export const CatalogEditModalProvider: FC<CatalogEditModalProviderProps> = ({ ch
     () => ({
       isOpen,
       selectedCatalog: null,
-      queryKeyVariables,
       handleChangeSelectedCatalog,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -68,7 +61,7 @@ export const CatalogEditModalProvider: FC<CatalogEditModalProviderProps> = ({ ch
           </Button>
         )}
       >
-        <CatalogEditForm selectedCatalog={selectedCatalogId} queryKeyVariables={queryKeyVariables} />
+        <CatalogEditForm selectedCatalog={selectedCatalogId} />
       </ModalLayout>
 
       {children}

@@ -12,16 +12,18 @@ import messages from './messages';
 
 interface CatalogEditFormProps {
   selectedCatalog: string | number | null;
-  queryKeyVariables: (string | number)[];
 }
 
-const CatalogEditForm: FC<CatalogEditFormProps> = ({ selectedCatalog, queryKeyVariables }) => {
+const CatalogEditForm: FC<CatalogEditFormProps> = ({ selectedCatalog }) => {
   const intl = useIntl();
   const { partnerId } = useParams<{ partnerId: string }>();
-  const { partnerDetails } = useCatalogDetails({ partnerId, selectedCatalog, queryKeyVariables });
+  const { catalogDetails } = useCatalogDetails({
+    partnerId,
+    selectedCatalog: selectedCatalog!,
+  });
 
   const methods = useForm({
-    defaultValues: partnerDetails ?? EMPTY_FORM_STATE,
+    defaultValues: catalogDetails ?? EMPTY_FORM_STATE,
     mode: 'onChange',
   });
 
