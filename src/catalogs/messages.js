@@ -36,6 +36,11 @@ const messages = defineMessages({
     defaultMessage: 'Catalog',
     description: 'Info for the catalog name',
   },
+  noCatalogs: {
+    id: 'corporate.catalog.table.empty.content',
+    defaultMessage: 'No catalogs found',
+    description: 'Empty table content for the catalog table.',
+  },
 });
 
 export default messages;

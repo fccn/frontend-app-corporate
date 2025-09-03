@@ -97,6 +97,7 @@ const CatalogsList: FC<CatalogsListProps> = ({ partnerId }) => {
     >
       <DataTable.TableControlBar />
       <DataTable.Table />
+      <DataTable.EmptyTable content={intl.formatMessage(messages.noCatalogs)} />
       <TableFooter />
     </DataTable>
   );
