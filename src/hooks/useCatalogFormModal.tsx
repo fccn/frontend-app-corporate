@@ -20,12 +20,6 @@ export const CatalogEditModalProvider: FC<CatalogEditModalProviderProps> = ({ ch
   const [isOpen, open, close] = useToggle(false);
   const [selectedCatalogId, setSelectedCatalogId] = useState<number | string | null>(null);
 
-  /**
-   * Called when a catalog is selected from the list.
-   * Opens the edit modal for the selected catalog.
-   *
-   * @param {number|string|null} catalogId The ID of the selected catalog.
-   */
   const handleChangeSelectedCatalog = (catalogId: number | string | null) => {
     setSelectedCatalogId(catalogId);
   };
