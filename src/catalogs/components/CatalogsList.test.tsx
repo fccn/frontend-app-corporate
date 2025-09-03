@@ -16,6 +16,12 @@ jest.mock('@src/hooks', () => ({
   }),
 }));
 
+jest.mock('@src/hooks/useCatalogFormModal', () => ({
+  useCatalogFormModal: () => ({
+    handleChangeSelectedCatalog: jest.fn(),
+  }),
+}));
+
 jest.mock('@src/app/TableFooter', () => function TableFooter() {
   return <div data-testid="table-footer" />;
 });

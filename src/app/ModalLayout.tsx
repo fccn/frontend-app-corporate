@@ -1,14 +1,15 @@
-import { ActionRow, ModalDialog } from '@openedx/paragon';
+import { FC, ReactNode } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import React, { FC } from 'react';
+import { ActionRow, ModalDialog } from '@openedx/paragon';
+
 import messages from './messages';
 
 interface ModalLayoutProps {
   title: string;
   isOpen: boolean;
   onClose: () => void;
-  actions: React.ReactNode | React.ReactNode[];
-  children: React.ReactNode;
+  actions: ReactNode | ReactNode[];
+  children: ReactNode;
 }
 
 const ModalLayout: FC<ModalLayoutProps> = ({

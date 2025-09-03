@@ -30,33 +30,16 @@ export const getPartnerCatalogs = async (
   }
 };
 
-export const getCatalogDetails = async (partnerId: string, catalogId: string | number): Promise<CorporateCatalog> => {
+export const getCatalogDetails = async (
+  partnerId: string,
+  catalogId: string | number,
+): Promise<CorporateCatalog | null> => {
   try {
     const url = `${getConfig().LMS_BASE_URL}/corporate_access/api/v1/partners/${partnerId}/catalogs/${catalogId}/`;
     const response = await getAuthenticatedHttpClient().get(url);
     return camelCaseObject(response.data);
   } catch (error) {
     logError(error);
-    return {
-      id: '',
-      name: '',
-      slug: '',
-      enrollments: 0,
-      certified: 0,
-      completionRate: 0,
-      supportEmail: '',
-      emailRegexes: [],
-      courseEnrollmentLimit: 0,
-      userLimit: 0,
-      availableStartDate: new Date(),
-      availableEndDate: new Date(),
-      catalogAlternativeLink: '',
-      isSelfEnrollment: false,
-      customCourses: false,
-      authorizationAdditionalMessage: '',
-      isPublic: false,
-      courses: 0,
-      corporatePartner: 0,
-    };
+    return null;
   }
 };
