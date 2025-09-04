@@ -4,16 +4,15 @@ import { lazy, Suspense } from 'react';
 import { paths } from '@src/constants';
 
 const CorporatePartnerPage = lazy(() => import('@src/partner/CorporatePartnerPage'));
+const PartnerCatalogsPage = lazy(() => import('@src/catalogs/PartnerCatalogsPage'));
 
 const Router = () => (
   <Suspense fallback={<div>Loading...</div>}>
     <WouterRouter base={paths.base}>
       <Switch>
         <Route path={paths.partners.path} component={CorporatePartnerPage} />
+        <Route path={paths.catalogs.path} component={PartnerCatalogsPage} />
 
-        <Route path={paths.catalogs.path}>
-          <h1>Catalogs</h1>
-        </Route>
         <Route path={paths.courses.path}>
           <h1>List of Courses</h1>
         </Route>

@@ -31,6 +31,11 @@ const messages = defineMessages({
     defaultMessage: 'Analytics',
     description: 'Tooltip text for analytics action',
   },
+  backButton: {
+    id: 'app.back.button',
+    defaultMessage: 'Back',
+    description: 'Text for the back button in the app layout',
+  },
 });
 
 export default messages;
