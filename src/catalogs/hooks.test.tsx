@@ -5,7 +5,6 @@ import { usePartnerCatalogs, useCatalogDetails } from './hooks';
 import * as api from './api';
 import { CorporateCatalog, PaginatedResponse } from '../app/types';
 
-// Mock the API functions
 jest.mock('./api');
 const mockedGetPartnerCatalogs = api.getPartnerCatalogs as jest.MockedFunction<typeof api.getPartnerCatalogs>;
 const mockedGetCatalogDetails = api.getCatalogDetails as jest.MockedFunction<typeof api.getCatalogDetails>;

@@ -7,10 +7,10 @@ import ActionItem from '@src/app/ActionItem';
 import TableFooter from '@src/app/TableFooter';
 import { paths } from '@src/constants';
 import { useNavigate, usePagination } from '@src/hooks';
-import { useCatalogFormModal } from '@src/hooks/useCatalogFormModal';
 
 import messages from '../messages';
 import { usePartnerCatalogs } from '../hooks';
+import { useCatalogEditionModal } from '../useCatalogEditionModal';
 
 type CellValue = {
   row: {
@@ -26,7 +26,7 @@ const CatalogsList: FC<CatalogsListProps> = ({ partnerId }) => {
   const navigate = useNavigate();
   const intl = useIntl();
 
-  const { handleChangeSelectedCatalog } = useCatalogFormModal();
+  const { handleChangeSelectedCatalog } = useCatalogEditionModal();
 
   const { pageIndex, pageSize, onPaginationChange } = usePagination();
 

@@ -7,7 +7,7 @@ import Header from '@edx/frontend-component-header';
 import { FooterSlot } from '@edx/frontend-component-footer';
 
 import { useNavigate } from '@src/hooks';
-import { CatalogEditModalProvider } from '@src/hooks/useCatalogFormModal';
+import { CatalogEditionModalProvider } from '@src/catalogs/useCatalogEditionModal';
 import messages from './messages';
 
 type AppLayoutProps = {
@@ -39,9 +39,9 @@ const AppLayout = ({
           </Button>
         )}
         {title && <h1 className="my-4">{title}</h1>}
-        <CatalogEditModalProvider>
+        <CatalogEditionModalProvider>
           {children}
-        </CatalogEditModalProvider>
+        </CatalogEditionModalProvider>
       </Container>
 
       {withFooter && <FooterSlot />}

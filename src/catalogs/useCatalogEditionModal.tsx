@@ -5,16 +5,16 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { Button, useToggle } from '@openedx/paragon';
 
 import ModalLayout from '@src/app/ModalLayout';
-import { CatalogEditionModalContext } from '@src/context/CatalogEditionModalContext';
 
-import CatalogEditForm from '@src/catalogs/components/CatalogEditForm';
+import CatalogEditForm from './components/CatalogEditForm';
 import messages from './messages';
+import { CatalogEditionModalContext } from './context/CatalogEditionModalContext';
 
-interface CatalogEditModalProviderProps {
+interface CatalogEditionModalProviderProps {
   children: React.ReactNode | React.ReactNode[];
 }
 
-export const CatalogEditModalProvider: FC<CatalogEditModalProviderProps> = ({ children }) => {
+export const CatalogEditionModalProvider: FC<CatalogEditionModalProviderProps> = ({ children }) => {
   const intl = useIntl();
 
   const [isOpen, open, close] = useToggle(false);
@@ -63,4 +63,4 @@ export const CatalogEditModalProvider: FC<CatalogEditModalProviderProps> = ({ ch
   );
 };
 
-export const useCatalogFormModal = () => useContext(CatalogEditionModalContext);
+export const useCatalogEditionModal = () => useContext(CatalogEditionModalContext);
