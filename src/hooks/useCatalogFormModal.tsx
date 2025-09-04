@@ -7,7 +7,7 @@ import { Button, useToggle } from '@openedx/paragon';
 import ModalLayout from '@src/app/ModalLayout';
 import { CatalogEditionModalContext } from '@src/context/CatalogEditionModalContext';
 
-import CatalogEditForm from '@src/app/CatalogEditForm';
+import CatalogEditForm from '@src/catalogs/components/CatalogEditForm';
 import messages from './messages';
 
 interface CatalogEditModalProviderProps {

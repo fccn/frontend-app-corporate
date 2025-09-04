@@ -3,10 +3,10 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useParams } from 'wouter';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
+import FormLayout from '@src/app/FormLayout';
+import { FormElement } from '@src/app/FormLayout/types';
 import { useCatalogDetails } from '@src/catalogs/hooks';
 
-import FormLayout from '../FormLayout';
-import { FormElement } from '../FormLayout/types';
 import { EMPTY_FORM_STATE } from './constants';
 import messages from './messages';
 
