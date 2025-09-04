@@ -1,24 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import { breakpoints, useMediaQuery } from '@openedx/paragon';
 import HeaderDescription from './HeaderDescription';
 
-// Mock the ImageWithSkeleton component
-jest.mock('./ImageWithSkeleton', () => function ImageWithSkeleton({
-  src, alt, width, height,
-}: {
-  src: string;
-  alt: string;
-  width: number | string;
-  height: number | string;
-}) {
-  return (
-    <div data-testid="image-with-skeleton">
-      <img src={src} alt={alt} width={width} height={height} />
-    </div>
-  );
-});
-
-// Mock useMediaQuery hook
 jest.mock('@openedx/paragon', () => ({
   ...jest.requireActual('@openedx/paragon'),
   useMediaQuery: jest.fn(),
@@ -36,19 +18,6 @@ describe('HeaderDescription', () => {
     { title: 'Courses', value: '25' },
     { title: 'Students', value: '1,250' },
   ];
-
-  beforeEach(() => {
-    // Default to desktop view
-    (useMediaQuery as jest.Mock).mockImplementation(({ maxWidth }) => {
-      if (maxWidth === breakpoints.small.maxWidth) {
-        return false; // isSmall = false
-      }
-      if (maxWidth === breakpoints.medium.maxWidth) {
-        return false; // isMedium = false
-      }
-      return false;
-    });
-  });
 
   afterEach(() => {
     jest.clearAllMocks();
@@ -83,11 +52,13 @@ describe('HeaderDescription', () => {
   });
 
   describe('Image Handling', () => {
-    it('renders image when imageUrl is provided', () => {
+    it('renders image when imageUrl is provided', async () => {
       render(<HeaderDescription context={mockContext} info={mockInfo} />);
-      expect(screen.getByTestId('image-with-skeleton')).toBeInTheDocument();
-      expect(screen.getByRole('img')).toHaveAttribute('src', mockContext.imageUrl);
-      expect(screen.getByRole('img')).toHaveAttribute('alt', mockContext.title);
+
+      const imageContainer = await screen.findByTestId('image-with-skeleton');
+      expect(imageContainer).toBeInTheDocument();
+      expect(imageContainer.querySelector('img')).toHaveAttribute('src', mockContext.imageUrl);
+      expect(imageContainer.querySelector('img')).toHaveAttribute('alt', mockContext.title);
     });
 
     it('does not render image when imageUrl is null', () => {

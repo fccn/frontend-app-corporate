@@ -15,7 +15,7 @@ const ImageWithSkeleton: FC<ImageWithSkeletonProps> = ({
   const [isImageLoaded, setImageLoaded] = useState(false);
 
   return (
-    <>
+    <div data-testid="image-with-skeleton">
       <img
         src={src}
         alt={alt}
@@ -26,7 +26,7 @@ const ImageWithSkeleton: FC<ImageWithSkeletonProps> = ({
         }}
       />
       {!isImageLoaded && <Skeleton width={width} height={height} />}
-    </>
+    </div>
   );
 };
 

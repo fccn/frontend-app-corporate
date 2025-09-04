@@ -3,7 +3,6 @@ import { renderWrapper } from '@src/setupTest';
 import CatalogsList from './CatalogsList';
 import { usePartnerCatalogs } from '../hooks';
 
-// Mock the hooks
 jest.mock('../hooks', () => ({
   usePartnerCatalogs: jest.fn(),
 }));
@@ -17,12 +16,10 @@ jest.mock('@src/hooks', () => ({
   }),
 }));
 
-// Mock components to avoid complex rendering
 jest.mock('@src/app/TableFooter', () => function TableFooter() {
   return <div data-testid="table-footer" />;
 });
 
-// Mock API
 jest.mock('../api');
 
 const mockCatalogs = [
@@ -73,7 +70,6 @@ describe('CatalogsList', () => {
   it('renders a table with catalog data', () => {
     renderWrapper(<CatalogsList partnerId="123" />);
 
-    // Check if catalog data is rendered
     mockCatalogs.forEach(async (catalog) => {
       expect(await screen.findByText(catalog.name)).toBeInTheDocument();
       expect(await screen.findByText(catalog.courses)).toBeInTheDocument();
