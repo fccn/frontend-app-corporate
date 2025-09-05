@@ -4,10 +4,15 @@ import { getCourses } from './api';
 
 
 
-export const useCatalogCourses = (catalogId: string) => useQuery({
-  queryKey: ['catalogCourses', catalogId],
-  queryFn: () => getCourses(catalogId),
-});
+export const useCatalogCourses = (partnerId:string, catalogId:string) => {
+  
+  const {data, isLoading} = useQuery({
+  queryKey: ['catalogCourses', partnerId, catalogId],
+  queryFn: () => getCourses(partnerId, catalogId),
+})
+
+  return { courses: data?.results || [], count: data?.count || 0, isLoading };
+};
 
 // export const useDeleteCourse = () => {
 //   const mutation = useMutation({

@@ -18,16 +18,13 @@ export type Learner = {
 };
 
 export type CorporateCourse = {
-  courseId: string;
-  name: string;
-  link: string;
-  logo: string;
-  enrollments: number;
-  certified: number;
-  completionRate: number;
+  id: string;
+  catalogId: number;
   position: number;
-  courseDates: string;
-  enrollmentDates: string;
+  courseRun: {
+    id: string;
+    displayName: string;
+  }
 };
 
 export type CorporateCatalog = {
