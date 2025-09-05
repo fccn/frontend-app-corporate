@@ -9,7 +9,7 @@ interface HeaderDescriptionProps {
   context: {
     title: string;
     imageUrl: string | null;
-    description?: string;
+    description?: string | ReactNode;
   },
   info: {
     title: string;
@@ -24,7 +24,7 @@ const HeaderDescription: FC<HeaderDescriptionProps> = ({ context, info, children
 
   return (
     <Stack
-      className={`border rounded bg-primary-100 px-${isSmall ? 3 : 4} py-3 my-3 justify-content-between`}
+      className={`border rounded bg-light-100 px-${isSmall ? 3 : 4} py-3 my-3 justify-content-between`}
       direction={isMedium ? 'vertical' : 'horizontal'}
       gap={4}
     >
@@ -48,8 +48,8 @@ const HeaderDescription: FC<HeaderDescriptionProps> = ({ context, info, children
         {info.map((item, index) => (
           <>
             <div key={item.title} className="d-flex flex-column">
-              <span className="x-small text-primary-500">{item.title}</span>
-              <span className="small text-primary-400">{item.value}</span>
+              <span className="x-small text-gray">{item.title}</span>
+              <span className="small text-gray">{item.value}</span>
             </div>
             {index < info.length - 1 && !isSmall && <hr className="border border-left-1 h-25 m-0" />}
           </>

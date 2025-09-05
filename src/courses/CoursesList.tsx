@@ -1,138 +1,108 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
-  DataTable, TextFilter,
+  DataTable, Form, TextFilter,
 } from '@openedx/paragon';
 
 import { CellValue, CorporateCourse } from '@src/app/types';
-import { navigate } from 'wouter/use-browser-location';
 import TableName from '@src/app/TableName';
 import TableFooter from '@src/app/TableFooter';
 import ActionItem from '@src/app/ActionItem';
+import { navigate } from 'wouter/use-browser-location';
+
+import { useCatalogCourses } from './hooks';
+import { usePagination } from '@src/hooks';
+import { paths } from '@src/constants';
 
 import messages from './messages';
-import { useCatalogCourses } from './apiHooks';
 
-
-interface CoursesDataCell extends CellValue {
+interface CoursesCell extends CellValue {
   row: {
     original: CorporateCourse;
-  }
+  };
+}
+
+interface CoursesListProps {
+  partnerId: string;
+  catalogId: string;
 }
 const tableActions = ['view', 'delete'];
-const mockData: CorporateCourse[] =  [
-  {
-    "courseId": "CC101",
-    "name": "Effective Communication in the Workplace",
-    "link": "https://corporatetraining.com/courses/cc101",
-    "logo": "https://via.placeholder.com/150",
-    "enrollments": 1200,
-    "certified": 950,
-    "completionRate": 79.2,
-    "position": 1,
-    "courseDates": "2023-01-15 to 2023-02-15",
-    "enrollmentDates": "2023-01-01 to 2023-01-14"
-  },
-  {
-    "courseId": "CC102",
-    "name": "Project Management Fundamentals",
-    "link": "https://corporatetraining.com/courses/cc102",
-    "logo": "https://via.placeholder.com/150",
-    "enrollments": 870,
-    "certified": 720,
-    "completionRate": 82.7,
-    "position": 2,
-    "courseDates": "2023-02-01 to 2023-03-01",
-    "enrollmentDates": "2023-01-15 to 2023-01-31"
-  },
-  {
-    "courseId": "CC103",
-    "name": "Cybersecurity Essentials for Employees",
-    "link": "https://corporatetraining.com/courses/cc103",
-    "logo": "https://via.placeholder.com/150",
-    "enrollments": 1500,
-    "certified": 1300,
-    "completionRate": 86.7,
-    "position": 3,
-    "courseDates": "2023-03-01 to 2023-04-01",
-    "enrollmentDates": "2023-02-15 to 2023-02-28"
-  },
-  {
-    "courseId": "CC104",
-    "name": "Diversity and Inclusion Training",
-    "link": "https://corporatetraining.com/courses/cc104",
-    "logo": "https://via.placeholder.com/150",
-    "enrollments": 980,
-    "certified": 840,
-    "completionRate": 85.7,
-    "position": 4,
-    "courseDates": "2023-04-01 to 2023-05-01",
-    "enrollmentDates": "2023-03-15 to 2023-03-31"
-  },
-  {
-    "courseId": "CC105",
-    "name": "Time Management for Professionals",
-    "link": "https://corporatetraining.com/courses/cc105",
-    "logo": "https://via.placeholder.com/150",
-    "enrollments": 1100,
-    "certified": 960,
-    "completionRate": 87.3,
-    "position": 5,
-    "courseDates": "2023-05-01 to 2023-06-01",
-    "enrollmentDates": "2023-04-15 to 2023-04-30"
-  }
-]
 
-const CoursesList = ({catalogId}) => {
+
+const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
   const intl = useIntl();
+  const { pageSize, pageIndex } = usePagination();
   const {
-    data= mockData,
+    courses,
+    count,
     isLoading,
-    isError,
-    error,
-  } = useCatalogCourses(catalogId);
-  // const data = mockData; // For testing purposes, replace with actual data fetching
-  console.debug('CoursesList data', data);
+  } = useCatalogCourses(partnerId, catalogId); // TODO: update hook signature for pagination
+  const positions = Array.from({ length: count || 0 }, (_, i) => i + 1);
+
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>, courseId: string) => {
+    // TODO: Implement mutation to update position
+    // updateCoursePosition(courseId, Number(e.target.value));
+    console.log('Change position for', courseId, 'to', e.target.value);
+  };
+
   return (
     <DataTable
-    isSelectable
+      isLoading={isLoading}
+      isSelectable
       isPaginated
       isFilterable
+      manualPagination
+      itemCount={count}
       defaultColumnValues={{ Filter: TextFilter }}
       initialState={{
-        pageSize: 30,
-        pageIndex: 0,
+        pageSize,
+        pageIndex,
       }}
+      data={courses}
       additionalColumns={[
         {
           id: 'action',
           Header: intl.formatMessage(messages.headerAction),
-          Cell: ({ row }: CoursesDataCell) => tableActions.map((type) => (
+          Cell: ({ row }: CoursesCell) => tableActions.map((type) => (
             <ActionItem
-              key={`action-${type}-${row.original.courseId}`}
+              key={`action-${type}-${row.original.id}`}
               type={type}
-              onClick={() => navigate(`/courses/${row.original.courseId}/`)}
+              onClick={() => navigate(paths.courseDetail.buildPath(partnerId, catalogId, row.original.courseRun.id))}
             />
           )),
         },
       ]}
-      itemCount={data?.length || 0}
-      data={data}
       columns={[
         {
           Header: intl.formatMessage(messages.headerName),
           accessor: 'name',
           // eslint-disable-next-line react/no-unstable-nested-components
-          Cell: ({ row }: CoursesDataCell) => (
+          Cell: ({ row }: CoursesCell) => (
             <TableName
               className="course-name"
-              key={`description-view-${row.original.courseId}`}
-              name={row.original.name}
+              key={`description-view-${row.original.id}`}
+              name={row.original.courseRun.displayName}
             />
           ),
         },
         {
           Header: intl.formatMessage(messages.headerPosition),
           accessor: 'position',
+          Cell: ({ row }: CoursesCell) => (
+            <Form.Control
+              as="select"
+              value={row.original.position}
+              onChange={(e) => handleChange(e, row.original.id)}
+            >
+              {positions.map((pos) => (
+                <option
+                  key={`position-${row.original.id}-${pos}`}
+                  value={pos}
+                >
+                  {pos}
+                </option>
+              ))}
+            </Form.Control>
+          ),
         },
         {
           Header: intl.formatMessage(messages.headerCourseDates),
@@ -150,7 +120,7 @@ const CoursesList = ({catalogId}) => {
           Header: intl.formatMessage(messages.headerCertified),
           accessor: 'certified',
         },
-                {
+        {
           Header: intl.formatMessage(messages.headerCompletion),
           accessor: 'completionRate',
         },

@@ -1,37 +1,66 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'wouter';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import AppLayout from '../app/AppLayout';
 import CoursesList from './CoursesList';
-import PageHeader from '@src/app/PageHeader';
+import HeaderDescription from '@src/app/HeaderDescription';
+import { useCatalogDetails } from '@src/catalogs/hooks';
+import { Icon, IconButton } from '@openedx/paragon';
+import { ContentCopy, LmsEditSquare } from '@openedx/paragon/icons';
 
 
+const DescriptionWithCopy = ({ value }: { value?: string }) => {
+  const intl = useIntl();
+
+  if (!value) return null;
+
+  const handleCopy = () => {
+    try {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(value);
+      }
+    } catch (err) { 
+      // Todo: handle error (e.g., show a notification)
+    }
+  };
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+      <span style={{ wordBreak: 'break-all' }}>{value}</span>
+      <button
+        type="button"
+        className="btn btn-link btn-sm p-0"
+        title={intl.formatMessage({ id: 'courses.page.copyLink', defaultMessage: 'Copy link' })}
+        onClick={handleCopy}
+        style={{ marginLeft: 4 }}
+      >
+        <Icon src={ContentCopy} size="xs" />
+      </button>
+    </div>
+  );
+};
 
 const CoursesPage = () => {
   const intl = useIntl();
-  const { catalogId } = useParams<{ catalogId?: string }>();
-  const queryClient = useQueryClient();
-  const courseContext = queryClient.getQueryData(['catalogs', catalogId]);
-  
+  const { partnerId, catalogId } = useParams();
+  const { catalogDetails } = useCatalogDetails({ partnerId: partnerId, catalogId: catalogId });
+
   return (
     <AppLayout>
-      <PageHeader
-        title={'courseContext.name'}
-        subtitle={'courseContext.name'}
-        imageUrl={'courseContext.logo'}
-        stats={[
-          { title: intl.formatMessage({ id: 'courses.page.totalCourses', defaultMessage: 'Courses' }), value: '50' },
-          { title: intl.formatMessage({ id: 'courses.page.enrolledEmployees', defaultMessage: 'Enrollments' }), value: '10,000+' },
-          { title: intl.formatMessage({ id: 'courses.page.totalCourses', defaultMessage: 'Certified Students' }), value: '50' },
-          { title: intl.formatMessage({ id: 'courses.page.enrolledEmployees', defaultMessage: 'Completion Rate' }), value: '10,000+' },
+      <HeaderDescription
+        context={{
+          title: catalogDetails?.name,
+          imageUrl: catalogDetails?.image,
+          description: <DescriptionWithCopy value={catalogDetails?.catalogAlternativeLink} />,
+        }}
+        info={[
+          { title: intl.formatMessage({ id: 'courses.page.totalCourses', defaultMessage: 'Courses' }), value: catalogDetails?.courses },
+          { title: intl.formatMessage({ id: 'courses.page.enrolledEmployees', defaultMessage: 'Enrollments' }), value: catalogDetails?.enrollments },
+          { title: intl.formatMessage({ id: 'courses.page.totalCourses', defaultMessage: 'Certified Students' }), value: catalogDetails?.certified },
+          { title: intl.formatMessage({ id: 'courses.page.enrolledEmployees', defaultMessage: 'Completion Rate' }), value: catalogDetails?.completionRate },
         ]}
-        actions={
-          <button className="btn btn-primary">
-            {intl.formatMessage({ id: 'courses.page.addCourse', defaultMessage: 'Add New Course' })}
-          </button>
-        }
-      />
-      <CoursesList catalog={catalogId}/>
+      >
+        <IconButton src={LmsEditSquare} alt='edit catalog'/>
+      </HeaderDescription>
+      <CoursesList catalogId={catalogId} partnerId={partnerId} />
     </AppLayout>
   );
 };
