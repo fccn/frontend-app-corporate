@@ -9,7 +9,7 @@ import TableFooter from '@src/app/TableFooter';
 import ActionItem from '@src/app/ActionItem';
 import { navigate } from 'wouter/use-browser-location';
 
-import { useCatalogCourses } from './hooks';
+import { useCatalogCourses, useDeleteCatalogCourse } from './hooks';
 import { usePagination } from '@src/hooks';
 import { paths } from '@src/constants';
 
@@ -25,18 +25,30 @@ interface CoursesListProps {
   partnerId: string;
   catalogId: string;
 }
-const tableActions = ['view', 'delete'];
-
 
 const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
   const intl = useIntl();
-  const { pageSize, pageIndex } = usePagination();
+  const { pageSize, pageIndex, onPaginationChange } = usePagination();
   const {
     courses,
     count,
+    pageCount,
     isLoading,
-  } = useCatalogCourses(partnerId, catalogId); // TODO: update hook signature for pagination
-  const positions = Array.from({ length: count || 0 }, (_, i) => i + 1);
+  } = useCatalogCourses(partnerId, catalogId, pageIndex + 1, pageSize);
+  const positions = Array.from({ length: count + 1 || 0 }, (_, i) => i);
+  const deleteCatalogCourse  = useDeleteCatalogCourse();
+
+  const tableActions = [{
+    type: 'view',
+    action: (partnerId, catalogId, course) => navigate(paths.courseDetail.buildPath(partnerId, catalogId, course.courseRun.id))
+  },
+  {
+    type: 'delete',
+    action: (partnerId, catalogId, course) => {
+      deleteCatalogCourse({ partnerId, catalogId, courseId: course.id }); 
+    }
+  }];
+  console.log('CoursesList render', { partnerId, catalogId, pageIndex, pageSize, count, pageCount, courses });
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>, courseId: string) => {
     // TODO: Implement mutation to update position
@@ -52,6 +64,8 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
       isFilterable
       manualPagination
       itemCount={count}
+      pageCount={pageCount}
+      fetchData={onPaginationChange}
       defaultColumnValues={{ Filter: TextFilter }}
       initialState={{
         pageSize,
@@ -62,11 +76,11 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
         {
           id: 'action',
           Header: intl.formatMessage(messages.headerAction),
-          Cell: ({ row }: CoursesCell) => tableActions.map((type) => (
+          Cell: ({ row }: CoursesCell) => tableActions.map(({ type, action }) => (
             <ActionItem
               key={`action-${type}-${row.original.id}`}
               type={type}
-              onClick={() => navigate(paths.courseDetail.buildPath(partnerId, catalogId, row.original.courseRun.id))}
+              onClick={() => action(partnerId, catalogId, row.original)}
             />
           )),
         },
