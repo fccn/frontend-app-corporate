@@ -13,13 +13,12 @@ export const usePartnerCatalogs = ({ partnerId, pageIndex, pageSize }) => {
 export const useCatalogDetails = ({ partnerId, catalogId }) => {
 
   const queryClient = useQueryClient();
-  // Aggregate all cached paginated catalog results for this partner
+
   const allCatalogs = queryClient
     .getQueriesData({ queryKey: ['partnerCatalogs', partnerId] })
     .flatMap(([, data]) => (Array.isArray(data?.results) ? data.results : []));
-
-    // Find the catalog by id/code
   const catalogCached = allCatalogs.find((catalog) => catalog.id === catalogId);
+
   const { data: catalogDetails, isLoading } = useQuery({
     queryKey: ['catalogsDetails', partnerId, catalogId],
     queryFn: () => getCatalogDetails(partnerId, catalogId),

@@ -1,7 +1,6 @@
-import { FC, ReactNode } from 'react';
-import {
-  breakpoints, Stack, useMediaQuery,
-} from '@openedx/paragon';
+import { FC, ReactNode, useState } from 'react';
+import { breakpoints, Stack, useMediaQuery, IconButtonWithTooltip } from '@openedx/paragon';
+import { ContentCopy } from '@openedx/paragon/icons';
 
 import ImageWithSkeleton from './ImageWithSkeleton';
 
@@ -9,7 +8,8 @@ interface HeaderDescriptionProps {
   context: {
     title: string;
     imageUrl: string | null;
-    description?: string | ReactNode;
+    description?: string;
+    copyableDescription?: boolean;
   },
   info: {
     title: string;
@@ -21,6 +21,20 @@ interface HeaderDescriptionProps {
 const HeaderDescription: FC<HeaderDescriptionProps> = ({ context, info, children }) => {
   const isSmall = useMediaQuery({ maxWidth: breakpoints.small.maxWidth });
   const isMedium = useMediaQuery({ maxWidth: breakpoints.medium.maxWidth });
+  const [copied, setCopied] = useState('Copy');
+
+  const handleCopy = async () => {
+    if (context.copyableDescription && context.description) {
+      try {
+        await navigator.clipboard.writeText(context.description);
+        setCopied('Copied');
+        setTimeout(() => setCopied('Copy'), 500);
+      } catch (e) {
+        setCopied('It was not possible to copy, try again');
+        setTimeout(() => setCopied('Copy'), 1500);
+      }
+    }
+  };
 
   return (
     <Stack
@@ -40,7 +54,19 @@ const HeaderDescription: FC<HeaderDescriptionProps> = ({ context, info, children
 
         <Stack className="justify-content-center">
           <h3 className="mb-0">{context.title}</h3>
-          <span className="small">{context?.description}</span>
+          <span className="small">{context?.description}
+            {context.copyableDescription && (
+              <IconButtonWithTooltip
+                invertColors
+                isActive
+                src={ContentCopy}
+                variant="primary"
+                onClick={handleCopy}
+                alt="Copy description"
+                tooltipContent={copied}
+              />
+            )}
+          </span>
         </Stack>
       </Stack>
 
