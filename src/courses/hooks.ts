@@ -1,42 +1,31 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getCourses } from './api';
+import { getCourses, deleteCourse } from './api';
 
 
 
-export const useCatalogCourses = (partnerId:string, catalogId:string) => {
-  
-  const {data, isLoading} = useQuery({
-  queryKey: ['catalogCourses', partnerId, catalogId],
-  queryFn: () => getCourses(partnerId, catalogId),
-})
+export const useCatalogCourses = (partnerId: string, catalogId: string, pageIndex, pageSize) => {
 
-  return { courses: data?.results || [], count: data?.count || 0, isLoading };
+  const { data, isLoading } = useQuery({
+    queryKey: ['catalogCourses', partnerId, catalogId, pageIndex, pageSize],
+    queryFn: () => getCourses(partnerId, catalogId, pageIndex, pageSize),
+  })
+
+  return { courses: data?.results || [], count: data?.count || 0, pageCount: data?.numPages, isLoading };
 };
 
-// export const useDeleteCourse = () => {
-//   const mutation = useMutation({
-//     mutationFn: async ({ pk }: { pk: number }) => api.deleteTaxonomy(pk),
-//     onSuccess: () => {
-//       console.log('User created successfully!')
-//     },
-//     onError: (error) => {
-//       console.error('Failed to create user:', error)
-//     }
-//   })
-// };
-
-// /* Builds the mutation to delete a taxonomy.
-//  * @returns A function that can be used to delete the taxonomy.
-//  */
-// export const useDeleteTaxonomy = () => {
-//   const queryClient = useQueryClient();
-//   const { mutateAsync } = useMutation({
-//     mutationFn: async ({ pk }: { pk: number }) => api.deleteTaxonomy(pk),
-//     onSettled: (_d, _e, args) => {
-//       queryClient.invalidateQueries({ queryKey: taxonomyQueryKeys.taxonomyList() });
-//       queryClient.removeQueries({ queryKey: taxonomyQueryKeys.taxonomy(args.pk) });
-//     },
-//   });
-//   return mutateAsync;
-// };
+export const useDeleteCatalogCourse = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync } = useMutation({
+    mutationFn: async ({ partnerId, catalogId, courseId }: { partnerId: string; catalogId: string; courseId: number }) => {
+      return deleteCourse(partnerId, catalogId, courseId);
+    },
+    onSettled: (_data, _error, args) => {
+      queryClient.invalidateQueries({
+        queryKey: ['catalogCourses', args.partnerId, args.catalogId],
+        exact: false,
+      });
+    },
+  });
+  return mutateAsync;
+};
