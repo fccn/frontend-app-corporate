@@ -35,7 +35,7 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
 
   const positions = Array.from({ length: count + 1 || 0 }, (_, i) => i);
   const formatDate = (date: string | null) => {
-    if (!date) return '';
+    if (!date) { return ''; }
     return intl.formatDate(date);
   };
 
@@ -124,12 +124,8 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
           // eslint-disable-next-line react/no-unstable-nested-components
           Cell: ({ row }: CoursesCell) => {
             const { start, end } = row.original.courseRun;
-            return (
-              <>
-                {`${formatDate(start)} - ${formatDate(end)}`}
-              </>
-            )
-          }
+            return `${formatDate(start)} - ${formatDate(end)}`;
+          },
         },
         {
           Header: intl.formatMessage(messages.headerEnrollmentDates),
@@ -137,12 +133,8 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
           // eslint-disable-next-line react/no-unstable-nested-components
           Cell: ({ row }: CoursesCell) => {
             const { enrollmentStart, enrollmentEnd } = row.original.courseRun;
-            return (
-              <>
-                {`${formatDate(enrollmentStart)} - ${formatDate(enrollmentEnd)}`}
-              </>
-            )
-          }
+            return `${formatDate(enrollmentStart)} - ${formatDate(enrollmentEnd)}`;
+          },
         },
         {
           Header: intl.formatMessage(messages.headerEnrollment),
@@ -155,11 +147,7 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
         {
           Header: intl.formatMessage(messages.headerCompletion),
           accessor: 'completionRate',
-          Cell: ({ row }: CoursesCell) => (
-            <>
-              {row.original.completionRate}%
-            </>
-          ),
+          Cell: ({ row }: CoursesCell) => `${row.original.completionRate}%`,
         },
       ]}
     >
