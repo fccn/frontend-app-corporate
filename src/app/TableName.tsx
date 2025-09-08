@@ -8,7 +8,9 @@ interface TableNameProps extends React.HTMLAttributes<HTMLDivElement> {
   image?: null | string;
 }
 
-const TableName = ({ name, destination, image = null, className }: TableNameProps) => (
+const TableName = ({
+  name, destination, image = null, className,
+}: TableNameProps) => (
   <Hyperlink
     className={`d-block ${className || ''}`}
     destination={destination}

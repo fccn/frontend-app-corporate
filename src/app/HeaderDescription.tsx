@@ -1,5 +1,7 @@
 import { FC, ReactNode, useState } from 'react';
-import { breakpoints, Stack, useMediaQuery, IconButtonWithTooltip } from '@openedx/paragon';
+import {
+  breakpoints, Stack, useMediaQuery, IconButtonWithTooltip,
+} from '@openedx/paragon';
 import { ContentCopy } from '@openedx/paragon/icons';
 
 import ImageWithSkeleton from './ImageWithSkeleton';
