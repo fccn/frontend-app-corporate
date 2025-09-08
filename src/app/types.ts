@@ -18,7 +18,7 @@ export type Learner = {
 };
 
 export type CorporateCourse = {
-  id: string;
+  id: number;
   catalogId: number;
   position: number;
   enrollments: number;
@@ -30,7 +30,8 @@ export type CorporateCourse = {
     start: string | null;
     end: string | null;
     enrollmentStart: string | null;
-    enrollmentEnd: string | null;  }
+    enrollmentEnd: string | null;
+  }
 };
 
 export type CorporateCatalog = {

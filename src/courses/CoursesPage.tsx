@@ -5,6 +5,7 @@ import { useCatalogDetails } from '@src/catalogs/hooks';
 import { usePartnerDetails } from '@src/partner/hooks';
 import { IconButton } from '@openedx/paragon';
 import { LmsEditSquare } from '@openedx/paragon/icons';
+import { paths } from '@src/constants';
 import CoursesList from './components/CoursesList';
 import AppLayout from '../app/AppLayout';
 
@@ -15,7 +16,7 @@ const CoursesPage = () => {
   const { partnerDetails } = usePartnerDetails({ partnerId });
 
   return (
-    <AppLayout>
+    <AppLayout withBackButton backPath={paths.catalogs.buildPath(partnerId)}>
       {catalogDetails
         && (
         <HeaderDescription
