@@ -62,4 +62,4 @@ export interface CellValue {
   row: {
     original: object;
   }
-};
+}

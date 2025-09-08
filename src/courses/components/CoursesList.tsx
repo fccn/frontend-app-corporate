@@ -7,13 +7,12 @@ import { CellValue, CorporateCourse } from '@src/app/types';
 import TableName from '@src/app/TableName';
 import TableFooter from '@src/app/TableFooter';
 import ActionItem from '@src/app/ActionItem';
-import { navigate } from 'wouter/use-browser-location';
+import { useNavigate, usePagination } from '@src/hooks';
 
-import { useCatalogCourses, useDeleteCatalogCourse } from './hooks';
-import { usePagination } from '@src/hooks';
 import { paths } from '@src/constants';
+import { useCatalogCourses, useDeleteCatalogCourse } from '../hooks';
 
-import messages from './messages';
+import messages from '../messages';
 
 interface CoursesCell extends CellValue {
   row: {
@@ -28,6 +27,7 @@ interface CoursesListProps {
 
 const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
   const intl = useIntl();
+  const navigate = useNavigate();
   const { pageSize, pageIndex, onPaginationChange } = usePagination();
   const {
     courses,
@@ -36,24 +36,22 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
     isLoading,
   } = useCatalogCourses(partnerId, catalogId, pageIndex + 1, pageSize);
   const positions = Array.from({ length: count + 1 || 0 }, (_, i) => i);
-  const deleteCatalogCourse  = useDeleteCatalogCourse();
+  const deleteCatalogCourse = useDeleteCatalogCourse();
 
   const tableActions = [{
     type: 'view',
-    action: (partnerId, catalogId, course) => navigate(paths.courseDetail.buildPath(partnerId, catalogId, course.courseRun.id))
+    action: (course) => navigate(paths.courseDetail.buildPath(partnerId, catalogId, course.courseRun.id)),
   },
   {
     type: 'delete',
-    action: (partnerId, catalogId, course) => {
-      deleteCatalogCourse({ partnerId, catalogId, courseId: course.id }); 
-    }
+    action: (course) => {
+      deleteCatalogCourse({ partnerId, catalogId, courseId: course.id });
+    },
   }];
-  console.log('CoursesList render', { partnerId, catalogId, pageIndex, pageSize, count, pageCount, courses });
 
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>, courseId: string) => {
+  const handleChange = () => {
     // TODO: Implement mutation to update position
-    // updateCoursePosition(courseId, Number(e.target.value));
-    console.log('Change position for', courseId, 'to', e.target.value);
+    // updateCourse(courseId, Number(e.target.value));
   };
 
   return (
@@ -80,7 +78,7 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
             <ActionItem
               key={`action-${type}-${row.original.id}`}
               type={type}
-              onClick={() => action(partnerId, catalogId, row.original)}
+              onClick={() => action(row.original)}
             />
           )),
         },
@@ -101,11 +99,12 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
         {
           Header: intl.formatMessage(messages.headerPosition),
           accessor: 'position',
+          // eslint-disable-next-line react/no-unstable-nested-components
           Cell: ({ row }: CoursesCell) => (
             <Form.Control
               as="select"
               value={row.original.position}
-              onChange={(e) => handleChange(e, row.original.id)}
+              onChange={() => handleChange()}
             >
               {positions.map((pos) => (
                 <option

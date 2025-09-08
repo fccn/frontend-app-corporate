@@ -1,10 +1,17 @@
-import { render, screen } from '@testing-library/react';
+import {
+  render, screen, fireEvent, waitFor,
+} from '@testing-library/react';
 import HeaderDescription from './HeaderDescription';
 
 jest.mock('@openedx/paragon', () => ({
   ...jest.requireActual('@openedx/paragon'),
   useMediaQuery: jest.fn(),
 }));
+Object.assign(navigator, {
+  clipboard: {
+    writeText: jest.fn().mockResolvedValue(undefined),
+  },
+});
 
 describe('HeaderDescription', () => {
   const mockContext = {
@@ -21,6 +28,23 @@ describe('HeaderDescription', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+  });
+
+  describe('Copy to clipboard', () => {
+    it('renders copy button if copyableDescription is true', () => {
+      render(<HeaderDescription context={{ ...mockContext, copyableDescription: true }} info={mockInfo} />);
+      const copyButton = screen.getByRole('button', { name: 'Copy description' });
+      expect(copyButton).toBeInTheDocument();
+    });
+
+    it('copies description to clipboard when copy button is clicked', async () => {
+      render(<HeaderDescription context={{ ...mockContext, copyableDescription: true }} info={mockInfo} />);
+      const copyButton = screen.getByRole('button', { name: 'Copy description' });
+      fireEvent.click(copyButton);
+      await waitFor(() => {
+        expect(navigator.clipboard.writeText).toHaveBeenCalledWith(mockContext.description);
+      });
+    });
   });
 
   describe('Basic Rendering', () => {
