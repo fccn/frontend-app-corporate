@@ -14,11 +14,7 @@ import { useCatalogCourses, useDeleteCatalogCourse } from '../hooks';
 
 import messages from '../messages';
 
-interface CoursesCell extends CellValue {
-  row: {
-    original: CorporateCourse;
-  };
-}
+type CoursesCell = CellValue<CorporateCourse>;
 
 interface CoursesListProps {
   partnerId: string;

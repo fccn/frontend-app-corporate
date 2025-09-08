@@ -38,8 +38,8 @@ const CatalogsList: FC<CatalogsListProps> = ({ partnerId }) => {
     onClick: (catalog: CorporateCatalog) => navigate(paths.courses.buildPath(partnerId, catalog.id)),
   }, {
     type: 'edit',
-    onClick: () => {
-      // to do - open edit catalog modal
+    onClick: (catalog: CorporateCatalog) => {
+      console.log(catalog.id);
     },
   }];
 
