@@ -21,10 +21,16 @@ export type CorporateCourse = {
   id: string;
   catalogId: number;
   position: number;
+  enrollments: number;
+  certified: number;
+  completionRate: number;
   courseRun: {
     id: string;
     displayName: string;
-  }
+    start: string | null;
+    end: string | null;
+    enrollmentStart: string | null;
+    enrollmentEnd: string | null;  }
 };
 
 export type CorporateCatalog = {

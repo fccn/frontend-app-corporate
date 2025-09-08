@@ -4,3 +4,15 @@
 .course-name:hover {
     text-decoration: none !important;
 }
+
+button[aria-label="Copy description"] svg {
+    width: 16px;
+    height: 16px;
+}
+
+.pgn__data-table td{
+    text-align: center;
+}
+.pgn__data-table th:not(:first-of-type) span {
+    margin: auto;
+}
