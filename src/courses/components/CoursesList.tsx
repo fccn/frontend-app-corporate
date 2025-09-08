@@ -31,8 +31,13 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
     pageCount,
     isLoading,
   } = useCatalogCourses(partnerId, catalogId, pageIndex + 1, pageSize);
-  const positions = Array.from({ length: count + 1 || 0 }, (_, i) => i);
   const deleteCatalogCourse = useDeleteCatalogCourse();
+
+  const positions = Array.from({ length: count + 1 || 0 }, (_, i) => i);
+  const formatDate = (date: string | null) => {
+    if (!date) return '';
+    return intl.formatDate(date);
+  };
 
   const tableActions = [{
     type: 'view',
@@ -116,10 +121,28 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
         {
           Header: intl.formatMessage(messages.headerCourseDates),
           accessor: 'courseDates',
+          // eslint-disable-next-line react/no-unstable-nested-components
+          Cell: ({ row }: CoursesCell) => {
+            const { start, end } = row.original.courseRun;
+            return (
+              <>
+                {`${formatDate(start)} - ${formatDate(end)}`}
+              </>
+            )
+          }
         },
         {
           Header: intl.formatMessage(messages.headerEnrollmentDates),
           accessor: 'enrollmentDates',
+          // eslint-disable-next-line react/no-unstable-nested-components
+          Cell: ({ row }: CoursesCell) => {
+            const { enrollmentStart, enrollmentEnd } = row.original.courseRun;
+            return (
+              <>
+                {`${formatDate(enrollmentStart)} - ${formatDate(enrollmentEnd)}`}
+              </>
+            )
+          }
         },
         {
           Header: intl.formatMessage(messages.headerEnrollment),
@@ -132,6 +155,11 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
         {
           Header: intl.formatMessage(messages.headerCompletion),
           accessor: 'completionRate',
+          Cell: ({ row }: CoursesCell) => (
+            <>
+              {row.original.completionRate}%
+            </>
+          ),
         },
       ]}
     >
