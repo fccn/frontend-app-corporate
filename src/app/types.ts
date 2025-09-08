@@ -58,8 +58,8 @@ export interface PaginatedResponse<T> {
   start: number;
   results: T[];
 }
-export interface CellValue {
+export interface CellValue<T> {
   row: {
-    original: object;
-  }
+    original: T;
+  };
 }
