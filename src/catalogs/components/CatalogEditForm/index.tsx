@@ -11,7 +11,7 @@ import { EMPTY_FORM_STATE } from './constants';
 import messages from './messages';
 
 interface CatalogEditFormProps {
-  selectedCatalog: string | number | null;
+  selectedCatalog: string | number;
 }
 
 const CatalogEditForm: FC<CatalogEditFormProps> = ({ selectedCatalog }) => {
@@ -19,7 +19,7 @@ const CatalogEditForm: FC<CatalogEditFormProps> = ({ selectedCatalog }) => {
   const { partnerId } = useParams<{ partnerId: string }>();
   const { catalogDetails } = useCatalogDetails({
     partnerId,
-    selectedCatalog: selectedCatalog!,
+    selectedCatalog,
   });
 
   const methods = useForm({

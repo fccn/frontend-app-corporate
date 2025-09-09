@@ -55,7 +55,7 @@ export const CatalogEditionModalProvider: FC<CatalogEditionModalProviderProps> =
           </Button>
         )}
       >
-        <CatalogEditForm selectedCatalog={selectedCatalogId} />
+        {selectedCatalogId && <CatalogEditForm selectedCatalog={selectedCatalogId} />}
       </ModalLayout>
 
       {children}
