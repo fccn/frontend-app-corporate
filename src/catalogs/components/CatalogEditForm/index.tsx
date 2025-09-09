@@ -21,10 +21,12 @@ const CatalogEditForm: FC<CatalogEditFormProps> = ({ selectedCatalog }) => {
     selectedCatalog,
   });
 
-  const { register, control } = useForm({
+  const { register, control, watch } = useForm({
     defaultValues: catalogDetails ?? EMPTY_FORM_STATE,
     mode: 'onChange',
   });
+
+  console.log(watch());
 
   return (
     <Stack gap={3} className="py-4">
@@ -73,7 +75,7 @@ const CatalogEditForm: FC<CatalogEditFormProps> = ({ selectedCatalog }) => {
               <Form.Control
                 id="availableStartDate"
                 value={value ? new Date(value).toISOString().split('T')[0] : ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(new Date(e.target.value).toISOString())}
                 type="date"
               />
             </Form.Group>
@@ -88,7 +90,13 @@ const CatalogEditForm: FC<CatalogEditFormProps> = ({ selectedCatalog }) => {
               <Form.Control
                 id="availableEndDate"
                 value={value ? new Date(value).toISOString().split('T')[0] : ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const date = e.target.value;
+                  // Set time to 23:59:59.999 for the selected day
+                  const endDate = new Date(date);
+                  endDate.setHours(23, 59, 59, 999);
+                  onChange(endDate.toISOString());
+                }}
                 type="date"
               />
             </Form.Group>
