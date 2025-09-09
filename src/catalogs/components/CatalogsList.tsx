@@ -10,6 +10,7 @@ import { useNavigate, usePagination } from '@src/hooks';
 
 import messages from '../messages';
 import { usePartnerCatalogs } from '../hooks';
+import { useCatalogEditionModal } from '../useCatalogEditionModal';
 
 type CellValue = {
   row: {
@@ -25,6 +26,8 @@ const CatalogsList: FC<CatalogsListProps> = ({ partnerId }) => {
   const navigate = useNavigate();
   const intl = useIntl();
 
+  const { handleChangeSelectedCatalog } = useCatalogEditionModal();
+
   const { pageIndex, pageSize, onPaginationChange } = usePagination();
 
   const { partnerCatalogs, isLoadingCatalogs } = usePartnerCatalogs({
@@ -39,7 +42,7 @@ const CatalogsList: FC<CatalogsListProps> = ({ partnerId }) => {
   }, {
     type: 'edit',
     onClick: (catalog: CorporateCatalog) => {
-      console.log(catalog.id);
+      handleChangeSelectedCatalog(catalog.id);
     },
   }];
 
