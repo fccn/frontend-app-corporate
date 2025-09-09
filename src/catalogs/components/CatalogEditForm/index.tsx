@@ -21,12 +21,10 @@ const CatalogEditForm: FC<CatalogEditFormProps> = ({ selectedCatalog }) => {
     selectedCatalog,
   });
 
-  const { register, control, watch } = useForm({
+  const { register, control } = useForm({
     defaultValues: catalogDetails ?? EMPTY_FORM_STATE,
     mode: 'onChange',
   });
-
-  console.log(watch());
 
   return (
     <Stack gap={3} className="py-4">
