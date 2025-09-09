@@ -16,7 +16,7 @@ jest.mock('@src/hooks', () => ({
   }),
 }));
 
-jest.mock('@src/hooks/useCatalogEditionModal', () => ({
+jest.mock('@src/catalogs/useCatalogEditionModal', () => ({
   useCatalogEditionModal: () => ({
     handleChangeSelectedCatalog: jest.fn(),
   }),
