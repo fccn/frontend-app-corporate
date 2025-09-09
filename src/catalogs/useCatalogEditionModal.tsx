@@ -1,12 +1,13 @@
 import {
-  FC, useContext, useEffect, useMemo, useState,
+  FC, useContext, useEffect, useMemo, useState, useRef,
 } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Button, useToggle } from '@openedx/paragon';
 
 import ModalLayout from '@src/app/ModalLayout';
 
-import CatalogEditForm from './components/CatalogEditForm';
+import { CorporateCatalogForm } from '@src/app/types';
+import CatalogEditForm, { CatalogEditFormRef } from './components/CatalogEditForm';
 import messages from './messages';
 import { CatalogEditionModalContext } from './context/CatalogEditionModalContext';
 
@@ -16,6 +17,7 @@ interface CatalogEditionModalProviderProps {
 
 export const CatalogEditionModalProvider: FC<CatalogEditionModalProviderProps> = ({ children }) => {
   const intl = useIntl();
+  const formRef = useRef<CatalogEditFormRef>(null);
 
   const [isOpen, open, close] = useToggle(false);
   const [selectedCatalogId, setSelectedCatalogId] = useState<number | string | null>(null);
@@ -27,6 +29,15 @@ export const CatalogEditionModalProvider: FC<CatalogEditionModalProviderProps> =
   const handleCloseModal = () => {
     setSelectedCatalogId(null);
     close();
+  };
+
+  const handleSave = () => {
+    if (formRef.current) { formRef.current.submitForm(); }
+  };
+
+  const handleFormSubmit = (data: CorporateCatalogForm) => {
+    if (data) { console.log(data); }
+    handleCloseModal();
   };
 
   useEffect(() => {
@@ -50,12 +61,18 @@ export const CatalogEditionModalProvider: FC<CatalogEditionModalProviderProps> =
         isOpen={isOpen}
         onClose={handleCloseModal}
         actions={(
-          <Button className="px-5" variant="primary" onClick={handleCloseModal}>
+          <Button className="px-5" variant="primary" onClick={handleSave}>
             {intl.formatMessage(messages.saveButton)}
           </Button>
         )}
       >
-        {selectedCatalogId && <CatalogEditForm selectedCatalog={selectedCatalogId} />}
+        {selectedCatalogId && (
+          <CatalogEditForm
+            ref={formRef}
+            selectedCatalog={selectedCatalogId}
+            onSubmit={handleFormSubmit}
+          />
+        )}
       </ModalLayout>
 
       {children}
