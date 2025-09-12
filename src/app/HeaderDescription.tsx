@@ -1,7 +1,8 @@
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useState } from 'react';
 import {
-  breakpoints, Stack, useMediaQuery,
+  breakpoints, Stack, useMediaQuery, IconButtonWithTooltip,
 } from '@openedx/paragon';
+import { ContentCopy } from '@openedx/paragon/icons';
 
 import ImageWithSkeleton from './ImageWithSkeleton';
 
@@ -10,6 +11,7 @@ interface HeaderDescriptionProps {
     title: string;
     imageUrl: string | null;
     description?: string;
+    copyableDescription?: boolean;
   },
   info: {
     title: string;
@@ -21,10 +23,24 @@ interface HeaderDescriptionProps {
 const HeaderDescription: FC<HeaderDescriptionProps> = ({ context, info, children }) => {
   const isSmall = useMediaQuery({ maxWidth: breakpoints.small.maxWidth });
   const isMedium = useMediaQuery({ maxWidth: breakpoints.medium.maxWidth });
+  const [copied, setCopied] = useState('Copy');
+
+  const handleCopy = async () => {
+    if (context.copyableDescription && context.description) {
+      try {
+        await navigator.clipboard.writeText(context.description);
+        setCopied('Copied');
+        setTimeout(() => setCopied('Copy'), 500);
+      } catch (e) {
+        setCopied('It was not possible to copy, try again');
+        setTimeout(() => setCopied('Copy'), 1500);
+      }
+    }
+  };
 
   return (
     <Stack
-      className={`border rounded bg-primary-100 px-${isSmall ? 3 : 4} py-3 my-3 justify-content-between`}
+      className={`border rounded bg-light-100 px-${isSmall ? 3 : 4} py-3 my-3 justify-content-between`}
       direction={isMedium ? 'vertical' : 'horizontal'}
       gap={4}
     >
@@ -40,7 +56,19 @@ const HeaderDescription: FC<HeaderDescriptionProps> = ({ context, info, children
 
         <Stack className="justify-content-center">
           <h3 className="mb-0">{context.title}</h3>
-          <span className="small">{context?.description}</span>
+          <span className="small">{context?.description}
+            {context.copyableDescription && (
+              <IconButtonWithTooltip
+                invertColors
+                isActive
+                src={ContentCopy}
+                variant="primary"
+                onClick={handleCopy}
+                alt="Copy description"
+                tooltipContent={copied}
+              />
+            )}
+          </span>
         </Stack>
       </Stack>
 
@@ -48,8 +76,8 @@ const HeaderDescription: FC<HeaderDescriptionProps> = ({ context, info, children
         {info.map((item, index) => (
           <>
             <div key={item.title} className="d-flex flex-column">
-              <span className="x-small text-primary-500">{item.title}</span>
-              <span className="small text-primary-400">{item.value}</span>
+              <span className="x-small text-gray">{item.title}</span>
+              <span className="small text-gray">{item.value}</span>
             </div>
             {index < info.length - 1 && !isSmall && <hr className="border border-left-1 h-25 m-0" />}
           </>

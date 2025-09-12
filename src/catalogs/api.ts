@@ -30,16 +30,13 @@ export const getPartnerCatalogs = async (
   }
 };
 
-export const getCatalogDetails = async (
-  partnerId: string,
-  catalogId: string | number,
-): Promise<CorporateCatalog | null> => {
+export const getCatalogDetails = async (partnerId: string, catalogId: string): Promise<CorporateCatalog> => {
   try {
     const url = `${getConfig().LMS_BASE_URL}/corporate_access/api/v1/partners/${partnerId}/catalogs/${catalogId}/`;
     const response = await getAuthenticatedHttpClient().get(url);
     return camelCaseObject(response.data);
   } catch (error) {
     logError(error);
-    return null;
+    return {} as CorporateCatalog;
   }
 };

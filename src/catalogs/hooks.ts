@@ -1,6 +1,6 @@
-import { useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { useQueryClient, useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { CorporateCatalog, PaginatedResponse } from '@src/app/types';
-import { getCatalogDetails, getPartnerCatalogs } from './api';
+import { getPartnerCatalogs, getCatalogDetails } from './api';
 
 export const usePartnerCatalogs = (
   { partnerId, pageIndex, pageSize }: { partnerId: string; pageIndex: number; pageSize: number; },
@@ -12,27 +12,22 @@ export const usePartnerCatalogs = (
 
   return { partnerCatalogs, isLoadingCatalogs };
 };
-
-export const useCatalogDetails = ({
-  partnerId,
-  selectedCatalog,
-}: { partnerId: string; selectedCatalog: string | number; }) => {
+export const useCatalogDetails = ({ partnerId, catalogId }) => {
   const queryClient = useQueryClient();
 
   const allCatalogs = queryClient
-    .getQueriesData({ queryKey: ['partnerCatalogs', partnerId] })
-    .flatMap(([, data]) => (data as PaginatedResponse<CorporateCatalog>)?.results ?? []);
-
-  const catalogFromCache = allCatalogs.find((c) => c.id === selectedCatalog);
+    .getQueriesData<PaginatedResponse<CorporateCatalog>>({ queryKey: ['partnerCatalogs', partnerId] })
+    .flatMap(([, data]) => data?.results ?? []);
+  const catalogCached: CorporateCatalog | undefined = allCatalogs.find((catalog) => catalog.id === catalogId);
 
   const { data: catalogDetails, isLoading } = useQuery({
-    queryKey: ['catalogDetails', partnerId, selectedCatalog],
-    queryFn: () => getCatalogDetails(partnerId, selectedCatalog),
-    enabled: !catalogFromCache && !!partnerId && !!selectedCatalog,
+    queryKey: ['catalogsDetails', partnerId, catalogId],
+    queryFn: () => getCatalogDetails(partnerId, catalogId),
+    enabled: !catalogCached,
   });
 
   return {
-    catalogDetails: catalogFromCache || catalogDetails || null,
+    catalogDetails: catalogCached || catalogDetails,
     isLoadingCatalogDetails: isLoading,
   };
 };
