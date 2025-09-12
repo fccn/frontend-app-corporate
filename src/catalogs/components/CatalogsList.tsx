@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { DataTable, TextFilter } from '@openedx/paragon';
 
@@ -26,15 +26,19 @@ const CatalogsList: FC<CatalogsListProps> = ({ partnerId }) => {
   const navigate = useNavigate();
   const intl = useIntl();
 
-  const { handleChangeSelectedCatalog } = useCatalogEditionModal();
-
   const { pageIndex, pageSize, onPaginationChange } = usePagination();
 
-  const { partnerCatalogs, isLoadingCatalogs } = usePartnerCatalogs({
+  const { handleChangeSelectedCatalog, registerRefetchCallback } = useCatalogEditionModal();
+  const { partnerCatalogs, isLoadingCatalogs, refetchCatalogs } = usePartnerCatalogs({
     partnerId,
     pageIndex: pageIndex + 1,
     pageSize,
   });
+
+  useEffect(() => {
+    registerRefetchCallback(refetchCatalogs);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refetchCatalogs]);
 
   const tableActions = [{
     type: 'view',

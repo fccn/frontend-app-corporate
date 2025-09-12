@@ -46,6 +46,8 @@ export type CorporateCatalog = {
   corporatePartner: number;
 };
 
+export type CorporateCatalogForm = Pick<CorporateCatalog, 'isPublic' | 'name' | 'catalogAlternativeLink' | 'supportEmail' | 'availableStartDate' | 'availableEndDate' | 'courseEnrollmentLimit' | 'userLimit' | 'emailRegexes' | 'customCourses' | 'isSelfEnrollment' >;
+
 export interface PaginatedResponse<T> {
   next: string | null;
   previous: string | null;

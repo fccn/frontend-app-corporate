@@ -2,7 +2,7 @@ import { getConfig, camelCaseObject } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { logError } from '@edx/frontend-platform/logging';
 
-import { CorporateCatalog, PaginatedResponse } from '../app/types';
+import { CorporateCatalog, CorporateCatalogForm, PaginatedResponse } from '../app/types';
 
 export const getPartnerCatalogs = async (
   partnerId: string,
@@ -37,6 +37,21 @@ export const getCatalogDetails = async (
   try {
     const url = `${getConfig().LMS_BASE_URL}/corporate_access/api/v1/partners/${partnerId}/catalogs/${catalogId}/`;
     const response = await getAuthenticatedHttpClient().get(url);
+    return camelCaseObject(response.data);
+  } catch (error) {
+    logError(error);
+    return null;
+  }
+};
+
+export const updateCatalog = async (
+  partnerId: string,
+  catalogId: string | number,
+  data: CorporateCatalogForm,
+): Promise<CorporateCatalog | null> => {
+  try {
+    const url = `${getConfig().LMS_BASE_URL}/corporate_access/api/v1/partners/${partnerId}/catalogs/${catalogId}/`;
+    const response = await getAuthenticatedHttpClient().put(url, data);
     return camelCaseObject(response.data);
   } catch (error) {
     logError(error);
