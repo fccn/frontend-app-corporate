@@ -1,18 +1,17 @@
 import { useImperativeHandle, forwardRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useParams } from 'wouter';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Col, Form, Stack } from '@openedx/paragon';
 
-import { useCatalogDetails, useYupValidationResolver } from '@src/catalogs/hooks';
+import { useYupValidationResolver } from '@src/catalogs/hooks';
 
-import { CorporateCatalogForm } from '@src/app/types';
+import { CorporateCatalog, CorporateCatalogForm } from '@src/app/types';
 import { getCatalogSchema } from './validationSchema';
 import { EMPTY_FORM_STATE } from './constants';
 import messages from './messages';
 
 interface CatalogEditFormProps {
-  selectedCatalog: string | number;
+  catalogDetails: CorporateCatalog;
   onSubmit: (data: CorporateCatalogForm) => void;
 }
 
@@ -21,13 +20,8 @@ export interface CatalogEditFormRef {
 }
 
 const CatalogEditForm = forwardRef<CatalogEditFormRef, CatalogEditFormProps>(
-  ({ selectedCatalog, onSubmit }, ref) => {
+  ({ catalogDetails, onSubmit }, ref) => {
     const intl = useIntl();
-    const { partnerId } = useParams<{ partnerId: string }>();
-    const { catalogDetails } = useCatalogDetails({
-      partnerId,
-      selectedCatalog,
-    });
 
     const resolver = useYupValidationResolver(getCatalogSchema(intl));
     const {
