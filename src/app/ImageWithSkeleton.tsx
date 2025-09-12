@@ -22,7 +22,7 @@ const ImageWithSkeleton: FC<ImageWithSkeletonProps> = ({
         onLoad={() => setImageLoaded(true)}
         className={className ?? ''}
         style={{
-          maxHeight: height, width, display: isImageLoaded ? 'block' : 'none', objectFit: 'cover',
+          maxHeight: height, width, display: isImageLoaded ? 'block' : 'none', objectFit: 'contain',
         }}
       />
       {!isImageLoaded && <Skeleton width={width} height={height} />}
