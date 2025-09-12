@@ -2,7 +2,9 @@ import { useQueryClient, useQuery, useSuspenseQuery } from '@tanstack/react-quer
 import { CorporateCatalog, PaginatedResponse } from '@src/app/types';
 import { getPartnerCatalogs, getCatalogDetails } from './api';
 
-export const usePartnerCatalogs = ({ partnerId, pageIndex, pageSize }) => {
+export const usePartnerCatalogs = (
+  { partnerId, pageIndex, pageSize }: { partnerId: string; pageIndex: number; pageSize: number; },
+) => {
   const { data: partnerCatalogs, isLoading: isLoadingCatalogs } = useSuspenseQuery({
     queryKey: ['partnerCatalogs', partnerId, pageIndex, pageSize],
     queryFn: () => getPartnerCatalogs(partnerId, pageIndex, pageSize),
@@ -21,7 +23,7 @@ export const useCatalogDetails = ({ partnerId, catalogId }) => {
   const { data: catalogDetails, isLoading } = useQuery({
     queryKey: ['catalogsDetails', partnerId, catalogId],
     queryFn: () => getCatalogDetails(partnerId, catalogId),
-    enabled: !catalogCached,
+    enabled: !catalogCached && !!catalogId && !!partnerId,
   });
 
   return {

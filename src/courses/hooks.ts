@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getCourses, deleteCourse } from './api';
+import { CorporateCourse, PaginatedResponse } from '@src/app/types';
+import { getCourses, deleteCourse, getCourseDetails } from './api';
 
 export const useCatalogCourses = (partnerId: string, catalogId: string, pageIndex, pageSize) => {
   const { data, isLoading } = useQuery({
@@ -25,4 +26,24 @@ export const useDeleteCatalogCourse = () => {
     },
   });
   return mutateAsync;
+};
+
+export const useCourseDetails = ({ partnerId, catalogId, courseId }) => {
+  const queryClient = useQueryClient();
+
+  const allCourses = queryClient
+    .getQueriesData<PaginatedResponse<CorporateCourse>>({ queryKey: ['catalogCourses'] })
+    .flatMap(([, data]) => data?.results ?? []);
+  const courseCached: CorporateCourse | undefined = allCourses.find((course) => course.id === Number(courseId));
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['courseDetails', partnerId, catalogId, courseId],
+    queryFn: () => getCourseDetails(partnerId, catalogId, courseId),
+    enabled: !courseCached,
+  });
+
+  return {
+    courseDetails: courseCached || data,
+    isLoadingCourseDetails: isLoading,
+  };
 };

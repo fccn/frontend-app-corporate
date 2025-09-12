@@ -27,3 +27,14 @@ export const deleteCourse = async (partnerId: string, catalogId: string, courseI
     throw error;
   }
 };
+
+export const getCourseDetails = async (partnerId: string, catalogId: string, courseId: number)
+: Promise<CorporateCourse> => {
+  try {
+    const { data } = await getAuthenticatedHttpClient().get(`${getConfig().LMS_BASE_URL}/corporate_access/api/v1/partners/${partnerId}/catalogs/${catalogId}/courses/${courseId}/`);
+    return camelCaseObject(data);
+  } catch (error) {
+    logError(error);
+    return {} as CorporateCourse;
+  }
+};
