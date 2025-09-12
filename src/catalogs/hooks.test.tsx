@@ -174,7 +174,7 @@ describe('Catalog Hooks', () => {
       mockedGetCatalogDetails.mockResolvedValueOnce(mockCatalog);
 
       const { result } = renderHook(
-        () => useCatalogDetails({ partnerId: '1', selectedCatalog: '1' }),
+        () => useCatalogDetails({ partnerId: '1', catalogId: '1' }),
         { wrapper: createWrapper },
       );
 
@@ -202,7 +202,7 @@ describe('Catalog Hooks', () => {
       queryClient.setQueryData(['partnerCatalogs', '1', 1, 10], mockCatalogsResponse);
 
       const { result } = renderHook(
-        () => useCatalogDetails({ partnerId: '1', selectedCatalog: '1' }),
+        () => useCatalogDetails({ partnerId: '1', catalogId: '1' }),
         { wrapper: createWrapper },
       );
 
@@ -212,23 +212,23 @@ describe('Catalog Hooks', () => {
       expect(result.current.isLoadingCatalogDetails).toBe(false);
     });
 
-    it('should not fetch when partnerId or selectedCatalog is missing', () => {
+    it('should not fetch when partnerId or catalogId is missing', () => {
       const { result: resultNoPartner } = renderHook(
-        () => useCatalogDetails({ partnerId: '', selectedCatalog: '1' }),
+        () => useCatalogDetails({ partnerId: '', catalogId: '1' }),
         { wrapper: createWrapper },
       );
 
       const { result: resultNoCatalog } = renderHook(
-        () => useCatalogDetails({ partnerId: '1', selectedCatalog: '' }),
+        () => useCatalogDetails({ partnerId: '1', catalogId: '' }),
         { wrapper: createWrapper },
       );
 
       expect(mockedGetCatalogDetails).not.toHaveBeenCalled();
 
-      expect(resultNoPartner.current.catalogDetails).toBeNull();
+      expect(resultNoPartner.current.catalogDetails).toBeUndefined();
       expect(resultNoPartner.current.isLoadingCatalogDetails).toBe(false);
 
-      expect(resultNoCatalog.current.catalogDetails).toBeNull();
+      expect(resultNoCatalog.current.catalogDetails).toBeUndefined();
       expect(resultNoCatalog.current.isLoadingCatalogDetails).toBe(false);
     });
   });

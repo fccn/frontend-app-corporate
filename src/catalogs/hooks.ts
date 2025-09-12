@@ -23,7 +23,7 @@ export const useCatalogDetails = ({ partnerId, catalogId }) => {
   const { data: catalogDetails, isLoading } = useQuery({
     queryKey: ['catalogsDetails', partnerId, catalogId],
     queryFn: () => getCatalogDetails(partnerId, catalogId),
-    enabled: !catalogCached,
+    enabled: !catalogCached && !!catalogId && !!partnerId,
   });
 
   return {
