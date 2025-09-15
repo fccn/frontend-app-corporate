@@ -7,7 +7,7 @@ import {
 
 import { CorporateCatalog, CorporateCatalogForm, PaginatedResponse } from '@src/app/types';
 import {
-  getCatalogDetails, getPartnerCatalogs, updateCatalog,
+  getCatalogDetails, getPartnerCatalogs, modifyCatalog,
 } from './api';
 
 export const usePartnerCatalogs = (
@@ -46,13 +46,13 @@ export const useCatalogDetails = ({
   };
 };
 
-export const useUpdateCatalog = () => {
+export const useModifyCatalog = () => {
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
     mutationFn: async ({
       partnerId, catalogId, data,
     }:
-    { partnerId: string; catalogId: string; data: CorporateCatalogForm }) => updateCatalog(partnerId, catalogId, data),
+    { partnerId: string; catalogId: string; data: CorporateCatalogForm }) => modifyCatalog(partnerId, catalogId, data),
     onSettled: (_data, _error, args) => {
       queryClient.invalidateQueries({
         queryKey: ['catalogDetails', args.partnerId, args.catalogId],

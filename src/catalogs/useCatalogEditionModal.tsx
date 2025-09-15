@@ -11,7 +11,7 @@ import { useParams } from 'wouter';
 import CatalogEditForm, { CatalogEditFormRef } from './components/CatalogEditForm';
 import messages from './messages';
 import { CatalogEditionModalContext } from './context/CatalogEditionModalContext';
-import { useCatalogDetails, useUpdateCatalog } from './hooks';
+import { useCatalogDetails, useModifyCatalog } from './hooks';
 
 interface CatalogEditionModalProviderProps {
   children: React.ReactNode | React.ReactNode[];
@@ -27,7 +27,7 @@ export const CatalogEditionModalProvider: FC<CatalogEditionModalProviderProps> =
   const [selectedCatalogId, setSelectedCatalogId] = useState<string | null>(null);
   const [refetchCallback, setRefetchCallback] = useState<(() => void) | null>(null);
 
-  const updateCatalog = useUpdateCatalog();
+  const modifyCatalog = useModifyCatalog();
   const { catalogDetails, refetchCatalogDetails } = useCatalogDetails({
     partnerId,
     selectedCatalog: selectedCatalogId,
@@ -52,7 +52,7 @@ export const CatalogEditionModalProvider: FC<CatalogEditionModalProviderProps> =
 
   const handleFormSubmit = (data: CorporateCatalogForm) => {
     if (data && selectedCatalogId) {
-      updateCatalog({ partnerId, catalogId: selectedCatalogId, data }, {
+      modifyCatalog({ partnerId, catalogId: selectedCatalogId, data }, {
         onSuccess: () => {
           if (refetchCallback) { refetchCallback(); }
           refetchCatalogDetails();

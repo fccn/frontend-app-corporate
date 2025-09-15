@@ -44,7 +44,7 @@ export const getCatalogDetails = async (
   }
 };
 
-export const updateCatalog = async (
+export const modifyCatalog = async (
   partnerId: string,
   catalogId: string | number,
   data: CorporateCatalogForm,
