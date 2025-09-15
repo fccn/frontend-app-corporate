@@ -11,19 +11,19 @@ const CourseEnrollmentsPage = lazy(() => import('@src/enrollments/CourseEnrollme
 
 const Router = () => (
   <Suspense fallback={<div>Loading...</div>}>
-    <WouterRouter base={paths.base}>
-      <Switch>
-        <Route path={paths.partners.path} component={CorporatePartnerPage} />
-        <CatalogEditionModalProvider>
+    <CatalogEditionModalProvider>
+      <WouterRouter base={paths.base}>
+        <Switch>
+          <Route path={paths.partners.path} component={CorporatePartnerPage} />
           <Route path={paths.catalogs.path} component={PartnerCatalogsPage} />
           <Route path={paths.courses.path} component={CoursesPage} />
-        </CatalogEditionModalProvider>
-        <Route path={paths.courseDetail.path} component={CourseEnrollmentsPage} />
-        <Route>
-          <h1>404 Not Found</h1>
-        </Route>
-      </Switch>
-    </WouterRouter>
+          <Route path={paths.courseDetail.path} component={CourseEnrollmentsPage} />
+          <Route>
+            <h1>404 Not Found</h1>
+          </Route>
+        </Switch>
+      </WouterRouter>
+    </CatalogEditionModalProvider>
   </Suspense>
 );
 
