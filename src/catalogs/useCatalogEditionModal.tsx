@@ -37,11 +37,6 @@ export const CatalogEditionModalProvider: FC<CatalogEditionModalProviderProps> =
     setSelectedCatalogId(catalogId);
   };
 
-  const handleCloseModal = () => {
-    closeModal();
-    setSelectedCatalogId(null);
-  };
-
   const registerRefetchCallback = useCallback((callback: () => void) => {
     setRefetchCallback(() => callback);
   }, []);
@@ -56,7 +51,7 @@ export const CatalogEditionModalProvider: FC<CatalogEditionModalProviderProps> =
         onSuccess: () => {
           if (refetchCallback) { refetchCallback(); }
           refetchCatalogDetails();
-          handleCloseModal();
+          setSelectedCatalogId(null);
         },
       });
     }
@@ -64,7 +59,7 @@ export const CatalogEditionModalProvider: FC<CatalogEditionModalProviderProps> =
 
   useEffect(() => {
     if (selectedCatalogId) { openModal(); }
-    if (!selectedCatalogId) { handleCloseModal(); }
+    if (!selectedCatalogId) { closeModal(); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCatalogId]);
 
@@ -83,7 +78,7 @@ export const CatalogEditionModalProvider: FC<CatalogEditionModalProviderProps> =
       <ModalLayout
         title={intl.formatMessage(messages.editCatalogTitle)}
         isOpen={isModalOpen}
-        onClose={handleCloseModal}
+        onClose={() => setSelectedCatalogId(null)}
         actions={(
           <Button className="px-5" variant="primary" onClick={handleSaveData}>
             {intl.formatMessage(messages.saveButton)}
