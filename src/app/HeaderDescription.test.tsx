@@ -1,6 +1,7 @@
 import {
-  render, screen, fireEvent, waitFor,
+  screen, fireEvent, waitFor,
 } from '@testing-library/react';
+import { renderWrapper } from '@src/setupTest';
 import HeaderDescription from './HeaderDescription';
 
 jest.mock('@openedx/paragon', () => ({
@@ -32,13 +33,13 @@ describe('HeaderDescription', () => {
 
   describe('Copy to clipboard', () => {
     it('renders copy button if copyableDescription is true', () => {
-      render(<HeaderDescription context={{ ...mockContext, copyableDescription: true }} info={mockInfo} />);
+      renderWrapper(<HeaderDescription context={{ ...mockContext, copyableDescription: true }} info={mockInfo} />);
       const copyButton = screen.getByRole('button', { name: 'Copy description' });
       expect(copyButton).toBeInTheDocument();
     });
 
     it('copies description to clipboard when copy button is clicked', async () => {
-      render(<HeaderDescription context={{ ...mockContext, copyableDescription: true }} info={mockInfo} />);
+      renderWrapper(<HeaderDescription context={{ ...mockContext, copyableDescription: true }} info={mockInfo} />);
       const copyButton = screen.getByRole('button', { name: 'Copy description' });
       fireEvent.click(copyButton);
       await waitFor(() => {
@@ -49,17 +50,17 @@ describe('HeaderDescription', () => {
 
   describe('Basic Rendering', () => {
     it('renders the context title', () => {
-      render(<HeaderDescription context={mockContext} info={mockInfo} />);
+      renderWrapper(<HeaderDescription context={mockContext} info={mockInfo} />);
       expect(screen.getByText(mockContext.title)).toBeInTheDocument();
     });
 
     it('renders the context description', () => {
-      render(<HeaderDescription context={mockContext} info={mockInfo} />);
+      renderWrapper(<HeaderDescription context={mockContext} info={mockInfo} />);
       expect(screen.getByText(mockContext.description)).toBeInTheDocument();
     });
 
     it('renders all info items', () => {
-      render(<HeaderDescription context={mockContext} info={mockInfo} />);
+      renderWrapper(<HeaderDescription context={mockContext} info={mockInfo} />);
 
       expect(screen.getByText('Catalogs')).toBeInTheDocument();
       expect(screen.getByText('5')).toBeInTheDocument();
@@ -70,14 +71,14 @@ describe('HeaderDescription', () => {
     });
 
     it('handles empty info array', () => {
-      render(<HeaderDescription context={mockContext} info={[]} />);
+      renderWrapper(<HeaderDescription context={mockContext} info={[]} />);
       expect(screen.getByText(mockContext.title)).toBeInTheDocument();
     });
   });
 
   describe('Image Handling', () => {
     it('renders image when imageUrl is provided', async () => {
-      render(<HeaderDescription context={mockContext} info={mockInfo} />);
+      renderWrapper(<HeaderDescription context={mockContext} info={mockInfo} />);
 
       const imageContainer = await screen.findByTestId('image-with-skeleton');
       expect(imageContainer).toBeInTheDocument();
@@ -87,7 +88,7 @@ describe('HeaderDescription', () => {
 
     it('does not render image when imageUrl is null', () => {
       const contextWithoutImage = { ...mockContext, imageUrl: null };
-      render(<HeaderDescription context={contextWithoutImage} info={mockInfo} />);
+      renderWrapper(<HeaderDescription context={contextWithoutImage} info={mockInfo} />);
       expect(screen.queryByTestId('image-with-skeleton')).not.toBeInTheDocument();
     });
   });
@@ -99,12 +100,12 @@ describe('HeaderDescription', () => {
         imageUrl: mockContext.imageUrl,
       };
 
-      render(<HeaderDescription context={contextWithoutDescription} info={mockInfo} />);
+      renderWrapper(<HeaderDescription context={contextWithoutDescription} info={mockInfo} />);
       expect(screen.getByText(contextWithoutDescription.title)).toBeInTheDocument();
     });
 
     it('renders children when provided', () => {
-      render(
+      renderWrapper(
         <HeaderDescription context={mockContext} info={mockInfo}>
           <div data-testid="custom-children">Custom content</div>
         </HeaderDescription>,

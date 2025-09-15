@@ -1,10 +1,12 @@
 import { FC, ReactNode, useState } from 'react';
+import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   breakpoints, Stack, useMediaQuery, IconButtonWithTooltip,
 } from '@openedx/paragon';
 import { ContentCopy } from '@openedx/paragon/icons';
 
 import ImageWithSkeleton from './ImageWithSkeleton';
+import messages from './messages';
 
 interface HeaderDescriptionProps {
   context: {
@@ -21,19 +23,20 @@ interface HeaderDescriptionProps {
 }
 
 const HeaderDescription: FC<HeaderDescriptionProps> = ({ context, info, children }) => {
+  const intl = useIntl();
   const isSmall = useMediaQuery({ maxWidth: breakpoints.small.maxWidth });
   const isMedium = useMediaQuery({ maxWidth: breakpoints.medium.maxWidth });
-  const [copied, setCopied] = useState('Copy');
+  const [copied, setCopied] = useState(intl.formatMessage(messages.copyAction));
 
   const handleCopy = async () => {
     if (context.copyableDescription && context.description) {
       try {
         await navigator.clipboard.writeText(context.description);
-        setCopied('Copied');
-        setTimeout(() => setCopied('Copy'), 500);
+        setCopied(intl.formatMessage(messages.copySuccess));
+        setTimeout(() => setCopied(intl.formatMessage(messages.copyAction)), 500);
       } catch (e) {
-        setCopied('It was not possible to copy, try again');
-        setTimeout(() => setCopied('Copy'), 1500);
+        setCopied(intl.formatMessage(messages.copyError));
+        setTimeout(() => setCopied(intl.formatMessage(messages.copyAction)), 2500);
       }
     }
   };
