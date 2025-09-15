@@ -2,8 +2,8 @@ import * as yup from 'yup';
 import messages from './messages';
 
 export const getCatalogSchema = (intl) => {
-  const CATALOG_NAME_MIN = 3;
-  const CATALOG_NAME_MAX = 100;
+  const CATALOG_NAME_MIN_LENGTH = 3;
+  const CATALOG_NAME_MAX_LENGTH = 100;
   const COURSE_ENROLLMENT_LIMIT_MIN = 0;
   const USER_LIMIT_MIN = 0;
 
@@ -12,8 +12,8 @@ export const getCatalogSchema = (intl) => {
     name: yup
       .string()
       .required(intl.formatMessage(messages.formNameRequired))
-      .min(CATALOG_NAME_MIN, intl.formatMessage(messages.formNameMin, { min: CATALOG_NAME_MIN }))
-      .max(CATALOG_NAME_MAX, intl.formatMessage(messages.formNameMax, { max: CATALOG_NAME_MAX })),
+      .min(CATALOG_NAME_MIN_LENGTH, intl.formatMessage(messages.formNameMin, { min: CATALOG_NAME_MIN_LENGTH }))
+      .max(CATALOG_NAME_MAX_LENGTH, intl.formatMessage(messages.formNameMax, { max: CATALOG_NAME_MAX_LENGTH })),
     catalogAlternativeLink: yup
       .string()
       .url(intl.formatMessage(messages.formCatalogAlternativeLinkInvalid)),
