@@ -41,6 +41,21 @@ const messages = defineMessages({
     defaultMessage: 'Cancel',
     description: 'Text for the cancel button in the app layout',
   },
+  copyAction: {
+    id: 'app.copy.button',
+    defaultMessage: 'Copy',
+    description: 'Text copy text action',
+  },
+  copySuccess: {
+    id: 'app.copy.success',
+    defaultMessage: 'Cancel',
+    description: 'Text for copy text sucess',
+  },
+  copyError: {
+    id: 'app.copy.error',
+    defaultMessage: 'It was not possible to copy, try again',
+    description: 'Text for copy text error',
+  },
 });
 
 export default messages;
