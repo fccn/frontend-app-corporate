@@ -44,7 +44,9 @@ export const useDeleteCatalogCourse = () => {
   return mutateAsync;
 };
 
-export const useCourseDetails = ({ partnerId, catalogId, courseId }) => {
+export const useCourseDetails = (
+  { partnerId, catalogId, courseId } : { partnerId: string; catalogId: string; courseId?: number },
+) => {
   const queryClient = useQueryClient();
 
   const allCourses = queryClient
@@ -54,7 +56,7 @@ export const useCourseDetails = ({ partnerId, catalogId, courseId }) => {
 
   const { data, isLoading } = useQuery({
     queryKey: ['courseDetails', partnerId, catalogId, courseId],
-    queryFn: () => getCourseDetails(partnerId, catalogId, courseId),
+    queryFn: () => getCourseDetails(partnerId, catalogId, courseId!),
     enabled: !courseCached && !!courseId,
   });
 
