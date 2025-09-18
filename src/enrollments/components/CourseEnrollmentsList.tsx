@@ -1,37 +1,42 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { FC } from 'react';
+import { useParams } from 'wouter';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   DataTable, TextFilter,
 } from '@openedx/paragon';
 
-import { useParams } from 'wouter';
-import { getCourseEnrollments } from '../api';
-import TableFooter from '../../app/TableFooter';
+import { usePagination } from '@src/hooks';
+import TableFooter from '@src/app/TableFooter';
 
 import messages from '../messages';
+import { useCatalogCourseEnrollments } from '../hooks';
 
-const CourseEnrollmentsList = () => {
+const CourseEnrollmentsList: FC<{ courseCatalogPK: number | undefined }> = ({ courseCatalogPK }) => {
   const intl = useIntl();
 
-  const { partnerId, catalogId, courseId } = useParams();
+  const { partnerId, catalogId } = useParams();
+  const { pageSize, pageIndex, onPaginationChange } = usePagination();
 
-  const { data, isLoading } = useSuspenseQuery({
-    queryKey: ['courseLearners'],
-    queryFn: () => getCourseEnrollments(partnerId!, catalogId!, courseId!, 1, 10),
+  const {
+    enrollments, count, pageCount, isLoading,
+  } = useCatalogCourseEnrollments({
+    partnerId: partnerId!, catalogId: catalogId!, courseId: courseCatalogPK, pageIndex: pageIndex + 1, pageSize,
   });
 
   return (
     <DataTable
-      isLoading={isLoading}
+      isLoading={isLoading || !courseCatalogPK}
       isPaginated
       isFilterable
       defaultColumnValues={{ Filter: TextFilter }}
+      fetchData={onPaginationChange}
       initialState={{
         pageSize: 30,
         pageIndex: 0,
       }}
-      itemCount={data.count}
-      data={data.results}
+      itemCount={count}
+      pageCount={pageCount}
+      data={enrollments}
       columns={[
         {
           Header: intl.formatMessage(messages.headerStudentName),
