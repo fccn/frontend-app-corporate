@@ -33,7 +33,9 @@ describe('useCatalogCourses', () => {
     });
 
     const { result } = renderHook(
-      () => useCatalogCourses('p1', 'c1', 1, 10),
+      () => useCatalogCourses({
+        partnerId: 'p1', catalogId: 'c1', pageIndex: 1, pageSize: 10,
+      }),
       { wrapper: createWrapper() },
     );
 
@@ -46,7 +48,9 @@ describe('useCatalogCourses', () => {
   it('returns loading state', async () => {
     (api.getCourses as jest.Mock).mockImplementation(() => new Promise(() => {}));
 
-    const { result } = renderHook(() => useCatalogCourses('p1', 'c1', 1, 10), {
+    const { result } = renderHook(() => useCatalogCourses({
+      partnerId: 'p1', catalogId: 'c1', pageIndex: 1, pageSize: 10,
+    }), {
       wrapper: createWrapper(),
     });
 
@@ -61,7 +65,9 @@ describe('useCatalogCourses', () => {
     });
 
     const { result } = renderHook(
-      () => useCatalogCourses('p1', 'c1', 1, 10),
+      () => useCatalogCourses({
+        partnerId: 'p1', catalogId: 'c1', pageIndex: 1, pageSize: 10,
+      }),
       { wrapper: createWrapper() },
     );
 
@@ -79,7 +85,9 @@ describe('useCatalogCourses', () => {
     });
 
     const { result } = renderHook(
-      () => useCatalogCourses('p1', 'c1', 1, 10),
+      () => useCatalogCourses({
+        partnerId: 'p1', catalogId: 'c1', pageIndex: 1, pageSize: 10,
+      }),
       { wrapper: createWrapper() },
     );
 
@@ -91,7 +99,9 @@ describe('useCatalogCourses', () => {
     (api.getCourses as jest.Mock).mockRejectedValue(new Error('API error'));
 
     const { result } = renderHook(
-      () => useCatalogCourses('p1', 'c1', 1, 10),
+      () => useCatalogCourses({
+        partnerId: 'p1', catalogId: 'c1', pageIndex: 1, pageSize: 10,
+      }),
       { wrapper: createWrapper() },
     );
 

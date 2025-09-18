@@ -30,7 +30,9 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
     count,
     pageCount,
     isLoading,
-  } = useCatalogCourses(partnerId, catalogId, pageIndex + 1, pageSize);
+  } = useCatalogCourses({
+    partnerId, catalogId, pageIndex: pageIndex + 1, pageSize,
+  });
   const deleteCatalogCourse = useDeleteCatalogCourse();
 
   const positions = Array.from({ length: count + 1 || 0 }, (_, i) => i);
