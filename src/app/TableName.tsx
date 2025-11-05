@@ -16,7 +16,7 @@ const TableName = ({
     destination={destination}
     variant="muted"
   >
-    <Row>
+    <Row className="align-items-center mx-auto">
       {image && (
         <Image
           alt={`${name} logo`}

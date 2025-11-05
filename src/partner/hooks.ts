@@ -21,7 +21,6 @@ export const usePartnerDetails = ({ partnerId }) => {
   };
 };
 
-
 interface UsePartnersOptions {
   pageSize: number;
   pageIndex: number;
@@ -39,7 +38,7 @@ export function usePartners({ pageSize, pageIndex }: UsePartnersOptions) {
 
   return {
     isLoading,
-    partners: data?.results?.map((partnerData) => camelCaseObject(partnerData)) || [],
+    partners: data?.results || [],
     count: data?.count || 0,
     pages: data?.numPages || 1,
     error,

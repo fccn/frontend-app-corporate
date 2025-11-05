@@ -1,5 +1,5 @@
-import { getConfig } from '@edx/frontend-platform';
-import { getAuthenticatedHttpClient, camelCaseObject } from '@edx/frontend-platform/auth';
+import { getConfig, camelCaseObject } from '@edx/frontend-platform';
+import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { logError } from '@edx/frontend-platform/logging';
 
 import { CorporatePartner, ApiResponse } from '../app/types';
@@ -11,7 +11,7 @@ export const getPartners = async ({ pageSize, pageIndex }): Promise<PartnersApiR
   const url = `${getConfig().LMS_BASE_URL}/partner_catalog/api/v1/partners/?page_size=${pageSize}&page=${pageIndex}`;
   try {
     const response = await getAuthenticatedHttpClient().get(url);
-    return response.data;
+    return camelCaseObject(response.data);
   } catch (error) {
     logError(error);
     return { results: [], count: 0 };
