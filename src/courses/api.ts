@@ -6,7 +6,7 @@ import { CorporateCourse, PaginatedResponse } from '@src/app/types';
 export const getCourses = async (partnerId: string, catalogId: string, pageIndex, pageSize)
 : Promise<PaginatedResponse<CorporateCourse>> => {
   try {
-    const url = new URL(`${getConfig().LMS_BASE_URL}/corporate_access/api/v1/partners/${partnerId}/catalogs/${catalogId}/courses/`);
+    const url = new URL(`${getConfig().LMS_BASE_URL}/partner_catalog/api/v1/partners/${partnerId}/catalogs/${catalogId}/courses/`);
     url.searchParams.append('page', pageIndex);
     url.searchParams.append('page_size', pageSize);
     const { data } = await getAuthenticatedHttpClient().get(url);
@@ -21,7 +21,7 @@ export const getCourses = async (partnerId: string, catalogId: string, pageIndex
 
 export const deleteCourse = async (partnerId: string, catalogId: string, courseId: number) => {
   try {
-    await getAuthenticatedHttpClient().delete(`${getConfig().LMS_BASE_URL}/corporate_access/api/v1/partners/${partnerId}/catalogs/${catalogId}/courses/${courseId}/`);
+    await getAuthenticatedHttpClient().delete(`${getConfig().LMS_BASE_URL}/partner_catalog/api/v1/partners/${partnerId}/catalogs/${catalogId}/courses/${courseId}/`);
   } catch (error) {
     logError(error);
     throw error;

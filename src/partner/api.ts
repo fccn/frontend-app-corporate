@@ -8,7 +8,7 @@ interface PartnersApiResponse extends ApiResponse {
   results: CorporatePartner[];
 }
 export const getPartners = async ({ pageSize, pageIndex }): Promise<PartnersApiResponse> => {
-  const url = `${getConfig().LMS_BASE_URL}/corporate_access/api/v1/partners/?page_size=${pageSize}&page=${pageIndex}`;
+  const url = `${getConfig().LMS_BASE_URL}/partner_catalog/api/v1/partners/?page_size=${pageSize}&page=${pageIndex}`;
   try {
     const response = await getAuthenticatedHttpClient().get(url);
     return response.data;
@@ -20,7 +20,7 @@ export const getPartners = async ({ pageSize, pageIndex }): Promise<PartnersApiR
 
 export const getPartnerDetails = async (partnerId?: string): Promise<CorporatePartner> => {
   try {
-    const url = `${getConfig().LMS_BASE_URL}/corporate_access/api/v1/partners/${partnerId}/`;
+    const url = `${getConfig().LMS_BASE_URL}/partner_catalog/api/v1/partners/${partnerId}/`;
     const response = await getAuthenticatedHttpClient().get(url);
     return camelCaseObject(response.data);
   } catch (error) {
