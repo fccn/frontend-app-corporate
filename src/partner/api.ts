@@ -5,7 +5,7 @@ import { logError } from '@edx/frontend-platform/logging';
 import { CorporatePartner } from '../app/types';
 
 export const getPartners = async (): Promise<CorporatePartner[]> => {
-  const url = `${getConfig().LMS_BASE_URL}/corporate_access/api/v1/partners/`;
+  const url = `${getConfig().LMS_BASE_URL}/partner_catalog/api/v1/partners/`;
   try {
     const response = await getAuthenticatedHttpClient().get(url);
     return camelCaseObject(response.data.results);
@@ -17,7 +17,7 @@ export const getPartners = async (): Promise<CorporatePartner[]> => {
 
 export const getPartnerDetails = async (partnerId?: string): Promise<CorporatePartner> => {
   try {
-    const url = `${getConfig().LMS_BASE_URL}/corporate_access/api/v1/partners/${partnerId}/`;
+    const url = `${getConfig().LMS_BASE_URL}/partner_catalog/api/v1/partners/${partnerId}/`;
     const response = await getAuthenticatedHttpClient().get(url);
     return camelCaseObject(response.data);
   } catch (error) {
