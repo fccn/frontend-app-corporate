@@ -51,7 +51,6 @@ const CorporatePartnerList = () => {
         pageSize,
         pageIndex,
       }}
-      autoResetPageIndex={false} // turn off auto reset of pageIndex
       data={partners}
       itemCount={count}
       pageCount={pages}
