@@ -48,7 +48,7 @@ const CorporatePartnerList = () => {
       isFilterable
       defaultColumnValues={{ Filter: TextFilter }}
       initialState={{
-        pageSize: 10,
+        pageSize,
         pageIndex,
       }}
       autoResetPageIndex={false} // turn off auto reset of pageIndex
