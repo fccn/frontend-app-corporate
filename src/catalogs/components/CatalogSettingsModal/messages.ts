@@ -1,6 +1,16 @@
 import { defineMessages } from '@edx/frontend-platform/i18n';
 
 const messages = defineMessages({
+  saveButton: {
+    id: 'app.save.button',
+    defaultMessage: 'Save',
+    description: 'Text for the save button in the app layout',
+  },
+  editCatalogTitle: {
+    id: 'app.edit.catalog.title',
+    defaultMessage: 'Catalog settings',
+    description: 'Title for the edit catalog modal',
+  },
   formGeneralInformation: {
     id: 'form.general.information',
     defaultMessage: 'General Information',

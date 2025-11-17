@@ -6,8 +6,8 @@ import { Col, Form, Stack } from '@openedx/paragon';
 
 import { useCatalogDetails } from '@src/catalogs/hooks';
 
-import { EMPTY_FORM_STATE } from './constants';
-import messages from './messages';
+import { EMPTY_FORM_STATE } from '../constants';
+import messages from '../messages';
 
 interface CatalogEditFormProps {
   selectedCatalog: string | number;

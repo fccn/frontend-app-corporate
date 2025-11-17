@@ -1,20 +1,30 @@
-import {
-  FC, useContext, useEffect, useMemo, useState,
-} from 'react';
+import { createContext, useEffect, useMemo, useState } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Button, useToggle } from '@openedx/paragon';
 
+import { CorporateCatalog } from '@src/types';
 import ModalLayout from '@src/components/ModalLayout';
 
-import CatalogEditForm from './components/CatalogEditForm';
-import messages from './messages';
-import { CatalogEditionModalContext } from './context/CatalogEditionModalContext';
+import CatalogEditForm from '../components/CatalogSettingsForm';
+import messages from '../messages';
 
-interface CatalogEditionModalProviderProps {
+export interface TCatalogESettingsModalContext {
+  isOpen: boolean;
+  selectedCatalog: CorporateCatalog | null;
+  handleChangeSelectedCatalog: (catalogId: number | string | null) => void;
+}
+
+export const CatalogSettingsModalContext = createContext<TCatalogESettingsModalContext>({
+  isOpen: false,
+  selectedCatalog: null,
+  handleChangeSelectedCatalog: () => {},
+});
+
+interface CatalogSettingsModalProviderProps {
   children: React.ReactNode | React.ReactNode[];
 }
 
-export const CatalogEditionModalProvider: FC<CatalogEditionModalProviderProps> = ({ children }) => {
+export const CatalogSettingsModalProvider = ({ children }:CatalogSettingsModalProviderProps) => {
   const intl = useIntl();
 
   const [isOpen, open, close] = useToggle(false);
@@ -44,7 +54,7 @@ export const CatalogEditionModalProvider: FC<CatalogEditionModalProviderProps> =
     [isOpen],
   );
   return (
-    <CatalogEditionModalContext.Provider value={value}>
+    <CatalogSettingsModalContext.Provider value={value}>
       <ModalLayout
         title={intl.formatMessage(messages.editCatalogTitle)}
         isOpen={isOpen}
@@ -59,8 +69,6 @@ export const CatalogEditionModalProvider: FC<CatalogEditionModalProviderProps> =
       </ModalLayout>
 
       {children}
-    </CatalogEditionModalContext.Provider>
+    </CatalogSettingsModalContext.Provider>
   );
 };
-
-export const useCatalogEditionModal = () => useContext(CatalogEditionModalContext);

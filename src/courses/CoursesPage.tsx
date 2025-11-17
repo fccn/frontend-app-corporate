@@ -6,7 +6,7 @@ import { usePartnerDetails } from '@src/partner/hooks';
 import { IconButton, Tab, Tabs } from '@openedx/paragon';
 import { Settings } from '@openedx/paragon/icons';
 import { paths } from '@src/constants';
-import { useCatalogEditionModal } from '@src/catalogs/useCatalogEditionModal';
+import { useCatalogSettingsModal } from '@src/catalogs/components/CatalogSettingsModal';
 import CoursesList from './components/CoursesList';
 import AppLayout from '../components/AppLayout';
 
@@ -15,7 +15,7 @@ const CoursesPage = () => {
   const { partnerId, catalogId } = useParams<{ partnerId: string, catalogId: string }>();
   const { catalogDetails } = useCatalogDetails({ partnerId, selectedCatalog: catalogId });
   const { partnerDetails } = usePartnerDetails({ partnerId });
-  const { handleChangeSelectedCatalog } = useCatalogEditionModal();
+  const { handleChangeSelectedCatalog } = useCatalogSettingsModal();
 
   return (
     <AppLayout withBackButton backPath={paths.catalogs.buildPath(partnerId)}>

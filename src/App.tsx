@@ -2,7 +2,7 @@ import { lazy, Suspense } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Route, Router as WouterRouter, Switch } from 'wouter';
 import { AppProvider } from '@edx/frontend-platform/react';
-import { CatalogEditionModalProvider } from './catalogs/useCatalogEditionModal';
+import { CatalogSettingsModalProvider } from './catalogs/components/CatalogSettingsModal';
 
 import { paths, STALE_TIME } from './constants';
 
@@ -25,10 +25,10 @@ const App = () => (
           <WouterRouter base={paths.base}>
             <Switch>
               <Route path={paths.partners.path} component={CorporatePartnerPage} />
-              <CatalogEditionModalProvider>
+              <CatalogSettingsModalProvider>
                 <Route path={paths.catalogs.path} component={PartnerCatalogsPage} />
                 <Route path={paths.courses.path} component={CoursesPage} />
-              </CatalogEditionModalProvider>
+              </CatalogSettingsModalProvider>
               <Route path={paths.courseDetail.path}>
                 <h1>Course Details</h1>
               </Route>
