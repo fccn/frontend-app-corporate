@@ -3,7 +3,7 @@ import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { logError } from '@edx/frontend-platform/logging';
 
 import { getCorporateApiBase } from '@src/constants';
-import { CorporateCatalog, PaginatedResponse } from '../types';
+import { CorporateCatalog, PaginatedResponse } from '../../types';
 
 export const getPartnerCatalogs = async (
   partnerId: string,

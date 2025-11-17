@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react';
 import { renderWrapper } from '@src/setupTest';
 import CatalogsList from './CatalogsList';
-import { usePartnerCatalogs } from '../hooks';
+import { usePartnerCatalogs } from '../data/hooks';
 
 jest.mock('../hooks', () => ({
   usePartnerCatalogs: jest.fn(),

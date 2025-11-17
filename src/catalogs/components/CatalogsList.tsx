@@ -8,7 +8,7 @@ import { paths } from '@src/constants';
 import { useNavigate, usePagination } from '@src/hooks';
 
 import messages from '../messages';
-import { usePartnerCatalogs } from '../hooks';
+import { usePartnerCatalogs } from '../data/hooks';
 
 type CellValue = {
   row: {

@@ -4,7 +4,7 @@ import { useParams } from 'wouter';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Col, Form, Stack } from '@openedx/paragon';
 
-import { useCatalogDetails } from '@src/catalogs/hooks';
+import { useCatalogDetails } from '@src/catalogs/data/hooks';
 
 import { EMPTY_FORM_STATE } from '../constants';
 import messages from '../messages';

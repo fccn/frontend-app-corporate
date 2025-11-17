@@ -17,22 +17,24 @@ export type Learner = {
   assesmentToComplete: number;
 };
 
-export type CorporateCourse = {
+export interface CourseRun {
+  id: string;
+  displayName: string;
+  start: string | null;
+  end: string | null;
+  enrollmentStart: string | null;
+  enrollmentEnd: string | null;
+}
+
+export interface Course {
   id: number;
   catalogId: number;
   position: number;
   enrollments: number;
   certified: number;
   completionRate: number;
-  courseRun: {
-    id: string;
-    displayName: string;
-    start: string | null;
-    end: string | null;
-    enrollmentStart: string | null;
-    enrollmentEnd: string | null;
-  }
-};
+  courseRun: CourseRun;
+}
 
 export type CorporateCatalog = {
   id: string;
@@ -50,7 +52,7 @@ export type CorporateCatalog = {
   catalogAlternativeLink: string;
   isSelfEnrollment: boolean;
   customCourses: boolean;
-  authorizationAdditionalMessage: string;
+  authorizationMessage: string;
   isPublic: boolean;
   courses: number;
   corporatePartner: number;
@@ -65,6 +67,7 @@ export interface PaginatedResponse<T> {
   start: number;
   results: T[];
 }
+
 export interface CellValue<T> {
   row: {
     original: T;

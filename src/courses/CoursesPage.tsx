@@ -1,7 +1,7 @@
 import { useParams } from 'wouter';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import HeaderDescription from '@src/components/HeaderDescription';
-import { useCatalogDetails } from '@src/catalogs/hooks';
+import { useCatalogDetails } from '@src/catalogs/data/hooks';
 import { usePartnerDetails } from '@src/partner/hooks';
 import { IconButton, Tab, Tabs } from '@openedx/paragon';
 import { Settings } from '@openedx/paragon/icons';
