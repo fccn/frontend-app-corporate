@@ -9,7 +9,7 @@ import { ActionItem, CellName, TableFooter} from '@src/components/Table';
 import { useNavigate, usePagination } from '@src/hooks';
 
 import { paths } from '@src/constants';
-import { useCatalogCourses, useDeleteCatalogCourse } from '../hooks';
+import { useCatalogCourses, useDeleteCatalogCourse } from '../data/hooks';
 
 import messages from '../messages';
 
@@ -60,6 +60,7 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
       isSelectable
       isPaginated
       isFilterable
+      isSortable
       manualPagination
       itemCount={count}
       pageCount={pageCount}

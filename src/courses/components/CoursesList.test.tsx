@@ -1,6 +1,6 @@
 import { screen, within } from '@testing-library/react';
 import { renderWrapper } from '@src/setupTest';
-import * as hooks from '../hooks';
+import * as hooks from '../data/hooks';
 import CoursesList from './CoursesList';
 
 jest.mock('@src/hooks', () => ({

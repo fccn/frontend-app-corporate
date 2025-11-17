@@ -3,8 +3,8 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import HeaderDescription from '@src/components/HeaderDescription';
 import { useCatalogDetails } from '@src/catalogs/hooks';
 import { usePartnerDetails } from '@src/partner/hooks';
-import { IconButton } from '@openedx/paragon';
-import { LmsEditSquare } from '@openedx/paragon/icons';
+import { IconButton, Tab, Tabs } from '@openedx/paragon';
+import { Settings } from '@openedx/paragon/icons';
 import { paths } from '@src/constants';
 import { useCatalogEditionModal } from '@src/catalogs/useCatalogEditionModal';
 import CoursesList from './components/CoursesList';
@@ -38,7 +38,14 @@ const CoursesPage = () => {
             <IconButton src={Settings} alt="edit catalog" onClick={() => handleChangeSelectedCatalog(catalogId)} />
           </HeaderDescription>
         )}
-      <CoursesList catalogId={catalogId} partnerId={partnerId} />
+      <Tabs  defaultActiveKey="courses">
+        <Tab eventKey="courses" title={intl.formatMessage({ id: 'courses.page.tab.courses', defaultMessage: 'Courses' })}>
+          <CoursesList catalogId={catalogId} partnerId={partnerId} />
+        </Tab>
+        <Tab eventKey="learners" title={intl.formatMessage({ id: 'courses.page.tab.learners', defaultMessage: 'Learners' })}>
+
+        </Tab>
+      </Tabs>
     </AppLayout>
   );
 };
