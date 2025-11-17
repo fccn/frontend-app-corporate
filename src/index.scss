@@ -16,4 +16,19 @@ button[aria-label="Copy description"] svg {
 .pgn__data-table th:not(:first-of-type) span {
     margin: auto;
 }
+
+.pgn__data-table th, .pgn__data-table tr, .pgn__data-table.is-striped tr:nth-child(2n) {
+    background-color: var(--pgn-color-white);
     border-bottom: 1px solid var(--pgn-color-gray-200);
+}
+
+.pgn__data-table th {
+    border-top: 1px solid var(--pgn-color-gray-200);
+}
+
+.truncate-single-line {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+

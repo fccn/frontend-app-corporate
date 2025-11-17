@@ -4,6 +4,7 @@ import {
   DataTable, DataTableContext, Dropdown, TablePaginationMinimal,
 } from '@openedx/paragon';
 import messages from './messages';
+import { DEFAULT_PAGE_SIZE_OPTIONS } from '@src/constants';
 
 type DataTableContextValue = {
   state: {
@@ -17,19 +18,20 @@ type TableFooterProps = {
 };
 
 const TableFooter = ({
-  pageSizeOptions = [10, 20, 30, 40],
+  pageSizeOptions = DEFAULT_PAGE_SIZE_OPTIONS,
 }: TableFooterProps) => {
   const intl = useIntl();
   const { setPageSize, state } = useContext<DataTableContextValue>(DataTableContext);
 
   return (
     <DataTable.TableFooter>
-      <div className="row w-100">
-        <Dropdown className="col col-6">
+      <div className="d-flex justify-content-end align-items-center w-100 small">
+        <Dropdown>
           {intl.formatMessage(messages.tableFooterRowSelector)}
           <Dropdown.Toggle
+            size="sm"
             id="table-number-rows-selector"
-            className="small ml-1 p-1"
+            className="ml-1 p-1"
             variant="ternary"
           >
             {state.pageSize}
@@ -38,6 +40,7 @@ const TableFooter = ({
             {pageSizeOptions.map((num) => (
               <Dropdown.Item
                 key={`footer-table-page-size-${num}`}
+                className="small"
                 eventKey={num}
                 onSelect={(value) => setPageSize(Number(value))}
               >
@@ -46,10 +49,8 @@ const TableFooter = ({
             ))}
           </Dropdown.Menu>
         </Dropdown>
-        <div className="col col-6 d-flex justify-content-end align-items-center">
-          <DataTable.RowStatus />
-          <TablePaginationMinimal />
-        </div>
+          <DataTable.RowStatus className="mx-4" />
+          <TablePaginationMinimal className="text-base" />
       </div>
     </DataTable.TableFooter>
   );

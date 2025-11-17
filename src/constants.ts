@@ -37,7 +37,7 @@ const CACHE_TIME = 2 * 60 * 60_000; // 2 hours
   
   // Pagination defaults
 const DEFAULT_PAGE_SIZE = 10;
-const DEFAULT_PAGE_SIZE_OPTIONS = [10, 25, 50];
+const DEFAULT_PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
 
   // Date format
 const DATE_FORMAT = 'YYYY-MM-DD';
