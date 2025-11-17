@@ -3,7 +3,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { IconButton, OverlayTrigger, Tooltip } from '@openedx/paragon';
 import {
   Visibility,
-  DeleteOutline,
+  Delete,
   InsertChartOutlined,
 } from '@openedx/paragon/icons';
 import messages from './messages';
@@ -22,7 +22,7 @@ export const actionConfig: Record<string, ActionConfigItem> = {
   },
   delete: {
     tooltip: messages.tableActionDelete,
-    icon: DeleteOutline,
+    icon: Delete,
     color: 'danger',
   },
   analytics: {

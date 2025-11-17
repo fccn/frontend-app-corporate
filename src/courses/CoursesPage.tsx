@@ -35,7 +35,7 @@ const CoursesPage = () => {
               { title: intl.formatMessage({ id: 'courses.page.enrolledEmployees', defaultMessage: 'Completion Rate' }), value: catalogDetails?.completionRate },
             ]}
           >
-            <IconButton src={LmsEditSquare} alt="edit catalog" onClick={() => handleChangeSelectedCatalog(catalogId)} />
+            <IconButton src={Settings} alt="edit catalog" onClick={() => handleChangeSelectedCatalog(catalogId)} />
           </HeaderDescription>
         )}
       <CoursesList catalogId={catalogId} partnerId={partnerId} />

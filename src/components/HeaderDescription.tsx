@@ -65,7 +65,7 @@ const HeaderDescription: FC<HeaderDescriptionProps> = ({ context, info, children
                 invertColors
                 isActive
                 src={ContentCopy}
-                variant="primary"
+                variant="black"
                 onClick={handleCopy}
                 alt="Copy description"
                 tooltipContent={copied}
