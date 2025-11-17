@@ -2,15 +2,13 @@ import { FC } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { DataTable, TextFilter } from '@openedx/paragon';
 
-import { CorporateCatalog } from '@src/app/types';
-import ActionItem from '@src/app/ActionItem';
-import TableFooter from '@src/app/TableFooter';
+import { CorporateCatalog } from '@src/types';
+import {ActionItem, TableFooter } from '@src/components/Table/';
 import { paths } from '@src/constants';
 import { useNavigate, usePagination } from '@src/hooks';
 
 import messages from '../messages';
 import { usePartnerCatalogs } from '../hooks';
-import { useCatalogEditionModal } from '../useCatalogEditionModal';
 
 type CellValue = {
   row: {
@@ -26,8 +24,6 @@ const CatalogsList: FC<CatalogsListProps> = ({ partnerId }) => {
   const navigate = useNavigate();
   const intl = useIntl();
 
-  const { handleChangeSelectedCatalog } = useCatalogEditionModal();
-
   const { pageIndex, pageSize, onPaginationChange } = usePagination();
 
   const { partnerCatalogs, isLoadingCatalogs } = usePartnerCatalogs({
@@ -39,11 +35,6 @@ const CatalogsList: FC<CatalogsListProps> = ({ partnerId }) => {
   const tableActions = [{
     type: 'view',
     onClick: (catalog: CorporateCatalog) => navigate(paths.courses.buildPath(partnerId, catalog.id)),
-  }, {
-    type: 'edit',
-    onClick: (catalog: CorporateCatalog) => {
-      handleChangeSelectedCatalog(catalog.id);
-    },
   }];
 
   return (

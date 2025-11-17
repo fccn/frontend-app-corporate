@@ -1,7 +1,7 @@
 import { camelCaseObject } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { logError } from '@edx/frontend-platform/logging';
-import { CorporateCourse, PaginatedResponse } from '@src/app/types';
+import { CorporateCourse, PaginatedResponse } from '@src/types';
 import { getCorporateApiBase } from '@src/constants';
 
 export const getCourses = async (partnerId: string, catalogId: string, pageIndex, pageSize)

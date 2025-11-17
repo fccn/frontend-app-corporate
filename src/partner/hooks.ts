@@ -1,4 +1,4 @@
-import { CorporatePartner } from '@src/app/types';
+import { CorporatePartner } from '@src/types';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getPartnerDetails } from './api';
 

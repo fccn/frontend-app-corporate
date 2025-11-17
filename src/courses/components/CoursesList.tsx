@@ -3,10 +3,9 @@ import {
   DataTable, Form, TextFilter,
 } from '@openedx/paragon';
 
-import { CellValue, CorporateCourse } from '@src/app/types';
-import TableName from '@src/app/TableName';
-import TableFooter from '@src/app/TableFooter';
-import ActionItem from '@src/app/ActionItem';
+import { CellValue, CorporateCourse } from '@src/types';
+import { ActionItem, CellName, TableFooter} from '@src/components/Table';
+
 import { useNavigate, usePagination } from '@src/hooks';
 
 import { paths } from '@src/constants';
@@ -90,7 +89,7 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
           accessor: 'name',
           // eslint-disable-next-line react/no-unstable-nested-components
           Cell: ({ row }: CoursesCell) => (
-            <TableName
+            <CellName
               className="course-name"
               key={`description-view-${row.original.id}`}
               name={row.original.courseRun.displayName}

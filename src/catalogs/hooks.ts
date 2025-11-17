@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { CorporateCatalog, PaginatedResponse } from '@src/app/types';
+import { CorporateCatalog, PaginatedResponse } from '@src/types';
 import { getCatalogDetails, getPartnerCatalogs } from './api';
 
 export const usePartnerCatalogs = (

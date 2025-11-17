@@ -2,7 +2,7 @@ import { camelCaseObject } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { logError } from '@edx/frontend-platform/logging';
 
-import { CorporatePartner } from '../app/types';
+import { CorporatePartner } from '../types';
 import { getCorporateApiBase } from '@src/constants';
 
 export const getPartners = async (): Promise<CorporatePartner[]> => {

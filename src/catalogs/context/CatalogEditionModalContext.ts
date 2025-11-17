@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 
-import { CorporateCatalog } from '@src/app/types';
+import { CorporateCatalog } from '@src/types';
 
 export interface TCatalogEditionModalContext {
   isOpen: boolean;

@@ -2,7 +2,7 @@ import { camelCaseObject } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { logError } from '@edx/frontend-platform/logging';
 
-import { CorporateCatalog, PaginatedResponse } from '../app/types';
+import { CorporateCatalog, PaginatedResponse } from '../types';
 import { getCorporateApiBase } from '@src/constants';
 
 export const getPartnerCatalogs = async (

@@ -4,15 +4,13 @@ import {
   DataTable, TextFilter,
 } from '@openedx/paragon';
 
-import { CorporatePartner } from '@src/app/types';
-import TableName from '@src/app/TableName';
+import { CorporatePartner } from '@src/types';
+import { ActionItem, CellName, TableFooter } from '@src/components/Table';
 import { useNavigate } from '@src/hooks';
 import { paths } from '@src/constants';
 import { getPartners } from '../api';
-import TableFooter from '../../app/TableFooter';
 
 import messages from '../messages';
-import ActionItem from '../../app/ActionItem';
 
 type CellValue = {
   row: {
@@ -61,7 +59,7 @@ const CorpotatePartnerList = () => {
           accessor: 'name',
           // eslint-disable-next-line react/no-unstable-nested-components
           Cell: ({ row }: CellValue) => (
-            <TableName
+            <CellName
               key={`description-view-${row.original.code}`}
               name={row.original.name}
               destination={row.original.homepageUrl}

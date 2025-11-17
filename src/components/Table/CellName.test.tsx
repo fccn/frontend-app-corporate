@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/react';
 import { renderWrapper } from '@src/setupTest';
-import TableName from './TableName';
+import TableName from './CellName';
 
 describe('TableName', () => {
   const defaultProps = {

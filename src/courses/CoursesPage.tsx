@@ -1,6 +1,6 @@
 import { useParams } from 'wouter';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import HeaderDescription from '@src/app/HeaderDescription';
+import HeaderDescription from '@src/components/HeaderDescription';
 import { useCatalogDetails } from '@src/catalogs/hooks';
 import { usePartnerDetails } from '@src/partner/hooks';
 import { IconButton } from '@openedx/paragon';
@@ -8,7 +8,7 @@ import { LmsEditSquare } from '@openedx/paragon/icons';
 import { paths } from '@src/constants';
 import { useCatalogEditionModal } from '@src/catalogs/useCatalogEditionModal';
 import CoursesList from './components/CoursesList';
-import AppLayout from '../app/AppLayout';
+import AppLayout from '../components/AppLayout';
 
 const CoursesPage = () => {
   const intl = useIntl();

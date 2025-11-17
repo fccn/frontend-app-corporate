@@ -3,9 +3,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { IconButton, OverlayTrigger, Tooltip } from '@openedx/paragon';
 import {
   Visibility,
-  Edit,
   DeleteOutline,
-  GroupAdd,
   InsertChartOutlined,
 } from '@openedx/paragon/icons';
 import messages from './messages';
@@ -20,23 +18,17 @@ export const actionConfig: Record<string, ActionConfigItem> = {
   view: {
     tooltip: messages.tableActionView,
     icon: Visibility,
-  },
-  edit: {
-    tooltip: messages.tableActionEdit,
-    icon: Edit,
+    color: 'black',
   },
   delete: {
     tooltip: messages.tableActionDelete,
     icon: DeleteOutline,
     color: 'danger',
   },
-  userEdit: {
-    tooltip: messages.tableActionUserEdit,
-    icon: GroupAdd,
-  },
   analytics: {
     tooltip: messages.tableActionAnalytics,
     icon: InsertChartOutlined,
+    color: 'black',
   },
 };
 

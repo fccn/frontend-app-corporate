@@ -4,7 +4,7 @@ import {
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Button, useToggle } from '@openedx/paragon';
 
-import ModalLayout from '@src/app/ModalLayout';
+import ModalLayout from '@src/components/ModalLayout';
 
 import CatalogEditForm from './components/CatalogEditForm';
 import messages from './messages';
