@@ -38,13 +38,11 @@ const CoursesPage = () => {
             <IconButton src={Settings} alt="edit catalog" onClick={() => handleChangeSelectedCatalog(catalogId)} />
           </HeaderDescription>
         )}
-      <Tabs  defaultActiveKey="courses">
+      <Tabs defaultActiveKey="courses">
         <Tab eventKey="courses" title={intl.formatMessage({ id: 'courses.page.tab.courses', defaultMessage: 'Courses' })}>
           <CoursesList catalogId={catalogId} partnerId={partnerId} />
         </Tab>
-        <Tab eventKey="learners" title={intl.formatMessage({ id: 'courses.page.tab.learners', defaultMessage: 'Learners' })}>
-
-        </Tab>
+        <Tab eventKey="learners" title={intl.formatMessage({ id: 'courses.page.tab.learners', defaultMessage: 'Learners' })} />
       </Tabs>
     </AppLayout>
   );

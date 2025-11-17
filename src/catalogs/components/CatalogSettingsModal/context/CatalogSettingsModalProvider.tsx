@@ -1,4 +1,6 @@
-import { createContext, useEffect, useMemo, useState } from 'react';
+import {
+  createContext, useEffect, useMemo, useState,
+} from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Button, useToggle } from '@openedx/paragon';
 

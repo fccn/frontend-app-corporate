@@ -4,7 +4,7 @@ import {
 } from '@openedx/paragon';
 
 import { CellValue, CorporateCourse } from '@src/types';
-import { ActionItem, CellName, TableFooter} from '@src/components/Table';
+import { ActionItem, TableFooter } from '@src/components/Table';
 
 import { useNavigate, usePagination } from '@src/hooks';
 

@@ -20,7 +20,7 @@ const messages = defineMessages({
     id: 'table.action.analytics',
     defaultMessage: 'Analytics',
     description: 'Tooltip text for analytics action',
-  }
+  },
 });
 
 export default messages;

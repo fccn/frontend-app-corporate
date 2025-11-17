@@ -22,22 +22,22 @@ const App = () => (
   <AppProvider wrapWithRouter={false}>
     <QueryClientProvider client={queryClient}>
       <Suspense fallback={<div>Loading...</div>}>
-          <WouterRouter base={paths.base}>
-            <Switch>
-              <Route path={paths.partners.path} component={CorporatePartnerPage} />
-              <CatalogSettingsModalProvider>
-                <Route path={paths.catalogs.path} component={PartnerCatalogsPage} />
-                <Route path={paths.courses.path} component={CoursesPage} />
-              </CatalogSettingsModalProvider>
-              <Route path={paths.courseDetail.path}>
-                <h1>Course Details</h1>
-              </Route>
-              <Route>
-                <h1>404 Not Found</h1>
-              </Route>
-            </Switch>
-          </WouterRouter>
-        </Suspense>
+        <WouterRouter base={paths.base}>
+          <Switch>
+            <Route path={paths.partners.path} component={CorporatePartnerPage} />
+            <CatalogSettingsModalProvider>
+              <Route path={paths.catalogs.path} component={PartnerCatalogsPage} />
+              <Route path={paths.courses.path} component={CoursesPage} />
+            </CatalogSettingsModalProvider>
+            <Route path={paths.courseDetail.path}>
+              <h1>Course Details</h1>
+            </Route>
+            <Route>
+              <h1>404 Not Found</h1>
+            </Route>
+          </Switch>
+        </WouterRouter>
+      </Suspense>
     </QueryClientProvider>
   </AppProvider>
 );

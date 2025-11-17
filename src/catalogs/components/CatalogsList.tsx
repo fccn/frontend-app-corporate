@@ -3,7 +3,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { DataTable, TextFilter } from '@openedx/paragon';
 
 import { CorporateCatalog } from '@src/types';
-import {ActionItem, TableFooter } from '@src/components/Table/';
+import { ActionItem, TableFooter } from '@src/components/Table/';
 import { paths } from '@src/constants';
 import { useNavigate, usePagination } from '@src/hooks';
 

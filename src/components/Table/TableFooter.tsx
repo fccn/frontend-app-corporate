@@ -3,8 +3,8 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   DataTable, DataTableContext, Dropdown, TablePaginationMinimal,
 } from '@openedx/paragon';
-import messages from './messages';
 import { DEFAULT_PAGE_SIZE_OPTIONS } from '@src/constants';
+import messages from './messages';
 
 type DataTableContextValue = {
   state: {
@@ -49,8 +49,8 @@ const TableFooter = ({
             ))}
           </Dropdown.Menu>
         </Dropdown>
-          <DataTable.RowStatus className="mx-4" />
-          <TablePaginationMinimal className="text-base" />
+        <DataTable.RowStatus className="mx-4" />
+        <TablePaginationMinimal className="text-base" />
       </div>
     </DataTable.TableFooter>
   );

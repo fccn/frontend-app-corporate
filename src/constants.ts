@@ -34,15 +34,15 @@ const getCorporateApiBase = () => `${getlmsBaseUrl()}${CORPORATE_API_BASE}`;
 // Cache configuration
 const STALE_TIME = 60 * 60_000; // 1 hour
 const CACHE_TIME = 2 * 60 * 60_000; // 2 hours
-  
-  // Pagination defaults
+
+// Pagination defaults
 const DEFAULT_PAGE_SIZE = 10;
 const DEFAULT_PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
 
-  // Date format
+// Date format
 const DATE_FORMAT = 'YYYY-MM-DD';
-  
-  // Form validation
+
+// Form validation
 const MIN_NAME_LENGTH = 3;
 const MAX_NAME_LENGTH = 255;
 const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
