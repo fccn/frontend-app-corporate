@@ -20,6 +20,17 @@ interface CoursesListProps {
   catalogId: string;
 }
 
+const CourseNameCell = ({ row }: CoursesCell) => (
+  <div className="text-left">
+    <span className="d-block font-weight-bold">
+      {row.original.courseRun.displayName}
+    </span>
+    <span className="text-muted small truncate-single-line">
+      {row.original.courseRun.id}
+    </span>
+  </div>
+);
+
 const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
   const intl = useIntl();
   const navigate = useNavigate();
@@ -89,13 +100,7 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
           Header: intl.formatMessage(messages.headerName),
           accessor: 'name',
           // eslint-disable-next-line react/no-unstable-nested-components
-          Cell: ({ row }: CoursesCell) => (
-            <CellName
-              className="course-name"
-              key={`description-view-${row.original.id}`}
-              name={row.original.courseRun.displayName}
-            />
-          ),
+          Cell: CourseNameCell,
         },
         {
           Header: intl.formatMessage(messages.headerPosition),

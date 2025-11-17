@@ -12,9 +12,9 @@ const CellName = ({
   name, destination, image = null, className,
 }: CellNameProps) => (
   <Hyperlink
-    className={`d-block ${className || ''}`}
+    className={`d-block ${className || ''} text-body`}
     destination={destination}
-    variant="muted"
+    isInline
   >
     <Row>
       {image && (
