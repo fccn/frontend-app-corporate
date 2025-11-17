@@ -53,7 +53,7 @@ const CatalogEditForm: FC<CatalogEditFormProps> = ({ selectedCatalog }) => {
       {/* Alternative Link */}
       <Form.Group controlId="catalogAlternativeLink">
         <Form.Label className="font-weight-bold">{intl.formatMessage(messages.formCatalogAlternativeLink)}</Form.Label>
-        <Form.Control id="catalogAlternativeLink" {...register('catalogAlternativeLink')} type="text" />
+        <Form.Control id="catalogAlternativeLink" {...register('alternativeLink')} type="text" />
       </Form.Group>
 
       {/* Support Email */}

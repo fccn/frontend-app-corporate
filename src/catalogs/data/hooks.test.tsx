@@ -3,7 +3,7 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { usePartnerCatalogs, useCatalogDetails } from './hooks';
 import * as api from '../api';
-import { CorporateCatalog, PaginatedResponse } from '../../types';
+import { Catalog, PaginatedResponse } from '../../types';
 
 jest.mock('./api');
 const mockedGetPartnerCatalogs = api.getPartnerCatalogs as jest.MockedFunction<typeof api.getPartnerCatalogs>;
@@ -31,7 +31,7 @@ describe('Catalog Hooks', () => {
   });
 
   describe('usePartnerCatalogs', () => {
-    const mockCatalogsResponse: PaginatedResponse<CorporateCatalog> = {
+    const mockCatalogsResponse: PaginatedResponse<Catalog> = {
       next: null,
       previous: null,
       count: 2,

@@ -1,11 +1,11 @@
 import { camelCaseObject } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { logError } from '@edx/frontend-platform/logging';
-import { CorporateCourse, PaginatedResponse } from '@src/types';
+import { Course, PaginatedResponse } from '@src/types';
 import { getCorporateApiBase } from '@src/constants';
 
 export const getCourses = async (partnerId: string, catalogId: string, pageIndex, pageSize)
-: Promise<PaginatedResponse<CorporateCourse>> => {
+: Promise<PaginatedResponse<Course>> => {
   try {
     const url = new URL(`${getCorporateApiBase()}${partnerId}/catalogs/${catalogId}/courses/`);
     url.searchParams.append('page', pageIndex);

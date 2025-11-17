@@ -1,8 +1,7 @@
-import { FC } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { DataTable, TextFilter } from '@openedx/paragon';
 
-import { CorporateCatalog } from '@src/types';
+import { Catalog, CellValue } from '@src/types';
 import { ActionItem, TableFooter } from '@src/components/Table/';
 import { paths } from '@src/constants';
 import { useNavigate, usePagination } from '@src/hooks';
@@ -10,17 +9,13 @@ import { useNavigate, usePagination } from '@src/hooks';
 import messages from '../messages';
 import { usePartnerCatalogs } from '../data/hooks';
 
-type CellValue = {
-  row: {
-    original: CorporateCatalog;
-  }
-};
+type CatalogCell = CellValue<Catalog>;
 
 interface CatalogsListProps {
   partnerId: string;
 }
 
-const CatalogsList: FC<CatalogsListProps> = ({ partnerId }) => {
+const CatalogsList= ({ partnerId }: CatalogsListProps) => {
   const navigate = useNavigate();
   const intl = useIntl();
 
@@ -34,7 +29,7 @@ const CatalogsList: FC<CatalogsListProps> = ({ partnerId }) => {
 
   const tableActions = [{
     type: 'view',
-    onClick: (catalog: CorporateCatalog) => navigate(paths.courses.buildPath(partnerId, catalog.id)),
+    onClick: (catalog: Catalog) => navigate(paths.courses.buildPath(partnerId, catalog.id)),
   }];
 
   return (
@@ -54,7 +49,7 @@ const CatalogsList: FC<CatalogsListProps> = ({ partnerId }) => {
         {
           id: 'action',
           Header: intl.formatMessage(messages.headerAction),
-          Cell: ({ row }: CellValue) => tableActions.map(({ type, onClick }) => (
+          Cell: ({ row }: CatalogCell) => tableActions.map(({ type, onClick }) => (
             <ActionItem
               key={`action-${type}-${row.original.id}`}
               type={type}

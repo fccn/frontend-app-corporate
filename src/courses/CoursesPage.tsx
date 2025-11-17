@@ -2,7 +2,7 @@ import { useParams } from 'wouter';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import HeaderDescription from '@src/components/HeaderDescription';
 import { useCatalogDetails } from '@src/catalogs/data/hooks';
-import { usePartnerDetails } from '@src/partner/hooks';
+import { usePartnerDetails } from '@src/partner/data/hooks';
 import { IconButton, Tab, Tabs } from '@openedx/paragon';
 import { Settings } from '@openedx/paragon/icons';
 import { paths } from '@src/constants';
@@ -25,7 +25,7 @@ const CoursesPage = () => {
             context={{
               title: catalogDetails?.name,
               imageUrl: partnerDetails?.logo || null,
-              description: catalogDetails?.catalogAlternativeLink,
+              description: catalogDetails?.alternativeLink,
               copyableDescription: true,
             }}
             info={[

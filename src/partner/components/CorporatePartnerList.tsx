@@ -4,19 +4,15 @@ import {
   DataTable, TextFilter,
 } from '@openedx/paragon';
 
-import { CorporatePartner } from '@src/types';
+import { Partner, CellValue } from '@src/types';
 import { ActionItem, CellName, TableFooter } from '@src/components/Table';
 import { useNavigate } from '@src/hooks';
 import { paths } from '@src/constants';
-import { getPartners } from '../api';
+import { getPartners } from '../data/api';
 
 import messages from '../messages';
 
-type CellValue = {
-  row: {
-    original: CorporatePartner;
-  }
-};
+type PartnersTableCell = CellValue<Partner>;
 
 const tableActions = ['view'];
 
@@ -42,25 +38,26 @@ const CorpotatePartnerList = () => {
         {
           id: 'action',
           Header: intl.formatMessage(messages.headerAction),
-          Cell: ({ row }: CellValue) => tableActions.map((type) => (
+          Cell: ({ row }: PartnersTableCell) => tableActions.map((type) => (
             <ActionItem
-              key={`action-${type}-${row.original.code}`}
+              key={`action-${type}-${row.original.slug}`}
               type={type}
               onClick={() => navigate(paths.catalogs.buildPath(row.original.id))}
             />
           )),
         },
       ]}
-      itemCount={data.length}
-      data={data}
+      itemCount={data?.count || 0}
+      data={data?.results}
+      pageCount={data?.numPages || 0}
       columns={[
         {
           Header: intl.formatMessage(messages.headerName),
           accessor: 'name',
           // eslint-disable-next-line react/no-unstable-nested-components
-          Cell: ({ row }: CellValue) => (
+          Cell: ({ row }: PartnersTableCell) => (
             <CellName
-              key={`description-view-${row.original.code}`}
+              key={`description-view-${row.original.slug}`}
               name={row.original.name}
               destination={row.original.homepageUrl}
               image={row.original.logo}

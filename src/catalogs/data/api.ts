@@ -3,13 +3,13 @@ import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { logError } from '@edx/frontend-platform/logging';
 
 import { getCorporateApiBase } from '@src/constants';
-import { CorporateCatalog, PaginatedResponse } from '../../types';
+import { Catalog, PaginatedResponse } from '../../types';
 
 export const getPartnerCatalogs = async (
   partnerId: string,
   page: number,
   pageSize: number,
-): Promise<PaginatedResponse<CorporateCatalog>> => {
+): Promise<PaginatedResponse<Catalog>> => {
   try {
     const url = new URL(`${getCorporateApiBase()}${partnerId}/catalogs/`);
     url.searchParams.append('page', page.toString());
@@ -34,7 +34,7 @@ export const getPartnerCatalogs = async (
 export const getCatalogDetails = async (
   partnerId: string,
   catalogId: string | number,
-): Promise<CorporateCatalog | null> => {
+): Promise<Catalog | null> => {
   try {
     const url = `${getCorporateApiBase()}${partnerId}/catalogs/${catalogId}/`;
     const response = await getAuthenticatedHttpClient().get(url);

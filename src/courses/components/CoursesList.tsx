@@ -3,7 +3,7 @@ import {
   DataTable, Form, TextFilter,
 } from '@openedx/paragon';
 
-import { CellValue, CorporateCourse } from '@src/types';
+import { CellValue, Course } from '@src/types';
 import { ActionItem, TableFooter } from '@src/components/Table';
 
 import { useNavigate, usePagination } from '@src/hooks';
@@ -13,7 +13,7 @@ import { useCatalogCourses, useDeleteCatalogCourse } from '../data/hooks';
 
 import messages from '../messages';
 
-type CoursesCell = CellValue<CorporateCourse>;
+type CoursesCell = CellValue<Course>;
 
 interface CoursesListProps {
   partnerId: string;

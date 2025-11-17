@@ -2,7 +2,7 @@ import { useParams } from 'wouter';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
 import AppLayout from '@src/components/AppLayout';
-import { usePartnerDetails } from '@src/partner/hooks';
+import { usePartnerDetails } from '@src/partner/data/hooks';
 import HeaderDescription from '@src/components/HeaderDescription';
 
 import CatalogsList from './components/CatalogsList';

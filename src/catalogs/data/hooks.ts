@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { CorporateCatalog, PaginatedResponse } from '@src/types';
+import { Catalog, PaginatedResponse } from '@src/types';
 import { getCatalogDetails, getPartnerCatalogs } from './api';
 
 export const usePartnerCatalogs = (
@@ -21,7 +21,7 @@ export const useCatalogDetails = ({
 
   const allCatalogs = queryClient
     .getQueriesData({ queryKey: ['partnerCatalogs', partnerId] })
-    .flatMap(([, data]) => (data as PaginatedResponse<CorporateCatalog>)?.results ?? []);
+    .flatMap(([, data]) => (data as PaginatedResponse<Catalog>)?.results ?? []);
 
   const catalogFromCache = allCatalogs.find((c) => c.id === selectedCatalog);
 

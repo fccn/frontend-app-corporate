@@ -1,6 +1,6 @@
-export type CorporatePartner = {
+export type Partner = {
   id: number;
-  code: string;
+  slug: string;
   name: string;
   logo: string;
   homepageUrl: string;
@@ -36,27 +36,31 @@ export interface Course {
   courseRun: CourseRun;
 }
 
-export type CorporateCatalog = {
+export interface CatalogBase {
   id: string;
   name: string;
   slug: string;
+  emailRegexes: string[];
+  isSelfEnrollment: boolean;
+  isPublic: boolean;
+  courseEnrollmentsLimit: number;
+  userLimit: number;
+  availableStartDate: Date | null;
+  availableEndDate: Date | null;
+  partnerId: number;
+}
+
+export interface CatalogStats {
   enrollments: number;
   certified: number;
   completionRate: number;
-  supportEmail: string;
-  emailRegexes: string[];
-  courseEnrollmentLimit: number;
-  userLimit: number;
-  availableStartDate: Date;
-  availableEndDate: Date;
-  catalogAlternativeLink: string;
-  isSelfEnrollment: boolean;
-  customCourses: boolean;
-  authorizationMessage: string;
-  isPublic: boolean;
   courses: number;
-  corporatePartner: number;
-};
+}
+export interface Catalog extends CatalogBase, CatalogStats {
+  supportEmail: string;
+  authorizationMessage: string;
+  alternativeLink: string;
+}
 
 export interface PaginatedResponse<T> {
   next: string | null;

@@ -1,10 +1,10 @@
-import { CorporatePartner } from '@src/types';
+import { Partner } from '@src/types';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getPartnerDetails } from './api';
 
 export const usePartnerDetails = ({ partnerId }) => {
   const queryClient = useQueryClient();
-  const partnersCached: CorporatePartner[] | undefined = queryClient.getQueryData(['partners']);
+  const partnersCached: Partner[] | undefined = queryClient.getQueryData(['partners']);
 
   // Check if this specific partner is already cached
   const partnerCached = partnersCached?.find((partner) => partner.id === Number(partnerId));

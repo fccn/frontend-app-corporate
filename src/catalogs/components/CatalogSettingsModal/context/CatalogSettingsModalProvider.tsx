@@ -4,7 +4,7 @@ import {
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Button, useToggle } from '@openedx/paragon';
 
-import { CorporateCatalog } from '@src/types';
+import { Catalog } from '@src/types';
 import ModalLayout from '@src/components/ModalLayout';
 
 import CatalogEditForm from '../components/CatalogSettingsForm';
@@ -12,7 +12,7 @@ import messages from '../messages';
 
 export interface TCatalogESettingsModalContext {
   isOpen: boolean;
-  selectedCatalog: CorporateCatalog | null;
+  selectedCatalog: Catalog | null;
   handleChangeSelectedCatalog: (catalogId: number | string | null) => void;
 }
 
