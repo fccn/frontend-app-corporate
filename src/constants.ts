@@ -26,3 +26,35 @@ export const paths = {
     buildPath: (partnerId: string | number, catalogId: string, courseId: string) => `/${partnerId}/${catalogId}/${courseId}/`,
   },
 } as const;
+
+const getlmsBaseUrl = () => getConfig().LMS_BASE_URL;
+const CORPORATE_API_BASE = '/partner_catalog/api/v1/partners/';
+const getCorporateApiBase = () => `${getlmsBaseUrl()}${CORPORATE_API_BASE}`;
+
+// Cache configuration
+const STALE_TIME = 60 * 60_000; // 1 hour
+const CACHE_TIME = 2 * 60 * 60_000; // 2 hours
+  
+  // Pagination defaults
+const DEFAULT_PAGE_SIZE = 10;
+const DEFAULT_PAGE_SIZE_OPTIONS = [10, 25, 50];
+
+  // Date format
+const DATE_FORMAT = 'YYYY-MM-DD';
+  
+  // Form validation
+const MIN_NAME_LENGTH = 3;
+const MAX_NAME_LENGTH = 255;
+const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+
+export {
+  STALE_TIME,
+  CACHE_TIME,
+  DEFAULT_PAGE_SIZE,
+  DEFAULT_PAGE_SIZE_OPTIONS,
+  DATE_FORMAT,
+  MIN_NAME_LENGTH,
+  MAX_NAME_LENGTH,
+  EMAIL_REGEX,
+  getCorporateApiBase,
+};
