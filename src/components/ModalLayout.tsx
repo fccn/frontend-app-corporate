@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { ActionRow, ModalDialog } from '@openedx/paragon';
 
@@ -12,9 +12,9 @@ interface ModalLayoutProps {
   children: ReactNode;
 }
 
-const ModalLayout: FC<ModalLayoutProps> = ({
+const ModalLayout = ({
   title, isOpen, actions, onClose, children,
-}) => {
+}: ModalLayoutProps) => {
   const intl = useIntl();
   return (
     <ModalDialog
@@ -22,12 +22,13 @@ const ModalLayout: FC<ModalLayoutProps> = ({
       isOpen={isOpen}
       onClose={onClose}
       size="lg"
+      variant='dark'
       hasCloseButton
       isFullscreenOnMobile
       isOverflowVisible={false}
     >
       <ModalDialog.Header className="bg-primary-500">
-        <ModalDialog.Title className="text-light-100">
+        <ModalDialog.Title>
           {title}
         </ModalDialog.Title>
       </ModalDialog.Header>

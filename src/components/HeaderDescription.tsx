@@ -1,4 +1,4 @@
-import { FC, ReactNode, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   breakpoints, Stack, useMediaQuery, IconButtonWithTooltip,
@@ -22,7 +22,7 @@ interface HeaderDescriptionProps {
   children?: ReactNode;
 }
 
-const HeaderDescription: FC<HeaderDescriptionProps> = ({ context, info, children }) => {
+const HeaderDescription = ({ context, info, children }: HeaderDescriptionProps) => {
   const intl = useIntl();
   const isSmall = useMediaQuery({ maxWidth: breakpoints.small.maxWidth });
   const isMedium = useMediaQuery({ maxWidth: breakpoints.medium.maxWidth });
