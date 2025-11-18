@@ -1,157 +1,192 @@
-import { FC } from 'react';
+import { useImperativeHandle, forwardRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useParams } from 'wouter';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Col, Form, Stack } from '@openedx/paragon';
 
-import { useCatalogDetails } from '@src/catalogs/data/hooks';
+import { yupValidationResolver } from '@src/utils';
 
-import { EMPTY_FORM_STATE } from '../constants';
+import { Catalog, CatalogUpdateRequest } from '@src/types';
+import { getCatalogSchema } from '../utils';
 import messages from '../messages';
+import { EMPTY_FORM_STATE } from '../constants';
 
-interface CatalogEditFormProps {
-  selectedCatalog: string | number;
+interface CatalogSettingsFormProps {
+  catalogDetails: Catalog;
+  onSubmit: (data: CatalogUpdateRequest) => void;
+  userType?: 'full' | 'limited';
+  limitedEditableFields?: string[];
 }
 
-const defaultLimitedEditable = ['catalogAlternativeLink', 'supportEmail', 'authorizationMessage', 'emailRegexes'];
+export interface CatalogSettingsFormRef {
+  submitForm: () => void;
+}
+const defaultLimitedEditable = ['alternativeLink', 'authorizationMessage', 'supportEmail', 'emailRegexes'];
 
-const CatalogEditForm = ({ selectedCatalog }: CatalogEditFormProps) => {
-  const intl = useIntl();
-  const { partnerId } = useParams<{ partnerId: string }>();
-  const { catalogDetails } = useCatalogDetails({
-    partnerId,
-    selectedCatalog,
-  });
+const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFormProps>(
+  ({ catalogDetails, onSubmit, userType = 'limited', limitedEditableFields }, ref) => {
+    const intl = useIntl();
 
-  const { register, control } = useForm({
-    defaultValues: catalogDetails ?? EMPTY_FORM_STATE,
-    mode: 'onChange',
-  });
+    const resolver = yupValidationResolver(getCatalogSchema(intl));
+    const {
+      register, control, handleSubmit, formState: { errors },
+    } = useForm({
+      defaultValues: catalogDetails || EMPTY_FORM_STATE,
+      mode: 'onChange',
+      resolver,
+    });
 
-  return (
-    <Stack gap={3} className="py-4">
-      {/* General Information Section */}
-      <h3 className="h3 text-primary-400">{intl.formatMessage(messages['corporate.catalog.form.general.information.title'])}</h3>
+    const canEditAllFields = userType === 'full';
+    const allowedEditableFields = limitedEditableFields ?? defaultLimitedEditable;
+    const isEditable = (fieldName: string) => canEditAllFields || allowedEditableFields.includes(fieldName);
 
-      {/* Catalog Name */}
-      <Form.Group controlId="name">
-        <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.name.field'])}</Form.Label>
-        <Form.Control id="name" {...register('name')} type="text" />
-      </Form.Group>
+    useImperativeHandle(ref, () => ({
+      submitForm: handleSubmit(onSubmit as any),
+    }));
 
-      {/* Alternative Link */}
-      <Form.Group controlId="catalogAlternativeLink">
-        <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.alternative.link.field'])}</Form.Label>
-        <Form.Control id="catalogAlternativeLink" {...register('alternativeLink')} type="text" />
-      </Form.Group>
+    return (
+      <Stack gap={3} className="py-4">
+        {/* General Information Section */}
+        <h3 className="h3 text-primary-400">{intl.formatMessage(messages['corporate.catalog.form.general.information.title'])}</h3>
 
-      {/* Support Email */}
-      <Form.Group controlId="supportEmail">
-        <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.support.email.field'])}</Form.Label>
-        <Form.Control id="supportEmail" {...register('supportEmail')} type="email" />
-      </Form.Group>
-
-      {/* Date Range Group */}
-      <Form.Row>
-        <Controller
-          control={control}
-          name="availableStartDate"
-          render={({ field: { value, onChange } }) => (
-            <Form.Group as={Col} controlId="availableStartDate">
-              <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.available.start.date.field'])}</Form.Label>
-              <Form.Control
-                id="availableStartDate"
-                value={value ? new Date(value).toISOString().split('T')[0] : ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(new Date(e.target.value).toISOString())}
-                type="date"
-              />
-            </Form.Group>
+        {/* Catalog Name */}
+        <Form.Group controlId="name" isInvalid={!!errors.name}>
+          <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.name.field'])}</Form.Label>
+          <Form.Control id="name" {...register('name')} type="text" disabled={!isEditable('name')} />
+          {errors.name && (
+            <Form.Control.Feedback type="invalid">
+              {errors.name?.message}
+            </Form.Control.Feedback>
           )}
-        />
-        <Controller
-          control={control}
-          name="availableEndDate"
-          render={({ field: { value, onChange } }) => (
-            <Form.Group as={Col} controlId="availableEndDate">
-              <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.available.end.date.field'])}</Form.Label>
-              <Form.Control
-                id="availableEndDate"
-                value={value ? new Date(value).toISOString().split('T')[0] : ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const date = e.target.value;
-                  // Set time to 23:59:59.999 for the selected day
-                  const endDate = new Date(date);
-                  endDate.setHours(23, 59, 59, 999);
-                  onChange(endDate.toISOString());
-                }}
-                type="date"
-              />
-            </Form.Group>
+        </Form.Group>
+
+        {/* Alternative Link */}
+        <Form.Group controlId="alternativeLink" isInvalid={!!errors.alternativeLink}>
+          <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.alternative.link.field'])}</Form.Label>
+          <Form.Control id="alternativeLink" {...register('alternativeLink')} type="url" disabled={!isEditable('alternativeLink')} />
+          {errors.alternativeLink && (
+            <Form.Control.Feedback type="invalid">
+              {errors.alternativeLink?.message}
+            </Form.Control.Feedback>
           )}
-        />
-      </Form.Row>
-
-      {/* Divider */}
-      <hr className="w-100" />
-
-      {/* Enrollment Settings Section */}
-      <h3 className="h3 text-primary-400">{intl.formatMessage(messages['corporate.catalog.form.enrollment.settings.title'])}</h3>
-
-      {/* Enrollment Limits Group */}
-      <Form.Row>
-        <Form.Group as={Col} controlId="courseEnrollmentLimit">
-          <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.course.enrollment.limit.field'])}</Form.Label>
-          <Form.Control id="courseEnrollmentLimit" {...register('courseEnrollmentsLimit')} type="number" />
         </Form.Group>
-        <Form.Group as={Col} controlId="userLimit">
-          <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.user.limit.field'])}</Form.Label>
-          <Form.Control id="userLimit" {...register('userLimit')} type="number" />
+
+        {/* Support Email */}
+        <Form.Group controlId="supportEmail" isInvalid={!!errors.alternativeLink}>
+          <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.support.email.field'])}</Form.Label>
+          <Form.Control id="supportEmail" {...register('supportEmail')} type="email" disabled={!isEditable('supportEmail')} />
+          {errors.supportEmail && (
+            <Form.Control.Feedback type="invalid">
+              {errors.supportEmail?.message}
+            </Form.Control.Feedback>
+          )}
         </Form.Group>
-      </Form.Row>
 
-      {/* Divider */}
-      <hr className="w-100" />
+        {/* Date Range Group */}
+        <Form.Row>
+          <Controller
+            control={control}
+            name="availableStartDate"
+            render={({ field: { value, onChange } }) => (
+              <Form.Group as={Col} controlId="availableStartDate">
+                <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.available.start.date.field'])}</Form.Label>
+                <Form.Control
+                  id="availableStartDate"
+                  value={value ? new Date(value).toISOString().split('T')[0] : ''}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(new Date(e.target.value).toISOString())}
+                  type="date"
+                  disabled={!isEditable('availableStartDate')}
+                />
+              </Form.Group>
+            )}
+          />
+          <Controller
+            control={control}
+            name="availableEndDate"
+            render={({ field: { value, onChange }, fieldState: { error } }) => (
+              <Form.Group isInvalid={!!error} as={Col} controlId="availableEndDate">
+                <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.available.end.date.field'])}</Form.Label>
+                <Form.Control
+                  id="availableEndDate"
+                  value={value ? new Date(value).toISOString().split('T')[0] : ''}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    const date = e.target.value;
+                    // Set time to 23:59:59.999 for the selected day
+                    const endDate = new Date(date);
+                    endDate.setHours(23, 59, 59, 999);
+                    onChange(endDate.toISOString());
+                  }}
+                  type="date"
+                  disabled={!isEditable('availableEndDate')}
+                />
+                {error && <Form.Control.Feedback type="invalid">{error.message}</Form.Control.Feedback>}
+              </Form.Group>
+            )}
+          />
+        </Form.Row>
 
-      {/* Advanced Settings Section */}
-      <h3 className="h3 text-primary-400">{intl.formatMessage(messages['corporate.catalog.form.advanced.settings.title'])}</h3>
-      <Form.Row>
+        {/* Divider */}
+        <hr className="w-100" />
 
-        <Form.Group as={Col} controlId="authorizationMessage">
-          <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.authorization.message.field'])}</Form.Label>
-          <Form.Control id="authorizationMessage" {...register('authorizationMessage')} as="textarea" />
-        </Form.Group>
-      </Form.Row>
+        {/* Enrollment Settings Section */}
+        <h3 className="h3 text-primary-400">{intl.formatMessage(messages['corporate.catalog.form.enrollment.settings.title'])}</h3>
 
-      {/* Email Regexes */}
-      <Controller
-        control={control}
-        name="emailRegexes"
-        render={({ field: { value, onChange } }) => (
-          <Form.Group controlId="emailRegexes">
-            <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.email.regexes.field'])}</Form.Label>
-            <Form.Control
-              id="emailRegexes"
-              type="text"
-              value={Array.isArray(value) ? value.join(', ') : value || ''}
-              onChange={(e) => onChange(e.target.value.split(',').map((v) => v.trim()))}
-            />
+        {/* Enrollment Limits Group */}
+        <Form.Row>
+          <Form.Group as={Col} controlId="courseEnrollmentLimit">
+            <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.course.enrollment.limit.field'])}</Form.Label>
+            <Form.Control id="courseEnrollmentLimit" {...register('courseEnrollmentsLimit')} type="number" disabled={!isEditable('courseEnrollmentLimit')} />
           </Form.Group>
-        )}
-      />
-      {/* Self Enrollment Switch */}
-      <Form.Group controlId="isSelfEnrollment" className="d-flex align-items-center">
-        <Form.Label className="mb-0 flex-grow-1 font-weight-bold">
-          {intl.formatMessage(messages['corporate.catalog.form.is.self.enrollment.field'])}
-        </Form.Label>
-        <Form.Switch
-          {...register('isSelfEnrollment', {
-            onChange: (e) => e.target.checked,
-          })}
-          floatLabelLeft
-        />
-      </Form.Group>
-    </Stack>
-  );
-};
+          <Form.Group as={Col} controlId="userLimit">
+            <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.user.limit.field'])}</Form.Label>
+            <Form.Control id="userLimit" {...register('userLimit')} type="number" disabled={!isEditable('userLimit')} />
+          </Form.Group>
+        </Form.Row>
 
-export default CatalogEditForm;
+        {/* Divider */}
+        <hr className="w-100" />
+
+        {/* Advanced Settings Section */}
+        <h3 className="h3 text-primary-400">{intl.formatMessage(messages['corporate.catalog.form.advanced.settings.title'])}</h3>
+        <Form.Row>
+
+          <Form.Group as={Col} controlId="authorizationMessage">
+            <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.authorization.message.field'])}</Form.Label>
+            <Form.Control id="authorizationMessage" {...register('authorizationMessage')} as="textarea" disabled={!isEditable('authorizationMessage')} />
+          </Form.Group>
+        </Form.Row>
+
+        {/* Email Regexes */}
+        <Controller
+          control={control}
+          name="emailRegexes"
+          render={({ field: { value, onChange } }) => (
+            <Form.Group controlId="emailRegexes">
+              <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.email.regexes.field'])}</Form.Label>
+              <Form.Control
+                id="emailRegexes"
+                type="text"
+                value={Array.isArray(value) ? value.join(', ') : value || ''}
+                onChange={(e) => onChange(e.target.value.split(',').map((v) => v.trim()))}
+                disabled={!isEditable('emailRegexes')}
+              />
+            </Form.Group>
+          )}
+        />
+        {/* Self Enrollment Switch */}
+        <Form.Group controlId="isSelfEnrollment" className="d-flex align-items-center">
+          <Form.Label className="mb-0 flex-grow-1 font-weight-bold">
+            {intl.formatMessage(messages['corporate.catalog.form.is.self.enrollment.field'])}
+          </Form.Label>
+          <Form.Switch
+            {...register('isSelfEnrollment', {
+              onChange: (e) => e.target.checked,
+            })}
+            floatLabelLeft
+            disabled={!isEditable('isSelfEnrollment')}
+          />
+        </Form.Group>
+      </Stack>
+    );
+  });
+
+export default CatalogSettingsForm;

@@ -42,7 +42,6 @@ export interface CatalogBase {
   slug: string;
   emailRegexes: string[];
   isSelfEnrollment: boolean;
-  isPublic: boolean;
   courseEnrollmentsLimit: number;
   userLimit: number;
   availableStartDate: Date | null;

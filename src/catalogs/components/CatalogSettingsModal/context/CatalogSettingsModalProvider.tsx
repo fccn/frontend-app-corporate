@@ -1,76 +1,116 @@
-import {
-  createContext, useEffect, useMemo, useState,
-} from 'react';
+import { useEffect, useMemo, useState, useRef, useCallback, createContext } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Button, useToggle } from '@openedx/paragon';
 
-import { Catalog } from '@src/types';
 import ModalLayout from '@src/components/ModalLayout';
 
-import CatalogEditForm from '../components/CatalogSettingsForm';
+import { CatalogUpdateRequest, Catalog } from '@src/types';
+import CatalogSettingsForm, { CatalogSettingsFormRef } from '../components/CatalogSettingsForm';
 import messages from '../messages';
+import { useCatalogDetails, useUpdateCatalog } from '@src/catalogs/data/hooks';
 
-export interface TCatalogESettingsModalContext {
-  isOpen: boolean;
-  selectedCatalog: Catalog | null;
-  handleChangeSelectedCatalog: (catalogId: number | string | null) => void;
+
+export interface CatalogSettingsModalContext {
+  isModalOpen: boolean;
+  partnerId: number | null,
+  catalogId: string | null;
+  catalogDetails?: Catalog;
+  handleChangeSelectedCatalog: (catalogId: | string | null) => void;
+  registerRefetchCallback: (callback: () => void) => void;
 }
 
-export const CatalogSettingsModalContext = createContext<TCatalogESettingsModalContext>({
-  isOpen: false,
-  selectedCatalog: null,
-  handleChangeSelectedCatalog: () => {},
+export const CatalogSettingsModalContext = createContext<CatalogSettingsModalContext>({
+  isModalOpen: false,
+  partnerId: null,
+  catalogId: null,
+  handleChangeSelectedCatalog: () => { },
+  registerRefetchCallback: () => { },
 });
+
 
 interface CatalogSettingsModalProviderProps {
   children: React.ReactNode | React.ReactNode[];
 }
 
-export const CatalogSettingsModalProvider = ({ children }:CatalogSettingsModalProviderProps) => {
+export const CatalogSettingsModalProvider = ({ children }: CatalogSettingsModalProviderProps) => {
   const intl = useIntl();
+  const formRef = useRef<CatalogSettingsFormRef>(null);
 
-  const [isOpen, open, close] = useToggle(false);
-  const [selectedCatalogId, setSelectedCatalogId] = useState<number | string | null>(null);
-
-  const handleChangeSelectedCatalog = (catalogId: number | string | null) => {
+  const [isModalOpen, openModal, closeModal] = useToggle(false);
+  const [selectedCatalogId, setSelectedCatalogId] = useState<string | null>(null);
+  const [partnerId, setPartnerId] = useState<number | null>(null);
+  const [refetchCallback, setRefetchCallback] = useState<(() => void) | null>(null);
+  const modifyCatalog = useUpdateCatalog();
+  const { catalogDetails } = useCatalogDetails({
+    partnerId,
+    selectedCatalogId,
+  });
+  
+  const handleChangeSelectedCatalog = (catalogId: string | null, partnerId: number | null) => {
+    setPartnerId(partnerId);
     setSelectedCatalogId(catalogId);
   };
-
-  const handleCloseModal = () => {
-    setSelectedCatalogId(null);
-    close();
+  
+  const registerRefetchCallback = useCallback((callback: () => void) => {
+    setRefetchCallback(() => callback);
+  }, []);
+  
+  const handleSaveData = () => {
+    if (formRef.current) { formRef.current.submitForm(); }
   };
-
+  console.log('modal', partnerId, selectedCatalogId);
+  
+  const handleFormSubmit = (data: CatalogUpdateRequest) => {
+    if (data && selectedCatalogId) {
+      modifyCatalog({ partnerId, catalogId: selectedCatalogId, data }, {
+        onSuccess: () => {
+          if (refetchCallback) { refetchCallback(); }
+          setSelectedCatalogId(null);
+        },
+      });
+    }
+  };
   useEffect(() => {
-    if (selectedCatalogId) { open(); }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCatalogId]);
+    if (selectedCatalogId && catalogDetails) {
+      openModal();
+    } else {
+      closeModal();
+    }
+  }, [selectedCatalogId, catalogDetails]);
 
   const value = useMemo(
     () => ({
-      isOpen,
-      selectedCatalog: null,
+      isModalOpen,
+      selectedCatalog: catalogDetails,
       handleChangeSelectedCatalog,
+      registerRefetchCallback,
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isOpen],
+    [isModalOpen, catalogDetails, registerRefetchCallback],
   );
+
   return (
     <CatalogSettingsModalContext.Provider value={value}>
       <ModalLayout
         title={intl.formatMessage(messages['corporate.catalog.settings.modal.title'])}
-        isOpen={isOpen}
-        onClose={handleCloseModal}
+        isOpen={isModalOpen}
+        onClose={() => setSelectedCatalogId(null)}
         actions={(
-          <Button className="px-5" variant="primary" onClick={handleCloseModal}>
+          <Button className="px-5" variant="primary" onClick={handleSaveData}>
             {intl.formatMessage(messages['corporate.catalog.form.save.button'])}
           </Button>
         )}
       >
-        {selectedCatalogId && <CatalogEditForm selectedCatalog={selectedCatalogId} />}
+        {catalogDetails && (
+          <CatalogSettingsForm
+            ref={formRef}
+            catalogDetails={catalogDetails}
+            onSubmit={handleFormSubmit}
+          />
+        )}
       </ModalLayout>
 
       {children}
     </CatalogSettingsModalContext.Provider>
   );
 };
+export default CatalogSettingsModalProvider;

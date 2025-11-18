@@ -1,9 +1,9 @@
-import { camelCaseObject } from '@edx/frontend-platform';
+import { camelCaseObject, snakeCaseObject } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { logError } from '@edx/frontend-platform/logging';
 
 import { getCorporateApiBase } from '@src/constants';
-import { Catalog, PaginatedResponse } from '../../types';
+import { Catalog, CatalogUpdateRequest, PaginatedResponse } from '../../types';
 
 export const getPartnerCatalogs = async (
   partnerId: string,
@@ -32,12 +32,27 @@ export const getPartnerCatalogs = async (
 };
 
 export const getCatalogDetails = async (
-  partnerId: string,
-  catalogId: string | number,
+  partnerId: number,
+  catalogId: string | undefined,
 ): Promise<Catalog | null> => {
   try {
     const url = `${getCorporateApiBase()}${partnerId}/catalogs/${catalogId}/`;
     const response = await getAuthenticatedHttpClient().get(url);
+    return camelCaseObject(response.data);
+  } catch (error) {
+    logError(error);
+    return null;
+  }
+};
+
+export const updateCatalog = async (
+  partnerId: string,
+  catalogId: string | number,
+  data: CatalogUpdateRequest,
+): Promise<Catalog | null> => {
+  try {
+    const url = `${getCorporateApiBase()}${partnerId}/catalogs/${catalogId}/`;
+    const response = await getAuthenticatedHttpClient().put(url, snakeCaseObject(data));
     return camelCaseObject(response.data);
   } catch (error) {
     logError(error);
