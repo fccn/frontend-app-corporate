@@ -8,19 +8,17 @@ export const getCatalogSchema = (intl) => {
   const USER_LIMIT_MIN = 0;
 
   return yup.object({
-    isPublic: yup.boolean(),
     name: yup
       .string()
       .required(intl.formatMessage(messages.formNameRequired))
       .min(CATALOG_NAME_MIN, intl.formatMessage(messages.formNameMin, { min: CATALOG_NAME_MIN }))
       .max(CATALOG_NAME_MAX, intl.formatMessage(messages.formNameMax, { max: CATALOG_NAME_MAX })),
-    catalogAlternativeLink: yup
+    alternativeLink: yup
       .string()
       .url(intl.formatMessage(messages.formCatalogAlternativeLinkInvalid)),
     supportEmail: yup
       .string()
-      .email(intl.formatMessage(messages.formSupportEmailInvalid))
-      .required(intl.formatMessage(messages.formSupportEmailRequired)),
+      .email(intl.formatMessage(messages.formSupportEmailInvalid)),
     availableStartDate: yup
       .date()
       .required(intl.formatMessage(messages.formAvailableStartDateRequired))
@@ -54,10 +52,11 @@ export const getCatalogSchema = (intl) => {
         USER_LIMIT_MIN,
         intl.formatMessage(messages.formUserLimitMin, { min: USER_LIMIT_MIN }),
       ),
+    authorizationMessage: yup
+      .string(),
     emailRegexes: yup
       .array()
       .of(yup.string().required()),
-    customCourses: yup.boolean(),
     isSelfEnrollment: yup.boolean(),
   });
 };

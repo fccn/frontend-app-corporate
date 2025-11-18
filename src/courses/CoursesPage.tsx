@@ -15,7 +15,7 @@ import messages from './messages';
 const CoursesPage = () => {
   const intl = useIntl();
   const { partnerId, catalogId } = useParams<{ partnerId: string, catalogId: string }>();
-  const { catalogDetails } = useCatalogDetails({ partnerId, selectedCatalog: catalogId });
+  const { catalogDetails } = useCatalogDetails({ partnerId, selectedCatalogId: catalogId });
   const { partnerDetails } = usePartnerDetails({ partnerId });
   const { handleChangeSelectedCatalog } = useCatalogSettingsModal();
 
@@ -37,7 +37,7 @@ const CoursesPage = () => {
               { title: intl.formatMessage(messages['corporate.courses.page.completionRate']), value: catalogDetails?.completionRate },
             ]}
           >
-            <IconButton src={Settings} alt="edit catalog" onClick={() => handleChangeSelectedCatalog(catalogId)} />
+            <IconButton src={Settings} alt="edit catalog" onClick={() => handleChangeSelectedCatalog(catalogId, partnerId)} />
           </HeaderDescription>
         )}
       <Tabs defaultActiveKey="courses">
