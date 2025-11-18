@@ -56,11 +56,16 @@ export interface CatalogStats {
   completionRate: number;
   courses: number;
 }
+
 export interface Catalog extends CatalogBase, CatalogStats {
   supportEmail: string;
   authorizationMessage: string;
   alternativeLink: string;
 }
+
+export type CatalogUpdateRequest = Partial<
+  Omit<Catalog, 'id' | 'slug' | 'enrollments' | 'certified' | 'completionRate' | 'courses'>
+>;
 
 export interface PaginatedResponse<T> {
   next: string | null;

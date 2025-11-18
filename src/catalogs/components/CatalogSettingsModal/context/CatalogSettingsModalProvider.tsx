@@ -58,12 +58,12 @@ export const CatalogSettingsModalProvider = ({ children }:CatalogSettingsModalPr
   return (
     <CatalogSettingsModalContext.Provider value={value}>
       <ModalLayout
-        title={intl.formatMessage(messages.editCatalogTitle)}
+        title={intl.formatMessage(messages['corporate.catalog.settings.modal.title'])}
         isOpen={isOpen}
         onClose={handleCloseModal}
         actions={(
           <Button className="px-5" variant="primary" onClick={handleCloseModal}>
-            {intl.formatMessage(messages.saveButton)}
+            {intl.formatMessage(messages['corporate.catalog.form.save.button'])}
           </Button>
         )}
       >
