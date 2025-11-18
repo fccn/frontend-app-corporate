@@ -13,7 +13,9 @@ interface CatalogEditFormProps {
   selectedCatalog: string | number;
 }
 
-const CatalogEditForm: FC<CatalogEditFormProps> = ({ selectedCatalog }) => {
+const defaultLimitedEditable = ['catalogAlternativeLink', 'supportEmail', 'authorizationMessage', 'emailRegexes'];
+
+const CatalogEditForm = ({ selectedCatalog }: CatalogEditFormProps) => {
   const intl = useIntl();
   const { partnerId } = useParams<{ partnerId: string }>();
   const { catalogDetails } = useCatalogDetails({
@@ -29,36 +31,23 @@ const CatalogEditForm: FC<CatalogEditFormProps> = ({ selectedCatalog }) => {
   return (
     <Stack gap={3} className="py-4">
       {/* General Information Section */}
-      <h3 className="h3 text-primary-400">{intl.formatMessage(messages.formGeneralInformation)}</h3>
-
-      {/* Public Catalog Switch */}
-      <Form.Group controlId="isPublic" className="d-flex align-items-center">
-        <Form.Label className="mb-0 flex-grow-1 font-weight-bold">
-          {intl.formatMessage(messages.formIsPublic)}
-        </Form.Label>
-        <Form.Switch
-          {...register('isPublic', {
-            onChange: (e) => e.target.checked,
-          })}
-          floatLabelLeft
-        />
-      </Form.Group>
+      <h3 className="h3 text-primary-400">{intl.formatMessage(messages['corporate.catalog.form.general.information.title'])}</h3>
 
       {/* Catalog Name */}
       <Form.Group controlId="name">
-        <Form.Label className="font-weight-bold">{intl.formatMessage(messages.formName)}</Form.Label>
+        <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.name.field'])}</Form.Label>
         <Form.Control id="name" {...register('name')} type="text" />
       </Form.Group>
 
       {/* Alternative Link */}
       <Form.Group controlId="catalogAlternativeLink">
-        <Form.Label className="font-weight-bold">{intl.formatMessage(messages.formCatalogAlternativeLink)}</Form.Label>
+        <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.alternative.link.field'])}</Form.Label>
         <Form.Control id="catalogAlternativeLink" {...register('alternativeLink')} type="text" />
       </Form.Group>
 
       {/* Support Email */}
       <Form.Group controlId="supportEmail">
-        <Form.Label className="font-weight-bold">{intl.formatMessage(messages.formSupportEmail)}</Form.Label>
+        <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.support.email.field'])}</Form.Label>
         <Form.Control id="supportEmail" {...register('supportEmail')} type="email" />
       </Form.Group>
 
@@ -69,7 +58,7 @@ const CatalogEditForm: FC<CatalogEditFormProps> = ({ selectedCatalog }) => {
           name="availableStartDate"
           render={({ field: { value, onChange } }) => (
             <Form.Group as={Col} controlId="availableStartDate">
-              <Form.Label className="font-weight-bold">{intl.formatMessage(messages.formAvailableStartDate)}</Form.Label>
+              <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.available.start.date.field'])}</Form.Label>
               <Form.Control
                 id="availableStartDate"
                 value={value ? new Date(value).toISOString().split('T')[0] : ''}
@@ -84,7 +73,7 @@ const CatalogEditForm: FC<CatalogEditFormProps> = ({ selectedCatalog }) => {
           name="availableEndDate"
           render={({ field: { value, onChange } }) => (
             <Form.Group as={Col} controlId="availableEndDate">
-              <Form.Label className="font-weight-bold">{intl.formatMessage(messages.formAvailableEndDate)}</Form.Label>
+              <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.available.end.date.field'])}</Form.Label>
               <Form.Control
                 id="availableEndDate"
                 value={value ? new Date(value).toISOString().split('T')[0] : ''}
@@ -106,16 +95,16 @@ const CatalogEditForm: FC<CatalogEditFormProps> = ({ selectedCatalog }) => {
       <hr className="w-100" />
 
       {/* Enrollment Settings Section */}
-      <h3 className="h3 text-primary-400">{intl.formatMessage(messages.formEnrollmentSettings)}</h3>
+      <h3 className="h3 text-primary-400">{intl.formatMessage(messages['corporate.catalog.form.enrollment.settings.title'])}</h3>
 
       {/* Enrollment Limits Group */}
       <Form.Row>
         <Form.Group as={Col} controlId="courseEnrollmentLimit">
-          <Form.Label className="font-weight-bold">{intl.formatMessage(messages.formCourseEnrollmentLimit)}</Form.Label>
+          <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.course.enrollment.limit.field'])}</Form.Label>
           <Form.Control id="courseEnrollmentLimit" {...register('courseEnrollmentsLimit')} type="number" />
         </Form.Group>
         <Form.Group as={Col} controlId="userLimit">
-          <Form.Label className="font-weight-bold">{intl.formatMessage(messages.formUserLimit)}</Form.Label>
+          <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.user.limit.field'])}</Form.Label>
           <Form.Control id="userLimit" {...register('userLimit')} type="number" />
         </Form.Group>
       </Form.Row>
@@ -124,7 +113,14 @@ const CatalogEditForm: FC<CatalogEditFormProps> = ({ selectedCatalog }) => {
       <hr className="w-100" />
 
       {/* Advanced Settings Section */}
-      <h3 className="h3 text-primary-400">{intl.formatMessage(messages.formAdvancedSettings)}</h3>
+      <h3 className="h3 text-primary-400">{intl.formatMessage(messages['corporate.catalog.form.advanced.settings.title'])}</h3>
+      <Form.Row>
+
+        <Form.Group as={Col} controlId="authorizationMessage">
+          <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.authorization.message.field'])}</Form.Label>
+          <Form.Control id="authorizationMessage" {...register('authorizationMessage')} as="textarea" />
+        </Form.Group>
+      </Form.Row>
 
       {/* Email Regexes */}
       <Controller
@@ -132,7 +128,7 @@ const CatalogEditForm: FC<CatalogEditFormProps> = ({ selectedCatalog }) => {
         name="emailRegexes"
         render={({ field: { value, onChange } }) => (
           <Form.Group controlId="emailRegexes">
-            <Form.Label className="font-weight-bold">{intl.formatMessage(messages.formEmailRegexes)}</Form.Label>
+            <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.email.regexes.field'])}</Form.Label>
             <Form.Control
               id="emailRegexes"
               type="text"
@@ -142,24 +138,10 @@ const CatalogEditForm: FC<CatalogEditFormProps> = ({ selectedCatalog }) => {
           </Form.Group>
         )}
       />
-
-      {/* Custom Courses Switch */}
-      <Form.Group controlId="customCourses" className="d-flex align-items-center">
-        <Form.Label className="mb-0 flex-grow-1 font-weight-bold">
-          {intl.formatMessage(messages.formCustomCourses)}
-        </Form.Label>
-        <Form.Switch
-          {...register('customCourses', {
-            onChange: (e) => e.target.checked,
-          })}
-          floatLabelLeft
-        />
-      </Form.Group>
-
       {/* Self Enrollment Switch */}
       <Form.Group controlId="isSelfEnrollment" className="d-flex align-items-center">
         <Form.Label className="mb-0 flex-grow-1 font-weight-bold">
-          {intl.formatMessage(messages.formIsSelfEnrollment)}
+          {intl.formatMessage(messages['corporate.catalog.form.is.self.enrollment.field'])}
         </Form.Label>
         <Form.Switch
           {...register('isSelfEnrollment', {
