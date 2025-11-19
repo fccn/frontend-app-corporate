@@ -81,6 +81,25 @@ const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFo
           )}
         </Form.Group>
 
+        {/* Divider */}
+        <hr className="w-100" />
+
+        {/* Enrollment Settings Section */}
+        <h3 className="h3 text-primary-400">{intl.formatMessage(messages['corporate.catalog.form.enrollment.settings.title'])}</h3>
+
+
+        {/* Enrollment Limits Group */}
+        <Form.Row>
+          <Form.Group as={Col} controlId="courseEnrollmentLimit">
+            <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.course.enrollment.limit.field'])}</Form.Label>
+            <Form.Control id="courseEnrollmentLimit" {...register('courseEnrollmentsLimit')} type="number" disabled={!isEditable('courseEnrollmentLimit')} />
+          </Form.Group>
+          <Form.Group as={Col} controlId="userLimit">
+            <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.user.limit.field'])}</Form.Label>
+            <Form.Control id="userLimit" {...register('userLimit')} type="number" disabled={!isEditable('userLimit')} />
+          </Form.Group>
+        </Form.Row>
+
         {/* Date Range Group */}
         <Form.Row>
           <Controller
@@ -92,7 +111,7 @@ const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFo
                 <Form.Control
                   id="availableStartDate"
                   value={value ? new Date(value).toISOString().split('T')[0] : ''}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(new Date(e.target.value).toISOString())}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
                   type="date"
                   disabled={!isEditable('availableStartDate')}
                 />
@@ -108,13 +127,7 @@ const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFo
                 <Form.Control
                   id="availableEndDate"
                   value={value ? new Date(value).toISOString().split('T')[0] : ''}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    const date = e.target.value;
-                    // Set time to 23:59:59.999 for the selected day
-                    const endDate = new Date(date);
-                    endDate.setHours(23, 59, 59, 999);
-                    onChange(endDate.toISOString());
-                  }}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
                   type="date"
                   disabled={!isEditable('availableEndDate')}
                 />
@@ -123,25 +136,6 @@ const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFo
             )}
           />
         </Form.Row>
-
-        {/* Divider */}
-        <hr className="w-100" />
-
-        {/* Enrollment Settings Section */}
-        <h3 className="h3 text-primary-400">{intl.formatMessage(messages['corporate.catalog.form.enrollment.settings.title'])}</h3>
-
-        {/* Enrollment Limits Group */}
-        <Form.Row>
-          <Form.Group as={Col} controlId="courseEnrollmentLimit">
-            <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.course.enrollment.limit.field'])}</Form.Label>
-            <Form.Control id="courseEnrollmentLimit" {...register('courseEnrollmentsLimit')} type="number" disabled={!isEditable('courseEnrollmentLimit')} />
-          </Form.Group>
-          <Form.Group as={Col} controlId="userLimit">
-            <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.user.limit.field'])}</Form.Label>
-            <Form.Control id="userLimit" {...register('userLimit')} type="number" disabled={!isEditable('userLimit')} />
-          </Form.Group>
-        </Form.Row>
-
         {/* Divider */}
         <hr className="w-100" />
 

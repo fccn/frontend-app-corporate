@@ -34,8 +34,6 @@ export const useCatalogDetails = ({
     enabled: !!partnerId && !!selectedCatalogId,
   });
 
-  console.log('useCatalogDetails - selectedCatalogId:', selectedCatalogId, catalogFromCache, catalogDetails);
-
   return {
     catalogDetails: catalogFromCache || catalogDetails || null,
     isLoadingCatalogDetails: isLoading,
@@ -49,7 +47,11 @@ export const useUpdateCatalog = () => {
     mutationFn: async ({
       partnerId, catalogId, data,
     }:
-      { partnerId: string; catalogId: string; data: CatalogUpdateRequest }) => updateCatalog(partnerId, catalogId, data),
+      { partnerId: string; catalogId: string; data: CatalogUpdateRequest }) => {
+        data.availableStartDate = new Date(data.availableStartDate).toISOString();
+        data.availableEndDate = new Date(data.availableEndDate).toISOString();
+        updateCatalog(partnerId, catalogId, data);
+    },
     onSettled: (_data, _error, args) => {
       queryClient.invalidateQueries({
         queryKey: ['catalogDetails', args.partnerId, args.catalogId],
