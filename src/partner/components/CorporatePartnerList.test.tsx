@@ -7,16 +7,20 @@ jest.mock('@tanstack/react-query');
 jest.mock('@src/hooks', () => ({
   useNavigate: () => jest.fn(),
 }));
-jest.mock('../api');
+jest.mock('../data/api');
 
 // Mock component to avoid Paragon-specific rendering issues
-jest.mock('../../app/TableFooter', () => function TableFooter() {
+jest.mock('../../components/Table/TableFooter', () => function TableFooter() {
   return <div data-testid="table-footer" />;
 });
 
-const mockPartners = [
-  {
-    code: 1,
+const mockPartners = {
+  count: 11,
+  numPages: 2,
+  currentPage: 1,
+  start: 0,
+  results: [{
+    id: 1,
     name: 'Example University',
     homepage: 'https://exampleu.com/university',
     logo: 'https://exampleu.com/logo.png',
@@ -35,7 +39,8 @@ const mockPartners = [
     enrollments: 700,
     certified: 300,
   },
-];
+  ]
+};
 
 describe('CorporatePartnerList', () => {
   beforeEach(() => {

@@ -8,9 +8,9 @@ import { Partner, CellValue } from '@src/types';
 import { ActionItem, CellName, TableFooter } from '@src/components/Table';
 import { useNavigate } from '@src/hooks';
 import { paths } from '@src/constants';
-import { getPartners } from '../data/api';
 
 import messages from '../messages';
+import { usePartners } from '../data/hooks';
 
 type PartnersTableCell = CellValue<Partner>;
 
@@ -19,10 +19,7 @@ const tableActions = ['view'];
 const CorpotatePartnerList = () => {
   const navigate = useNavigate();
   const intl = useIntl();
-  const { data, isLoading } = useSuspenseQuery({
-    queryKey: ['partners'],
-    queryFn: () => getPartners(),
-  });
+  const { data, isLoading } = usePartners();
 
   return (
     <DataTable

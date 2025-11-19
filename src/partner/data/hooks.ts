@@ -1,6 +1,12 @@
 import { Partner } from '@src/types';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getPartnerDetails } from './api';
+import { useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { getPartnerDetails, getPartners } from './api';
+
+
+export const usePartners = ()=> useSuspenseQuery({
+  queryKey: ['partners'],
+  queryFn: () => getPartners(),
+});
 
 export const usePartnerDetails = ({ partnerId }) => {
   const queryClient = useQueryClient();

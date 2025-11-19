@@ -12,7 +12,7 @@ jest.mock('@src/hooks', () => ({
   }),
 }));
 
-jest.mock('../hooks');
+jest.mock('../data/hooks');
 
 const mockCourses = [
   {

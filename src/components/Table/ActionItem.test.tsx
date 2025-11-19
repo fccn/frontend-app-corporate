@@ -3,7 +3,7 @@ import { renderWrapper } from '@src/setupTest';
 import ActionItem from './ActionItem';
 
 describe('ActionItem', () => {
-  const types = ['view', 'edit', 'delete', 'analytics'] as const;
+  const types = ['view', 'delete', 'analytics'] as const;
 
   types.forEach((type) => {
     it(`renders correctly for type "${type}"`, async () => {
@@ -30,7 +30,7 @@ describe('ActionItem', () => {
   });
 
   it('uses custom ariaLabel when provided', () => {
-    renderWrapper(<ActionItem type="edit" ariaLabel="Custom Label" />);
+    renderWrapper(<ActionItem type="view" ariaLabel="Custom Label" />);
     const button = screen.getByRole('button');
     expect(button).toHaveAttribute('aria-label', 'Custom Label');
   });

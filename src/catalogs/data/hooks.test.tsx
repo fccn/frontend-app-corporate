@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { usePartnerCatalogs, useCatalogDetails } from './hooks';
-import * as api from '../api';
+import * as api from './api';
 import { Catalog, PaginatedResponse } from '../../types';
 
 jest.mock('./api');

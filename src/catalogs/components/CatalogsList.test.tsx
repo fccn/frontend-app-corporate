@@ -3,7 +3,7 @@ import { renderWrapper } from '@src/setupTest';
 import CatalogsList from './CatalogsList';
 import { usePartnerCatalogs } from '../data/hooks';
 
-jest.mock('../hooks', () => ({
+jest.mock('../data/hooks', () => ({
   usePartnerCatalogs: jest.fn(),
 }));
 
@@ -16,17 +16,18 @@ jest.mock('@src/hooks', () => ({
   }),
 }));
 
-jest.mock('@src/catalogs/useCatalogEditionModal', () => ({
-  useCatalogEditionModal: () => ({
+jest.mock('./CatalogSettingsModal', () => ({
+  ...jest.requireActual('./CatalogSettingsModal'),
+  useCatalogSettingsModal: () => ({
     handleChangeSelectedCatalog: jest.fn(),
   }),
 }));
 
-jest.mock('@src/app/TableFooter', () => function TableFooter() {
+jest.mock('@src/components/Table/TableFooter', () => function TableFooter() {
   return <div data-testid="table-footer" />;
 });
 
-jest.mock('../api');
+jest.mock('../data/api');
 
 const mockCatalogs = [
   {
@@ -113,12 +114,9 @@ describe('CatalogsList', () => {
   it('renders correct number of action buttons per row', () => {
     renderWrapper(<CatalogsList partnerId="123" />);
 
-    // Each catalog should have 2 actions (view and edit)
     const viewButtons = screen.getAllByLabelText('view-action');
-    const editButtons = screen.getAllByLabelText('edit-action');
 
     expect(viewButtons).toHaveLength(mockCatalogs.length);
-    expect(editButtons).toHaveLength(mockCatalogs.length);
   });
 
   it('handles pagination data correctly', () => {
@@ -139,9 +137,6 @@ describe('CatalogsList', () => {
     expect(screen.getByText('Python Programming Catalog')).toBeInTheDocument();
     expect(screen.queryByText('Data Science Catalog')).not.toBeInTheDocument();
     expect(screen.queryByText('Web Development Catalog')).not.toBeInTheDocument();
-
-    // Should only have one set of action buttons
     expect(screen.getAllByLabelText('view-action')).toHaveLength(1);
-    expect(screen.getAllByLabelText('edit-action')).toHaveLength(1);
   });
 });
