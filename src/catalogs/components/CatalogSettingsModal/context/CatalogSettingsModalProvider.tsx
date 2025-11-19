@@ -50,10 +50,6 @@ export const CatalogSettingsModalProvider = ({ children }: CatalogSettingsModalP
     setSelectedCatalogId(catalogId);
   };
   
-  const registerRefetchCallback = useCallback((callback: () => void) => {
-    setRefetchCallback(() => callback);
-  }, []);
-  
   const handleSaveData = () => {
     if (formRef.current) { formRef.current.submitForm(); }
   };
@@ -80,9 +76,8 @@ export const CatalogSettingsModalProvider = ({ children }: CatalogSettingsModalP
       isModalOpen,
       selectedCatalog: catalogDetails,
       handleChangeSelectedCatalog,
-      registerRefetchCallback,
     }),
-    [isModalOpen, catalogDetails, registerRefetchCallback],
+    [isModalOpen, catalogDetails],
   );
 
   return (

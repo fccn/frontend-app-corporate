@@ -145,7 +145,12 @@ const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFo
 
           <Form.Group as={Col} controlId="authorizationMessage">
             <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.authorization.message.field'])}</Form.Label>
-            <Form.Control id="authorizationMessage" {...register('authorizationMessage')} as="textarea" disabled={!isEditable('authorizationMessage')} />
+            <Form.Control 
+            id="authorizationMessage" 
+            {...register('authorizationMessage')} 
+            as="textarea" 
+            disabled={!isEditable('authorizationMessage')} 
+            placeholder={intl.formatMessage(messages['corporate.catalog.form.authorization.message.placeholder'])}/>
           </Form.Group>
         </Form.Row>
 
