@@ -39,8 +39,7 @@ export const CatalogSettingsModalProvider = ({ children }: CatalogSettingsModalP
   const [isModalOpen, openModal, closeModal] = useToggle(false);
   const [selectedCatalogId, setSelectedCatalogId] = useState<string | null>(null);
   const [partnerId, setPartnerId] = useState<number | null>(null);
-  const [refetchCallback, setRefetchCallback] = useState<(() => void) | null>(null);
-  const modifyCatalog = useUpdateCatalog();
+  const updateCatalog = useUpdateCatalog();
   const { catalogDetails } = useCatalogDetails({
     partnerId,
     selectedCatalogId,
@@ -58,13 +57,11 @@ export const CatalogSettingsModalProvider = ({ children }: CatalogSettingsModalP
   const handleSaveData = () => {
     if (formRef.current) { formRef.current.submitForm(); }
   };
-  console.log('modal', partnerId, selectedCatalogId);
   
   const handleFormSubmit = (data: CatalogUpdateRequest) => {
     if (data && selectedCatalogId) {
-      modifyCatalog({ partnerId, catalogId: selectedCatalogId, data }, {
+      updateCatalog({ partnerId, catalogId: selectedCatalogId, data }, {
         onSuccess: () => {
-          if (refetchCallback) { refetchCallback(); }
           setSelectedCatalogId(null);
         },
       });
