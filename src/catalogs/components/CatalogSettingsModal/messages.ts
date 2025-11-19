@@ -66,6 +66,11 @@ const messages = defineMessages({
     defaultMessage: 'Additional message for authorization',
     description: 'Label the authorization message field',
   },
+  'corporate.catalog.form.authorization.message.placeholder': {
+    id: 'corporate.catalog.form.authorization.message.placeholder',
+    defaultMessage: 'Write a message for learners (optional)',
+    description: 'Placeholder for the authorization message field',
+  },
   'corporate.catalog.form.email.regexes.field': {
     id: 'corporate.catalog.form.email.regexes.field',
     defaultMessage: 'Partner Email Regex',
