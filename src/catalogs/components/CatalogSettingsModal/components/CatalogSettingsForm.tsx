@@ -112,7 +112,7 @@ const CatalogEditForm: FC<CatalogEditFormProps> = ({ selectedCatalog }) => {
       <Form.Row>
         <Form.Group as={Col} controlId="courseEnrollmentLimit">
           <Form.Label className="font-weight-bold">{intl.formatMessage(messages.formCourseEnrollmentLimit)}</Form.Label>
-          <Form.Control id="courseEnrollmentLimit" {...register('courseEnrollmentLimit')} type="number" />
+          <Form.Control id="courseEnrollmentLimit" {...register('courseEnrollmentsLimit')} type="number" />
         </Form.Group>
         <Form.Group as={Col} controlId="userLimit">
           <Form.Label className="font-weight-bold">{intl.formatMessage(messages.formUserLimit)}</Form.Label>

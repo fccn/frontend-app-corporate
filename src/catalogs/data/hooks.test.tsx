@@ -48,17 +48,16 @@ describe('Catalog Hooks', () => {
           completionRate: 0.8,
           supportEmail: 'support@test.com',
           emailRegexes: ['@test.com'],
-          courseEnrollmentLimit: 1000,
+          courseEnrollmentsLimit: 1000,
           userLimit: 500,
           availableStartDate: new Date('2023-01-01'),
           availableEndDate: new Date('2023-12-31'),
-          catalogAlternativeLink: 'https://test.com/catalog',
+          alternativeLink: 'https://test.com/catalog',
           isSelfEnrollment: true,
-          customCourses: false,
-          authorizationAdditionalMessage: 'Test message',
+          authorizationMessage: 'Test message',
           isPublic: true,
           courses: 50,
-          corporatePartner: 1,
+          partnerId: 1,
         },
         {
           id: '2',
@@ -69,17 +68,16 @@ describe('Catalog Hooks', () => {
           completionRate: 0.8,
           supportEmail: 'support@test2.com',
           emailRegexes: ['@test2.com'],
-          courseEnrollmentLimit: 2000,
+          courseEnrollmentsLimit: 2000,
           userLimit: 1000,
           availableStartDate: new Date('2023-01-01'),
           availableEndDate: new Date('2023-12-31'),
-          catalogAlternativeLink: 'https://test2.com/catalog',
+          alternativeLink: 'https://test2.com/catalog',
           isSelfEnrollment: false,
-          customCourses: true,
-          authorizationAdditionalMessage: 'Test message 2',
+          authorizationMessage: 'Test message 2',
           isPublic: false,
           courses: 75,
-          corporatePartner: 1,
+          partnerId: 1,
         },
       ],
     };
@@ -102,7 +100,7 @@ describe('Catalog Hooks', () => {
     });
 
     it('should use correct query key for caching', async () => {
-      const secondPageResponse: PaginatedResponse<CorporateCatalog> = {
+      const secondPageResponse: PaginatedResponse<Catalog> = {
         ...mockCatalogsResponse,
         currentPage: 2,
         start: 10,
@@ -148,7 +146,7 @@ describe('Catalog Hooks', () => {
   });
 
   describe('useCatalogDetails', () => {
-    const mockCatalog: CorporateCatalog = {
+    const mockCatalog: Catalog = {
       id: '1',
       name: 'Test Catalog Details',
       slug: 'test-catalog-details',
@@ -157,17 +155,16 @@ describe('Catalog Hooks', () => {
       completionRate: 0.8,
       supportEmail: 'support@details.com',
       emailRegexes: ['@details.com'],
-      courseEnrollmentLimit: 3000,
+      courseEnrollmentsLimit: 3000,
       userLimit: 1500,
       availableStartDate: new Date('2023-01-01'),
       availableEndDate: new Date('2023-12-31'),
-      catalogAlternativeLink: 'https://details.com/catalog',
+      alternativeLink: 'https://details.com/catalog',
       isSelfEnrollment: true,
-      customCourses: true,
-      authorizationAdditionalMessage: 'Details message',
+      authorizationMessage: 'Details message',
       isPublic: true,
       courses: 100,
-      corporatePartner: 1,
+      partnerId: 1,
     };
 
     it('should fetch catalog details when not in cache', async () => {
@@ -189,7 +186,7 @@ describe('Catalog Hooks', () => {
 
     it('should return cached catalog when available', async () => {
       // Propulate the cache with partner catalogs
-      const mockCatalogsResponse: PaginatedResponse<CorporateCatalog> = {
+      const mockCatalogsResponse: PaginatedResponse<Catalog> = {
         next: null,
         previous: null,
         count: 1,

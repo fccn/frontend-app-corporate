@@ -1,4 +1,3 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   DataTable, TextFilter,
@@ -19,11 +18,10 @@ const tableActions = ['view'];
 const CorpotatePartnerList = () => {
   const navigate = useNavigate();
   const intl = useIntl();
-  const { data, isLoading } = usePartners();
+  const { data } = usePartners();
 
   return (
     <DataTable
-      isLoading={isLoading}
       isPaginated
       isFilterable
       defaultColumnValues={{ Filter: TextFilter }}

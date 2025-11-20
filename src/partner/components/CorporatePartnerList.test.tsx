@@ -9,11 +9,6 @@ jest.mock('@src/hooks', () => ({
 }));
 jest.mock('../data/api');
 
-// Mock component to avoid Paragon-specific rendering issues
-jest.mock('../../components/Table/TableFooter', () => function TableFooter() {
-  return <div data-testid="table-footer" />;
-});
-
 const mockPartners = {
   count: 11,
   numPages: 2,
@@ -39,14 +34,13 @@ const mockPartners = {
     enrollments: 700,
     certified: 300,
   },
-  ]
+  ],
 };
 
 describe('CorporatePartnerList', () => {
   beforeEach(() => {
     (useSuspenseQuery as jest.Mock).mockReturnValue({
       data: mockPartners,
-      isLoading: false,
     });
   });
 
@@ -73,16 +67,6 @@ describe('CorporatePartnerList', () => {
     expect(screen.getAllByLabelText('view-action')).toHaveLength(2);
 
     // Footer should be rendered
-    expect(screen.getByTestId('table-footer')).toBeInTheDocument();
-  });
-
-  it('shows loading state if data is still loading', () => {
-    (useSuspenseQuery as jest.Mock).mockReturnValue({
-      data: [],
-      isLoading: true,
-    });
-
-    renderWrapper(<CorporatePartnerList />);
-    expect(screen.getByRole('status')).toBeInTheDocument();
+    expect(screen.getByText(/Rows per page/i)).toBeInTheDocument();
   });
 });

@@ -22,7 +22,7 @@ const ModalLayout = ({
       isOpen={isOpen}
       onClose={onClose}
       size="lg"
-      variant='dark'
+      variant="dark"
       hasCloseButton
       isFullscreenOnMobile
       isOverflowVisible={false}

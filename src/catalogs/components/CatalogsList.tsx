@@ -15,7 +15,7 @@ interface CatalogsListProps {
   partnerId: string;
 }
 
-const CatalogsList= ({ partnerId }: CatalogsListProps) => {
+const CatalogsList = ({ partnerId }: CatalogsListProps) => {
   const navigate = useNavigate();
   const intl = useIntl();
 
