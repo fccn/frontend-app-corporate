@@ -5,7 +5,7 @@ import { ArrowBack } from '@openedx/paragon/icons';
 import Header from '@edx/frontend-component-header';
 import { FooterSlot } from '@edx/frontend-component-footer';
 
-import { useCurrentUser, useNavigate } from '@src/hooks';
+import { useNavigate } from '@src/hooks';
 import messages from './messages';
 
 type AppLayoutProps = {
@@ -21,9 +21,6 @@ const AppLayout = ({
 }: AppLayoutProps) => {
   const intl = useIntl();
   const navigate = useNavigate();
-  const { user } = useCurrentUser();
-
-  console.log('Current User in AppLayout:', user);
 
   const handleGoBackPath = backPath ? () => navigate(backPath) : () => window.history.back();
 
