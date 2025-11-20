@@ -27,34 +27,26 @@ export const paths = {
   },
 } as const;
 
-const getlmsBaseUrl = () => getConfig().LMS_BASE_URL;
-const CORPORATE_API_BASE = '/partner_catalog/api/v1/partners/';
-const getCorporateApiBase = () => `${getlmsBaseUrl()}${CORPORATE_API_BASE}`;
+export const appId = 'org.nau.frontend.app.corporate';
+
+export const CORPORATE_MANAGER_ROLE = 'catalog_manager:active';
+
+export const getlmsBaseUrl = () => getConfig().LMS_BASE_URL;
+export const CORPORATE_API_BASE = '/partner_catalog/api/v1/partners/';
+export const getCorporateApiBase = () => `${getlmsBaseUrl()}${CORPORATE_API_BASE}`;
 
 // Cache configuration
-const STALE_TIME = 60 * 60_000; // 1 hour
-const CACHE_TIME = 2 * 60 * 60_000; // 2 hours
+export const STALE_TIME = 60 * 60_000; // 1 hour
+export const CACHE_TIME = 2 * 60 * 60_000; // 2 hours
 
 // Pagination defaults
-const DEFAULT_PAGE_SIZE = 10;
-const DEFAULT_PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
+export const DEFAULT_PAGE_SIZE = 10;
+export const DEFAULT_PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
 
 // Date format
-const DATE_FORMAT = 'YYYY-MM-DD';
+export const DATE_FORMAT = 'YYYY-MM-DD';
 
 // Form validation
-const MIN_NAME_LENGTH = 3;
-const MAX_NAME_LENGTH = 255;
-const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-
-export {
-  STALE_TIME,
-  CACHE_TIME,
-  DEFAULT_PAGE_SIZE,
-  DEFAULT_PAGE_SIZE_OPTIONS,
-  DATE_FORMAT,
-  MIN_NAME_LENGTH,
-  MAX_NAME_LENGTH,
-  EMAIL_REGEX,
-  getCorporateApiBase,
-};
+export const MIN_NAME_LENGTH = 3;
+export const MAX_NAME_LENGTH = 255;
+export const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;

@@ -1,12 +1,11 @@
-import { ReactNode, useContext } from 'react';
+import { ReactNode } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { AppContext } from '@edx/frontend-platform/react';
 import { Button, Container } from '@openedx/paragon';
 import { ArrowBack } from '@openedx/paragon/icons';
 import Header from '@edx/frontend-component-header';
 import { FooterSlot } from '@edx/frontend-component-footer';
 
-import { useNavigate } from '@src/hooks';
+import { useCurrentUser, useNavigate } from '@src/hooks';
 import messages from './messages';
 
 type AppLayoutProps = {
@@ -22,8 +21,9 @@ const AppLayout = ({
 }: AppLayoutProps) => {
   const intl = useIntl();
   const navigate = useNavigate();
-  const { authenticatedUser } = useContext<AppContext>(AppContext);
-  console.debug(authenticatedUser);
+  const { user } = useCurrentUser();
+
+  console.log('Current User in AppLayout:', user);
 
   const handleGoBackPath = backPath ? () => navigate(backPath) : () => window.history.back();
 

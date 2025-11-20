@@ -1,5 +1,37 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useLocation } from 'wouter';
+import { AppContext } from '@edx/frontend-platform/react';
+import { CORPORATE_MANAGER_ROLE } from './constants';
+
+/**
+ * A React hook that provides convenient access to the currently authenticated user
+ * and their authorization flags.
+ *
+ * @returns An object containing:
+ * - `user`: The authenticated user object from the `AppContext`.
+ * - `isAdmin`: Whether the current user has administrative privileges.
+ * - `isCatalogManager`: Whether the current user has the `catalog_manager` role.
+ *
+ * @example
+ * ```ts
+ * const { user, isAdmin, isCatalogManager } = useCurrentUser();
+ *
+ * if (isAdmin) {
+ *   // Render admin-only UI
+ * }
+ * ```
+ */
+
+export const useCurrentUser = () => {
+    const { authenticatedUser } = useContext<AppContext>(AppContext);
+    const isAdmin = authenticatedUser.isAdmin;
+    const isCatalogManager = authenticatedUser.roles.includes(CORPORATE_MANAGER_ROLE);
+    return {
+        user: authenticatedUser,
+        isAdmin,
+        isCatalogManager,
+    };
+};
 
 /**
  * A custom hook that provides a navigation function.
