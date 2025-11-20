@@ -26,17 +26,17 @@ const HeaderDescription = ({ context, info, children }: HeaderDescriptionProps) 
   const intl = useIntl();
   const isSmall = useMediaQuery({ maxWidth: breakpoints.small.maxWidth });
   const isMedium = useMediaQuery({ maxWidth: breakpoints.medium.maxWidth });
-  const [copied, setCopied] = useState(intl.formatMessage(messages.copyAction));
+  const [copied, setCopied] = useState(intl.formatMessage(messages['corporate.copy.action']));
 
   const handleCopy = async () => {
     if (context.copyableDescription && context.description) {
       try {
         await navigator.clipboard.writeText(context.description);
-        setCopied(intl.formatMessage(messages.copySuccess));
-        setTimeout(() => setCopied(intl.formatMessage(messages.copyAction)), 500);
+        setCopied(intl.formatMessage(messages['corporate.copy.success']));
+        setTimeout(() => setCopied(intl.formatMessage(messages['corporate.copy.action'])), 500);
       } catch (e) {
-        setCopied(intl.formatMessage(messages.copyError));
-        setTimeout(() => setCopied(intl.formatMessage(messages.copyAction)), 2500);
+        setCopied(intl.formatMessage(messages['corporate.copy.error']));
+        setTimeout(() => setCopied(intl.formatMessage(messages['corporate.copy.action'])), 2500);
       }
     }
   };

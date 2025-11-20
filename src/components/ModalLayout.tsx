@@ -40,7 +40,7 @@ const ModalLayout = ({
       <ModalDialog.Footer className="py-4 px-5">
         <ActionRow>
           <ModalDialog.CloseButton className="px-5" variant="outline-primary">
-            {intl.formatMessage(messages.cancelButton)}
+            {intl.formatMessage(messages['corporate.cancel.button'])}
           </ModalDialog.CloseButton>
 
           {actions}

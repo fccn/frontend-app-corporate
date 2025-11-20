@@ -31,7 +31,7 @@ const AppLayout = ({
         {withBackButton && (
           <Button variant="link" className="d-flex align-items-center" onClick={handleGoBackPath}>
             <ArrowBack className="mr-3 text-primary-400" />
-            <span className="text-primary-400">{intl.formatMessage(messages.backButton)}</span>
+            <span className="text-primary-400">{intl.formatMessage(messages['corporate.back.button'])}</span>
           </Button>
         )}
         {title && <h1 className="my-4">{title}</h1>}

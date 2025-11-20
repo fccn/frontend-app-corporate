@@ -1,28 +1,28 @@
 import { defineMessages } from '@edx/frontend-platform/i18n';
 
 const messages = defineMessages({
-  backButton: {
-    id: 'app.back.button',
+  'corporate.back.button': {
+    id: 'corporate.back.button',
     defaultMessage: 'Back',
-    description: 'Text for the back button in the app layout',
+    description: 'Text for the back button in the corporate layout',
   },
-  cancelButton: {
-    id: 'app.cancel.button',
+  'corporate.cancel.button': {
+    id: 'corporate.cancel.button',
     defaultMessage: 'Cancel',
-    description: 'Text for the cancel button in the app layout',
+    description: 'Text for the cancel button in the corporate layout',
   },
-  copyAction: {
-    id: 'app.copy.button',
+  'corporate.copy.action': {
+    id: 'corporate.copy.action',
     defaultMessage: 'Copy',
     description: 'Text copy text action',
   },
-  copySuccess: {
-    id: 'app.copy.success',
+  'corporate.copy.success': {
+    id: 'corporate.copy.success',
     defaultMessage: 'Cancel',
     description: 'Text for copy text sucess',
   },
-  copyError: {
-    id: 'app.copy.error',
+  'corporate.copy.error': {
+    id: 'corporate.copy.error',
     defaultMessage: 'It was not possible to copy, try again',
     description: 'Text for copy text error',
   },

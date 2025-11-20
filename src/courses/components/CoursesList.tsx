@@ -85,7 +85,7 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
       additionalColumns={[
         {
           id: 'action',
-          Header: intl.formatMessage(messages.headerAction),
+          Header: intl.formatMessage(messages['corporate.courses.table.header.action']),
           Cell: ({ row }: CoursesCell) => tableActions.map(({ type, action }) => (
             <ActionItem
               key={`action-${type}-${row.original.id}`}
@@ -97,13 +97,13 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
       ]}
       columns={[
         {
-          Header: intl.formatMessage(messages.headerName),
+          Header: intl.formatMessage(messages['corporate.courses.table.header.name']),
           accessor: 'name',
           // eslint-disable-next-line react/no-unstable-nested-components
           Cell: CourseNameCell,
         },
         {
-          Header: intl.formatMessage(messages.headerPosition),
+          Header: intl.formatMessage(messages['corporate.courses.table.header.position']),
           accessor: 'position',
           // eslint-disable-next-line react/no-unstable-nested-components
           Cell: ({ row }: CoursesCell) => (
@@ -124,7 +124,7 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
           ),
         },
         {
-          Header: intl.formatMessage(messages.headerCourseDates),
+          Header: intl.formatMessage(messages['corporate.courses.table.header.course.dates']),
           accessor: 'courseDates',
           // eslint-disable-next-line react/no-unstable-nested-components
           Cell: ({ row }: CoursesCell) => {
@@ -133,7 +133,7 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
           },
         },
         {
-          Header: intl.formatMessage(messages.headerEnrollmentDates),
+          Header: intl.formatMessage(messages['corporate.courses.table.header.enrollment.dates']),
           accessor: 'enrollmentDates',
           // eslint-disable-next-line react/no-unstable-nested-components
           Cell: ({ row }: CoursesCell) => {
@@ -142,15 +142,15 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
           },
         },
         {
-          Header: intl.formatMessage(messages.headerEnrollment),
+          Header: intl.formatMessage(messages['corporate.courses.table.header.enrollment']),
           accessor: 'enrollments',
         },
         {
-          Header: intl.formatMessage(messages.headerCertified),
+          Header: intl.formatMessage(messages['corporate.courses.table.header.certified']),
           accessor: 'certified',
         },
         {
-          Header: intl.formatMessage(messages.headerCompletion),
+          Header: intl.formatMessage(messages['corporate.courses.table.header.completion']),
           accessor: 'completionRate',
           Cell: ({ row }: CoursesCell) => `${row.original.completionRate}%`,
         },
