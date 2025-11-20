@@ -10,6 +10,8 @@ import { useCatalogSettingsModal } from '@src/catalogs/components/CatalogSetting
 import CoursesList from './components/CoursesList';
 import AppLayout from '../components/AppLayout';
 
+import messages from './messages';
+
 const CoursesPage = () => {
   const intl = useIntl();
   const { partnerId, catalogId } = useParams<{ partnerId: string, catalogId: string }>();
@@ -29,20 +31,20 @@ const CoursesPage = () => {
               copyableDescription: true,
             }}
             info={[
-              { title: intl.formatMessage({ id: 'courses.page.totalCourses', defaultMessage: 'Courses' }), value: catalogDetails?.courses },
-              { title: intl.formatMessage({ id: 'courses.page.enrolledEmployees', defaultMessage: 'Enrollments' }), value: catalogDetails?.enrollments },
-              { title: intl.formatMessage({ id: 'courses.page.totalCourses', defaultMessage: 'Certified Students' }), value: catalogDetails?.certified },
-              { title: intl.formatMessage({ id: 'courses.page.enrolledEmployees', defaultMessage: 'Completion Rate' }), value: catalogDetails?.completionRate },
+              { title: intl.formatMessage(messages['corporate.courses.page.totalCourses']), value: catalogDetails?.courses },
+              { title: intl.formatMessage(messages['corporate.courses.page.enrolledUsers']), value: catalogDetails?.enrollments },
+              { title: intl.formatMessage(messages['corporate.courses.page.certifiedUsers']), value: catalogDetails?.certified },
+              { title: intl.formatMessage(messages['corporate.courses.page.completionRate']), value: catalogDetails?.completionRate },
             ]}
           >
             <IconButton src={Settings} alt="edit catalog" onClick={() => handleChangeSelectedCatalog(catalogId)} />
           </HeaderDescription>
         )}
       <Tabs defaultActiveKey="courses">
-        <Tab eventKey="courses" title={intl.formatMessage({ id: 'courses.page.tab.courses', defaultMessage: 'Courses' })}>
+        <Tab eventKey="courses" title={intl.formatMessage(messages['corporate.courses.page.tab.courses'])}>
           <CoursesList catalogId={catalogId} partnerId={partnerId} />
         </Tab>
-        <Tab eventKey="learners" title={intl.formatMessage({ id: 'courses.page.tab.learners', defaultMessage: 'Learners' })} />
+        <Tab eventKey="learners" title={intl.formatMessage(messages['corporate.courses.page.tab.learners'])} />
       </Tabs>
     </AppLayout>
   );

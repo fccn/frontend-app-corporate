@@ -16,17 +16,17 @@ type ActionConfigItem = {
 
 export const actionConfig: Record<string, ActionConfigItem> = {
   view: {
-    tooltip: messages.tableActionView,
+    tooltip: messages['table.action.view'],
     icon: Visibility,
     color: 'black',
   },
   delete: {
-    tooltip: messages.tableActionDelete,
+    tooltip: messages['table.action.delete'],
     icon: Delete,
     color: 'danger',
   },
   analytics: {
-    tooltip: messages.tableActionAnalytics,
+    tooltip: messages['table.action.analytics'],
     icon: InsertChartOutlined,
     color: 'black',
   },

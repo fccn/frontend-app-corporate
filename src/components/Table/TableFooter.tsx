@@ -27,7 +27,7 @@ const TableFooter = ({
     <DataTable.TableFooter>
       <div className="d-flex justify-content-end align-items-center w-100 small">
         <Dropdown>
-          {intl.formatMessage(messages.tableFooterRowSelector)}
+          {intl.formatMessage(messages['table.footer.rows.elector'])}
           <Dropdown.Toggle
             size="sm"
             id="table-number-rows-selector"
