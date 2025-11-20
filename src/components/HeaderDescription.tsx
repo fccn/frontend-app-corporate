@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { Fragment, ReactNode, useState } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   breakpoints, Stack, useMediaQuery, IconButtonWithTooltip,
@@ -77,13 +77,13 @@ const HeaderDescription = ({ context, info, children }: HeaderDescriptionProps) 
 
       <Stack direction="horizontal" gap={4}>
         {info.map((item, index) => (
-          <>
-            <div key={item.title} className="d-flex flex-column">
+          <Fragment key={item.title}>
+            <div className="d-flex flex-column">
               <span className="x-small text-gray">{item.title}</span>
               <span className="small text-gray">{item.value}</span>
             </div>
             {index < info.length - 1 && !isSmall && <hr className="border border-left-1 h-25 m-0" />}
-          </>
+          </Fragment>
         ))}
       </Stack>
 
