@@ -5,7 +5,7 @@ import {
 
 import { Partner, CellValue } from '@src/types';
 import { ActionItem, CellName, TableFooter } from '@src/components/Table';
-import { useNavigate } from '@src/hooks';
+import { useNavigate, usePagination } from '@src/hooks';
 import { paths } from '@src/constants';
 
 import messages from '../messages';
@@ -18,21 +18,23 @@ const tableActions = ['view'];
 const CorpotatePartnerList = () => {
   const navigate = useNavigate();
   const intl = useIntl();
+  const { pageIndex, pageSize } = usePagination();
   const { data } = usePartners();
 
   return (
     <DataTable
       isPaginated
       isFilterable
+      manualPagination
       defaultColumnValues={{ Filter: TextFilter }}
       initialState={{
-        pageSize: 30,
-        pageIndex: 0,
+        pageSize,
+        pageIndex
       }}
       additionalColumns={[
         {
           id: 'action',
-          Header: intl.formatMessage(messages.headerAction),
+          Header: intl.formatMessage(messages['corporate.partner.table.header.action']),
           Cell: ({ row }: PartnersTableCell) => tableActions.map((type) => (
             <ActionItem
               key={`action-${type}-${row.original.slug}`}
@@ -47,7 +49,7 @@ const CorpotatePartnerList = () => {
       pageCount={data?.numPages || 0}
       columns={[
         {
-          Header: intl.formatMessage(messages.headerName),
+          Header: intl.formatMessage(messages['corporate.partner.table.header.name']),
           accessor: 'name',
           // eslint-disable-next-line react/no-unstable-nested-components
           Cell: ({ row }: PartnersTableCell) => (
@@ -60,19 +62,19 @@ const CorpotatePartnerList = () => {
           ),
         },
         {
-          Header: intl.formatMessage(messages.headerCatalogs),
+          Header: intl.formatMessage(messages['corporate.partner.table.header.catalogs']),
           accessor: 'catalogs',
         },
         {
-          Header: intl.formatMessage(messages.headerCourses),
+          Header: intl.formatMessage(messages['corporate.partner.table.header.courses']),
           accessor: 'courses',
         },
         {
-          Header: intl.formatMessage(messages.headerEnrollments),
+          Header: intl.formatMessage(messages['corporate.partner.table.header.enrollments']),
           accessor: 'enrollments',
         },
         {
-          Header: intl.formatMessage(messages.headerCertified),
+          Header: intl.formatMessage(messages['corporate.partner.table.header.certified']),
           accessor: 'certified',
         },
       ]}

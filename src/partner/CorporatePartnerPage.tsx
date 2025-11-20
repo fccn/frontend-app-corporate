@@ -6,7 +6,7 @@ import messages from './messages';
 const CorpotatePartnerPage = () => {
   const intl = useIntl();
   return (
-    <AppLayout title={intl.formatMessage(messages.titleCorporatePage)}>
+    <AppLayout title={intl.formatMessage(messages['corporate.partner.page.title'])}>
       <CorpotatePartnerList />
     </AppLayout>
   );
