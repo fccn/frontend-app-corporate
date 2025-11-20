@@ -25,10 +25,8 @@ const App = () => (
         <WouterRouter base={paths.base}>
           <Switch>
             <Route path={paths.partners.path} component={CorporatePartnerPage} />
-            <CatalogSettingsModalProvider>
-              <Route path={paths.catalogs.path} component={PartnerCatalogsPage} />
-              <Route path={paths.courses.path} component={CoursesPage} />
-            </CatalogSettingsModalProvider>
+              <Route path={paths.catalogs.path} component={() => <CatalogSettingsModalProvider><PartnerCatalogsPage/></CatalogSettingsModalProvider>} />
+              <Route path={paths.courses.path} component={() => <CatalogSettingsModalProvider><CoursesPage/></CatalogSettingsModalProvider>} />
             <Route path={paths.courseDetail.path}>
               <h1>Course Details</h1>
             </Route>
