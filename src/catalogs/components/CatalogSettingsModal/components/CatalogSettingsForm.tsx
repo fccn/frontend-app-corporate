@@ -9,11 +9,11 @@ import { Catalog, CatalogUpdateRequest } from '@src/types';
 import { getCatalogSchema } from '../utils';
 import messages from '../messages';
 import { EMPTY_FORM_STATE } from '../constants';
+import { useCurrentUser } from '@src/hooks';
 
 interface CatalogSettingsFormProps {
   catalogDetails: Catalog;
   onSubmit: (data: CatalogUpdateRequest) => void;
-  userType?: 'full' | 'limited';
   limitedEditableFields?: string[];
 }
 
@@ -23,8 +23,9 @@ export interface CatalogSettingsFormRef {
 const defaultLimitedEditable = ['alternativeLink', 'authorizationMessage', 'supportEmail', 'emailRegexes'];
 
 const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFormProps>(
-  ({ catalogDetails, onSubmit, userType = 'limited', limitedEditableFields }, ref) => {
+  ({ catalogDetails, onSubmit, limitedEditableFields }, ref) => {
     const intl = useIntl();
+    const { isAdmin } = useCurrentUser()
 
     const resolver = yupValidationResolver(getCatalogSchema(intl));
     const {
@@ -35,7 +36,7 @@ const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFo
       resolver,
     });
 
-    const canEditAllFields = userType === 'full';
+    const canEditAllFields = isAdmin;
     const allowedEditableFields = limitedEditableFields ?? defaultLimitedEditable;
     const isEditable = (fieldName: string) => canEditAllFields || allowedEditableFields.includes(fieldName);
 

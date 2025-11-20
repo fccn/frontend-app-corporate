@@ -6,7 +6,7 @@ import { usePartnerDetails } from '@src/partner/data/hooks';
 import { IconButton, Tab, Tabs } from '@openedx/paragon';
 import { Settings } from '@openedx/paragon/icons';
 import { paths } from '@src/constants';
-import { useCatalogSettingsModal } from '@src/catalogs/components/CatalogSettingsModal';
+import { CatalogSettingsModal } from '@src/catalogs/components/CatalogSettingsModal';
 import CoursesList from './components/CoursesList';
 import AppLayout from '../components/AppLayout';
 
@@ -14,10 +14,9 @@ import messages from './messages';
 
 const CoursesPage = () => {
   const intl = useIntl();
-  const { partnerId, catalogId } = useParams<{ partnerId: string, catalogId: string }>();
+  const { partnerId, catalogId } = useParams<{ partnerId: number, catalogId: string }>();
   const { catalogDetails } = useCatalogDetails({ partnerId, selectedCatalogId: catalogId });
   const { partnerDetails } = usePartnerDetails({ partnerId });
-  const { handleChangeSelectedCatalog } = useCatalogSettingsModal();
 
   return (
     <AppLayout withBackButton backPath={paths.catalogs.buildPath(partnerId)}>
@@ -37,7 +36,11 @@ const CoursesPage = () => {
               { title: intl.formatMessage(messages['corporate.courses.page.completionRate']), value: catalogDetails?.completionRate },
             ]}
           >
-            <IconButton src={Settings} alt="edit catalog" onClick={() => handleChangeSelectedCatalog(catalogId, partnerId)} />
+            <CatalogSettingsModal>
+              {(openModal) => (
+                <IconButton src={Settings} alt="edit catalog" onClick={() => openModal(catalogId, partnerId)} />
+              )}
+            </CatalogSettingsModal>
           </HeaderDescription>
         )}
       <Tabs defaultActiveKey="courses">
