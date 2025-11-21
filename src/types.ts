@@ -63,7 +63,7 @@ export interface Catalog extends CatalogBase, CatalogStats {
 }
 
 export type CatalogUpdateRequest = Partial<
-  Omit<Catalog, 'id' | 'slug' | 'enrollments' | 'certified' | 'completionRate' | 'courses'>
+Omit<Catalog, 'id' | 'slug' | 'enrollments' | 'certified' | 'completionRate' | 'courses'>
 >;
 
 export interface PaginatedResponse<T> {

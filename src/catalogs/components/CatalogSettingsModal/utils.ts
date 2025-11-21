@@ -36,7 +36,7 @@ export const getCatalogSchema = (intl) => {
           return new Date(availableEndDate) > new Date(availableStartDate);
         },
       ),
-    courseEnrollmentLimit: yup
+    courseEnrollmentsLimit: yup
       .number()
       .typeError(intl.formatMessage(messages.formCourseEnrollmentLimitInteger))
       .integer(intl.formatMessage(messages.formCourseEnrollmentLimitInteger))
@@ -60,3 +60,38 @@ export const getCatalogSchema = (intl) => {
     isSelfEnrollment: yup.boolean(),
   });
 };
+
+/**
+ * Converts an ISO-8601 datetime string (e.g., "2025-11-05T13:00:00Z")
+ * into a `YYYY-MM-DD` string suitable for use in an HTML
+ * `<input type="date">`.
+ *
+ * The conversion respects the user's **local timezone**.
+ * For example, if the backend sends a UTC timestamp, this function
+ * adjusts the date based on the user's local offset.
+ *
+ * @param isoString - An ISO-8601 formatted date/time string.
+ * @returns A `YYYY-MM-DD` formatted date string, or an empty string if the input is invalid.
+ *
+ * @example
+ * ```ts
+ * isoToDateInputValue("2025-11-05T13:00:00Z");
+ * // "2025-11-05" (depending on the user's local timezone)
+ * ```
+ *
+ * @example
+ * ```ts
+ * isoToDateInputValue("invalid-date");
+ * // ""
+ * ```
+ */
+export function isoToDateInputValue(isoString: string): string {
+  const date = new Date(isoString);
+  if (Number.isNaN(date.getTime())) { return ''; }
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
