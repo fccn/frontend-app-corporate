@@ -3,14 +3,14 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { Button, useToggle } from '@openedx/paragon';
 
 import ModalLayout from '@src/components/ModalLayout';
-import CatalogEditForm, { CatalogSettingsFormRef } from './components/CatalogSettingsForm';
-import messages from './messages';
 import { useCatalogDetails, useUpdateCatalog } from '@src/catalogs/data/hooks';
 import { CatalogUpdateRequest } from '@src/types';
+import CatalogEditForm, { CatalogSettingsFormRef } from './components/CatalogSettingsForm';
+import messages from './messages';
 
 interface Props {
-  /**  
-   * Children is a function that receives `openModal`  
+  /**
+   * Children is a function that receives `openModal`
    * so any child can trigger the modal.
    */
   children: (openModal: (catalogId: string, partnerId: number) => void) => ReactNode;
@@ -24,7 +24,6 @@ export const CatalogSettingsModal = ({ children }: Props) => {
   const [partnerId, setPartnerId] = useState<number | null>(null);
   const formRef = useRef<CatalogSettingsFormRef>(null);
 
-
   const updateCatalog = useUpdateCatalog();
   const { catalogDetails } = useCatalogDetails({
     partnerId,
@@ -33,7 +32,7 @@ export const CatalogSettingsModal = ({ children }: Props) => {
 
   const openModal = (catalogId: number | string, partnerId: number) => {
     setSelectedCatalogId(catalogId);
-    setPartnerId(partnerId)
+    setPartnerId(partnerId);
     open();
   };
 
@@ -73,7 +72,8 @@ export const CatalogSettingsModal = ({ children }: Props) => {
           <CatalogEditForm
             ref={formRef}
             catalogDetails={catalogDetails}
-            onSubmit={handleFormSubmit} />
+            onSubmit={handleFormSubmit}
+          />
         )}
       </ModalLayout>
 

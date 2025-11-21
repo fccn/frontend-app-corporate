@@ -6,7 +6,7 @@ import { getCorporateApiBase } from '@src/constants';
 import { Catalog, CatalogUpdateRequest, PaginatedResponse } from '../../types';
 
 export const getPartnerCatalogs = async (
-  partnerId: string,
+  partnerId: number,
   page: number,
   pageSize: number,
 ): Promise<PaginatedResponse<Catalog>> => {
@@ -46,7 +46,7 @@ export const getCatalogDetails = async (
 };
 
 export const updateCatalog = async (
-  partnerId: string,
+  partnerId: number,
   catalogId: string | number,
   data: CatalogUpdateRequest,
 ): Promise<Catalog | null> => {

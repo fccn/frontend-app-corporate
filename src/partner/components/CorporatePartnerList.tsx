@@ -29,7 +29,7 @@ const CorpotatePartnerList = () => {
       defaultColumnValues={{ Filter: TextFilter }}
       initialState={{
         pageSize,
-        pageIndex
+        pageIndex,
       }}
       additionalColumns={[
         {

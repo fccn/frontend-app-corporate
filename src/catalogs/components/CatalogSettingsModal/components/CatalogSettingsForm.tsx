@@ -6,10 +6,10 @@ import { Col, Form, Stack } from '@openedx/paragon';
 import { yupValidationResolver } from '@src/utils';
 
 import { Catalog, CatalogUpdateRequest } from '@src/types';
-import { getCatalogSchema } from '../utils';
+import { useCurrentUser } from '@src/hooks';
+import { getCatalogSchema, isoToDateInputValue } from '../utils';
 import messages from '../messages';
 import { EMPTY_FORM_STATE } from '../constants';
-import { useCurrentUser } from '@src/hooks';
 
 interface CatalogSettingsFormProps {
   catalogDetails: Catalog;
@@ -25,7 +25,7 @@ const defaultLimitedEditable = ['alternativeLink', 'authorizationMessage', 'supp
 const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFormProps>(
   ({ catalogDetails, onSubmit, limitedEditableFields }, ref) => {
     const intl = useIntl();
-    const { isAdmin } = useCurrentUser()
+    const { isAdmin } = useCurrentUser();
 
     const resolver = yupValidationResolver(getCatalogSchema(intl));
     const {
@@ -88,7 +88,6 @@ const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFo
         {/* Enrollment Settings Section */}
         <h3 className="h3 text-primary-400">{intl.formatMessage(messages['corporate.catalog.form.enrollment.settings.title'])}</h3>
 
-
         {/* Enrollment Limits Group */}
         <Form.Row>
           <Form.Group as={Col} controlId="courseEnrollmentLimit">
@@ -111,7 +110,7 @@ const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFo
                 <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.available.start.date.field'])}</Form.Label>
                 <Form.Control
                   id="availableStartDate"
-                  value={value ? new Date(value).toISOString().split('T')[0] : ''}
+                  value={isoToDateInputValue(value)}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
                   type="date"
                   disabled={!isEditable('availableStartDate')}
@@ -127,7 +126,7 @@ const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFo
                 <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.available.end.date.field'])}</Form.Label>
                 <Form.Control
                   id="availableEndDate"
-                  value={value ? new Date(value).toISOString().split('T')[0] : ''}
+                  value={isoToDateInputValue(value)}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
                   type="date"
                   disabled={!isEditable('availableEndDate')}
@@ -146,12 +145,13 @@ const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFo
 
           <Form.Group as={Col} controlId="authorizationMessage">
             <Form.Label className="font-weight-bold">{intl.formatMessage(messages['corporate.catalog.form.authorization.message.field'])}</Form.Label>
-            <Form.Control 
-            id="authorizationMessage" 
-            {...register('authorizationMessage')} 
-            as="textarea" 
-            disabled={!isEditable('authorizationMessage')} 
-            placeholder={intl.formatMessage(messages['corporate.catalog.form.authorization.message.placeholder'])}/>
+            <Form.Control
+              id="authorizationMessage"
+              {...register('authorizationMessage')}
+              as="textarea"
+              disabled={!isEditable('authorizationMessage')}
+              placeholder={intl.formatMessage(messages['corporate.catalog.form.authorization.message.placeholder'])}
+            />
           </Form.Group>
         </Form.Row>
 
@@ -187,6 +187,7 @@ const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFo
         </Form.Group>
       </Stack>
     );
-  });
+  },
+);
 
 export default CatalogSettingsForm;

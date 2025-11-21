@@ -1,5 +1,4 @@
-import { Resolver } from 'react-hook-form';
-import { FieldValues, FieldErrorsImpl } from 'react-hook-form';
+import { Resolver, FieldValues, FieldErrorsImpl } from 'react-hook-form';
 import { SchemaOf, ValidationError } from 'yup';
 
 export function yupValidationResolver<TFieldValues extends FieldValues>(
