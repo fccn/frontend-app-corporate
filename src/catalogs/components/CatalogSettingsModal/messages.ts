@@ -61,6 +61,11 @@ const messages = defineMessages({
     defaultMessage: 'Advanced Settings',
     description: 'Title for the advanced settings section of the form',
   },
+  'corporate.catalog.form.enrollment.authorization.title': {
+    id: 'corporate.catalog.form.enrollment.authorization.title',
+    defaultMessage: 'Authorization',
+    description: 'Title for the authorization section of the form',
+  },
   'corporate.catalog.form.authorization.message.field': {
     id: 'corporate.catalog.form.authorization.message.field',
     defaultMessage: 'Additional message for authorization',
@@ -73,11 +78,16 @@ const messages = defineMessages({
   },
   'corporate.catalog.form.email.regexes.field': {
     id: 'corporate.catalog.form.email.regexes.field',
-    defaultMessage: 'Partner Email Regex',
+    defaultMessage: 'Allowed email domains',
     description: 'Label for the partner email regex field',
   },
-  'corporate.catalog.form.is.self.enrollment.field': {
-    id: 'corporate.catalog.form.is.self.enrollment.field',
+  'corporate.catalog.form.email.regexes.description': {
+    id: 'corporate.catalog.form.email.regexes.description',
+    defaultMessage: 'Add the email domains allowed to self-enroll in this catalog. Only users with emails from these domains will be able to join. Example: @empresa.com',
+    description: 'Description text for the partner email regex field',
+  },
+  'corporate.catalog.form.self.enrollment.field': {
+    id: 'corporate.catalog.form.self.enrollment.field',
     defaultMessage: 'Self Enrollment',
     description: 'Label for the self enrollment switch',
   },

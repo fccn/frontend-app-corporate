@@ -33,7 +33,7 @@ export const getCatalogSchema = (intl) => {
       .test(
         'is-after-start',
         intl.formatMessage(messages.formAvailableEndDateMin),
-        function (value) {
+        function validateEndDate(value) {
           const { availableStartDate } = this.parent;
           return (
             isValidDate(value)
