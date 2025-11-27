@@ -50,12 +50,11 @@ describe('Catalog Hooks', () => {
           emailRegexes: ['@test.com'],
           courseEnrollmentsLimit: 1000,
           userLimit: 500,
-          availableStartDate: new Date('2023-01-01'),
-          availableEndDate: new Date('2023-12-31'),
+          availableStartDate: '2023-01-01',
+          availableEndDate: '2023-12-31',
           alternativeLink: 'https://test.com/catalog',
           isSelfEnrollment: true,
           authorizationMessage: 'Test message',
-          isPublic: true,
           courses: 50,
           partnerId: 1,
         },
@@ -70,12 +69,11 @@ describe('Catalog Hooks', () => {
           emailRegexes: ['@test2.com'],
           courseEnrollmentsLimit: 2000,
           userLimit: 1000,
-          availableStartDate: new Date('2023-01-01'),
-          availableEndDate: new Date('2023-12-31'),
+          availableStartDate: '2023-01-01',
+          availableEndDate: '2023-12-31',
           alternativeLink: 'https://test2.com/catalog',
           isSelfEnrollment: false,
           authorizationMessage: 'Test message 2',
-          isPublic: false,
           courses: 75,
           partnerId: 1,
         },
@@ -86,7 +84,7 @@ describe('Catalog Hooks', () => {
       mockedGetPartnerCatalogs.mockResolvedValueOnce(mockCatalogsResponse);
 
       const { result } = renderHook(
-        () => usePartnerCatalogs({ partnerId: '1', pageIndex: 1, pageSize: 10 }),
+        () => usePartnerCatalogs({ partnerId: 1, pageIndex: 1, pageSize: 10 }),
         { wrapper: createWrapper },
       );
 
@@ -95,7 +93,7 @@ describe('Catalog Hooks', () => {
         expect(result.current.isLoadingCatalogs).toBe(false);
       });
 
-      expect(mockedGetPartnerCatalogs).toHaveBeenCalledWith('1', 1, 10);
+      expect(mockedGetPartnerCatalogs).toHaveBeenCalledWith(1, 1, 10);
       expect(mockedGetPartnerCatalogs).toHaveBeenCalledTimes(1);
     });
 
@@ -122,7 +120,7 @@ describe('Catalog Hooks', () => {
         ({ partnerId, pageIndex, pageSize }) => usePartnerCatalogs({ partnerId, pageIndex, pageSize }),
         {
           wrapper: createWrapper,
-          initialProps: { partnerId: '1', pageIndex: 1, pageSize: 10 },
+          initialProps: { partnerId: 1, pageIndex: 1, pageSize: 10 },
         },
       );
 
@@ -133,11 +131,11 @@ describe('Catalog Hooks', () => {
       });
 
       // Rerender with same params should not call API again due to caching
-      rerender({ partnerId: '1', pageIndex: 1, pageSize: 10 });
+      rerender({ partnerId: 1, pageIndex: 1, pageSize: 10 });
       expect(mockedGetPartnerCatalogs).toHaveBeenCalledTimes(1);
 
       // Rerender with different params should call API again
-      rerender({ partnerId: '1', pageIndex: 2, pageSize: 10 });
+      rerender({ partnerId: 1, pageIndex: 2, pageSize: 10 });
       await waitFor(() => {
         expect(mockedGetPartnerCatalogs).toHaveBeenCalledTimes(2);
         expect(result.current.partnerCatalogs).toEqual(secondPageResponse);
@@ -157,21 +155,20 @@ describe('Catalog Hooks', () => {
       emailRegexes: ['@details.com'],
       courseEnrollmentsLimit: 3000,
       userLimit: 1500,
-      availableStartDate: new Date('2023-01-01'),
-      availableEndDate: new Date('2023-12-31'),
+      availableStartDate: '2023-01-01',
+      availableEndDate: '2023-12-31',
       alternativeLink: 'https://details.com/catalog',
       isSelfEnrollment: true,
       authorizationMessage: 'Details message',
-      isPublic: true,
       courses: 100,
       partnerId: 1,
     };
 
-    it('should fetch catalog details when not in cache', async () => {
+    it('should fetch catalog details', async () => {
       mockedGetCatalogDetails.mockResolvedValueOnce(mockCatalog);
 
       const { result } = renderHook(
-        () => useCatalogDetails({ partnerId: '1', selectedCatalog: '1' }),
+        () => useCatalogDetails({ partnerId: 1, catalogId: '1' }),
         { wrapper: createWrapper },
       );
 
@@ -180,43 +177,18 @@ describe('Catalog Hooks', () => {
         expect(result.current.isLoadingCatalogDetails).toBe(false);
       });
 
-      expect(mockedGetCatalogDetails).toHaveBeenCalledWith('1', '1');
+      expect(mockedGetCatalogDetails).toHaveBeenCalledWith(1, '1');
       expect(mockedGetCatalogDetails).toHaveBeenCalledTimes(1);
     });
 
-    it('should return cached catalog when available', async () => {
-      // Propulate the cache with partner catalogs
-      const mockCatalogsResponse: PaginatedResponse<Catalog> = {
-        next: null,
-        previous: null,
-        count: 1,
-        numPages: 1,
-        currentPage: 1,
-        start: 0,
-        results: [mockCatalog],
-      };
-
-      queryClient.setQueryData(['partnerCatalogs', '1', 1, 10], mockCatalogsResponse);
-
-      const { result } = renderHook(
-        () => useCatalogDetails({ partnerId: '1', selectedCatalog: '1' }),
-        { wrapper: createWrapper },
-      );
-
-      // Should return cached catalog immediately without calling API
-      expect(mockedGetCatalogDetails).not.toHaveBeenCalled();
-      expect(result.current.catalogDetails).toEqual(mockCatalog);
-      expect(result.current.isLoadingCatalogDetails).toBe(false);
-    });
-
-    it('should not fetch when partnerId or selectedCatalog is missing', () => {
+    it('should not fetch when partnerId or catalogId is missing', () => {
       const { result: resultNoPartner } = renderHook(
-        () => useCatalogDetails({ partnerId: '', selectedCatalog: '1' }),
+        () => useCatalogDetails({ partnerId: 0, catalogId: '1' }),
         { wrapper: createWrapper },
       );
 
       const { result: resultNoCatalog } = renderHook(
-        () => useCatalogDetails({ partnerId: '1', selectedCatalog: '' }),
+        () => useCatalogDetails({ partnerId: 1, catalogId: '' }),
         { wrapper: createWrapper },
       );
 

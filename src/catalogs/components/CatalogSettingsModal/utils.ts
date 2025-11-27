@@ -7,6 +7,8 @@ export const getCatalogSchema = (intl) => {
   const COURSE_ENROLLMENT_LIMIT_MIN = 0;
   const USER_LIMIT_MIN = 0;
 
+  const isValidDate = (v?: string) => typeof v === 'string' && !Number.isNaN(new Date(v).getTime());
+
   return yup.object({
     name: yup
       .string()
@@ -20,20 +22,24 @@ export const getCatalogSchema = (intl) => {
       .string()
       .email(intl.formatMessage(messages.formSupportEmailInvalid)),
     availableStartDate: yup
-      .date()
+      .string()
       .required(intl.formatMessage(messages.formAvailableStartDateRequired))
-      .typeError(intl.formatMessage(messages.formAvailableStartDateInvalid)),
+      .test('valid-date', intl.formatMessage(messages.formAvailableStartDateInvalid), isValidDate),
+
     availableEndDate: yup
-      .date()
+      .string()
       .required(intl.formatMessage(messages.formAvailableEndDateRequired))
-      .typeError(intl.formatMessage(messages.formAvailableEndDateInvalid))
+      .test('valid-date', intl.formatMessage(messages.formAvailableEndDateInvalid), isValidDate)
       .test(
-        'is-after-start-date',
+        'is-after-start',
         intl.formatMessage(messages.formAvailableEndDateMin),
-        function validateEndDate(availableEndDate) {
+        function (value) {
           const { availableStartDate } = this.parent;
-          if (!availableEndDate || !availableStartDate) { return true; }
-          return new Date(availableEndDate) > new Date(availableStartDate);
+          return (
+            isValidDate(value)
+            && isValidDate(availableStartDate)
+            && new Date(value!).getTime() > new Date(availableStartDate!).getTime()
+          );
         },
       ),
     courseEnrollmentsLimit: yup

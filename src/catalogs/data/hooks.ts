@@ -7,7 +7,9 @@ import { getCatalogDetails, getPartnerCatalogs, updateCatalog } from './api';
 
 const queryKey = {
   all: [appId, 'catalogs'],
-  catalogList: (partnerId: number, pageIndex: number, pageSize: number) => [...queryKey.all, partnerId, pageIndex, pageSize],
+  catalogList: (partnerId: number, pageIndex: number, pageSize: number) => [
+    ...queryKey.all, partnerId, pageIndex, pageSize,
+  ],
   catalogDetail: (partnerId: number, catalogId: string) => [...queryKey.all, 'detail', partnerId, catalogId],
 };
 
@@ -24,12 +26,12 @@ export const usePartnerCatalogs = (
 
 export const useCatalogDetails = ({
   partnerId,
-  selectedCatalogId,
-}: { partnerId: number; selectedCatalogId: string }) => {
+  catalogId,
+}: { partnerId: number; catalogId: string }) => {
   const { data: catalogDetails, isLoading } = useQuery({
-    queryKey: queryKey.catalogDetail(partnerId, selectedCatalogId),
-    queryFn: () => getCatalogDetails(partnerId, selectedCatalogId),
-    enabled: !!partnerId && !!selectedCatalogId,
+    queryKey: queryKey.catalogDetail(partnerId, catalogId),
+    queryFn: () => getCatalogDetails(partnerId, catalogId),
+    enabled: !!partnerId && !!catalogId,
   });
 
   return {
@@ -45,8 +47,6 @@ export const useUpdateCatalog = () => {
       partnerId, catalogId, data,
     }:
     { partnerId: number; catalogId: string; data: CatalogUpdateRequest }) => {
-      data.availableStartDate = new Date(data.availableStartDate).toISOString();
-      data.availableEndDate = new Date(data.availableEndDate).toISOString();
       updateCatalog(partnerId, catalogId, data);
     },
     onSettled: (_data, _error, args) => {

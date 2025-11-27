@@ -4,6 +4,7 @@ const { createConfig } = require('@openedx/frontend-build');
 const config = createConfig('eslint', {
   rules: {
     'react/prop-types': 'off',
+    'react/require-default-props': 'off',
   },
 });
 

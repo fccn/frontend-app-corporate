@@ -15,7 +15,7 @@ import messages from './messages';
 const CoursesPage = () => {
   const intl = useIntl();
   const { partnerId, catalogId } = useParams<{ partnerId: number, catalogId: string }>();
-  const { catalogDetails } = useCatalogDetails({ partnerId, selectedCatalogId: catalogId });
+  const { catalogDetails } = useCatalogDetails({ partnerId, catalogId });
   const { partnerDetails } = usePartnerDetails({ partnerId });
 
   return (

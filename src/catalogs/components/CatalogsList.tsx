@@ -12,7 +12,7 @@ import { usePartnerCatalogs } from '../data/hooks';
 type CatalogCell = CellValue<Catalog>;
 
 interface CatalogsListProps {
-  partnerId: string;
+  partnerId: number;
 }
 
 const CatalogsList = ({ partnerId }: CatalogsListProps) => {

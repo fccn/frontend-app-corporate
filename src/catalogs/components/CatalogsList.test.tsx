@@ -75,7 +75,7 @@ describe('CatalogsList', () => {
   });
 
   it('renders a table with catalog data', () => {
-    renderWrapper(<CatalogsList partnerId="123" />);
+    renderWrapper(<CatalogsList partnerId={1} />);
 
     mockCatalogs.forEach(async (catalog) => {
       expect(await screen.findByText(catalog.name)).toBeInTheDocument();
@@ -92,7 +92,7 @@ describe('CatalogsList', () => {
       isLoadingCatalogs: true,
     });
 
-    renderWrapper(<CatalogsList partnerId="123" />);
+    renderWrapper(<CatalogsList partnerId={1} />);
     expect(screen.getByRole('status')).toBeInTheDocument();
   });
 
@@ -102,7 +102,7 @@ describe('CatalogsList', () => {
       isLoadingCatalogs: false,
     });
 
-    renderWrapper(<CatalogsList partnerId="123" />);
+    renderWrapper(<CatalogsList partnerId={1} />);
 
     // Should still render the table structure
     expect(screen.getByTestId('table-footer')).toBeInTheDocument();
@@ -112,7 +112,7 @@ describe('CatalogsList', () => {
   });
 
   it('renders correct number of action buttons per row', () => {
-    renderWrapper(<CatalogsList partnerId="123" />);
+    renderWrapper(<CatalogsList partnerId={1} />);
 
     const viewButtons = screen.getAllByLabelText('view-action');
 
@@ -131,7 +131,7 @@ describe('CatalogsList', () => {
       isLoadingCatalogs: false,
     });
 
-    renderWrapper(<CatalogsList partnerId="123" />);
+    renderWrapper(<CatalogsList partnerId={1} />);
 
     // Should only render one catalog
     expect(screen.getByText('Python Programming Catalog')).toBeInTheDocument();

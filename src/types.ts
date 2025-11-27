@@ -44,8 +44,8 @@ export interface CatalogBase {
   isSelfEnrollment: boolean;
   courseEnrollmentsLimit: number;
   userLimit: number;
-  availableStartDate: Date | null;
-  availableEndDate: Date | null;
+  availableStartDate: string;
+  availableEndDate: string;
   partnerId: number;
 }
 
@@ -63,7 +63,7 @@ export interface Catalog extends CatalogBase, CatalogStats {
 }
 
 export type CatalogUpdateRequest = Partial<
-Omit<Catalog, 'id' | 'slug' | 'enrollments' | 'certified' | 'completionRate' | 'courses'>
+Omit<Catalog, 'id' | 'slug' | 'enrollments' | 'certified' | 'completionRate' | 'courses' | 'partnerId'>
 >;
 
 export interface PaginatedResponse<T> {
