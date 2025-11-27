@@ -4,7 +4,7 @@ import { logError } from '@edx/frontend-platform/logging';
 import { Course, PaginatedResponse } from '@src/types';
 import { getCorporateApiBase } from '@src/constants';
 
-export const getCourses = async (partnerId: string, catalogId: string, pageIndex, pageSize)
+export const getCourses = async (partnerId: number, catalogId: string, pageIndex, pageSize)
 : Promise<PaginatedResponse<Course>> => {
   try {
     const url = new URL(`${getCorporateApiBase()}${partnerId}/catalogs/${catalogId}/courses/`);
@@ -20,7 +20,7 @@ export const getCourses = async (partnerId: string, catalogId: string, pageIndex
   }
 };
 
-export const deleteCourse = async (partnerId: string, catalogId: string, courseId: number) => {
+export const deleteCourse = async (partnerId: number, catalogId: string, courseId: number) => {
   try {
     await getAuthenticatedHttpClient().delete(`${getCorporateApiBase()}${partnerId}/catalogs/${catalogId}/courses/${courseId}/`);
   } catch (error) {

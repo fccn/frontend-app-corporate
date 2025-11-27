@@ -11,7 +11,7 @@ import messages from './messages';
 const PartnerCatalogsPage = () => {
   const intl = useIntl();
 
-  const { partnerId } = useParams<{ partnerId: string }>();
+  const { partnerId } = useParams<{ partnerId: number }>();
 
   const { partnerDetails } = usePartnerDetails({ partnerId });
 

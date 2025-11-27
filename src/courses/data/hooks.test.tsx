@@ -33,7 +33,7 @@ describe('useCatalogCourses', () => {
     });
 
     const { result } = renderHook(
-      () => useCatalogCourses('p1', 'c1', 1, 10),
+      () => useCatalogCourses(1, 'c1', 1, 10),
       { wrapper: createWrapper() },
     );
 
@@ -46,7 +46,7 @@ describe('useCatalogCourses', () => {
   it('returns loading state', async () => {
     (api.getCourses as jest.Mock).mockImplementation(() => new Promise(() => {}));
 
-    const { result } = renderHook(() => useCatalogCourses('p1', 'c1', 1, 10), {
+    const { result } = renderHook(() => useCatalogCourses(1, 'c1', 1, 10), {
       wrapper: createWrapper(),
     });
 
@@ -61,7 +61,7 @@ describe('useCatalogCourses', () => {
     });
 
     const { result } = renderHook(
-      () => useCatalogCourses('p1', 'c1', 1, 10),
+      () => useCatalogCourses(1, 'c1', 1, 10),
       { wrapper: createWrapper() },
     );
 
@@ -79,7 +79,7 @@ describe('useCatalogCourses', () => {
     });
 
     const { result } = renderHook(
-      () => useCatalogCourses('p1', 'c1', 1, 10),
+      () => useCatalogCourses(1, 'c1', 1, 10),
       { wrapper: createWrapper() },
     );
 
@@ -91,7 +91,7 @@ describe('useCatalogCourses', () => {
     (api.getCourses as jest.Mock).mockRejectedValue(new Error('API error'));
 
     const { result } = renderHook(
-      () => useCatalogCourses('p1', 'c1', 1, 10),
+      () => useCatalogCourses(1, 'c1', 1, 10),
       { wrapper: createWrapper() },
     );
 
@@ -114,10 +114,10 @@ describe('useDeleteCatalogCourse', () => {
     });
 
     await act(async () => {
-      await result.current({ partnerId: 'p1', catalogId: 'c1', courseId: 1 });
+      await result.current({ partnerId: 1, catalogId: 'c1', courseId: 1 });
     });
 
-    expect(api.deleteCourse).toHaveBeenCalledWith('p1', 'c1', 1);
+    expect(api.deleteCourse).toHaveBeenCalledWith(1, 'c1', 1);
   });
 
   it('handles API error', async () => {
@@ -128,7 +128,7 @@ describe('useDeleteCatalogCourse', () => {
     });
 
     await expect(
-      result.current({ partnerId: 'p1', catalogId: 'c1', courseId: 1 }),
+      result.current({ partnerId: 1, catalogId: 'c1', courseId: 1 }),
     ).rejects.toThrow('Delete error');
   });
 });

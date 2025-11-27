@@ -4,7 +4,7 @@ import { Button, useToggle } from '@openedx/paragon';
 
 import ModalLayout from '@src/components/ModalLayout';
 import { useCatalogDetails, useUpdateCatalog } from '@src/catalogs/data/hooks';
-import { CatalogUpdateRequest } from '@src/types';
+import { Catalog, CatalogUpdateRequest } from '@src/types';
 import CatalogEditForm, { CatalogSettingsFormRef } from './components/CatalogSettingsForm';
 import messages from './messages';
 
@@ -20,24 +20,24 @@ export const CatalogSettingsModal = ({ children }: Props) => {
   const intl = useIntl();
 
   const [isOpen, open, close] = useToggle(false);
-  const [selectedCatalogId, setSelectedCatalogId] = useState<string | null>(null);
-  const [partnerId, setPartnerId] = useState<number | null>(null);
+  const [selectedCatalogId, setSelectedCatalogId] = useState<string>('');
+  const [relatedpartnerId, setRelatedPartnerId] = useState<number>(NaN);
   const formRef = useRef<CatalogSettingsFormRef>(null);
 
   const updateCatalog = useUpdateCatalog();
   const { catalogDetails } = useCatalogDetails({
-    partnerId,
-    selectedCatalogId,
+    partnerId: relatedpartnerId,
+    catalogId: selectedCatalogId,
   });
 
-  const openModal = (catalogId: number | string, partnerId: number) => {
+  const openModal = (catalogId: string, partnerId: number) => {
     setSelectedCatalogId(catalogId);
-    setPartnerId(partnerId);
+    setRelatedPartnerId(partnerId);
     open();
   };
 
   const handleClose = () => {
-    setSelectedCatalogId(null);
+    setSelectedCatalogId('');
     close();
   };
 
@@ -47,9 +47,9 @@ export const CatalogSettingsModal = ({ children }: Props) => {
 
   const handleFormSubmit = (data: CatalogUpdateRequest) => {
     if (data && selectedCatalogId) {
-      updateCatalog({ partnerId, catalogId: selectedCatalogId, data }, {
+      updateCatalog({ partnerId: relatedpartnerId, catalogId: selectedCatalogId, data }, {
         onSuccess: () => {
-          setSelectedCatalogId(null);
+          setSelectedCatalogId('');
           close();
         },
       });
@@ -71,7 +71,7 @@ export const CatalogSettingsModal = ({ children }: Props) => {
         {selectedCatalogId && (
           <CatalogEditForm
             ref={formRef}
-            catalogDetails={catalogDetails}
+            catalogDetails={catalogDetails as Catalog}
             onSubmit={handleFormSubmit}
           />
         )}

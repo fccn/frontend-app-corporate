@@ -16,7 +16,7 @@ import messages from '../messages';
 type CoursesCell = CellValue<Course>;
 
 interface CoursesListProps {
-  partnerId: string;
+  partnerId: number;
   catalogId: string;
 }
 
