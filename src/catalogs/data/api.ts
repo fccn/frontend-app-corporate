@@ -3,7 +3,9 @@ import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { logError } from '@edx/frontend-platform/logging';
 
 import { getCorporateApiBase } from '@src/constants';
-import { Catalog, CatalogUpdateRequest, PaginatedResponse } from '../../types';
+import {
+  Catalog, CatalogUpdateRequest, Learner, PaginatedResponse,
+} from '../../types';
 
 export const getPartnerCatalogs = async (
   partnerId: number,
@@ -57,5 +59,27 @@ export const updateCatalog = async (
   } catch (error) {
     logError(error);
     return null;
+  }
+};
+
+export const getCatalogsLearners = async (
+  partnerId: number,
+  catalogId: string | number,
+): Promise<PaginatedResponse<Learner>> => {
+  try {
+    const url = `${getCorporateApiBase()}${partnerId}/catalogs/${catalogId}/learners/`;
+    const response = await getAuthenticatedHttpClient().get(url);
+    return camelCaseObject(response.data);
+  } catch (error) {
+    logError(error);
+    return {
+      next: null,
+      previous: null,
+      count: 0,
+      numPages: 0,
+      currentPage: 0,
+      start: 0,
+      results: [],
+    };
   }
 };

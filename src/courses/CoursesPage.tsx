@@ -7,6 +7,7 @@ import { IconButton, Tab, Tabs } from '@openedx/paragon';
 import { Settings } from '@openedx/paragon/icons';
 import { paths } from '@src/constants';
 import { CatalogSettingsModal } from '@src/catalogs/components/CatalogSettingsModal';
+import LearnerList from '@src/catalogs/components/LearnerList';
 import CoursesList from './components/CoursesList';
 import AppLayout from '../components/AppLayout';
 
@@ -47,7 +48,9 @@ const CoursesPage = () => {
         <Tab eventKey="courses" title={intl.formatMessage(messages['corporate.courses.page.tab.courses'])}>
           <CoursesList catalogId={catalogId} partnerId={partnerId} />
         </Tab>
-        <Tab eventKey="learners" title={intl.formatMessage(messages['corporate.courses.page.tab.learners'])} />
+        <Tab eventKey="learners" title={intl.formatMessage(messages['corporate.courses.page.tab.learners'])}>
+          <LearnerList catalogId={catalogId} partnerId={partnerId} />
+        </Tab>
       </Tabs>
     </AppLayout>
   );

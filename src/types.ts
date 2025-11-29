@@ -11,10 +11,19 @@ export type Partner = {
 };
 
 export type Learner = {
-  name: string;
-  email: string;
-  assesmentDone: number;
-  assesmentToComplete: number;
+  id: number;
+  active: boolean;
+  user: {
+    id: number;
+    username: string;
+    email: string;
+    fullName: string;
+  },
+  inviteSentAt: string;
+  acceptedAt: string;
+  removedAt: string;
+  enrollments: number;
+  certified: number;
 };
 
 export interface CourseRun {

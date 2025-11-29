@@ -3,7 +3,9 @@ import {
 } from '@tanstack/react-query';
 import { CatalogUpdateRequest } from '@src/types';
 import { appId } from '@src/constants';
-import { getCatalogDetails, getPartnerCatalogs, updateCatalog } from './api';
+import {
+  getCatalogDetails, getPartnerCatalogs, updateCatalog, getCatalogsLearners,
+} from './api';
 
 const queryKey = {
   all: [appId, 'catalogs'],
@@ -58,3 +60,11 @@ export const useUpdateCatalog = () => {
   });
   return mutate;
 };
+
+export const useCatalogLearners = ({
+  partnerId,
+  catalogId,
+}: { partnerId: number; catalogId: string | number; }) => useQuery({
+  queryKey: ['catalogLearners', partnerId, catalogId],
+  queryFn: () => getCatalogsLearners(partnerId, catalogId),
+});
