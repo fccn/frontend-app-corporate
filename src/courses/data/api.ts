@@ -2,12 +2,12 @@ import { camelCaseObject } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { logError } from '@edx/frontend-platform/logging';
 import { Course, PaginatedResponse } from '@src/types';
-import { getCorporateApiBase } from '@src/constants';
+import { getCorporateApi } from '@src/constants';
 
-export const getCourses = async (partnerId: number, catalogId: string, pageIndex, pageSize)
+export const getCourses = async (catalogId: string, pageIndex, pageSize)
 : Promise<PaginatedResponse<Course>> => {
   try {
-    const url = new URL(`${getCorporateApiBase()}${partnerId}/catalogs/${catalogId}/courses/`);
+    const url = new URL(getCorporateApi(`manage/catalogs/${catalogId}/courses/`));
     url.searchParams.append('page', pageIndex);
     url.searchParams.append('page_size', pageSize);
     const { data } = await getAuthenticatedHttpClient().get(url);
@@ -20,9 +20,9 @@ export const getCourses = async (partnerId: number, catalogId: string, pageIndex
   }
 };
 
-export const deleteCourse = async (partnerId: number, catalogId: string, courseId: number) => {
+export const deleteCourse = async (catalogId: string, courseId: number) => {
   try {
-    await getAuthenticatedHttpClient().delete(`${getCorporateApiBase()}${partnerId}/catalogs/${catalogId}/courses/${courseId}/`);
+    await getAuthenticatedHttpClient().delete(getCorporateApi(`catalogs/${catalogId}/courses/${courseId}/`));
   } catch (error) {
     logError(error);
     throw error;

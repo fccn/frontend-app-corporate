@@ -17,10 +17,12 @@ export const getCatalogSchema = (intl) => {
       .max(CATALOG_NAME_MAX, intl.formatMessage(messages['corporate.catalog.form.validation.name.max'], { max: CATALOG_NAME_MAX })),
     alternativeLink: yup
       .string()
-      .url(intl.formatMessage(messages['corporate.catalog.form.validation.alternative.link.invalid'])),
+      .url(intl.formatMessage(messages['corporate.catalog.form.validation.alternative.link.invalid']))
+      .nullable(),
     supportEmail: yup
       .string()
-      .email(intl.formatMessage(messages['corporate.catalog.form.validation.support.email.invalid'])),
+      .email(intl.formatMessage(messages['corporate.catalog.form.validation.support.email.invalid']))
+      .nullable(),
     availableStartDate: yup
       .string()
       .required(intl.formatMessage(messages['corporate.catalog.form.validation.start.date.required']))

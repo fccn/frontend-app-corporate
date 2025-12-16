@@ -2,13 +2,12 @@ import { camelCaseObject } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { logError } from '@edx/frontend-platform/logging';
 
-import { getCorporateApiBase } from '@src/constants';
+import { getCorporateApi } from '@src/constants';
 import { PaginatedResponse, Partner } from '@src/types';
 
 export const getPartners = async (): Promise<PaginatedResponse<Partner>> => {
-  const url = `${getCorporateApiBase()}`;
   try {
-    const response = await getAuthenticatedHttpClient().get(url);
+    const response = await getAuthenticatedHttpClient().get(getCorporateApi('partners/'));
     return camelCaseObject(response.data);
   } catch (error) {
     logError(error);
@@ -26,8 +25,7 @@ export const getPartners = async (): Promise<PaginatedResponse<Partner>> => {
 
 export const getPartnerDetails = async (partnerId?: string): Promise<Partner> => {
   try {
-    const url = `${getCorporateApiBase()}${partnerId}/`;
-    const response = await getAuthenticatedHttpClient().get(url);
+    const response = await getAuthenticatedHttpClient().get(getCorporateApi(`partners/${partnerId}/`));
     return camelCaseObject(response.data);
   } catch (error) {
     logError(error);

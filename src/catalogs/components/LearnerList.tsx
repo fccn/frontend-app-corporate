@@ -62,7 +62,7 @@ const LearnerList = ({ catalogId, partnerId }) => {
       }}
       manualPagination
       fetchData={onPaginationChange}
-      pageCount={data?.numPages}
+      pageCount={data?.numPages || 0}
       additionalColumns={[
         {
           id: 'action',

@@ -32,8 +32,8 @@ export const appId = 'org.nau.frontend.app.corporate';
 export const CORPORATE_MANAGER_ROLE = 'catalog_manager:active';
 
 export const getlmsBaseUrl = () => getConfig().LMS_BASE_URL;
-export const CORPORATE_API_BASE = '/partner_catalog/api/v1/partners/';
-export const getCorporateApiBase = () => `${getlmsBaseUrl()}${CORPORATE_API_BASE}`;
+export const CORPORATE_API_BASE = '/partner_catalog/api/v1/';
+export const getCorporateApi = (path) => `${getlmsBaseUrl()}${CORPORATE_API_BASE}${path}`;
 
 // Cache configuration
 export const STALE_TIME = 60 * 60_000; // 1 hour

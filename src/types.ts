@@ -66,9 +66,9 @@ export interface CatalogStats {
 }
 
 export interface Catalog extends CatalogBase, CatalogStats {
-  supportEmail: string;
-  authorizationMessage: string;
-  alternativeLink: string;
+  supportEmail: string | null;
+  authorizationMessage: string | null;
+  alternativeLink: string | null;
 }
 
 export type CatalogUpdateRequest = Partial<

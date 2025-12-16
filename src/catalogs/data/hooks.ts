@@ -33,7 +33,7 @@ export const useCatalogDetails = ({
 }: { partnerId: number; catalogId: string }) => {
   const { data: catalogDetails, isLoading } = useQuery({
     queryKey: queryKey.catalogDetail(partnerId, catalogId),
-    queryFn: () => getCatalogDetails(partnerId, catalogId),
+    queryFn: () => getCatalogDetails(catalogId),
     enabled: !!partnerId && !!catalogId,
   });
 
@@ -46,11 +46,9 @@ export const useCatalogDetails = ({
 export const useUpdateCatalog = () => {
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
-    mutationFn: async ({
-      partnerId, catalogId, data,
-    }:
+    mutationFn: async ({ catalogId, data,}:
     { partnerId: number; catalogId: string; data: CatalogUpdateRequest }) => {
-      updateCatalog(partnerId, catalogId, data);
+      updateCatalog(catalogId, data);
     },
     onSettled: (_data, _error, args) => {
       queryClient.invalidateQueries({
@@ -67,5 +65,5 @@ export const useCatalogLearners = ({
   catalogId,
 }: { partnerId: number; catalogId: string }) => useQuery({
   queryKey: queryKey.catalogLearners(partnerId, catalogId),
-  queryFn: () => getCatalogsLearners(partnerId, catalogId),
+  queryFn: () => getCatalogsLearners(catalogId),
 });
