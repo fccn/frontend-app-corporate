@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ErrorPage } from '@edx/frontend-platform/react';
 import {
-  APP_INIT_ERROR, APP_READY, subscribe, initialize,
+  APP_INIT_ERROR, APP_READY, subscribe, initialize, mergeConfig,
 } from '@edx/frontend-platform';
 
 import App from './App';
@@ -33,4 +33,9 @@ subscribe(APP_INIT_ERROR, (error) => {
 initialize({
   messages,
   requireAuthenticatedUser: true,
+  config: () => {
+    mergeConfig({
+      DASHBOARD_PAGE_SIZE: process.env.DASHBOARD_PAGE_SIZE || null,
+    }, 'LearningPathsConfig');
+  },
 });

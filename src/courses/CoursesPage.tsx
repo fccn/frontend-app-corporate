@@ -1,4 +1,5 @@
 import { useParams } from 'wouter';
+import { getConfig } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import HeaderDescription from '@src/components/HeaderDescription';
 import { useCatalogDetails } from '@src/catalogs/data/hooks';
@@ -18,7 +19,7 @@ const CoursesPage = () => {
   const { partnerId, catalogId } = useParams<{ partnerId: number, catalogId: string }>();
   const { catalogDetails } = useCatalogDetails({ partnerId, catalogId });
   const { partnerDetails } = usePartnerDetails({ partnerId });
-
+  console.debug('Catalog Details:', catalogDetails);
   return (
     <AppLayout withBackButton backPath={paths.catalogs.buildPath(partnerId)}>
       {catalogDetails
@@ -27,10 +28,12 @@ const CoursesPage = () => {
             context={{
               title: catalogDetails?.name,
               imageUrl: partnerDetails?.logo || null,
-              description: catalogDetails?.alternativeLink,
+              description: catalogDetails?.alternativeLink || `${getConfig().CORPORATE_CATALOGS_MFE_URL}/${partnerDetails?.slug}/catalog/${catalogId}`,
               copyableDescription: true,
             }}
             info={[
+              {title: 'Available Seats', value: `${catalogDetails?.userLimit - catalogDetails?.activeLearners} / ${catalogDetails?.userLimit}`},
+              { title: 'Total Learners', value: catalogDetails?.totalLearners },
               { title: intl.formatMessage(messages['corporate.courses.page.totalCourses']), value: catalogDetails?.courses },
               { title: intl.formatMessage(messages['corporate.courses.page.enrolledUsers']), value: catalogDetails?.enrollments },
               { title: intl.formatMessage(messages['corporate.courses.page.certifiedUsers']), value: catalogDetails?.certified },
