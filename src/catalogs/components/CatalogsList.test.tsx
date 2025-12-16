@@ -23,10 +23,6 @@ jest.mock('./CatalogSettingsModal', () => ({
   }),
 }));
 
-jest.mock('@src/components/Table/TableFooter', () => function TableFooter() {
-  return <div data-testid="table-footer" />;
-});
-
 jest.mock('../data/api');
 
 const mockCatalogs = [
@@ -105,7 +101,7 @@ describe('CatalogsList', () => {
     renderWrapper(<CatalogsList partnerId={1} />);
 
     // Should still render the table structure
-    expect(screen.getByTestId('table-footer')).toBeInTheDocument();
+    expect(screen.queryByText(/Rows per page/i)).toBeInTheDocument();
 
     // But no catalog data should be present
     expect(screen.queryByText('No catalogs found')).toBeInTheDocument();

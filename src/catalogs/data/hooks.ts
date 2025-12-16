@@ -13,6 +13,7 @@ const queryKey = {
     ...queryKey.all, partnerId, pageIndex, pageSize,
   ],
   catalogDetail: (partnerId: number, catalogId: string) => [...queryKey.all, 'detail', partnerId, catalogId],
+  catalogLearners: (partnerId: number, catalogId: string) => [...queryKey.all, 'learners', partnerId, catalogId],
 };
 
 export const usePartnerCatalogs = (
@@ -64,7 +65,7 @@ export const useUpdateCatalog = () => {
 export const useCatalogLearners = ({
   partnerId,
   catalogId,
-}: { partnerId: number; catalogId: string | number; }) => useQuery({
-  queryKey: ['catalogLearners', partnerId, catalogId],
+}: { partnerId: number; catalogId: string }) => useQuery({
+  queryKey: queryKey.catalogLearners(partnerId, catalogId),
   queryFn: () => getCatalogsLearners(partnerId, catalogId),
 });

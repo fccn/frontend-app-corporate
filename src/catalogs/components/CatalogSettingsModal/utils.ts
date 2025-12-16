@@ -12,27 +12,27 @@ export const getCatalogSchema = (intl) => {
   return yup.object({
     name: yup
       .string()
-      .required(intl.formatMessage(messages.formNameRequired))
-      .min(CATALOG_NAME_MIN, intl.formatMessage(messages.formNameMin, { min: CATALOG_NAME_MIN }))
-      .max(CATALOG_NAME_MAX, intl.formatMessage(messages.formNameMax, { max: CATALOG_NAME_MAX })),
+      .required(intl.formatMessage(messages['corporate.catalog.form.validation.name.required']))
+      .min(CATALOG_NAME_MIN, intl.formatMessage(messages['corporate.catalog.form.validation.name.min'], { min: CATALOG_NAME_MIN }))
+      .max(CATALOG_NAME_MAX, intl.formatMessage(messages['corporate.catalog.form.validation.name.max'], { max: CATALOG_NAME_MAX })),
     alternativeLink: yup
       .string()
-      .url(intl.formatMessage(messages.formCatalogAlternativeLinkInvalid)),
+      .url(intl.formatMessage(messages['corporate.catalog.form.validation.alternative.link.invalid'])),
     supportEmail: yup
       .string()
-      .email(intl.formatMessage(messages.formSupportEmailInvalid)),
+      .email(intl.formatMessage(messages['corporate.catalog.form.validation.support.email.invalid'])),
     availableStartDate: yup
       .string()
-      .required(intl.formatMessage(messages.formAvailableStartDateRequired))
-      .test('valid-date', intl.formatMessage(messages.formAvailableStartDateInvalid), isValidDate),
+      .required(intl.formatMessage(messages['corporate.catalog.form.validation.start.date.required']))
+      .test('valid-date', intl.formatMessage(messages['corporate.catalog.form.validation.start.date.invalid']), isValidDate),
 
     availableEndDate: yup
       .string()
-      .required(intl.formatMessage(messages.formAvailableEndDateRequired))
-      .test('valid-date', intl.formatMessage(messages.formAvailableEndDateInvalid), isValidDate)
+      .required(intl.formatMessage(messages['corporate.catalog.form.validation.end.date.required']))
+      .test('valid-date', intl.formatMessage(messages['corporate.catalog.form.validation.end.date.invalid']), isValidDate)
       .test(
         'is-after-start',
-        intl.formatMessage(messages.formAvailableEndDateMin),
+        intl.formatMessage(messages['corporate.catalog.form.validation.end.date.min']),
         function validateEndDate(value) {
           const { availableStartDate } = this.parent;
           return (
@@ -44,19 +44,19 @@ export const getCatalogSchema = (intl) => {
       ),
     courseEnrollmentsLimit: yup
       .number()
-      .typeError(intl.formatMessage(messages.formCourseEnrollmentLimitInteger))
-      .integer(intl.formatMessage(messages.formCourseEnrollmentLimitInteger))
+      .typeError(intl.formatMessage(messages['corporate.catalog.form.validation.course.enrollment.limit.integer']))
+      .integer(intl.formatMessage(messages['corporate.catalog.form.validation.course.enrollment.limit.integer']))
       .min(
         COURSE_ENROLLMENT_LIMIT_MIN,
-        intl.formatMessage(messages.formCourseEnrollmentLimitMin, { min: COURSE_ENROLLMENT_LIMIT_MIN }),
+        intl.formatMessage(messages['corporate.catalog.form.validation.course.enrollment.limit.min'], { min: COURSE_ENROLLMENT_LIMIT_MIN }),
       ),
     userLimit: yup
       .number()
-      .typeError(intl.formatMessage(messages.formUserLimitInteger))
-      .integer(intl.formatMessage(messages.formUserLimitInteger))
+      .typeError(intl.formatMessage(messages['corporate.catalog.form.validation.user.limit.integer']))
+      .integer(intl.formatMessage(messages['corporate.catalog.form.validation.user.limit.integer']))
       .min(
         USER_LIMIT_MIN,
-        intl.formatMessage(messages.formUserLimitMin, { min: USER_LIMIT_MIN }),
+        intl.formatMessage(messages['corporate.catalog.form.validation.user.limit.min'], { min: USER_LIMIT_MIN }),
       ),
     authorizationMessage: yup
       .string(),
