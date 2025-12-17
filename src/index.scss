@@ -28,9 +28,19 @@ button[aria-label="Copy description"] svg {
     border-top: 1px solid var(--pgn-color-gray-200);
 }
 
-.truncate-single-line {
-  white-space: nowrap;
+.truncate-1-line {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
   overflow: hidden;
-  text-overflow: ellipsis;
+}
+
+.truncate-2-line {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
 }
 

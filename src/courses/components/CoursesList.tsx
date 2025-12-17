@@ -21,11 +21,11 @@ interface CoursesListProps {
 }
 
 const CourseNameCell = ({ row }: CoursesCell) => (
-  <div className="text-left truncate-single-line">
-    <span className="d-block font-weight-bold">
+  <div className="text-left">
+    <span className="d-block font-weight-bold truncate-1-line">
       {row.original.courseRun.displayName}
     </span>
-    <span className="small text-muted">
+    <span className="small text-muted  truncate-1-line">
       {row.original.courseRun.id}
     </span>
   </div>
