@@ -18,7 +18,7 @@ type CoursesCell = CellValue<Course>;
 
 interface CoursesListProps {
   partnerId: number;
-  catalogId: string;
+  catalogId?: string;
 }
 
 const CourseNameCell = ({ row }: CoursesCell) => (
@@ -43,7 +43,7 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
     count,
     pageCount,
     isLoading,
-  } = useCatalogCourses(partnerId, catalogId, pageIndex + 1, pageSize);
+  } = useCatalogCourses(partnerId, catalogId!, pageIndex + 1, pageSize);
   const deleteCatalogCourse = useDeleteCatalogCourse();
 
   const positions = Array.from({ length: count + 1 || 0 }, (_, i) => i);
@@ -59,7 +59,7 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
   {
     type: 'delete',
     action: (course) => {
-      deleteCatalogCourse({ partnerId, catalogId, courseId: course.id });
+      deleteCatalogCourse({ partnerId, catalogId: catalogId!, courseId: course.id });
     },
   }];
 
@@ -77,7 +77,7 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
       isSortable
       manualPagination
       itemCount={count}
-      pageCount={pageCount}
+      pageCount={pageCount || 0}
       fetchData={onPaginationChange}
       defaultColumnValues={{ Filter: TextFilter }}
       initialState={{

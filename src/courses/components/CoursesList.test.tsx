@@ -12,6 +12,10 @@ jest.mock('@src/hooks', () => ({
   }),
 }));
 
+jest.mock('wouter', () => ({
+  useParams: () => ({ partnerSlug: 'partner1', catalogSlug: 'catalog1' }),
+}));
+
 jest.mock('../data/hooks');
 
 const mockCourses = [

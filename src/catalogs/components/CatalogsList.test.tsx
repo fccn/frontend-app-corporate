@@ -16,13 +16,6 @@ jest.mock('@src/hooks', () => ({
   }),
 }));
 
-jest.mock('./CatalogSettingsModal', () => ({
-  ...jest.requireActual('./CatalogSettingsModal'),
-  useCatalogSettingsModal: () => ({
-    handleChangeSelectedCatalog: jest.fn(),
-  }),
-}));
-
 jest.mock('../data/api');
 
 const mockCatalogs = [
@@ -71,7 +64,7 @@ describe('CatalogsList', () => {
   });
 
   it('renders a table with catalog data', () => {
-    renderWrapper(<CatalogsList partnerId={1} />);
+    renderWrapper(<CatalogsList partnerId={1} partnerSlug="test-partner" />);
 
     mockCatalogs.forEach(async (catalog) => {
       expect(await screen.findByText(catalog.name)).toBeInTheDocument();
@@ -88,7 +81,7 @@ describe('CatalogsList', () => {
       isLoadingCatalogs: true,
     });
 
-    renderWrapper(<CatalogsList partnerId={1} />);
+    renderWrapper(<CatalogsList partnerId={1} partnerSlug="test-partner" />);
     expect(screen.getByRole('status')).toBeInTheDocument();
   });
 
@@ -98,7 +91,7 @@ describe('CatalogsList', () => {
       isLoadingCatalogs: false,
     });
 
-    renderWrapper(<CatalogsList partnerId={1} />);
+    renderWrapper(<CatalogsList partnerId={1} partnerSlug="test-partner" />);
 
     // Should still render the table structure
     expect(screen.queryByText(/Rows per page/i)).toBeInTheDocument();
@@ -108,7 +101,7 @@ describe('CatalogsList', () => {
   });
 
   it('renders correct number of action buttons per row', () => {
-    renderWrapper(<CatalogsList partnerId={1} />);
+    renderWrapper(<CatalogsList partnerId={1} partnerSlug="test-partner" />);
 
     const viewButtons = screen.getAllByLabelText('view-action');
 
@@ -127,7 +120,7 @@ describe('CatalogsList', () => {
       isLoadingCatalogs: false,
     });
 
-    renderWrapper(<CatalogsList partnerId={1} />);
+    renderWrapper(<CatalogsList partnerId={1} partnerSlug="test-partner" />);
 
     // Should only render one catalog
     expect(screen.getByText('Python Programming Catalog')).toBeInTheDocument();

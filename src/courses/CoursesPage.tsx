@@ -16,12 +16,15 @@ import messages from './messages';
 
 const CoursesPage = () => {
   const intl = useIntl();
-  const { partnerSlug, catalogSlug } = useParams<{ partnerSlug: string, catalogSlug: string }>();
-  const { partnerDetails } = usePartnerDetails({ partnerSlug });
-  const { catalogDetails } = useCatalogDetails({ catalogSlug });
+  const { partnerSlug, catalogSlug } = useParams<{
+    partnerSlug: string | undefined,
+    catalogSlug: string | undefined
+  }>();
+  const { partnerDetails } = usePartnerDetails({ partnerSlug: partnerSlug! });
+  const { catalogDetails } = useCatalogDetails({ catalogSlug: catalogSlug! });
 
   return (
-    <AppLayout withBackButton backPath={paths.catalogs.buildPath(partnerSlug)}>
+    <AppLayout withBackButton backPath={paths.catalogs.buildPath(partnerSlug!)}>
       {catalogDetails
         && (
           <HeaderDescription
@@ -49,7 +52,7 @@ const CoursesPage = () => {
         )}
       <Tabs defaultActiveKey="courses">
         <Tab eventKey="courses" title={intl.formatMessage(messages['corporate.courses.page.tab.courses'])}>
-          <CoursesList catalogSlug={catalogSlug} catalogId={catalogDetails?.id} partnerId={partnerDetails.id} />
+          <CoursesList catalogId={catalogDetails?.id} partnerId={partnerDetails.id} />
         </Tab>
         <Tab eventKey="learners" title={intl.formatMessage(messages['corporate.courses.page.tab.learners'])}>
           <LearnerList catalogId={catalogDetails?.id} partnerId={partnerDetails.id} />

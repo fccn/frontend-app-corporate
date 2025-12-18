@@ -61,7 +61,8 @@ export const getCatalogSchema = (intl) => {
         intl.formatMessage(messages['corporate.catalog.form.validation.user.limit.min'], { min: USER_LIMIT_MIN }),
       ),
     authorizationMessage: yup
-      .string(),
+      .string()
+      .nullable(),
     emailRegexes: yup
       .array()
       .of(yup.string().required()),

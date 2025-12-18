@@ -1,10 +1,9 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Badge, DataTable, TextFilter } from '@openedx/paragon';
 
-import { Catalog, CellValue } from '@src/types';
+import { CellValue, Learner } from '@src/types';
 import { ActionItem, TableFooter } from '@src/components/Table/';
-import { paths } from '@src/constants';
-import { useNavigate, usePagination } from '@src/hooks';
+import { usePagination } from '@src/hooks';
 
 import messages from '../messages';
 import { useCatalogLearners } from '../data/hooks';
@@ -33,7 +32,6 @@ const dateFormat = (isoDateString) => {
 };
 
 const LearnerList = ({ catalogId, partnerId }) => {
-  const navigate = useNavigate();
   const intl = useIntl();
 
   const { pageIndex, pageSize, onPaginationChange } = usePagination();
@@ -41,13 +39,13 @@ const LearnerList = ({ catalogId, partnerId }) => {
   const { data, isLoading } = useCatalogLearners({
     catalogId,
     partnerId,
-    pageIndex: pageIndex + 1,
-    pageSize,
   });
 
   const tableActions = [{
     type: 'delete',
-    onClick: (catalog: Catalog) => navigate(paths.courses.buildPath(partnerId, catalog.id)),
+    onClick: (_learner: Learner) => {
+      // TODO: Implement delete learner
+    },
   }];
 
   return (
@@ -67,7 +65,7 @@ const LearnerList = ({ catalogId, partnerId }) => {
         {
           id: 'action',
           Header: intl.formatMessage(messages.headerAction),
-          Cell: ({ row }: CellValue) => tableActions.map(({ type, onClick }) => (
+          Cell: ({ row }: CellValue<Learner>) => tableActions.map(({ type, onClick }) => (
             <ActionItem
               key={`action-${type}-${row.original.id}`}
               type={type}

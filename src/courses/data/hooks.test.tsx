@@ -117,7 +117,7 @@ describe('useDeleteCatalogCourse', () => {
       await result.current({ partnerId: 1, catalogId: 'c1', courseId: 1 });
     });
 
-    expect(api.deleteCourse).toHaveBeenCalledWith(1, 'c1', 1);
+    expect(api.deleteCourse).toHaveBeenCalledWith('c1', 1);
   });
 
   it('handles API error', async () => {

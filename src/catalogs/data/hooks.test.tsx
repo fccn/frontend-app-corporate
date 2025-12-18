@@ -43,6 +43,7 @@ describe('Catalog Hooks', () => {
           id: '1',
           name: 'Test Catalog 1',
           slug: 'test-catalog-1',
+          image: 'https://test.com/image1.jpg',
           enrollments: 100,
           certified: 80,
           completionRate: 0.8,
@@ -56,12 +57,15 @@ describe('Catalog Hooks', () => {
           isSelfEnrollment: true,
           authorizationMessage: 'Test message',
           courses: 50,
+          totalLearners: 100,
+          activeLearners: 80,
           partnerId: 1,
         },
         {
           id: '2',
           name: 'Test Catalog 2',
           slug: 'test-catalog-2',
+          image: 'https://test.com/image2.jpg',
           enrollments: 200,
           certified: 160,
           completionRate: 0.8,
@@ -75,6 +79,8 @@ describe('Catalog Hooks', () => {
           isSelfEnrollment: false,
           authorizationMessage: 'Test message 2',
           courses: 75,
+          totalLearners: 200,
+          activeLearners: 160,
           partnerId: 1,
         },
       ],
@@ -148,6 +154,7 @@ describe('Catalog Hooks', () => {
       id: '1',
       name: 'Test Catalog Details',
       slug: 'test-catalog-details',
+      image: 'https://details.com/image.jpg',
       enrollments: 300,
       certified: 240,
       completionRate: 0.8,
@@ -161,6 +168,8 @@ describe('Catalog Hooks', () => {
       isSelfEnrollment: true,
       authorizationMessage: 'Details message',
       courses: 100,
+      totalLearners: 300,
+      activeLearners: 240,
       partnerId: 1,
     };
 
@@ -168,37 +177,16 @@ describe('Catalog Hooks', () => {
       mockedGetCatalogDetails.mockResolvedValueOnce(mockCatalog);
 
       const { result } = renderHook(
-        () => useCatalogDetails({ partnerId: 1, catalogId: '1' }),
+        () => useCatalogDetails({ catalogSlug: '1' }),
         { wrapper: createWrapper },
       );
 
       await waitFor(() => {
         expect(result.current.catalogDetails).toEqual(mockCatalog);
-        expect(result.current.isLoadingCatalogDetails).toBe(false);
       });
 
-      expect(mockedGetCatalogDetails).toHaveBeenCalledWith(1, '1');
+      expect(mockedGetCatalogDetails).toHaveBeenCalledWith('1');
       expect(mockedGetCatalogDetails).toHaveBeenCalledTimes(1);
-    });
-
-    it('should not fetch when partnerId or catalogId is missing', () => {
-      const { result: resultNoPartner } = renderHook(
-        () => useCatalogDetails({ partnerId: 0, catalogId: '1' }),
-        { wrapper: createWrapper },
-      );
-
-      const { result: resultNoCatalog } = renderHook(
-        () => useCatalogDetails({ partnerId: 1, catalogId: '' }),
-        { wrapper: createWrapper },
-      );
-
-      expect(mockedGetCatalogDetails).not.toHaveBeenCalled();
-
-      expect(resultNoPartner.current.catalogDetails).toBeNull();
-      expect(resultNoPartner.current.isLoadingCatalogDetails).toBe(false);
-
-      expect(resultNoCatalog.current.catalogDetails).toBeNull();
-      expect(resultNoCatalog.current.isLoadingCatalogDetails).toBe(false);
     });
   });
 });

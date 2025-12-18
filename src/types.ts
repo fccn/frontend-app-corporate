@@ -49,6 +49,7 @@ export interface CatalogBase {
   id: string;
   name: string;
   slug: string;
+  image: string | null;
   emailRegexes: string[];
   isSelfEnrollment: boolean;
   courseEnrollmentsLimit: number;
@@ -63,6 +64,8 @@ export interface CatalogStats {
   certified: number;
   completionRate: number;
   courses: number;
+  totalLearners: number;
+  activeLearners: number;
 }
 
 export interface Catalog extends CatalogBase, CatalogStats {

@@ -5,6 +5,7 @@ export const useCatalogCourses = (partnerId: number, catalogId: string, pageInde
   const { data, isLoading } = useQuery({
     queryKey: ['catalogCourses', partnerId, catalogId, pageIndex, pageSize],
     queryFn: () => getCourses(catalogId, pageIndex, pageSize),
+    enabled: !!catalogId,
   });
 
   return {
