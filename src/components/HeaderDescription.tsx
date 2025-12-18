@@ -63,13 +63,13 @@ const HeaderDescription = ({ context, info, children }: HeaderDescriptionProps) 
             <span className="w-70 truncate-2-line">{context?.description}</span>
             {context.copyableDescription && (
               <IconButtonWithTooltip
-              invertColors
-              isActive
-              src={ContentCopy}
-              variant="black"
-              onClick={handleCopy}
-              alt="Copy description"
-              tooltipContent={copied}
+                invertColors
+                isActive
+                src={ContentCopy}
+                variant="black"
+                onClick={handleCopy}
+                alt="Copy description"
+                tooltipContent={copied}
               />
             )}
           </span>

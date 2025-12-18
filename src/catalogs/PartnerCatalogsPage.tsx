@@ -11,28 +11,29 @@ import messages from './messages';
 const PartnerCatalogsPage = () => {
   const intl = useIntl();
 
-  const { partnerId } = useParams<{ partnerId: number }>();
+  const { partnerSlug } = useParams<{ partnerSlug: string }>();
 
-  const { partnerDetails } = usePartnerDetails({ partnerId });
+  const { partnerDetails } = usePartnerDetails({ partnerSlug });
 
   return (
     <AppLayout withBackButton backPath="/">
       {partnerDetails && (
-      <HeaderDescription
-        context={{
-          title: partnerDetails.name,
-          imageUrl: partnerDetails.logo,
-        }}
-        info={[
-          { title: intl.formatMessage(messages.infoCatalog), value: partnerDetails.catalogs },
-          { title: intl.formatMessage(messages.headerCourses), value: partnerDetails.courses },
-          { title: intl.formatMessage(messages.headerEnrollments), value: partnerDetails.enrollments },
-          { title: intl.formatMessage(messages.headerCertified), value: partnerDetails.certified },
-        ]}
-      />
-      )}
+        <>      <HeaderDescription
+          context={{
+            title: partnerDetails.name,
+            imageUrl: partnerDetails.logo,
+          }}
+          info={[
+            { title: intl.formatMessage(messages.infoCatalog), value: partnerDetails.catalogs },
+            { title: intl.formatMessage(messages.headerCourses), value: partnerDetails.courses },
+            { title: intl.formatMessage(messages.headerEnrollments), value: partnerDetails.enrollments },
+            { title: intl.formatMessage(messages.headerCertified), value: partnerDetails.certified },
+          ]}
+        />
 
-      <CatalogsList partnerId={partnerId} />
+          <CatalogsList partnerId={partnerDetails.id} partnerSlug={partnerSlug} />
+        </>
+      )}
     </AppLayout>
   );
 };

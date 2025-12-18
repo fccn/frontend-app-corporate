@@ -12,18 +12,18 @@ export const paths = {
   },
 
   catalogs: {
-    path: '/:partnerId/',
-    buildPath: (partnerId: string | number) => `/${partnerId}/`,
+    path: '/:partnerSlug/',
+    buildPath: (partnerSlug: string) => `/${partnerSlug}/`,
   },
 
   courses: {
-    path: '/:partnerId/:catalogId/',
-    buildPath: (partnerId: string | number, catalogId: string) => `/${partnerId}/${catalogId}/`,
+    path: '/:partnerSlug/:catalogSlug/',
+    buildPath: (partnerSlug: string, catalogSlug: string) => `/${partnerSlug}/${catalogSlug}/`,
   },
 
   courseDetail: {
-    path: '/:partnerId/:catalogId/:courseId/',
-    buildPath: (partnerId: string | number, catalogId: string, courseId: string) => `/${partnerId}/${catalogId}/${courseId}/`,
+    path: '/:partnerSlug/:catalogSlug/:courseId/',
+    buildPath: (partnerSlug: string, catalogSlug: string, courseId: string) => `/${partnerSlug}/${catalogSlug}/${courseId}/`,
   },
 } as const;
 

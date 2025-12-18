@@ -34,12 +34,13 @@ export const getPartnerCatalogs = async (
 };
 
 export const getCatalogDetails = async (
-  catalogId: string | undefined,
+  catalogSlug: string | undefined,
 ): Promise<Catalog | null> => {
   try {
-    const url = getCorporateApi(`manage/catalogs/${catalogId}/`);
+    const url = new URL(getCorporateApi('manage/catalogs/'));
+    url.searchParams.append('slug', catalogSlug || '');
     const response = await getAuthenticatedHttpClient().get(url);
-    return camelCaseObject(response.data);
+    return camelCaseObject(response.data.results[0]);
   } catch (error) {
     logError(error);
     return null;

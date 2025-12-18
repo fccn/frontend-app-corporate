@@ -15,7 +15,7 @@ export const useCatalogCourses = (partnerId: number, catalogId: string, pageInde
 export const useDeleteCatalogCourse = () => {
   const queryClient = useQueryClient();
   const { mutateAsync } = useMutation({
-    mutationFn: async ({catalogId, courseId }:
+    mutationFn: async ({ catalogId, courseId }:
     { partnerId: number; catalogId: string; courseId: number }) => deleteCourse(catalogId, courseId),
     onSettled: (_data, _error, args) => {
       queryClient.invalidateQueries({

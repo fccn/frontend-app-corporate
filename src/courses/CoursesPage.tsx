@@ -16,43 +16,43 @@ import messages from './messages';
 
 const CoursesPage = () => {
   const intl = useIntl();
-  const { partnerId, catalogId } = useParams<{ partnerId: number, catalogId: string }>();
-  const { catalogDetails } = useCatalogDetails({ partnerId, catalogId });
-  const { partnerDetails } = usePartnerDetails({ partnerId });
-  console.debug('Catalog Details:', catalogDetails);
+  const { partnerSlug, catalogSlug } = useParams<{ partnerSlug: string, catalogSlug: string }>();
+  const { partnerDetails } = usePartnerDetails({ partnerSlug });
+  const { catalogDetails } = useCatalogDetails({ catalogSlug });
+
   return (
-    <AppLayout withBackButton backPath={paths.catalogs.buildPath(partnerId)}>
+    <AppLayout withBackButton backPath={paths.catalogs.buildPath(partnerSlug)}>
       {catalogDetails
         && (
           <HeaderDescription
             context={{
-              title: catalogDetails?.name,
-              imageUrl: partnerDetails?.logo || null,
-              description: catalogDetails?.alternativeLink || `${getConfig().CORPORATE_CATALOGS_MFE_URL}/${partnerDetails?.slug}/catalog/${catalogId}`,
+              title: catalogDetails.name,
+              imageUrl: catalogDetails.image || null,
+              description: catalogDetails.alternativeLink || `${getConfig().CORPORATE_CATALOGS_MFE_URL}/${partnerDetails?.slug}/catalog/${catalogDetails?.slug}`,
               copyableDescription: true,
             }}
             info={[
-              {title: 'Available Seats', value: `${catalogDetails?.userLimit - catalogDetails?.activeLearners} / ${catalogDetails?.userLimit}`},
-              { title: 'Total Learners', value: catalogDetails?.totalLearners },
-              { title: intl.formatMessage(messages['corporate.courses.page.totalCourses']), value: catalogDetails?.courses },
-              { title: intl.formatMessage(messages['corporate.courses.page.enrolledUsers']), value: catalogDetails?.enrollments },
-              { title: intl.formatMessage(messages['corporate.courses.page.certifiedUsers']), value: catalogDetails?.certified },
-              { title: intl.formatMessage(messages['corporate.courses.page.completionRate']), value: catalogDetails?.completionRate },
+              { title: 'Available Seats', value: `${catalogDetails.userLimit - catalogDetails.activeLearners} / ${catalogDetails.userLimit}` },
+              { title: 'Total Learners', value: catalogDetails.totalLearners },
+              { title: intl.formatMessage(messages['corporate.courses.page.totalCourses']), value: catalogDetails.courses },
+              { title: intl.formatMessage(messages['corporate.courses.page.enrolledUsers']), value: catalogDetails.enrollments },
+              { title: intl.formatMessage(messages['corporate.courses.page.certifiedUsers']), value: catalogDetails.certified },
+              { title: intl.formatMessage(messages['corporate.courses.page.completionRate']), value: catalogDetails.completionRate },
             ]}
           >
             <CatalogSettingsModal>
               {(openModal) => (
-                <IconButton src={Settings} alt="edit catalog" onClick={() => openModal(catalogId, partnerId)} />
+                <IconButton src={Settings} alt="edit catalog" onClick={() => openModal(catalogDetails.slug)} />
               )}
             </CatalogSettingsModal>
           </HeaderDescription>
         )}
       <Tabs defaultActiveKey="courses">
         <Tab eventKey="courses" title={intl.formatMessage(messages['corporate.courses.page.tab.courses'])}>
-          <CoursesList catalogId={catalogId} partnerId={partnerId} />
+          <CoursesList catalogSlug={catalogSlug} catalogId={catalogDetails?.id} partnerId={partnerDetails.id} />
         </Tab>
         <Tab eventKey="learners" title={intl.formatMessage(messages['corporate.courses.page.tab.learners'])}>
-          <LearnerList catalogId={catalogId} partnerId={partnerId} />
+          <LearnerList catalogId={catalogDetails?.id} partnerId={partnerDetails.id} />
         </Tab>
       </Tabs>
     </AppLayout>

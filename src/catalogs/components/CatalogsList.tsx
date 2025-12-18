@@ -13,9 +13,10 @@ type CatalogCell = CellValue<Catalog>;
 
 interface CatalogsListProps {
   partnerId: number;
+  partnerSlug: string;
 }
 
-const CatalogsList = ({ partnerId }: CatalogsListProps) => {
+const CatalogsList = ({ partnerId, partnerSlug }: CatalogsListProps) => {
   const navigate = useNavigate();
   const intl = useIntl();
 
@@ -29,7 +30,7 @@ const CatalogsList = ({ partnerId }: CatalogsListProps) => {
 
   const tableActions = [{
     type: 'view',
-    onClick: (catalog: Catalog) => navigate(paths.courses.buildPath(partnerId, catalog.id)),
+    onClick: (catalog: Catalog) => navigate(paths.courses.buildPath(partnerSlug, catalog.slug)),
   }];
 
   return (

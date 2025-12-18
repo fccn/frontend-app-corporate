@@ -9,6 +9,7 @@ import { ActionItem, TableFooter } from '@src/components/Table';
 import { useNavigate, usePagination } from '@src/hooks';
 
 import { paths } from '@src/constants';
+import { useParams } from 'wouter';
 import { useCatalogCourses, useDeleteCatalogCourse } from '../data/hooks';
 
 import messages from '../messages';
@@ -34,6 +35,8 @@ const CourseNameCell = ({ row }: CoursesCell) => (
 const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
   const intl = useIntl();
   const navigate = useNavigate();
+  const { partnerSlug, catalogSlug } = useParams<{ partnerSlug: string, catalogSlug: string }>();
+
   const { pageSize, pageIndex, onPaginationChange } = usePagination();
   const {
     courses,
@@ -51,7 +54,7 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
 
   const tableActions = [{
     type: 'view',
-    action: (course) => navigate(paths.courseDetail.buildPath(partnerId, catalogId, course.courseRun.id)),
+    action: (course) => navigate(paths.courseDetail.buildPath(partnerSlug, catalogSlug, course.courseRun.id)),
   },
   {
     type: 'delete',

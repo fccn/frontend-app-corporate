@@ -1,20 +1,23 @@
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { getPartnerDetails, getPartners } from './api';
 
+const queryKey = {
+  partners: () => ['partners'],
+  partnerDetails: (partnerSlug: string) => ['partnerDetails', partnerSlug],
+};
+
 export const usePartners = () => useSuspenseQuery({
-  queryKey: ['partners'],
+  queryKey: queryKey.partners(),
   queryFn: () => getPartners(),
 });
 
-export const usePartnerDetails = ({ partnerId }) => {
-  const { data: partnerDetails, isLoading } = useQuery({
-    queryKey: ['partnerDetails', partnerId],
-    queryFn: () => getPartnerDetails(partnerId),
-    enabled: !!partnerId,
+export const usePartnerDetails = ({ partnerSlug }) => {
+  const { data: partnerDetails } = useSuspenseQuery({
+    queryKey: queryKey.partnerDetails(partnerSlug),
+    queryFn: () => getPartnerDetails(partnerSlug),
   });
 
   return {
     partnerDetails,
-    isLoadingPartnerDetails: isLoading,
   };
 };

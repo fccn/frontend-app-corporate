@@ -12,7 +12,7 @@ const queryKey = {
   catalogList: (partnerId: number, pageIndex: number, pageSize: number) => [
     ...queryKey.all, partnerId, pageIndex, pageSize,
   ],
-  catalogDetail: (partnerId: number, catalogId: string) => [...queryKey.all, 'detail', partnerId, catalogId],
+  catalogDetail: (catalogSlug: string) => [...queryKey.all, 'detail', catalogSlug],
   catalogLearners: (partnerId: number, catalogId: string) => [...queryKey.all, 'learners', partnerId, catalogId],
 };
 
@@ -28,31 +28,28 @@ export const usePartnerCatalogs = (
 };
 
 export const useCatalogDetails = ({
-  partnerId,
-  catalogId,
-}: { partnerId: number; catalogId: string }) => {
-  const { data: catalogDetails, isLoading } = useQuery({
-    queryKey: queryKey.catalogDetail(partnerId, catalogId),
-    queryFn: () => getCatalogDetails(catalogId),
-    enabled: !!partnerId && !!catalogId,
+  catalogSlug,
+}: { catalogSlug: string }) => {
+  const { data: catalogDetails } = useSuspenseQuery({
+    queryKey: queryKey.catalogDetail(catalogSlug),
+    queryFn: () => getCatalogDetails(catalogSlug),
   });
 
   return {
     catalogDetails: catalogDetails || null,
-    isLoadingCatalogDetails: isLoading,
   };
 };
 
 export const useUpdateCatalog = () => {
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
-    mutationFn: async ({ catalogId, data,}:
-    { partnerId: number; catalogId: string; data: CatalogUpdateRequest }) => {
+    mutationFn: async ({ catalogId, data }:
+    { catalogId: string; data: CatalogUpdateRequest }) => {
       updateCatalog(catalogId, data);
     },
     onSettled: (_data, _error, args) => {
       queryClient.invalidateQueries({
-        queryKey: queryKey.catalogDetail(args.partnerId, args.catalogId),
+        queryKey: queryKey.catalogDetail(args.catalogId),
         exact: false,
       });
     },

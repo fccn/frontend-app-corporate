@@ -6,7 +6,8 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { Col, Form, Stack } from '@openedx/paragon';
 
 import { yupValidationResolver } from '@src/utils';
-import { Catalog, CatalogUpdateRequest } from '@src/types';
+
+import { useCatalogDetails, useUpdateCatalog } from '@src/catalogs/data/hooks';
 import { useCurrentUser } from '@src/hooks';
 import { InferType } from 'yup';
 import { getCatalogSchema, isoToDateInputValue } from '../utils';
@@ -14,9 +15,9 @@ import messages from '../messages';
 import RegexInput from './RegexInput';
 
 interface CatalogSettingsFormProps {
-  catalogDetails: Catalog;
-  onSubmit: (data: CatalogUpdateRequest) => void;
+  catalogSlug: string;
   limitedEditableFields?: string[];
+  onSuccess?: () => void;
 }
 
 export interface CatalogSettingsFormRef {
@@ -25,13 +26,16 @@ export interface CatalogSettingsFormRef {
 
 const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFormProps>(
   ({
-    catalogDetails,
-    onSubmit,
+    catalogSlug,
     limitedEditableFields = ['alternativeLink', 'authorizationMessage', 'supportEmail', 'emailRegexes'],
+    onSuccess,
   }, ref) => {
     const intl = useIntl();
     const { isAdmin } = useCurrentUser();
-
+    const updateCatalog = useUpdateCatalog();
+    const { catalogDetails } = useCatalogDetails({
+      catalogSlug,
+    });
     const schema = getCatalogSchema(intl);
     type CatalogFormValues = InferType<typeof schema>;
 
@@ -50,14 +54,23 @@ const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFo
     const isEditable = (fieldName: string) => canEditAllFields || limitedEditableFields.includes(fieldName);
 
     const handleFormSubmit = (data: CatalogFormValues) => {
-      const parsedStartData = new Date(data.availableStartDate).toISOString();
-      const parsedEndData = new Date(data.availableEndDate).toISOString();
-      onSubmit({
-        ...data,
-        availableStartDate: parsedStartData,
-        availableEndDate: parsedEndData,
-        emailRegexes: data.emailRegexes ?? [],
-      });
+      if (data && catalogDetails) {
+        const parsedStartData = new Date(data.availableStartDate).toISOString();
+        const parsedEndData = new Date(data.availableEndDate).toISOString();
+        updateCatalog({
+          catalogId: catalogDetails.id,
+          data: {
+            ...data,
+            availableStartDate: parsedStartData,
+            availableEndDate: parsedEndData,
+            emailRegexes: data.emailRegexes ?? [],
+          },
+        }, {
+          onSuccess: () => {
+            onSuccess?.();
+          },
+        });
+      }
     };
 
     useImperativeHandle(ref, () => ({

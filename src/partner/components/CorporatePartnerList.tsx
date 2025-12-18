@@ -39,7 +39,7 @@ const CorpotatePartnerList = () => {
             <ActionItem
               key={`action-${type}-${row.original.slug}`}
               type={type}
-              onClick={() => navigate(paths.catalogs.buildPath(row.original.id))}
+              onClick={() => navigate(paths.catalogs.buildPath(row.original.slug))}
             />
           )),
         },

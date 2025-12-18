@@ -23,10 +23,12 @@ export const getPartners = async (): Promise<PaginatedResponse<Partner>> => {
   }
 };
 
-export const getPartnerDetails = async (partnerId?: string): Promise<Partner> => {
+export const getPartnerDetails = async (partnerSlug?: string): Promise<Partner> => {
   try {
-    const response = await getAuthenticatedHttpClient().get(getCorporateApi(`partners/${partnerId}/`));
-    return camelCaseObject(response.data);
+    const url = new URL(getCorporateApi('partners/'));
+    url.searchParams.append('slug', partnerSlug || '');
+    const response = await getAuthenticatedHttpClient().get(url);
+    return camelCaseObject(response.data.results[0]);
   } catch (error) {
     logError(error);
     return {
