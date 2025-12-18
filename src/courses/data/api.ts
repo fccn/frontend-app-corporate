@@ -20,9 +20,18 @@ export const getCourses = async (catalogId: string, pageIndex, pageSize)
   }
 };
 
-export const deleteCourse = async (catalogId: string, courseId: number) => {
+export const deleteCourse = async (catalogId: string, courseId: string) => {
   try {
-    await getAuthenticatedHttpClient().delete(getCorporateApi(`catalogs/${catalogId}/courses/${courseId}/`));
+    await getAuthenticatedHttpClient().delete(getCorporateApi(`manage/catalogs/${catalogId}/courses/${courseId}/`));
+  } catch (error) {
+    logError(error);
+    throw error;
+  }
+};
+
+export const updateCourse = async (catalogId: string, courseId: string, data: { position: number }) => {
+  try {
+    await getAuthenticatedHttpClient().patch(getCorporateApi(`manage/catalogs/${catalogId}/courses/${courseId}/`), data);
   } catch (error) {
     logError(error);
     throw error;

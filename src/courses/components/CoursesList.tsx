@@ -10,7 +10,7 @@ import { useNavigate, usePagination } from '@src/hooks';
 
 import { paths } from '@src/constants';
 import { useParams } from 'wouter';
-import { useCatalogCourses, useDeleteCatalogCourse } from '../data/hooks';
+import { useCatalogCourses, useDeleteCatalogCourse, useUpdateCatalogCourse } from '../data/hooks';
 
 import messages from '../messages';
 
@@ -32,7 +32,7 @@ const CourseNameCell = ({ row }: CoursesCell) => (
   </div>
 );
 
-const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
+const CoursesList = ({ catalogId }: CoursesListProps) => {
   const intl = useIntl();
   const navigate = useNavigate();
   const { partnerSlug, catalogSlug } = useParams<{ partnerSlug: string, catalogSlug: string }>();
@@ -43,8 +43,9 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
     count,
     pageCount,
     isLoading,
-  } = useCatalogCourses(partnerId, catalogId!, pageIndex + 1, pageSize);
+  } = useCatalogCourses( catalogId!, pageIndex + 1, pageSize);
   const deleteCatalogCourse = useDeleteCatalogCourse();
+  const updateCatalogCourse = useUpdateCatalogCourse();
 
   const positions = Array.from({ length: count + 1 || 0 }, (_, i) => i);
   const formatDate = (date: string | null) => {
@@ -59,13 +60,12 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
   {
     type: 'delete',
     action: (course) => {
-      deleteCatalogCourse({ partnerId, catalogId: catalogId!, courseId: course.id });
+      deleteCatalogCourse({ catalogId: catalogId!, courseId: course.id });
     },
   }];
 
-  const handleChange = () => {
-    // TODO: Implement mutation to update position
-    // updateCourse(courseId, Number(e.target.value));
+  const handleChange = (courseId: string, e: React.ChangeEvent<HTMLSelectElement>) => {
+    updateCatalogCourse({ catalogId: catalogId!, courseId, data: { position: Number(e.target.value) } });
   };
 
   return (
@@ -113,7 +113,7 @@ const CoursesList = ({ partnerId, catalogId }: CoursesListProps) => {
             <Form.Control
               as="select"
               value={row.original.position}
-              onChange={() => handleChange()}
+              onChange={(e) => handleChange(row.original.courseRun.id, e)}
             >
               {positions.map((pos) => (
                 <option

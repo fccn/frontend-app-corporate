@@ -1,9 +1,17 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getCourses, deleteCourse } from './api';
+import { appId } from '@src/constants';
+import { getCourses, deleteCourse, updateCourse } from './api';
 
-export const useCatalogCourses = (partnerId: number, catalogId: string, pageIndex, pageSize) => {
+const queryKey = {
+  all: [appId, 'courses'],
+  courseList: (catalogId: string, pageIndex: number, pageSize: number) => [
+    ...queryKey.all, catalogId, pageIndex, pageSize,
+  ],
+};
+
+export const useCatalogCourses = (catalogId: string, pageIndex, pageSize) => {
   const { data, isLoading } = useQuery({
-    queryKey: ['catalogCourses', partnerId, catalogId, pageIndex, pageSize],
+    queryKey: queryKey.courseList(catalogId, pageIndex, pageSize),
     queryFn: () => getCourses(catalogId, pageIndex, pageSize),
     enabled: !!catalogId,
   });
@@ -17,10 +25,25 @@ export const useDeleteCatalogCourse = () => {
   const queryClient = useQueryClient();
   const { mutateAsync } = useMutation({
     mutationFn: async ({ catalogId, courseId }:
-    { partnerId: number; catalogId: string; courseId: number }) => deleteCourse(catalogId, courseId),
-    onSettled: (_data, _error, args) => {
+    { catalogId: string; courseId: string }) => deleteCourse(catalogId, courseId),
+    onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: ['catalogCourses', args.partnerId, args.catalogId],
+        queryKey: queryKey.all,
+        exact: false,
+      });
+    },
+  });
+  return mutateAsync;
+};
+
+export const useUpdateCatalogCourse = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync } = useMutation({
+    mutationFn: async ({ catalogId, courseId, data }:
+    { catalogId: string; courseId: string; data: { position: number } }) => updateCourse(catalogId, courseId, data),
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKey.all,
         exact: false,
       });
     },
