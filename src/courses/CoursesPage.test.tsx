@@ -1,4 +1,6 @@
-import { screen, waitFor } from '@testing-library/react';
+import {
+  screen, waitFor, fireEvent, act,
+} from '@testing-library/react';
 import { renderWrapper } from '@src/setupTest';
 import CoursesPage from './CoursesPage';
 
@@ -101,9 +103,11 @@ describe('CoursesPage', () => {
 
     await waitFor(() => {
       const tabElements = screen.getAllByRole('tab');
-      expect(tabElements).toHaveLength(2);
-      expect(tabElements[0]).toHaveTextContent('Courses');
-      expect(tabElements[1]).toHaveTextContent('Learners');
+      // Filter out the "More..." dropdown tab
+      const contentTabs = tabElements.filter(tab => !tab.textContent?.includes('More...'));
+      expect(contentTabs).toHaveLength(2);
+      expect(contentTabs[0]).toHaveTextContent('Courses');
+      expect(contentTabs[1]).toHaveTextContent('Learners');
     });
   });
 
@@ -121,11 +125,13 @@ describe('CoursesPage', () => {
 
     // Switch to learners tab
     const learnersTab = screen.getByRole('tab', { name: /learners/i });
-    learnersTab.click();
+    await act(async () => {
+      fireEvent.click(learnersTab);
+    });
 
     await waitFor(() => {
       // Check for elements that indicate LearnerList is rendered
-      expect(screen.getByText('Search learners')).toBeInTheDocument();
+      expect(screen.getByText('Learner name')).toBeInTheDocument();
     });
   });
 

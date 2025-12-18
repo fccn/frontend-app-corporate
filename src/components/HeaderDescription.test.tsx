@@ -80,16 +80,15 @@ describe('HeaderDescription', () => {
     it('renders image when imageUrl is provided', async () => {
       renderWrapper(<HeaderDescription context={mockContext} info={mockInfo} />);
 
-      const imageContainer = await screen.findByTestId('image-with-skeleton');
-      expect(imageContainer).toBeInTheDocument();
-      expect(imageContainer.querySelector('img')).toHaveAttribute('src', mockContext.imageUrl);
-      expect(imageContainer.querySelector('img')).toHaveAttribute('alt', mockContext.title);
+      const image = await screen.findByAltText(mockContext.title);
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute('src', mockContext.imageUrl);
     });
 
     it('does not render image when imageUrl is null', () => {
       const contextWithoutImage = { ...mockContext, imageUrl: null };
       renderWrapper(<HeaderDescription context={contextWithoutImage} info={mockInfo} />);
-      expect(screen.queryByTestId('image-with-skeleton')).not.toBeInTheDocument();
+      expect(screen.queryByAltText(mockContext.title)).not.toBeInTheDocument();
     });
   });
 
@@ -107,11 +106,10 @@ describe('HeaderDescription', () => {
     it('renders children when provided', () => {
       renderWrapper(
         <HeaderDescription context={mockContext} info={mockInfo}>
-          <div data-testid="custom-children">Custom content</div>
+          <div>Custom content</div>
         </HeaderDescription>,
       );
 
-      expect(screen.getByTestId('custom-children')).toBeInTheDocument();
       expect(screen.getByText('Custom content')).toBeInTheDocument();
     });
   });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { 
+import {
   screen, waitFor, fireEvent,
 
 } from '@testing-library/react';
@@ -34,7 +34,10 @@ const mockCatalogDetails = {
   emailRegexes: ['@example\\.com$'],
 };
 
-const renderCatalogSettingsModal = (children: (openModal: (catalogSlug: string) => void) => React.ReactNode) => renderWrapper(
+const renderCatalogSettingsModal = (
+  children: (openModal: (catalogSlug: string) => void
+  ) => React.ReactNode,
+) => renderWrapper(
   <CatalogSettingsModal>
     {children}
   </CatalogSettingsModal>,
@@ -58,10 +61,8 @@ describe('CatalogSettingsModal', () => {
   });
 
   it('renders trigger button and opens modal when clicked', async () => {
-    const mockOpenModal = jest.fn();
-
     renderCatalogSettingsModal((openModal) => (
-      <button onClick={() => openModal('test-catalog')}>
+      <button type="button" onClick={() => openModal('test-catalog')}>
         Open Modal
       </button>
     ));
@@ -78,7 +79,7 @@ describe('CatalogSettingsModal', () => {
 
   it('closes modal when close button is clicked', async () => {
     renderCatalogSettingsModal((openModal) => (
-      <button onClick={() => openModal('test-catalog')}>
+      <button type="button" onClick={() => openModal('test-catalog')}>
         Open Modal
       </button>
     ));
@@ -101,7 +102,7 @@ describe('CatalogSettingsModal', () => {
 
   it('displays save button in modal actions', async () => {
     renderCatalogSettingsModal((openModal) => (
-      <button onClick={() => openModal('test-catalog')}>
+      <button type="button" onClick={() => openModal('test-catalog')}>
         Open Modal
       </button>
     ));
@@ -115,7 +116,7 @@ describe('CatalogSettingsModal', () => {
 
   it('passes catalogSlug to CatalogSettingsForm', async () => {
     renderCatalogSettingsModal((openModal) => (
-      <button onClick={() => openModal('test-catalog')}>
+      <button type="button" onClick={() => openModal('test-catalog')}>
         Open Modal
       </button>
     ));
@@ -137,7 +138,7 @@ describe('CatalogSettingsModal', () => {
     });
 
     renderCatalogSettingsModal((openModal) => (
-      <button onClick={() => openModal('test-catalog')}>
+      <button type="button" onClick={() => openModal('test-catalog')}>
         Open Modal
       </button>
     ));

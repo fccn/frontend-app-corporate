@@ -1,9 +1,10 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
-import { IntlProvider } from '@edx/frontend-platform/i18n';
+import { screen, waitFor } from '@testing-library/react';
+import { renderWrapper } from '@src/setupTest';
 import * as wouter from 'wouter';
 import * as partnerHooks from '@src/partner/data/hooks';
 import PartnerCatalogsPage from './PartnerCatalogsPage';
+import { usePartnerCatalogs } from './data/hooks';
 
 // Mock hooks
 jest.mock('@src/partner/data/hooks', () => ({
@@ -19,11 +20,7 @@ jest.mock('wouter', () => ({
   useLocation: jest.fn(),
 }));
 
-const renderPartnerCatalogsPage = () => render(
-  <IntlProvider locale="en">
-    <PartnerCatalogsPage />
-  </IntlProvider>,
-);
+const renderPartnerCatalogsPage = () => renderWrapper(<PartnerCatalogsPage />);
 
 describe('PartnerCatalogsPage', () => {
   beforeEach(() => {
@@ -42,7 +39,7 @@ describe('PartnerCatalogsPage', () => {
       },
     });
     // Mock usePartnerCatalogs
-    const mockUsePartnerCatalogs = require('@src/catalogs/data/hooks').usePartnerCatalogs;
+    const mockUsePartnerCatalogs = usePartnerCatalogs as jest.Mock;
     mockUsePartnerCatalogs.mockReturnValue({
       partnerCatalogs: {
         results: [],
