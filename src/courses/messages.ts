@@ -1,6 +1,18 @@
 import { defineMessages } from '@edx/frontend-platform/i18n';
 
 const messages = defineMessages({
+  'corporate.courses.page.seats': {
+    id: 'corporate.courses.page.seats',
+    defaultMessage: 'Available Seats',
+    description: 'Label for stats total seats',
+
+  },
+  'corporate.courses.page.learners': {
+    id: 'corporate.courses.page.learners',
+    defaultMessage: 'Total Learners',
+    description: 'Label for stats total learners',
+
+  },
   'corporate.courses.page.totalCourses': {
     id: 'corporate.courses.page.totalCourses',
     defaultMessage: 'Courses',

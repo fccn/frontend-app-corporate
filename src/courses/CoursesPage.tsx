@@ -35,12 +35,12 @@ const CoursesPage = () => {
               copyableDescription: true,
             }}
             info={[
-              { title: 'Available Seats', value: `${catalogDetails.userLimit - catalogDetails.activeLearners} / ${catalogDetails.userLimit}` },
-              { title: 'Total Learners', value: catalogDetails.totalLearners },
+              { title: intl.formatMessage(messages['corporate.courses.page.seats']), value: `${catalogDetails.userLimit - catalogDetails.activeLearners} / ${catalogDetails.userLimit}` },
+              { title: intl.formatMessage(messages['corporate.courses.page.learners']), value: catalogDetails.totalLearners },
               { title: intl.formatMessage(messages['corporate.courses.page.totalCourses']), value: catalogDetails.courses },
               { title: intl.formatMessage(messages['corporate.courses.page.enrolledUsers']), value: catalogDetails.enrollments },
               { title: intl.formatMessage(messages['corporate.courses.page.certifiedUsers']), value: catalogDetails.certified },
-              { title: intl.formatMessage(messages['corporate.courses.page.completionRate']), value: catalogDetails.completionRate },
+              { title: intl.formatMessage(messages['corporate.courses.page.completionRate']), value: `${catalogDetails.completionRate}%` },
             ]}
           >
             <CatalogSettingsModal>
@@ -51,10 +51,10 @@ const CoursesPage = () => {
           </HeaderDescription>
         )}
       <Tabs defaultActiveKey="courses">
-        <Tab eventKey="courses" title={intl.formatMessage(messages['corporate.courses.page.tab.courses'])}>
+        <Tab eventKey="courses" title={intl.formatMessage(messages['corporate.courses.page.tab.courses'])} alt="Courses Tab">
           <CoursesList catalogId={catalogDetails?.id} partnerId={partnerDetails.id} />
         </Tab>
-        <Tab eventKey="learners" title={intl.formatMessage(messages['corporate.courses.page.tab.learners'])}>
+        <Tab eventKey="learners" title={intl.formatMessage(messages['corporate.courses.page.tab.learners'])} alt="Learners Tab">
           <LearnerList catalogId={catalogDetails?.id} partnerId={partnerDetails.id} />
         </Tab>
       </Tabs>

@@ -32,7 +32,7 @@ const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFo
   }, ref) => {
     const intl = useIntl();
     const { isAdmin } = useCurrentUser();
-    const updateCatalog = useUpdateCatalog();
+    const updateCatalogMutation = useUpdateCatalog();
     const { catalogDetails } = useCatalogDetails({
       catalogSlug,
     });
@@ -57,7 +57,7 @@ const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFo
       if (data && catalogDetails) {
         const parsedStartData = new Date(data.availableStartDate).toISOString();
         const parsedEndData = new Date(data.availableEndDate).toISOString();
-        updateCatalog({
+        updateCatalogMutation.mutate({
           catalogId: catalogDetails.id,
           data: {
             ...data,

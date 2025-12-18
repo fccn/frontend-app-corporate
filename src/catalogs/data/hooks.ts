@@ -42,19 +42,18 @@ export const useCatalogDetails = ({
 
 export const useUpdateCatalog = () => {
   const queryClient = useQueryClient();
-  const { mutate } = useMutation({
+  return useMutation({
     mutationFn: async ({ catalogId, data }:
-    { catalogId: string; data: CatalogUpdateRequest }) => {
-      updateCatalog(catalogId, data);
-    },
-    onSettled: (_data, _error, args) => {
-      queryClient.invalidateQueries({
-        queryKey: queryKey.catalogDetail(args.catalogId),
-        exact: false,
-      });
+    { catalogId: string; data: CatalogUpdateRequest }) => updateCatalog(catalogId, data),
+    onSuccess(data) {
+      if (data) {
+        queryClient.setQueryData(
+          queryKey.catalogDetail(data.slug),
+          data,
+        );
+      }
     },
   });
-  return mutate;
 };
 
 export const useCatalogLearners = ({
