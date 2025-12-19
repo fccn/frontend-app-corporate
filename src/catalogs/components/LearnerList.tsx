@@ -69,6 +69,7 @@ const LearnerList = ({ catalogId, partnerId }) => {
             <ActionItem
               key={`action-${type}-${row.original.id}`}
               type={type}
+              disabled={!!row.original.removedAt}
               onClick={() => onClick(row.original)}
             />
           )),

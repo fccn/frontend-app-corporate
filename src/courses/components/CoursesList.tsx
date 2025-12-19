@@ -1,5 +1,6 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
+  Button,
   DataTable, Form, TextFilter,
 } from '@openedx/paragon';
 
@@ -10,6 +11,9 @@ import { useNavigate, usePagination } from '@src/hooks';
 
 import { paths } from '@src/constants';
 import { useParams } from 'wouter';
+import { Add, SaveAlt } from '@openedx/paragon/icons';
+import CourseAddModal from '@src/courses/components/CourseAddModal';
+import { useState } from 'react';
 import { useCatalogCourses, useDeleteCatalogCourse, useUpdateCatalogCourse } from '../data/hooks';
 
 import messages from '../messages';
@@ -17,7 +21,6 @@ import messages from '../messages';
 type CoursesCell = CellValue<Course>;
 
 interface CoursesListProps {
-  partnerId: number;
   catalogId?: string;
 }
 
@@ -32,6 +35,27 @@ const CourseNameCell = ({ row }: CoursesCell) => (
   </div>
 );
 
+const TableAction = ({ catalogId }: { catalogId: string }) => {
+  const intl = useIntl();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  return (
+    <>
+      <Button iconBefore={Add} size="sm" onClick={() => setIsModalOpen(true)}>
+        {intl.formatMessage(messages['corporate.courses.table.action.add.course'])}
+      </Button>
+      <Button iconBefore={SaveAlt} size="sm">
+        {intl.formatMessage(messages['corporate.courses.table.action.download.report'])}
+      </Button>
+      <CourseAddModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        catalogId={catalogId!}
+      />
+    </>
+  );
+};
+
 const CoursesList = ({ catalogId }: CoursesListProps) => {
   const intl = useIntl();
   const navigate = useNavigate();
@@ -43,7 +67,7 @@ const CoursesList = ({ catalogId }: CoursesListProps) => {
     count,
     pageCount,
     isLoading,
-  } = useCatalogCourses( catalogId!, pageIndex + 1, pageSize);
+  } = useCatalogCourses(catalogId!, pageIndex + 1, pageSize);
   const deleteCatalogCourse = useDeleteCatalogCourse();
   const updateCatalogCourse = useUpdateCatalogCourse();
 
@@ -85,6 +109,9 @@ const CoursesList = ({ catalogId }: CoursesListProps) => {
         pageIndex,
       }}
       data={courses}
+      tableActions={[
+        <TableAction catalogId={catalogId!} />,
+      ]}
       additionalColumns={[
         {
           id: 'action',

@@ -1,4 +1,4 @@
-import { camelCaseObject } from '@edx/frontend-platform';
+import { camelCaseObject, snakeCaseObject } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { logError } from '@edx/frontend-platform/logging';
 import { Course, PaginatedResponse } from '@src/types';
@@ -32,6 +32,27 @@ export const deleteCourse = async (catalogId: string, courseId: string) => {
 export const updateCourse = async (catalogId: string, courseId: string, data: { position: number }) => {
   try {
     await getAuthenticatedHttpClient().patch(getCorporateApi(`manage/catalogs/${catalogId}/courses/${courseId}/`), data);
+  } catch (error) {
+    logError(error);
+    throw error;
+  }
+};
+
+export const getAvailableCourses = async (catalogId: string): Promise<{ base: Course[]; organization: Course[] }> => {
+  try {
+    const url = getCorporateApi(`manage/catalogs/${catalogId}/available_courses/`);
+    const response = await getAuthenticatedHttpClient().get(url);
+    return camelCaseObject(response.data);
+  } catch (error) {
+    logError(error);
+    return { base: [], organization: [] };
+  }
+};
+
+export const addCoursesToCatalog = async (catalogId: string, data: { courseIds: number[] }): Promise<void> => {
+  try {
+    const url = getCorporateApi(`manage/catalogs/${catalogId}/courses/`);
+    await getAuthenticatedHttpClient().post(url, snakeCaseObject(data));
   } catch (error) {
     logError(error);
     throw error;

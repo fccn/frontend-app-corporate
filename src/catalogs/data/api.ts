@@ -53,7 +53,7 @@ export const updateCatalog = async (
 ): Promise<Catalog | null> => {
   try {
     const url = getCorporateApi(`manage/catalogs/${catalogId}/`);
-    const response = await getAuthenticatedHttpClient().put(url, snakeCaseObject(data));
+    const response = await getAuthenticatedHttpClient().patch(url, snakeCaseObject(data));
     return camelCaseObject(response.data);
   } catch (error) {
     logError(error);

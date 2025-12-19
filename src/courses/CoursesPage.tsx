@@ -52,7 +52,7 @@ const CoursesPage = () => {
         )}
       <Tabs defaultActiveKey="courses">
         <Tab eventKey="courses" title={intl.formatMessage(messages['corporate.courses.page.tab.courses'])} alt="Courses Tab">
-          <CoursesList catalogId={catalogDetails?.id} partnerId={partnerDetails.id} />
+          <CoursesList catalogId={catalogDetails?.id} />
         </Tab>
         <Tab eventKey="learners" title={intl.formatMessage(messages['corporate.courses.page.tab.learners'])} alt="Learners Tab">
           <LearnerList catalogId={catalogDetails?.id} partnerId={partnerDetails.id} />

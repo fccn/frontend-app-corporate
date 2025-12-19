@@ -38,12 +38,14 @@ interface ActionItemProps {
   type: ActionType;
   onClick?: () => void;
   ariaLabel?: string;
+  disabled?: boolean;
 }
 
 const ActionItem = ({
   type,
   onClick,
   ariaLabel,
+  disabled = false,
 }: ActionItemProps) => {
   const intl = useIntl();
   const { tooltip, icon, color } = actionConfig[type];
@@ -52,7 +54,7 @@ const ActionItem = ({
     <OverlayTrigger
       overlay={<Tooltip id={`tooltip-${type}`}>{intl.formatMessage(tooltip)}</Tooltip>}
     >
-      <IconButton src={icon} onClick={onClick} alt={ariaLabel || `${type}-action`} variant={color} />
+      <IconButton src={icon} onClick={onClick} alt={ariaLabel || `${type}-action`} variant={color} disabled={disabled} />
     </OverlayTrigger>
   );
 };

@@ -1,12 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { appId } from '@src/constants';
-import { getCourses, deleteCourse, updateCourse } from './api';
+import {
+  getCourses, deleteCourse, updateCourse, getAvailableCourses,
+} from './api';
 
 const queryKey = {
   all: [appId, 'courses'],
   courseList: (catalogId: string, pageIndex: number, pageSize: number) => [
     ...queryKey.all, catalogId, pageIndex, pageSize,
   ],
+  availableCourses: (catalogId: string) => [...queryKey.all, 'available', catalogId],
 };
 
 export const useCatalogCourses = (catalogId: string, pageIndex, pageSize) => {
@@ -49,4 +52,23 @@ export const useUpdateCatalogCourse = () => {
     },
   });
   return mutateAsync;
+};
+
+export const useAvailableCourses = (catalogId: string, isOpen: boolean) => useQuery({
+  queryKey: queryKey.availableCourses(catalogId),
+  queryFn: () => getAvailableCourses(catalogId),
+  enabled: isOpen,
+});
+
+export const useAddCoursesToCatalog = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ catalogId, courseIds }: { catalogId: string; courseIds: number[] }) => addCoursesToCatalog(catalogId, { courseIds }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [appId, 'courses'],
+        exact: false,
+      });
+    },
+  });
 };

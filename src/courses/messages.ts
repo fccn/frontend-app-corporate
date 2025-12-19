@@ -86,6 +86,36 @@ const messages = defineMessages({
     defaultMessage: 'Completion Rate',
     description: 'Header for the completion rate column, describing the percentage of students who completed the course',
   },
+  'corporate.courses.table.action.add.course': {
+    id: 'corporate.courses.table.action.add.course',
+    defaultMessage: 'Add Course',
+    description: 'Action button to add a course',
+  },
+  'corporate.courses.table.action.download.report': {
+    id: 'corporate.courses.table.action.download.report',
+    defaultMessage: 'Download Report',
+    description: 'Action button to download a report',
+  },
+  'corporate.courses.modal.add.title': {
+    id: 'corporate.courses.modal.add.title',
+    defaultMessage: 'Add Courses to Catalog',
+    description: 'Title for the add courses modal',
+  },
+  'corporate.courses.modal.add.tab.base': {
+    id: 'corporate.courses.modal.add.tab.base',
+    defaultMessage: 'Base Catalog Courses',
+    description: 'Tab title for base courses',
+  },
+  'corporate.courses.modal.add.tab.organization': {
+    id: 'corporate.courses.modal.add.tab.organization',
+    defaultMessage: "My Organization's Courses",
+    description: 'Tab title for organization courses',
+  },
+'corporate.courses.modal.add.no.courses': {
+    id: 'corporate.courses.modal.add.no.courses',
+    defaultMessage: 'You\'ve already added all available courses for this section.',
+    description: 'Message when no courses are available to add',
+  },
 });
 
 export default messages;
