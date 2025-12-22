@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useIntl } from '@edx/frontend-platform/i18n';
 import ModalLayout from '@src/components/ModalLayout';
 import {
   Button, Tab, Tabs, Container,
 } from '@openedx/paragon';
+import messages from '@src/courses/messages';
 import { useAvailableCourses, useAddCoursesToCatalog } from '../../data/hooks';
 import AvailableCoursesList from './AvailableCoursesList';
 
@@ -13,8 +15,14 @@ interface CourseAddModalProps {
 }
 
 const CourseAddModal: React.FC<CourseAddModalProps> = ({ isOpen, onClose, catalogId }) => {
-  const [selectedCourses, setSelectedCourses] = useState<Set<number>>(new Set());
-  const { data: allCourses = { base: [], organization: [] }, isLoading: loadingAll } = useAvailableCourses(catalogId, isOpen);
+  const intl = useIntl();
+  const [selectedCourses, setSelectedCourses] = useState<Set<string>>(new Set());
+  const {
+    data: allCourses = {
+      base: [],
+      organization: [],
+    }, isLoading: loadingAll,
+  } = useAvailableCourses(catalogId, isOpen);
 
   const addMutation = useAddCoursesToCatalog();
 
@@ -24,12 +32,12 @@ const CourseAddModal: React.FC<CourseAddModalProps> = ({ isOpen, onClose, catalo
 
   return (
     <ModalLayout
-      title="Add Courses"
+      title={intl.formatMessage(messages['corporate.courses.modal.add.title'])}
       isOpen={isOpen}
       onClose={onClose}
       actions={(
         <Button onClick={handleSave} disabled={addMutation.isPending}>
-          Save
+          {intl.formatMessage(messages['corporate.courses.modal.add.button.add'])}
         </Button>
       )}
     >

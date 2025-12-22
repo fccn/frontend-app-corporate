@@ -1,7 +1,7 @@
 import { camelCaseObject, snakeCaseObject } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { logError } from '@edx/frontend-platform/logging';
-import { Course, PaginatedResponse } from '@src/types';
+import { Course, CourseRun, PaginatedResponse } from '@src/types';
 import { getCorporateApi } from '@src/constants';
 
 export const getCourses = async (catalogId: string, pageIndex, pageSize)
@@ -38,7 +38,9 @@ export const updateCourse = async (catalogId: string, courseId: string, data: { 
   }
 };
 
-export const getAvailableCourses = async (catalogId: string): Promise<{ base: Course[]; organization: Course[] }> => {
+export const getAvailableCourses = async (catalogId: string): Promise<{
+  base: CourseRun[]; organization: CourseRun[];
+}> => {
   try {
     const url = getCorporateApi(`manage/catalogs/${catalogId}/available_courses/`);
     const response = await getAuthenticatedHttpClient().get(url);
@@ -49,7 +51,7 @@ export const getAvailableCourses = async (catalogId: string): Promise<{ base: Co
   }
 };
 
-export const addCoursesToCatalog = async (catalogId: string, data: { courseIds: number[] }): Promise<void> => {
+export const addCoursesToCatalog = async (catalogId: string, data: { courseIds: string[] }): Promise<void> => {
   try {
     const url = getCorporateApi(`manage/catalogs/${catalogId}/courses/`);
     await getAuthenticatedHttpClient().post(url, snakeCaseObject(data));

@@ -33,7 +33,7 @@ describe('useCatalogCourses', () => {
     });
 
     const { result } = renderHook(
-      () => useCatalogCourses(1, 'c1', 1, 10),
+      () => useCatalogCourses('c1', 1, 10),
       { wrapper: createWrapper() },
     );
 
@@ -46,7 +46,7 @@ describe('useCatalogCourses', () => {
   it('returns loading state', async () => {
     (api.getCourses as jest.Mock).mockImplementation(() => new Promise(() => {}));
 
-    const { result } = renderHook(() => useCatalogCourses(1, 'c1', 1, 10), {
+    const { result } = renderHook(() => useCatalogCourses('c1', 1, 10), {
       wrapper: createWrapper(),
     });
 
@@ -61,7 +61,7 @@ describe('useCatalogCourses', () => {
     });
 
     const { result } = renderHook(
-      () => useCatalogCourses(1, 'c1', 1, 10),
+      () => useCatalogCourses('c1', 1, 10),
       { wrapper: createWrapper() },
     );
 
@@ -79,7 +79,7 @@ describe('useCatalogCourses', () => {
     });
 
     const { result } = renderHook(
-      () => useCatalogCourses(1, 'c1', 1, 10),
+      () => useCatalogCourses('c1', 1, 10),
       { wrapper: createWrapper() },
     );
 
@@ -91,7 +91,7 @@ describe('useCatalogCourses', () => {
     (api.getCourses as jest.Mock).mockRejectedValue(new Error('API error'));
 
     const { result } = renderHook(
-      () => useCatalogCourses(1, 'c1', 1, 10),
+      () => useCatalogCourses('c1', 1, 10),
       { wrapper: createWrapper() },
     );
 
@@ -114,7 +114,7 @@ describe('useDeleteCatalogCourse', () => {
     });
 
     await act(async () => {
-      await result.current({ partnerId: 1, catalogId: 'c1', courseId: 1 });
+      await result.current({ catalogId: 'c1', courseId: '1' });
     });
 
     expect(api.deleteCourse).toHaveBeenCalledWith('c1', 1);
@@ -128,7 +128,7 @@ describe('useDeleteCatalogCourse', () => {
     });
 
     await expect(
-      result.current({ partnerId: 1, catalogId: 'c1', courseId: 1 }),
+      result.current({ catalogId: 'c1', courseId: '1' }),
     ).rejects.toThrow('Delete error');
   });
 });

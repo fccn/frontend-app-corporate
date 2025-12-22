@@ -111,10 +111,25 @@ const messages = defineMessages({
     defaultMessage: "My Organization's Courses",
     description: 'Tab title for organization courses',
   },
-'corporate.courses.modal.add.no.courses': {
+  'corporate.courses.modal.add.no.courses': {
     id: 'corporate.courses.modal.add.no.courses',
     defaultMessage: 'You\'ve already added all available courses for this section.',
     description: 'Message when no courses are available to add',
+  },
+  'corporate.courses.modal.add.search.placeholder': {
+    id: 'corporate.courses.modal.add.search.placeholder',
+    defaultMessage: 'Search courses by name or ID',
+    description: 'Placeholder text for the course search field in the add courses modal',
+  },
+  'corporate.courses.modal.add.button.add': {
+    id: 'corporate.courses.modal.add.button.add',
+    defaultMessage: 'Add Selected Courses',
+    description: 'Button text to add selected courses',
+  },
+  'corporate.courses.modal.add.select.all': {
+    id: 'corporate.courses.modal.add.select.all',
+    defaultMessage: 'Select All ({count} courses)',
+    description: 'Checkbox text to select all courses',
   },
 });
 

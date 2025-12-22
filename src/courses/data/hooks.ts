@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { appId } from '@src/constants';
 import {
   getCourses, deleteCourse, updateCourse, getAvailableCourses,
+  addCoursesToCatalog,
 } from './api';
 
 const queryKey = {
@@ -63,7 +64,9 @@ export const useAvailableCourses = (catalogId: string, isOpen: boolean) => useQu
 export const useAddCoursesToCatalog = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ catalogId, courseIds }: { catalogId: string; courseIds: number[] }) => addCoursesToCatalog(catalogId, { courseIds }),
+    mutationFn: ({ catalogId, courseIds }: {
+      catalogId: string;
+      courseIds: string[] }) => addCoursesToCatalog(catalogId, { courseIds }),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [appId, 'courses'],
