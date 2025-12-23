@@ -20,9 +20,10 @@ export const getCourses = async (catalogId: string, pageIndex, pageSize)
   }
 };
 
-export const deleteCourse = async (catalogId: string, courseId: string) => {
+export const deleteCourse = async (catalogId: string, data: { courseIds: string[] }) => {
   try {
-    await getAuthenticatedHttpClient().delete(getCorporateApi(`manage/catalogs/${catalogId}/courses/${courseId}/`));
+    const url = getCorporateApi(`manage/catalogs/${catalogId}/remove_courses/`);
+    await getAuthenticatedHttpClient().post(url, snakeCaseObject(data));
   } catch (error) {
     logError(error);
     throw error;

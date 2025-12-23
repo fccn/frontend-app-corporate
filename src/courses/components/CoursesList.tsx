@@ -56,6 +56,18 @@ const TableAction = ({ catalogId }: { catalogId: string }) => {
   );
 };
 
+const BulkAction = ({catalogId, selectedFlatRows}) => {
+  const intl = useIntl();
+  const deleteCatalogCourse = useDeleteCatalogCourse();
+  console.log('selectedFlatRows', selectedFlatRows, catalogId);
+  return (
+    <Button variant="outline-danger" size="sm" onClick={() => {
+      deleteCatalogCourse({ catalogId: catalogId!, data: { catalogCourseIds: selectedFlatRows.map((row) => row.original.id) } });
+    }}>
+      {intl.formatMessage(messages['corporate.courses.table.action.delete.selected'])}
+    </Button>
+  );
+};
 const CoursesList = ({ catalogId }: CoursesListProps) => {
   const intl = useIntl();
   const navigate = useNavigate();
@@ -111,6 +123,9 @@ const CoursesList = ({ catalogId }: CoursesListProps) => {
       data={courses}
       tableActions={[
         <TableAction catalogId={catalogId!} />,
+      ]}
+      bulkActions={[
+        <BulkAction catalogId={catalogId} />,
       ]}
       additionalColumns={[
         {

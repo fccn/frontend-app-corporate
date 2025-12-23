@@ -131,6 +131,11 @@ const messages = defineMessages({
     defaultMessage: 'Select All ({count} courses)',
     description: 'Checkbox text to select all courses',
   },
+  'corporate.courses.table.action.delete.selected': {
+    id: 'corporate.courses.table.action.delete.selected',
+    defaultMessage: 'Delete Selected Courses',
+    description: 'Action button to delete selected courses',
+  },
 });
 
 export default messages;

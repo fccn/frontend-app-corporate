@@ -69,6 +69,8 @@ jest.mock('./data/hooks', () => ({
     isLoading: false,
   }),
   useDeleteCatalogCourse: () => jest.fn(),
+  useAddCoursesToCatalog: () => jest.fn(),
+  useUpdateCatalogCourse: () => jest.fn(),
 }));
 const renderCoursesPage = () => renderWrapper(<CoursesPage />);
 
