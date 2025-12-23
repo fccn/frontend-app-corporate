@@ -42,7 +42,7 @@ const AvailableCoursesList = ({ courses, selectedCourses, setSelectedCourses }: 
           <Card className="p-3 shadow-none border-bottom rounded-0 bg-light-300">
             <Form.Checkbox
               checked={allSelected}
-              indeterminate={someSelected && !allSelected}
+              indeterminate={someSelected && !allSelected ? true : undefined}
               onChange={e => handleSelectAll(e.target.checked)}
             >
               {intl.formatMessage(messages['corporate.courses.modal.add.select.all'], { count: filteredCourses.length })}

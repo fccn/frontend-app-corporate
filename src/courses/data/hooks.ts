@@ -69,8 +69,7 @@ export const useAddCoursesToCatalog = () => {
       courseIds: string[] }) => addCoursesToCatalog(catalogId, { courseIds }),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [appId, 'courses'],
-        exact: false,
+        queryKey: queryKey.all,
       });
     },
   });
