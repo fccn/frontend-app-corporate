@@ -2,6 +2,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   Button,
   DataTable, Form, TextFilter,
+  useToggle,
 } from '@openedx/paragon';
 
 import { CellValue, Course } from '@src/types';
@@ -14,14 +15,16 @@ import { useParams } from 'wouter';
 import { Add, SaveAlt } from '@openedx/paragon/icons';
 import CourseAddModal from '@src/courses/components/CourseAddModal';
 import { useState } from 'react';
-import { useCatalogCourses, useDeleteCatalogCourse, useUpdateCatalogCourse } from '../data/hooks';
+import { useCatalogCourses, useUpdateCatalogCourse } from '../data/hooks';
 
 import messages from '../messages';
+import CourseDeleteModal from './CourseDeteleteModal';
 
 type CoursesCell = CellValue<Course>;
 
 interface CoursesListProps {
   catalogId?: string;
+  catalogName?: string;
 }
 
 const CourseNameCell = ({ row }: CoursesCell) => (
@@ -56,23 +59,27 @@ const TableAction = ({ catalogId }: { catalogId: string }) => {
   );
 };
 
-const BulkAction = ({catalogId, selectedFlatRows}) => {
+const BulkAction = ({ selectedFlatRows, setRowsForDelete, openDeleteModal }) => {
   const intl = useIntl();
-  const deleteCatalogCourse = useDeleteCatalogCourse();
-  console.log('selectedFlatRows', selectedFlatRows, catalogId);
   return (
-    <Button variant="outline-danger" size="sm" onClick={() => {
-      deleteCatalogCourse({ catalogId: catalogId!, data: { catalogCourseIds: selectedFlatRows.map((row) => row.original.id) } });
-    }}>
+    <Button
+      variant="outline-danger"
+      size="sm"
+      onClick={() => {
+        setRowsForDelete(selectedFlatRows.map((row) => row.original.id));
+        openDeleteModal();
+      }}
+    >
       {intl.formatMessage(messages['corporate.courses.table.action.delete.selected'])}
     </Button>
   );
 };
-const CoursesList = ({ catalogId }: CoursesListProps) => {
+const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
   const intl = useIntl();
   const navigate = useNavigate();
   const { partnerSlug, catalogSlug } = useParams<{ partnerSlug: string, catalogSlug: string }>();
-
+  const [isdeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
+  const [selectedRowsForDelete, setSelectedRowsForDelete] = useState<any[]>([]);
   const { pageSize, pageIndex, onPaginationChange } = usePagination();
   const {
     courses,
@@ -80,7 +87,6 @@ const CoursesList = ({ catalogId }: CoursesListProps) => {
     pageCount,
     isLoading,
   } = useCatalogCourses(catalogId!, pageIndex + 1, pageSize);
-  const deleteCatalogCourse = useDeleteCatalogCourse();
   const updateCatalogCourse = useUpdateCatalogCourse();
 
   const positions = Array.from({ length: count + 1 || 0 }, (_, i) => i);
@@ -96,7 +102,8 @@ const CoursesList = ({ catalogId }: CoursesListProps) => {
   {
     type: 'delete',
     action: (course) => {
-      deleteCatalogCourse({ catalogId: catalogId!, courseId: course.id });
+      setSelectedRowsForDelete([course.id]);
+      openDeleteModal();
     },
   }];
 
@@ -105,106 +112,115 @@ const CoursesList = ({ catalogId }: CoursesListProps) => {
   };
 
   return (
-    <DataTable
-      isLoading={isLoading}
-      isSelectable
-      isPaginated
-      isFilterable
-      isSortable
-      manualPagination
-      itemCount={count}
-      pageCount={pageCount || 0}
-      fetchData={onPaginationChange}
-      defaultColumnValues={{ Filter: TextFilter }}
-      initialState={{
-        pageSize,
-        pageIndex,
-      }}
-      data={courses}
-      tableActions={[
-        <TableAction catalogId={catalogId!} />,
-      ]}
-      bulkActions={[
-        <BulkAction catalogId={catalogId} />,
-      ]}
-      additionalColumns={[
-        {
-          id: 'action',
-          Header: intl.formatMessage(messages['corporate.courses.table.header.action']),
-          Cell: ({ row }: CoursesCell) => tableActions.map(({ type, action }) => (
-            <ActionItem
-              key={`action-${type}-${row.original.id}`}
-              type={type}
-              onClick={() => action(row.original)}
-            />
-          )),
-        },
-      ]}
-      columns={[
-        {
-          Header: intl.formatMessage(messages['corporate.courses.table.header.name']),
-          accessor: 'name',
-          // eslint-disable-next-line react/no-unstable-nested-components
-          Cell: CourseNameCell,
-        },
-        {
-          Header: intl.formatMessage(messages['corporate.courses.table.header.position']),
-          accessor: 'position',
-          // eslint-disable-next-line react/no-unstable-nested-components
-          Cell: ({ row }: CoursesCell) => (
-            <Form.Control
-              as="select"
-              value={row.original.position}
-              onChange={(e) => handleChange(row.original.courseRun.id, e)}
-            >
-              {positions.map((pos) => (
-                <option
-                  key={`position-${row.original.id}-${pos}`}
-                  value={pos}
-                >
-                  {pos}
-                </option>
-              ))}
-            </Form.Control>
-          ),
-        },
-        {
-          Header: intl.formatMessage(messages['corporate.courses.table.header.course.dates']),
-          accessor: 'courseDates',
-          // eslint-disable-next-line react/no-unstable-nested-components
-          Cell: ({ row }: CoursesCell) => {
-            const { start, end } = row.original.courseRun;
-            return `${formatDate(start)} - ${formatDate(end)}`;
+    <>
+      <DataTable
+        isLoading={isLoading}
+        isSelectable
+        isPaginated
+        isFilterable
+        isSortable
+        manualPagination
+        itemCount={count}
+        pageCount={pageCount || 0}
+        fetchData={onPaginationChange}
+        defaultColumnValues={{ Filter: TextFilter }}
+        initialState={{
+          pageSize,
+          pageIndex,
+        }}
+        data={courses}
+        tableActions={[
+          <TableAction catalogId={catalogId!} />,
+        ]}
+        bulkActions={[
+          <BulkAction setRowsForDelete={setSelectedRowsForDelete} openDeleteModal={openDeleteModal} />,
+        ]}
+        additionalColumns={[
+          {
+            id: 'action',
+            Header: intl.formatMessage(messages['corporate.courses.table.header.action']),
+            Cell: ({ row }: CoursesCell) => tableActions.map(({ type, action }) => (
+              <ActionItem
+                key={`action-${type}-${row.original.id}`}
+                type={type}
+                onClick={() => action(row.original)}
+              />
+            )),
           },
-        },
-        {
-          Header: intl.formatMessage(messages['corporate.courses.table.header.enrollment.dates']),
-          accessor: 'enrollmentDates',
-          // eslint-disable-next-line react/no-unstable-nested-components
-          Cell: ({ row }: CoursesCell) => {
-            const { enrollmentStart, enrollmentEnd } = row.original.courseRun;
-            return `${formatDate(enrollmentStart)} - ${formatDate(enrollmentEnd)}`;
+        ]}
+        columns={[
+          {
+            Header: intl.formatMessage(messages['corporate.courses.table.header.name']),
+            accessor: 'name',
+            // eslint-disable-next-line react/no-unstable-nested-components
+            Cell: CourseNameCell,
           },
-        },
-        {
-          Header: intl.formatMessage(messages['corporate.courses.table.header.enrollment']),
-          accessor: 'enrollments',
-        },
-        {
-          Header: intl.formatMessage(messages['corporate.courses.table.header.certified']),
-          accessor: 'certified',
-        },
-        {
-          Header: intl.formatMessage(messages['corporate.courses.table.header.completion']),
-          accessor: 'completionRate',
-          Cell: ({ row }: CoursesCell) => `${row.original.completionRate}%`,
-        },
-      ]}
-    >
-      <DataTable.TableControlBar />
-      <DataTable.Table />
-      <TableFooter />
-    </DataTable>
+          {
+            Header: intl.formatMessage(messages['corporate.courses.table.header.position']),
+            accessor: 'position',
+            // eslint-disable-next-line react/no-unstable-nested-components
+            Cell: ({ row }: CoursesCell) => (
+              <Form.Control
+                as="select"
+                value={row.original.position}
+                onChange={(e) => handleChange(row.original.courseRun.id, e)}
+              >
+                {positions.map((pos) => (
+                  <option
+                    key={`position-${row.original.id}-${pos}`}
+                    value={pos}
+                  >
+                    {pos}
+                  </option>
+                ))}
+              </Form.Control>
+            ),
+          },
+          {
+            Header: intl.formatMessage(messages['corporate.courses.table.header.course.dates']),
+            accessor: 'courseDates',
+            // eslint-disable-next-line react/no-unstable-nested-components
+            Cell: ({ row }: CoursesCell) => {
+              const { start, end } = row.original.courseRun;
+              return `${formatDate(start)} - ${formatDate(end)}`;
+            },
+          },
+          {
+            Header: intl.formatMessage(messages['corporate.courses.table.header.enrollment.dates']),
+            accessor: 'enrollmentDates',
+            // eslint-disable-next-line react/no-unstable-nested-components
+            Cell: ({ row }: CoursesCell) => {
+              const { enrollmentStart, enrollmentEnd } = row.original.courseRun;
+              return `${formatDate(enrollmentStart)} - ${formatDate(enrollmentEnd)}`;
+            },
+          },
+          {
+            Header: intl.formatMessage(messages['corporate.courses.table.header.enrollment']),
+            accessor: 'enrollments',
+          },
+          {
+            Header: intl.formatMessage(messages['corporate.courses.table.header.certified']),
+            accessor: 'certified',
+          },
+          {
+            Header: intl.formatMessage(messages['corporate.courses.table.header.completion']),
+            accessor: 'completionRate',
+            Cell: ({ row }: CoursesCell) => `${row.original.completionRate}%`,
+          },
+        ]}
+      >
+        <DataTable.TableControlBar />
+        <DataTable.Table />
+        <TableFooter />
+      </DataTable>
+      <CourseDeleteModal
+        isOpen={isdeleteModalOpen}
+        onClose={() => { closeDeleteModal(); setSelectedRowsForDelete([]); }}
+        selectedCourses={selectedRowsForDelete}
+        catalogId={catalogId!}
+        catalogName={catalogName}
+      />
+    </>
   );
 };
 

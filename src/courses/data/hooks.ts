@@ -64,9 +64,9 @@ export const useAvailableCourses = (catalogId: string, isOpen: boolean) => useQu
 export const useAddCoursesToCatalog = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ catalogId, courseIds }: {
+    mutationFn: ({ catalogId, catalogCourseIds }: {
       catalogId: string;
-      courseIds: string[] }) => addCoursesToCatalog(catalogId, { courseIds }),
+      catalogCourseIds: number[] }) => addCoursesToCatalog(catalogId, { catalogCourseIds }),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: queryKey.all,

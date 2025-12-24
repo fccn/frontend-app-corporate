@@ -78,7 +78,7 @@ describe('AvailableCoursesList', () => {
       <AvailableCoursesList
         {...defaultProps}
         setSelectedCourses={mockSetSelectedCourses}
-      />
+      />,
     );
 
     const selectAllCheckbox = screen.getByLabelText('Select All (3 courses)');
@@ -94,7 +94,7 @@ describe('AvailableCoursesList', () => {
         {...defaultProps}
         selectedCourses={new Set(['course1', 'course2', 'course3'])}
         setSelectedCourses={mockSetSelectedCourses}
-      />
+      />,
     );
 
     const selectAllCheckbox = screen.getByLabelText('Select All (3 courses)');
@@ -108,7 +108,7 @@ describe('AvailableCoursesList', () => {
       <AvailableCoursesList
         {...defaultProps}
         selectedCourses={new Set(['course1'])}
-      />
+      />,
     );
 
     const selectAllCheckbox = screen.getByLabelText('Select All (3 courses)');
@@ -121,7 +121,7 @@ describe('AvailableCoursesList', () => {
       <AvailableCoursesList
         {...defaultProps}
         setSelectedCourses={mockSetSelectedCourses}
-      />
+      />,
     );
 
     const courseCheckbox = screen.getByLabelText('Introduction to React');
@@ -137,7 +137,7 @@ describe('AvailableCoursesList', () => {
         {...defaultProps}
         selectedCourses={new Set(['course1'])}
         setSelectedCourses={mockSetSelectedCourses}
-      />
+      />,
     );
 
     const courseCheckbox = screen.getByLabelText('Introduction to React');
@@ -153,7 +153,7 @@ describe('AvailableCoursesList', () => {
         {...defaultProps}
         selectedCourses={new Set(['course1'])}
         setSelectedCourses={mockSetSelectedCourses}
-      />
+      />,
     );
 
     const courseCheckbox = screen.getByLabelText('Advanced JavaScript');
@@ -167,7 +167,7 @@ describe('AvailableCoursesList', () => {
       <AvailableCoursesList
         {...defaultProps}
         selectedCourses={new Set(['course1', 'course3'])}
-      />
+      />,
     );
 
     expect(screen.getByLabelText('Introduction to React')).toBeChecked();
@@ -198,7 +198,7 @@ describe('AvailableCoursesList', () => {
       <AvailableCoursesList
         {...defaultProps}
         courses={[]}
-      />
+      />,
     );
 
     expect(screen.getByText("You've already added all available courses for this section.")).toBeInTheDocument();

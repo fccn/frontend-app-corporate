@@ -136,6 +136,31 @@ const messages = defineMessages({
     defaultMessage: 'Delete Selected Courses',
     description: 'Action button to delete selected courses',
   },
+  'corporate.courses.modal.delete.title': {
+    id: 'corporate.courses.modal.delete.title',
+    defaultMessage: 'Delete {count, plural, one {Course} other {Courses}} from Catalog',
+    description: 'Title for the delete courses modal',
+  },
+  'corporate.courses.modal.delete.subtitle': {
+    id: 'corporate.courses.modal.delete.subtitle',
+    defaultMessage: 'You are about to delete {count, plural, one {a course} other {# courses}} from {catalogName} catalog.',
+    description: 'Subtitle for the delete courses modal',
+  },
+  'corporate.courses.modal.delete.description': {
+    id: 'corporate.courses.modal.delete.description',
+    defaultMessage: `
+    <li>This action will hide the course from learners in this catalog.</li>
+    <li>Learners already enrolled in this course will keep their progress and certificates, but new enrollments will no longer be possible through this catalog.</li>
+    <li>This does not delete the course from the platform or from other catalogs.</li>
+    `,
+    description: 'Description for the delete courses modal',
+  },
+  'corporate.courses.modal.delete.button.delete': {
+    id: 'corporate.courses.modal.delete.button.delete',
+    defaultMessage: 'Yes, Delete',
+    description: 'Button text to delete selected courses',
+  },
+
 });
 
 export default messages;

@@ -52,7 +52,7 @@ export const getAvailableCourses = async (catalogId: string): Promise<{
   }
 };
 
-export const addCoursesToCatalog = async (catalogId: string, data: { courseIds: string[] }): Promise<void> => {
+export const addCoursesToCatalog = async (catalogId: string, data: { catalogCourseIds: number[] }): Promise<void> => {
   try {
     const url = getCorporateApi(`manage/catalogs/${catalogId}/add_courses/`);
     await getAuthenticatedHttpClient().post(url, snakeCaseObject(data));

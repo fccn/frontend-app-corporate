@@ -83,7 +83,7 @@ const messages = defineMessages({
   },
   'corporate.catalog.form.email.regexes.description': {
     id: 'corporate.catalog.form.email.regexes.description',
-    defaultMessage: 'Add the email domains allowed to self-enroll in this catalog. Only users with emails from these domains will be able to join. Example: @empresa.com',
+    defaultMessage: 'Add comma-separated email domains allowed to self-enroll in this catalog. Only users with emails from these domains will be able to join. Example: @empresa.com',
     description: 'Description text for the partner email regex field',
   },
   'corporate.catalog.form.self.enrollment.field': {

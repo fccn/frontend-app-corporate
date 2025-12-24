@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import ModalLayout from '@src/components/ModalLayout';
 import {
@@ -14,7 +14,7 @@ interface CourseAddModalProps {
   catalogId: string;
 }
 
-const CourseAddModal: React.FC<CourseAddModalProps> = ({ isOpen, onClose, catalogId }) => {
+const CourseAddModal = ({ isOpen, onClose, catalogId }:CourseAddModalProps) => {
   const intl = useIntl();
   const [selectedCourses, setSelectedCourses] = useState<Set<string>>(new Set());
   const {
@@ -28,6 +28,7 @@ const CourseAddModal: React.FC<CourseAddModalProps> = ({ isOpen, onClose, catalo
 
   const handleSave = () => {
     addMutation.mutate({ catalogId, courseIds: Array.from(selectedCourses) });
+    onClose();
   };
 
   return (

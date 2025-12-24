@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
 import { renderWrapper } from '@src/setupTest';
 import CourseAddModal from './index';
 import * as hooks from '../../data/hooks';
