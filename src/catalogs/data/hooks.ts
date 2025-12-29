@@ -5,6 +5,8 @@ import { CatalogUpdateRequest } from '@src/types';
 import { appId } from '@src/constants';
 import {
   getCatalogDetails, getPartnerCatalogs, updateCatalog, getCatalogsLearners,
+  postCatalogInviteLearners,
+  postBulkCatalogInviteLearners,
 } from './api';
 
 const queryKey = {
@@ -13,7 +15,7 @@ const queryKey = {
     ...queryKey.all, partnerId, pageIndex, pageSize,
   ],
   catalogDetail: (catalogSlug: string) => [...queryKey.all, 'detail', catalogSlug],
-  catalogLearners: (partnerId: number, catalogId: string) => [...queryKey.all, 'learners', partnerId, catalogId],
+  catalogLearners: (catalogId: string) => [...queryKey.all, 'learners', catalogId],
 };
 
 export const usePartnerCatalogs = (
@@ -44,7 +46,7 @@ export const useUpdateCatalog = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ catalogId, data }:
-    { catalogId: string; data: CatalogUpdateRequest }) => updateCatalog(catalogId, data),
+      { catalogId: string; data: CatalogUpdateRequest }) => updateCatalog(catalogId, data),
     onSuccess(data) {
       if (data) {
         queryClient.setQueryData(
@@ -57,9 +59,57 @@ export const useUpdateCatalog = () => {
 };
 
 export const useCatalogLearners = ({
-  partnerId,
   catalogId,
-}: { partnerId: number; catalogId: string }) => useQuery({
-  queryKey: queryKey.catalogLearners(partnerId, catalogId),
+}: {catalogId: string }) => useQuery({
+  queryKey: queryKey.catalogLearners(catalogId),
   queryFn: () => getCatalogsLearners(catalogId),
 });
+
+type InvitePayload = {
+  emails?: string[];
+  csvFile?: File;
+};
+
+
+export const useInviteLearners = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      catalogId,
+      data,
+    }: {
+      catalogId: string;
+      data: InvitePayload;
+    }) => {
+      // Emails
+      if (data.emails?.length) {
+        await postCatalogInviteLearners(catalogId, {
+          emails: data.emails,
+        });
+      }
+
+      // CSV
+      if (data.csvFile) {
+        await postBulkCatalogInviteLearners(catalogId, {
+          csvFile: data.csvFile,
+        });
+      }
+    },
+
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: queryKey.catalogLearners(variables.catalogId),
+      });
+    },
+  });
+};
+
+
+// export const useCatalogEnrollments = ({
+//   partnerId,
+//   catalogId,
+// }: { partnerId: number; catalogId: string }) => useQuery({
+//   queryKey: queryKey.catalogLearners(partnerId, catalogId),
+//   queryFn: () => getCatalogsLearners(catalogId),
+// });

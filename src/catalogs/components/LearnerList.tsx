@@ -1,5 +1,5 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { Badge, DataTable, TextFilter } from '@openedx/paragon';
+import { Badge, Button, DataTable, TextFilter } from '@openedx/paragon';
 
 import { CellValue, Learner } from '@src/types';
 import { ActionItem, TableFooter } from '@src/components/Table/';
@@ -7,6 +7,9 @@ import { usePagination } from '@src/hooks';
 
 import messages from '../messages';
 import { useCatalogLearners } from '../data/hooks';
+import { PersonAddAlt, SaveAlt } from '@openedx/paragon/icons';
+import { useState } from 'react';
+import InviteLearnersModal from './InviteLearnersModal';
 
 const LearnerName = ({ row }) => (
   <span>{row.original.user.fullName}</span>
@@ -20,6 +23,27 @@ const LearnerStatus = ({ row }) => (
   <Badge variant={row.original.active ? 'success' : 'danger'}>{row.original.active ? 'Active' : 'Inactive'}</Badge>
 );
 
+const TableAction = ({ catalogId }: { catalogId: string }) => {
+  const intl = useIntl();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  return (
+    <>
+      <Button iconBefore={PersonAddAlt} size="sm" onClick={() => setIsModalOpen(true)}>
+        {intl.formatMessage(messages['corporate.learners.table.action.add.learner'])}
+      </Button>
+      <Button iconBefore={SaveAlt} size="sm">
+        {intl.formatMessage(messages['corporate.learners.table.action.download.report'])}
+      </Button>
+      <InviteLearnersModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        catalogId={catalogId}
+      />
+    </>
+  );
+};
+
 const dateFormat = (isoDateString) => {
   if (!isoDateString) {
     return null;
@@ -31,14 +55,13 @@ const dateFormat = (isoDateString) => {
   return formatted;
 };
 
-const LearnerList = ({ catalogId, partnerId }) => {
+const LearnerList = ({ catalogId }) => {
   const intl = useIntl();
 
   const { pageIndex, pageSize, onPaginationChange } = usePagination();
 
   const { data, isLoading } = useCatalogLearners({
     catalogId,
-    partnerId,
   });
 
   const tableActions = [{
@@ -61,6 +84,9 @@ const LearnerList = ({ catalogId, partnerId }) => {
       manualPagination
       fetchData={onPaginationChange}
       pageCount={data?.numPages || 0}
+      tableActions={[
+        <TableAction catalogId={catalogId!} />,
+      ]}
       additionalColumns={[
         {
           id: 'action',

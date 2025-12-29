@@ -106,6 +106,51 @@ const messages = defineMessages({
     defaultMessage: 'Removed At',
     description: 'Header for the removed at column',
   },
+  'corporate.learners.table.action.add.learner': {
+    id: 'corporate.learners.table.action.add.learner',
+    defaultMessage: 'Invite Learners',
+    description: 'Button text to add a learner to the catalog',
+  },
+  'corporate.learners.table.action.download.report': {
+    id: 'corporate.learners.table.action.download.report',
+    defaultMessage: 'Download Report',
+    description: 'Button text to download the learners report',
+  },
+  'corporate.catalog.learners.modal.invite.title': {
+    id: 'corporate.catalog.learners.modal.invite.title',
+    defaultMessage: 'Invite Learners to Catalog',
+    description: 'Title for the invite learners to catalog modal',
+  },
+  'corporate.catalog.learners.modal.invite.manually.title': {
+    id: 'corporate.catalog.learners.modal.invite.manually.title',
+    defaultMessage: 'Invite manually',
+    description: 'Label for the manual invite learners input',
+  },
+  'corporate.catalog.learners.modal.invite.manually.description': {
+    id: 'corporate.catalog.learners.modal.invite.manually.description',
+    defaultMessage: 'Add email addresses',
+    description: 'Description for the manual invite learners input',
+  },
+  'corporate.catalog.learners.modal.invite.manually.input.placeholder': {
+    id: 'corporate.catalog.learners.modal.invite.manually.input.placeholder',
+    defaultMessage: 'Enter email addresses (use commas, semicolons, spaces, or new lines to separate).',
+    description: 'Placeholder for the manual invite learners input',
+  },
+  'corporate.catalog.learners.modal.invite.bulk.title': {
+    id: 'corporate.catalog.learners.modal.invite.bulk.title',
+    defaultMessage: 'Send invitation in Bulk',
+    description: 'Label for the bulk invite learners input',
+  },
+  'corporate.catalog.learners.modal.invite.bulk.description': {
+    id: 'corporate.catalog.learners.modal.invite.bulk.description',
+    defaultMessage: 'Import the learner list as a CSV file.',
+    description: 'Description for the bulk invite learners input',
+  },
+  'corporate.catalog.learners.modal.invite.action': {
+    id: 'corporate.catalog.learners.modal.invite.action',
+    defaultMessage: 'Send Invitations',
+    description: 'Action button text for sending invitations to learners',
+  },
 });
 
 export default messages;

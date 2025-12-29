@@ -81,3 +81,35 @@ export const getCatalogsLearners = async (
     };
   }
 };
+
+export const postCatalogInviteLearners = async (
+  catalogId: string | number,
+  data: { emails: string[] },
+): Promise<void> => {
+  try {
+    const url = getCorporateApi(`manage/catalogs/${catalogId}/invitations/`);
+    await getAuthenticatedHttpClient().post(url, snakeCaseObject(data));
+  } catch (error) {
+    logError(error);
+    throw error;
+  }
+};
+
+export const postBulkCatalogInviteLearners = async (
+  catalogId: string | number,
+  data: { csvFile: File },
+): Promise<void> => {
+  try {
+    const url = getCorporateApi(`manage/catalogs/${catalogId}/invitations/bulk_invite/`);
+    const formData = new FormData();
+    formData.append('file', data.csvFile);
+    await getAuthenticatedHttpClient().post(url, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  } catch (error) {
+    logError(error);
+    throw error;
+  }
+};
