@@ -71,6 +71,7 @@ jest.mock('./data/hooks', () => ({
   useDeleteCatalogCourse: () => jest.fn(),
   useAddCoursesToCatalog: () => jest.fn(),
   useUpdateCatalogCourse: () => jest.fn(),
+  useAvailableCourses: () => jest.fn(),
 }));
 const renderCoursesPage = () => renderWrapper(<CoursesPage />);
 
@@ -133,7 +134,7 @@ describe('CoursesPage', () => {
 
     await waitFor(() => {
       // Check for elements that indicate LearnerList is rendered
-      expect(screen.getByText('Learner name')).toBeInTheDocument();
+      expect(screen.getByText('Learner Name')).toBeInTheDocument();
     });
   });
 

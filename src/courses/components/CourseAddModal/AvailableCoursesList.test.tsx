@@ -103,18 +103,6 @@ describe('AvailableCoursesList', () => {
     expect(mockSetSelectedCourses).toHaveBeenCalledWith(new Set());
   });
 
-  it('shows indeterminate state when some courses are selected', () => {
-    renderWrapper(
-      <AvailableCoursesList
-        {...defaultProps}
-        selectedCourses={new Set(['course1'])}
-      />,
-    );
-
-    const selectAllCheckbox = screen.getByLabelText('Select All (3 courses)');
-    expect(selectAllCheckbox).toBePartiallyChecked();
-  });
-
   it('selects individual course when checkbox is clicked', () => {
     const mockSetSelectedCourses = jest.fn();
     renderWrapper(

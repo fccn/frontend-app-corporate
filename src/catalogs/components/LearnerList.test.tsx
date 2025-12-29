@@ -186,7 +186,7 @@ describe('LearnerList', () => {
 
     renderLearnerList();
 
-    expect(screen.getByText('No catalogs found')).toBeInTheDocument();
+    expect(screen.getByText('No learners found')).toBeInTheDocument();
   });
 
   it('handles null dates gracefully', async () => {

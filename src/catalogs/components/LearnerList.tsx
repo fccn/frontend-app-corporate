@@ -64,7 +64,7 @@ const LearnerList = ({ catalogId, partnerId }) => {
       additionalColumns={[
         {
           id: 'action',
-          Header: intl.formatMessage(messages.headerAction),
+          Header: intl.formatMessage(messages['corporate.catalog.table.header.action']),
           Cell: ({ row }: CellValue<Learner>) => tableActions.map(({ type, onClick }) => (
             <ActionItem
               key={`action-${type}-${row.original.id}`}
@@ -79,46 +79,46 @@ const LearnerList = ({ catalogId, partnerId }) => {
       data={data?.results || []}
       columns={[
         {
-          Header: 'Learner name',
+          Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.name']),
           accessor: 'fullName',
           Cell: LearnerName,
 
         },
         {
-          Header: 'Invite email',
+          Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.email']),
           accessor: 'email',
           Cell: LearnerEmail,
         },
         {
-          Header: 'Status',
+          Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.status']),
           accessor: 'status',
           Cell: LearnerStatus,
         },
         {
-          Header: 'Invite sent at',
+          Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.invite.sent.at']),
           accessor: 'inviteSentAt',
           Cell: ({ row }) => dateFormat(row.original.inviteSentAt),
         },
         {
-          Header: 'Accept at',
+          Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.accept.at']),
           accessor: 'acceptedAt',
           Cell: ({ row }) => dateFormat(row.original.acceptedAt),
         },
         {
-          Header: 'Last login date',
+          Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.last.login']),
           accessor: 'lastLogin',
           Cell: ({ row }) => dateFormat(row.original.lastLogin),
         },
         {
-          Header: 'Enrollments',
+          Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.enrollments']),
           accessor: 'enrollments',
         },
         {
-          Header: 'Certificates',
+          Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.certified']),
           accessor: 'certified',
         },
         {
-          Header: 'Removed at',
+          Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.removed.at']),
           accessor: 'removedAt',
           Cell: ({ row }) => dateFormat(row.original.removedAt),
         },
@@ -126,6 +126,7 @@ const LearnerList = ({ catalogId, partnerId }) => {
     >
       <DataTable.TableControlBar />
       <DataTable.Table />
+      <DataTable.EmptyTable content={intl.formatMessage(messages['corporate.catalog.learners.table.empty.content'])} />
       <TableFooter />
     </DataTable>
   );

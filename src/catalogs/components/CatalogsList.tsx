@@ -49,7 +49,7 @@ const CatalogsList = ({ partnerId, partnerSlug }: CatalogsListProps) => {
       additionalColumns={[
         {
           id: 'action',
-          Header: intl.formatMessage(messages.headerAction),
+          Header: intl.formatMessage(messages['corporate.catalog.table.header.action']),
           Cell: ({ row }: CatalogCell) => tableActions.map(({ type, onClick }) => (
             <ActionItem
               key={`action-${type}-${row.original.id}`}
@@ -63,31 +63,31 @@ const CatalogsList = ({ partnerId, partnerSlug }: CatalogsListProps) => {
       data={partnerCatalogs.results}
       columns={[
         {
-          Header: intl.formatMessage(messages.headerName),
+          Header: intl.formatMessage(messages['corporate.catalog.table.header.name']),
           accessor: 'name',
 
         },
         {
-          Header: intl.formatMessage(messages.headerCourses),
+          Header: intl.formatMessage(messages['corporate.catalog.table.header.courses']),
           accessor: 'courses',
         },
         {
-          Header: intl.formatMessage(messages.headerEnrollments),
+          Header: intl.formatMessage(messages['corporate.catalog.table.header.enrollments']),
           accessor: 'enrollments',
         },
         {
-          Header: intl.formatMessage(messages.headerCertified),
+          Header: intl.formatMessage(messages['corporate.catalog.table.header.certified']),
           accessor: 'certified',
         },
         {
-          Header: intl.formatMessage(messages.headerCompletion),
+          Header: intl.formatMessage(messages['corporate.catalog.table.header.completion']),
           accessor: 'completionRate',
         },
       ]}
     >
       <DataTable.TableControlBar />
       <DataTable.Table />
-      <DataTable.EmptyTable content={intl.formatMessage(messages.noCatalogs)} />
+      <DataTable.EmptyTable content={intl.formatMessage(messages['corporate.catalog.table.empty.content'])} />
       <TableFooter />
     </DataTable>
   );

@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Card, Form, SearchField } from '@openedx/paragon';
-import { CourseRun } from '@src/types';
 import messages from '@src/courses/messages';
 
+type CourseListItem = {
+  id: string;
+  displayName: string;
+};
+
 type AvailableCoursesListProps = {
-  courses: CourseRun[];
+  courses: CourseListItem[];
   selectedCourses: Set<string>;
   setSelectedCourses: (courses: Set<string>) => void;
 };
@@ -42,7 +46,7 @@ const AvailableCoursesList = ({ courses, selectedCourses, setSelectedCourses }: 
           <Card className="p-3 shadow-none border-bottom rounded-0 bg-light-300">
             <Form.Checkbox
               checked={allSelected}
-              indeterminate={someSelected && !allSelected ? true : undefined}
+              indeterminate={someSelected && !allSelected}
               onChange={e => handleSelectAll(e.target.checked)}
             >
               {intl.formatMessage(messages['corporate.courses.modal.add.select.all'], { count: filteredCourses.length })}

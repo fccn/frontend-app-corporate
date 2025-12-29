@@ -51,6 +51,12 @@ describe('CoursesList', () => {
       isLoading: false,
     });
     (hooks.useDeleteCatalogCourse as jest.Mock).mockReturnValue(jest.fn());
+    (hooks.useAvailableCourses as jest.Mock).mockReturnValue({
+      data: [],
+      isLoading: false,
+    });
+    (hooks.useAddCoursesToCatalog as jest.Mock).mockReturnValue(jest.fn());
+    (hooks.useUpdateCatalogCourse as jest.Mock).mockReturnValue(jest.fn());
   });
 
   it('renders a table with course data', () => {

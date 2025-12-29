@@ -25,7 +25,7 @@ describe('RegexInput', () => {
     renderRegexInput();
 
     expect(screen.getByText('Allowed email domains')).toBeInTheDocument();
-    expect(screen.getByText(/Add the email domains allowed to self-enroll/)).toBeInTheDocument();
+    expect(screen.getByText(/Add comma-separated email domains allowed to self-enroll/)).toBeInTheDocument();
   });
 
   it('calls onChange with parsed array on blur', async () => {

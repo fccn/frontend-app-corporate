@@ -114,10 +114,10 @@ describe('useDeleteCatalogCourse', () => {
     });
 
     await act(async () => {
-      await result.current({ catalogId: 'c1', courseId: '1' });
+      await result.current({ catalogId: 'c1', data: { catalogCourseIds: [1] } });
     });
 
-    expect(api.deleteCourse).toHaveBeenCalledWith('c1', 1);
+    expect(api.deleteCourse).toHaveBeenCalledWith('c1', { catalogCourseIds: [1] });
   });
 
   it('handles API error', async () => {
@@ -128,7 +128,7 @@ describe('useDeleteCatalogCourse', () => {
     });
 
     await expect(
-      result.current({ catalogId: 'c1', courseId: '1' }),
+      result.current({ catalogId: 'c1', data: { catalogCourseIds: [1] } }),
     ).rejects.toThrow('Delete error');
   });
 });

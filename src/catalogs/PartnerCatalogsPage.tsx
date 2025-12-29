@@ -24,10 +24,10 @@ const PartnerCatalogsPage = () => {
             imageUrl: partnerDetails.logo,
           }}
           info={[
-            { title: intl.formatMessage(messages.infoCatalog), value: partnerDetails.catalogs },
-            { title: intl.formatMessage(messages.headerCourses), value: partnerDetails.courses },
-            { title: intl.formatMessage(messages.headerEnrollments), value: partnerDetails.enrollments },
-            { title: intl.formatMessage(messages.headerCertified), value: partnerDetails.certified },
+            { title: intl.formatMessage(messages['corporate.catalog.header.info.name']), value: partnerDetails.catalogs },
+            { title: intl.formatMessage(messages['corporate.catalog.header.info.courses']), value: partnerDetails.courses },
+            { title: intl.formatMessage(messages['corporate.catalog.header.info.enrollments']), value: partnerDetails.enrollments },
+            { title: intl.formatMessage(messages['corporate.catalog.header.info.certified']), value: partnerDetails.certified },
           ]}
         />
 

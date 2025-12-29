@@ -29,7 +29,7 @@ export const useDeleteCatalogCourse = () => {
   const queryClient = useQueryClient();
   const { mutateAsync } = useMutation({
     mutationFn: async ({ catalogId, data }:
-    { catalogId: string; data: { courseIds: string[] } }) => deleteCourse(catalogId, data),
+    { catalogId: string; data: { catalogCourseIds: number[] } }) => deleteCourse(catalogId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: queryKey.all,
@@ -64,9 +64,9 @@ export const useAvailableCourses = (catalogId: string, isOpen: boolean) => useQu
 export const useAddCoursesToCatalog = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ catalogId, catalogCourseIds }: {
+    mutationFn: ({ catalogId, courseIds }: {
       catalogId: string;
-      catalogCourseIds: number[] }) => addCoursesToCatalog(catalogId, { catalogCourseIds }),
+      courseIds: string[] }) => addCoursesToCatalog(catalogId, { courseIds }),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: queryKey.all,
