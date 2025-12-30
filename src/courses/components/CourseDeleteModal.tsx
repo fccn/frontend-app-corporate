@@ -2,7 +2,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import ModalLayout from '@src/components/ModalLayout';
 import { Button, Container } from '@openedx/paragon';
 import messages from '@src/courses/messages';
-import { useDeleteCatalogCourse } from '../../data/hooks';
+import { useDeleteCatalogCourse } from '../data/hooks';
 
 interface CourseDeleteProps {
   isOpen: boolean;
