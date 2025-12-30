@@ -45,6 +45,11 @@ const messages = defineMessages({
     defaultMessage: 'Learners',
     description: 'Tab title for learners',
   },
+  'corporate.courses.page.tab.enrollments': {
+    id: 'corporate.courses.page.tab.enrollments',
+    defaultMessage: 'Enrollments',
+    description: 'Tab title for enrollments',
+  },
   'corporate.courses.table.header.action': {
     id: 'corporate.courses.table.header.action',
     defaultMessage: 'Actions',

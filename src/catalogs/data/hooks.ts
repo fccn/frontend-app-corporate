@@ -7,6 +7,7 @@ import {
   getCatalogDetails, getPartnerCatalogs, updateCatalog, getCatalogsLearners,
   postCatalogInviteLearners,
   postBulkCatalogInviteLearners,
+  getCatalogEnrrollements,
 } from './api';
 
 const queryKey = {
@@ -16,6 +17,7 @@ const queryKey = {
   ],
   catalogDetail: (catalogSlug: string) => [...queryKey.all, 'detail', catalogSlug],
   catalogLearners: (catalogId: string) => [...queryKey.all, 'learners', catalogId],
+  catalogEnrollments: (catalogId: string) => [...queryKey.all, 'enrollments', catalogId],
 };
 
 export const usePartnerCatalogs = (
@@ -46,7 +48,7 @@ export const useUpdateCatalog = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ catalogId, data }:
-      { catalogId: string; data: CatalogUpdateRequest }) => updateCatalog(catalogId, data),
+    { catalogId: string; data: CatalogUpdateRequest }) => updateCatalog(catalogId, data),
     onSuccess(data) {
       if (data) {
         queryClient.setQueryData(
@@ -60,7 +62,7 @@ export const useUpdateCatalog = () => {
 
 export const useCatalogLearners = ({
   catalogId,
-}: {catalogId: string }) => useQuery({
+}: { catalogId: string }) => useQuery({
   queryKey: queryKey.catalogLearners(catalogId),
   queryFn: () => getCatalogsLearners(catalogId),
 });
@@ -69,7 +71,6 @@ type InvitePayload = {
   emails?: string[];
   csvFile?: File;
 };
-
 
 export const useInviteLearners = () => {
   const queryClient = useQueryClient();
@@ -105,11 +106,9 @@ export const useInviteLearners = () => {
   });
 };
 
-
-// export const useCatalogEnrollments = ({
-//   partnerId,
-//   catalogId,
-// }: { partnerId: number; catalogId: string }) => useQuery({
-//   queryKey: queryKey.catalogLearners(partnerId, catalogId),
-//   queryFn: () => getCatalogsLearners(catalogId),
-// });
+export const useCatalogEnrollments = ({
+  catalogId,
+}: { catalogId: string }) => useQuery({
+  queryKey: queryKey.catalogEnrollments(catalogId),
+  queryFn: () => getCatalogEnrrollements(catalogId),
+});

@@ -106,13 +106,13 @@ const messages = defineMessages({
     defaultMessage: 'Removed At',
     description: 'Header for the removed at column',
   },
-  'corporate.learners.table.action.add.learner': {
-    id: 'corporate.learners.table.action.add.learner',
+  'corporate.catalog.learners.table.action.add.learner': {
+    id: 'corporate.catalog.learners.table.action.add.learner',
     defaultMessage: 'Invite Learners',
     description: 'Button text to add a learner to the catalog',
   },
-  'corporate.learners.table.action.download.report': {
-    id: 'corporate.learners.table.action.download.report',
+  'corporate.catalog.learners.table.action.download.report': {
+    id: 'corporate.catalog.learners.table.action.download.report',
     defaultMessage: 'Download Report',
     description: 'Button text to download the learners report',
   },
@@ -150,6 +150,21 @@ const messages = defineMessages({
     id: 'corporate.catalog.learners.modal.invite.action',
     defaultMessage: 'Send Invitations',
     description: 'Action button text for sending invitations to learners',
+  },
+  'corporate.catalog.enrollments.table.header.progress': {
+    id: 'corporate.catalog.enrollments.table.header.progress',
+    defaultMessage: 'Progress',
+    description: 'Header for the progress column in the enrollments table',
+  },
+  'corporate.catalog.enrollments.table.header.hasCertificate': {
+    id: 'corporate.catalog.enrollments.table.header.hasCertificate',
+    defaultMessage: 'Has Certificate',
+    description: 'Header for the has certificate column in the enrollments table',
+  },
+  'corporate.catalog.enrollments.table.action.preenroll': {
+    id: 'corporate.catalog.enrollments.table.action.preenroll',
+    defaultMessage: 'Pre-enroll Learner',
+    description: 'Action button text for pre-enrolling a learner in the enrollments table',
   },
 });
 

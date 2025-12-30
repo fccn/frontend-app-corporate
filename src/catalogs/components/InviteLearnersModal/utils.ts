@@ -1,7 +1,6 @@
 import * as yup from 'yup';
 
-const emailRegex =
-  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([^<>()[\]\\.,;:\s@"]+\.)+[^<>()[\]\\.,;:\s@"]{2,})$/i;
+const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([^<>()[\]\\.,;:\s@"]+\.)+[^<>()[\]\\.,;:\s@"]{2,})$/i;
 
 export const inviteSchema = yup
   .object({
@@ -12,7 +11,7 @@ export const inviteSchema = yup
         'valid-emails',
         'One or more email addresses are invalid',
         (value) => {
-          if (!value) return true; // optional
+          if (!value) { return true; } // optional
 
           const emails = value
             .split(/[\s,;]+/)
@@ -20,7 +19,7 @@ export const inviteSchema = yup
             .filter(Boolean);
 
           return emails.every(email => emailRegex.test(email));
-        }
+        },
       ),
 
     csvFile: yup
@@ -31,7 +30,11 @@ export const inviteSchema = yup
   .test(
     'at-least-one-method',
     'Please add email addresses or upload a CSV file',
-    (values) => {
-      return Boolean(values?.emails?.trim() || values?.csvFile);
-    }
+    (values) => Boolean(values?.emails?.trim() || values?.csvFile),
   );
+
+export const fileUploadStatus = {
+  success: 'SUCCESS',
+  failure: 'FAILURE',
+  pending: 'PENDING',
+};

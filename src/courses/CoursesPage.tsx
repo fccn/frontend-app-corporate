@@ -9,6 +9,7 @@ import { Settings } from '@openedx/paragon/icons';
 import { paths } from '@src/constants';
 import { CatalogSettingsModal } from '@src/catalogs/components/CatalogSettingsModal';
 import LearnerList from '@src/catalogs/components/LearnerList';
+import EnrollmentList from '@src/catalogs/components/EnrollmentList';
 import CoursesList from './components/CoursesList';
 import AppLayout from '../components/AppLayout';
 
@@ -55,7 +56,10 @@ const CoursesPage = () => {
           <CoursesList catalogId={catalogDetails?.id} catalogName={catalogDetails?.name} />
         </Tab>
         <Tab eventKey="learners" title={intl.formatMessage(messages['corporate.courses.page.tab.learners'])} alt="Learners Tab">
-          <LearnerList catalogId={catalogDetails?.id} partnerId={partnerDetails.id} />
+          <LearnerList catalogId={catalogDetails?.id} />
+        </Tab>
+        <Tab eventKey="enrollments" title={intl.formatMessage(messages['corporate.courses.page.tab.enrollments'])} alt="Enrollments Tab">
+          <EnrollmentList catalogId={catalogDetails?.id} />
         </Tab>
       </Tabs>
     </AppLayout>

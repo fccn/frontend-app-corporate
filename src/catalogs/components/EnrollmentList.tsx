@@ -3,14 +3,13 @@ import {
   Badge, Button, DataTable, TextFilter,
 } from '@openedx/paragon';
 
-import { CellValue, Learner } from '@src/types';
-import { ActionItem, TableFooter } from '@src/components/Table/';
+import { TableFooter } from '@src/components/Table/';
 import { usePagination } from '@src/hooks';
 
-import { PersonAddAlt, SaveAlt } from '@openedx/paragon/icons';
+import { HowToReg, SaveAlt } from '@openedx/paragon/icons';
 import { useState } from 'react';
 import messages from '../messages';
-import { useCatalogLearners } from '../data/hooks';
+import { useCatalogEnrollments } from '../data/hooks';
 import InviteLearnersModal from './InviteLearnersModal';
 
 const LearnerName = ({ row }) => (
@@ -25,14 +24,25 @@ const LearnerStatus = ({ row }) => (
   <Badge variant={row.original.active ? 'success' : 'danger'}>{row.original.active ? 'Active' : 'Inactive'}</Badge>
 );
 
+const CourseNameCell = ({ row }) => (
+  <div className="text-center small">
+    <span className="d-block font-weight-bold truncate-1-line">
+      {row.original.courseOverview.displayName}
+    </span>
+    <span className="text-muted  truncate-1-line">
+      {row.original.courseOverview.id}
+    </span>
+  </div>
+);
+
 const TableAction = ({ catalogId }: { catalogId: string }) => {
   const intl = useIntl();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <>
-      <Button iconBefore={PersonAddAlt} size="sm" onClick={() => setIsModalOpen(true)}>
-        {intl.formatMessage(messages['corporate.catalog.learners.table.action.add.learner'])}
+      <Button iconBefore={HowToReg} size="sm" onClick={() => setIsModalOpen(true)}>
+        {intl.formatMessage(messages['corporate.catalog.enrollments.table.action.preenroll'])}
       </Button>
       <Button iconBefore={SaveAlt} size="sm">
         {intl.formatMessage(messages['corporate.catalog.learners.table.action.download.report'])}
@@ -62,16 +72,9 @@ const LearnerList = ({ catalogId }) => {
 
   const { pageIndex, pageSize, onPaginationChange } = usePagination();
 
-  const { data, isLoading } = useCatalogLearners({
+  const { data, isLoading } = useCatalogEnrollments({
     catalogId,
   });
-
-  const tableActions = [{
-    type: 'delete',
-    onClick: (_learner: Learner) => {
-      // TODO: Implement delete learner
-    },
-  }];
 
   return (
     <DataTable
@@ -88,20 +91,6 @@ const LearnerList = ({ catalogId }) => {
       pageCount={data?.numPages || 0}
       tableActions={[
         <TableAction catalogId={catalogId!} />,
-      ]}
-      additionalColumns={[
-        {
-          id: 'action',
-          Header: intl.formatMessage(messages['corporate.catalog.table.header.action']),
-          Cell: ({ row }: CellValue<Learner>) => tableActions.map(({ type, onClick }) => (
-            <ActionItem
-              key={`action-${type}-${row.original.id}`}
-              type={type}
-              disabled={!!row.original.removedAt}
-              onClick={() => onClick(row.original)}
-            />
-          )),
-        },
       ]}
       itemCount={data?.count || 0}
       data={data?.results || []}
@@ -135,20 +124,23 @@ const LearnerList = ({ catalogId }) => {
         {
           Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.last.login']),
           accessor: 'lastLogin',
-          Cell: ({ row }) => dateFormat(row.original.lastLogin),
+          Cell: ({ row }) => dateFormat(row.original.user.lastLogin),
         },
         {
           Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.enrollments']),
-          accessor: 'enrollments',
+          accessor: 'course',
+          Cell: CourseNameCell,
+
         },
         {
-          Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.certified']),
-          accessor: 'certified',
+          Header: intl.formatMessage(messages['corporate.catalog.enrollments.table.header.progress']),
+          accessor: 'progress',
+          Cell: ({ row }) => `${row.original.progress}%`,
         },
         {
-          Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.removed.at']),
-          accessor: 'removedAt',
-          Cell: ({ row }) => dateFormat(row.original.removedAt),
+          Header: intl.formatMessage(messages['corporate.catalog.enrollments.table.header.hasCertificate']),
+          accessor: 'hasCertificate',
+          Cell: ({ row }) => (row.original.hasCertificate ? 'Yes' : 'No'),
         },
       ]}
     >

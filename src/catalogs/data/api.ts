@@ -113,3 +113,24 @@ export const postBulkCatalogInviteLearners = async (
     throw error;
   }
 };
+
+export const getCatalogEnrrollements = async (
+  catalogId: string,
+): Promise<PaginatedResponse<Learner>> => {
+  try {
+    const url = new URL(getCorporateApi(`manage/catalogs/${catalogId}/enrollments/`));
+    const response = await getAuthenticatedHttpClient().get(url);
+    return camelCaseObject(response.data);
+  } catch (error) {
+    logError(error);
+    return {
+      next: null,
+      previous: null,
+      count: 0,
+      numPages: 0,
+      currentPage: 0,
+      start: 0,
+      results: [],
+    };
+  }
+};

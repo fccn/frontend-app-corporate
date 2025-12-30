@@ -1,13 +1,14 @@
-import { useState } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import ModalLayout from '@src/components/ModalLayout';
-import { Button, Card, Container, Dropzone, Form, IconButton } from '@openedx/paragon';
+import {
+  Button, Card, Container, Dropzone, Form, IconButton,
+} from '@openedx/paragon';
 import messages from '@src/catalogs/messages';
 import { useForm } from 'react-hook-form';
 import { yupValidationResolver } from '@src/utils';
-import { inviteSchema } from './utils';
 import { useInviteLearners } from '@src/catalogs/data/hooks';
 import { Delete } from '@openedx/paragon/icons';
+import { inviteSchema } from './utils';
 
 type FormValues = {
   emails?: string;
@@ -27,6 +28,7 @@ const InviteLearnersModal = ({ isOpen, onClose, catalogId }: CourseAddModalProps
     handleSubmit,
     setValue,
     watch,
+    reset,
     formState: { errors, isValid, isSubmitting },
   } = useForm<FormValues>({
     resolver: yupValidationResolver(inviteSchema),
@@ -53,21 +55,26 @@ const InviteLearnersModal = ({ isOpen, onClose, catalogId }: CourseAddModalProps
     });
   };
 
-
   return (
     <ModalLayout
       title={intl.formatMessage(messages['corporate.catalog.learners.modal.invite.title'])}
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={() => {
+        reset({
+          emails: '',
+          csvFile: null,
+        });
+        onClose();
+      }}
       actions={(
         <Button onClick={handleSubmit(onSubmit)} disabled={!isValid || isSubmitting || isLoading}>
           {intl.formatMessage(messages['corporate.catalog.learners.modal.invite.action'])}
         </Button>
       )}
     >
-      <Container className='py-3'>
-        <Form.Group controlId="inviteLearnersEmail" size='sm'>
-          <h4 className='text-primary'>{intl.formatMessage(messages['corporate.catalog.learners.modal.invite.manually.title'])}</h4>
+      <Container className="py-3">
+        <Form.Group controlId="inviteLearnersEmail" size="sm">
+          <h4 className="text-primary">{intl.formatMessage(messages['corporate.catalog.learners.modal.invite.manually.title'])}</h4>
           <Form.Label>
             {intl.formatMessage(messages['corporate.catalog.learners.modal.invite.manually.description'])}
           </Form.Label>
@@ -76,7 +83,7 @@ const InviteLearnersModal = ({ isOpen, onClose, catalogId }: CourseAddModalProps
             rows={6}
             {...register('emails')}
             placeholder={intl.formatMessage(
-              messages['corporate.catalog.learners.modal.invite.manually.input.placeholder']
+              messages['corporate.catalog.learners.modal.invite.manually.input.placeholder'],
             )}
             isInvalid={!!errors.emails}
           />
@@ -86,22 +93,26 @@ const InviteLearnersModal = ({ isOpen, onClose, catalogId }: CourseAddModalProps
             </Form.Control.Feedback>
           )}
         </Form.Group>
-        <Form.Group controlId="inviteLearnersUpload" size='sm' className='mt-4'>
-          <h4 className='text-primary'>{intl.formatMessage(messages['corporate.catalog.learners.modal.invite.bulk.title'])}</h4>
+        <Form.Group controlId="inviteLearnersUpload" size="sm" className="mt-4">
+          <h4 className="text-primary">{intl.formatMessage(messages['corporate.catalog.learners.modal.invite.bulk.title'])}</h4>
           <Form.Label>
             {intl.formatMessage(messages['corporate.catalog.learners.modal.invite.bulk.description'])}
           </Form.Label>
-          {csvFile ?
-            (<Card className='mt-4 px-3 py-4 d-flex align-items-center justify-content-between' orientation='horizontal'>
-              <span>{fileName}</span>
-              <IconButton
-                variant="danger"
-                src={Delete}
-                size="sm"
-                onClick={() => {
-                  setValue('csvFile', null, { shouldValidate: true });
-                }} />
-            </Card>)
+          {csvFile
+            ? (
+              <Card className="mt-4 px-3 py-4 d-flex align-items-center justify-content-between" orientation="horizontal">
+                <span>{fileName}</span>
+                <IconButton
+                  variant="danger"
+                  alt="Remove File"
+                  src={Delete}
+                  size="sm"
+                  onClick={() => {
+                    setValue('csvFile', null, { shouldValidate: true });
+                  }}
+                />
+              </Card>
+            )
             : (
               <Dropzone
                 accept={{ 'text/csv': ['.csv'] }}
@@ -113,12 +124,10 @@ const InviteLearnersModal = ({ isOpen, onClose, catalogId }: CourseAddModalProps
                     if (!file) {
                       throw new Error('No file provided');
                     }
-                    console.log(file);
-
                     setValue('csvFile', file, { shouldValidate: true });
 
                     // Signal success to Dropzone
-                    return Promise.resolve({
+                    return await Promise.resolve({
                       ...requestConfig,
                       status: 200,
                       data: {},
