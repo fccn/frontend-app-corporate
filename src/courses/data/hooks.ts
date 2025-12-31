@@ -3,6 +3,8 @@ import { appId } from '@src/constants';
 import {
   getCourses, deleteCourse, updateCourse, getAvailableCourses,
   addCoursesToCatalog,
+  getCourseDetails,
+  getCourseLearnersStatus,
 } from './api';
 
 const queryKey = {
@@ -10,7 +12,11 @@ const queryKey = {
   courseList: (catalogId: string, pageIndex: number, pageSize: number) => [
     ...queryKey.all, catalogId, pageIndex, pageSize,
   ],
+  courseDetails: (catalogId: string, courseId: string) => [...queryKey.all, 'details', catalogId, courseId],
   availableCourses: (catalogId: string) => [...queryKey.all, 'available', catalogId],
+  courseLearnersList: (catalogId: string, courseId: string, pageIndex: number, pageSize: number) => [
+    ...queryKey.all, 'learners', catalogId, courseId, pageIndex, pageSize,
+  ],
 };
 
 export const useCatalogCourses = (catalogId: string, pageIndex, pageSize) => {
@@ -24,6 +30,12 @@ export const useCatalogCourses = (catalogId: string, pageIndex, pageSize) => {
     courses: data?.results || [], count: data?.count || 0, pageCount: data?.numPages, isLoading,
   };
 };
+
+export const useCatalogCourseDetails = (catalogId: string, courseId: string) => useQuery({
+  queryKey: queryKey.courseDetails(catalogId, courseId),
+  queryFn: () => getCourseDetails(catalogId, courseId),
+  enabled: !!catalogId && !!courseId,
+});
 
 export const useDeleteCatalogCourse = () => {
   const queryClient = useQueryClient();
@@ -73,4 +85,17 @@ export const useAddCoursesToCatalog = () => {
       });
     },
   });
+};
+
+export const useCourseLearnersStatus = (catalogId: string, courseId: string, pageIndex, pageSize) => {
+  const { data, isLoading } = useQuery({
+    queryKey: queryKey.courseLearnersList(catalogId, courseId, pageIndex, pageSize),
+    queryFn: () => getCourseLearnersStatus(catalogId, courseId, pageIndex, pageSize),
+    enabled: !!catalogId,
+  });
+
+  return {
+    data,
+    isLoading,
+  };
 };

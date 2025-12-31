@@ -114,7 +114,6 @@ export const postBulkCatalogInviteLearners = async (
   }
 };
 
-
 export const deleteLearnersFromCatalog = async (
   catalogId: string,
   data: { learnerIds: number[] },
@@ -126,7 +125,7 @@ export const deleteLearnersFromCatalog = async (
     logError(error);
     throw error;
   }
-}
+};
 
 export const getCatalogEnrrollements = async (
   catalogId: string,

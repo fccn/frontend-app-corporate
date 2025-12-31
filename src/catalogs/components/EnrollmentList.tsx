@@ -57,8 +57,6 @@ const TableAction = ({ catalogId }: { catalogId: string }) => {
   );
 };
 
-
-
 const dateFormat = (isoDateString) => {
   if (!isoDateString) {
     return null;

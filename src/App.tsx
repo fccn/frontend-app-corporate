@@ -9,6 +9,7 @@ import { useCurrentUser } from './hooks';
 const CorporatePartnerPage = lazy(() => import('@src/partner/CorporatePartnerPage'));
 const PartnerCatalogsPage = lazy(() => import('@src/catalogs/PartnerCatalogsPage'));
 const CoursesPage = lazy(() => import('@src/courses/CoursesPage'));
+const CourseDetailPage = lazy(() => import('@src/courses/CourseDetailPage'));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,9 +32,7 @@ const Router = () => {
         <Route path={paths.partners.path} component={CorporatePartnerPage} />
         <Route path={paths.catalogs.path} component={PartnerCatalogsPage} />
         <Route path={paths.courses.path} component={CoursesPage} />
-        <Route path={paths.courseDetail.path}>
-          <h1>Course Details</h1>
-        </Route>
+        <Route path={paths.courseDetail.path} component={CourseDetailPage} />
         <Route>
           <h1>404 Not Found</h1>
         </Route>

@@ -100,7 +100,6 @@ export interface CourseOverview {
   display_name: string;
 }
 
-
 export interface CatalogCourseEnrollment {
   id: number;
   active: boolean;
@@ -110,4 +109,3 @@ export interface CatalogCourseEnrollment {
   user: Partial<Learner['user']>;
   course_overview: CourseOverview;
 }
-

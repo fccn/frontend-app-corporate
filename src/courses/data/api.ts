@@ -20,6 +20,17 @@ export const getCourses = async (catalogId: string, pageIndex, pageSize)
   }
 };
 
+export const getCourseDetails = async (catalogId: string, courseId: string): Promise<Course | null> => {
+  try {
+    const url = getCorporateApi(`manage/catalogs/${catalogId}/courses/${courseId}/`);
+    const { data } = await getAuthenticatedHttpClient().get(url);
+    return camelCaseObject(data);
+  } catch (error) {
+    logError(error);
+    return null;
+  }
+};
+
 export const deleteCourse = async (catalogId: string, data: { catalogCourseIds: number[] }) => {
   try {
     const url = getCorporateApi(`manage/catalogs/${catalogId}/remove_courses/`);
@@ -59,5 +70,21 @@ export const addCoursesToCatalog = async (catalogId: string, data: { courseIds: 
   } catch (error) {
     logError(error);
     throw error;
+  }
+};
+
+export const getCourseLearnersStatus = async (catalogId: string, courseId: string, pageIndex, pageSize)
+: Promise<PaginatedResponse<any>> => {
+  try {
+    const url = new URL(getCorporateApi(`manage/catalogs/${catalogId}/courses/${courseId}/enrollments/`));
+    url.searchParams.append('page', pageIndex);
+    url.searchParams.append('page_size', pageSize);
+    const { data } = await getAuthenticatedHttpClient().get(url);
+    return camelCaseObject(data);
+  } catch (error) {
+    logError(error);
+    return {
+      count: 0, next: null, previous: null, results: [], numPages: 0, currentPage: 1, start: 0,
+    };
   }
 };
