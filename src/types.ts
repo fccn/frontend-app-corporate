@@ -18,6 +18,7 @@ export type Learner = {
     username: string;
     email: string;
     fullName: string;
+    lastLogin: string;
   },
   inviteSentAt: string;
   acceptedAt: string;

@@ -162,7 +162,7 @@ const LearnerList = ({ catalogId, catalogName }) => {
           {
             Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.last.login']),
             accessor: 'lastLogin',
-            Cell: ({ row }) => dateFormat(row.original.lastLogin),
+            Cell: ({ row }) => dateFormat(row.original.user.lastLogin),
           },
           {
             Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.enrollments']),
