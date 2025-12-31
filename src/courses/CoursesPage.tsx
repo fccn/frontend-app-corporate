@@ -56,7 +56,7 @@ const CoursesPage = () => {
           <CoursesList catalogId={catalogDetails?.id} catalogName={catalogDetails?.name} />
         </Tab>
         <Tab eventKey="learners" title={intl.formatMessage(messages['corporate.courses.page.tab.learners'])} alt="Learners Tab">
-          <LearnerList catalogId={catalogDetails?.id} />
+          <LearnerList catalogId={catalogDetails?.id} catalogName={catalogDetails?.name} />
         </Tab>
         <Tab eventKey="enrollments" title={intl.formatMessage(messages['corporate.courses.page.tab.enrollments'])} alt="Enrollments Tab">
           <EnrollmentList catalogId={catalogDetails?.id} />

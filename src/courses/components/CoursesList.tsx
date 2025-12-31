@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { useParams } from 'wouter';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   Button,
@@ -11,14 +13,12 @@ import { ActionItem, TableFooter } from '@src/components/Table';
 import { useNavigate, usePagination } from '@src/hooks';
 
 import { paths } from '@src/constants';
-import { useParams } from 'wouter';
 import { Add, SaveAlt } from '@openedx/paragon/icons';
 import CourseAddModal from '@src/courses/components/CourseAddModal';
-import { useState } from 'react';
 import { useCatalogCourses, useUpdateCatalogCourse } from '../data/hooks';
+import CourseDeleteModal from './CourseDeleteModal';
 
 import messages from '../messages';
-import CourseDeleteModal from './CourseDeteleteModal';
 
 type CoursesCell = CellValue<Course>;
 

@@ -8,12 +8,13 @@ import {
   postCatalogInviteLearners,
   postBulkCatalogInviteLearners,
   getCatalogEnrrollements,
+  deleteLearnersFromCatalog,
 } from './api';
 
 const queryKey = {
   all: [appId, 'catalogs'],
-  catalogList: (partnerId: number, pageIndex: number, pageSize: number) => [
-    ...queryKey.all, partnerId, pageIndex, pageSize,
+  catalogList: (pageIndex: number, pageSize: number) => [
+    ...queryKey.all, 'courses', pageIndex, pageSize,
   ],
   catalogDetail: (catalogSlug: string) => [...queryKey.all, 'detail', catalogSlug],
   catalogLearners: (catalogId: string) => [...queryKey.all, 'learners', catalogId],
@@ -86,7 +87,8 @@ export const useInviteLearners = () => {
       // Emails
       if (data.emails?.length) {
         await postCatalogInviteLearners(catalogId, {
-          emails: data.emails,
+          inviteEmail: data.emails,
+          catalogId,
         });
       }
 
@@ -96,6 +98,30 @@ export const useInviteLearners = () => {
           csvFile: data.csvFile,
         });
       }
+    },
+
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: queryKey.catalogLearners(variables.catalogId),
+      });
+    },
+  });
+};
+
+export const useRemoveLearners = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      catalogId,
+      learnerIds,
+    }: {
+      catalogId: string;
+      learnerIds: number[];
+    }) => {
+      deleteLearnersFromCatalog(catalogId, {
+        learnerIds,
+      });
     },
 
     onSuccess: (_, variables) => {

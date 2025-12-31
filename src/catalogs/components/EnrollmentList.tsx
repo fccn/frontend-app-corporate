@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   Badge, Button, DataTable, TextFilter,
@@ -7,10 +8,10 @@ import { TableFooter } from '@src/components/Table/';
 import { usePagination } from '@src/hooks';
 
 import { HowToReg, SaveAlt } from '@openedx/paragon/icons';
-import { useState } from 'react';
-import messages from '../messages';
 import { useCatalogEnrollments } from '../data/hooks';
 import InviteLearnersModal from './InviteLearnersModal';
+
+import messages from '../messages';
 
 const LearnerName = ({ row }) => (
   <span>{row.original.user.fullName}</span>
@@ -56,6 +57,8 @@ const TableAction = ({ catalogId }: { catalogId: string }) => {
   );
 };
 
+
+
 const dateFormat = (isoDateString) => {
   if (!isoDateString) {
     return null;
@@ -67,7 +70,7 @@ const dateFormat = (isoDateString) => {
   return formatted;
 };
 
-const LearnerList = ({ catalogId }) => {
+const EnrollmentsList = ({ catalogId }) => {
   const intl = useIntl();
 
   const { pageIndex, pageSize, onPaginationChange } = usePagination();
@@ -152,4 +155,4 @@ const LearnerList = ({ catalogId }) => {
   );
 };
 
-export default LearnerList;
+export default EnrollmentsList;

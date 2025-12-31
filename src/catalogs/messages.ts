@@ -151,6 +151,35 @@ const messages = defineMessages({
     defaultMessage: 'Send Invitations',
     description: 'Action button text for sending invitations to learners',
   },
+  'corporate.catalog.learners.bulk.delete.action': {
+    id: 'corporate.catalog.learners.bulk.delete.action',
+    defaultMessage: 'Delete Selected Learners',
+    description: 'Action button text for deleting selected learners from the catalog',
+  },
+  'corporate.catalog.learners.modal.delete.title': {
+    id: 'corporate.catalog.learners.modal.delete.title',
+    defaultMessage: 'Delete Learners from Catalog',
+    description: 'Title for the delete learners from catalog modal',
+  },
+  'corporate.catalog.learners.modal.delete.confirmation': {
+    id: 'corporate.catalog.learners.modal.delete.confirmation',
+    defaultMessage: 'You are about to remove {learnerName} ({email}) from the “{catalogName}” catalog.',
+    description: 'Confirmation message for deleting learners from the catalog',
+  },
+  'corporate.catalog.learners.modal.delete.description': {
+    id: 'corporate.catalog.learners.modal.delete.description',
+    defaultMessage: `
+    <li>The learner will lose access to this catalog and will no longer see its courses.</li>
+    <li>Any active enrollments in open/free courses will be preserved (progress and certificates remain intact).</li>
+    <li>If the learner was enrolled in paid or verified-mode courses only through this catalog, their enrollment may be downgraded to audit mode.</li>
+    `,
+    description: 'Description for the delete learners from catalog modal',
+  },
+  'corporate.catalog.learners.modal.delete.action': {
+    id: 'corporate.catalog.learners.modal.delete.action',
+    defaultMessage: 'Delete Learner',
+    description: 'Action button text for deleting learners from the catalog',
+  },
   'corporate.catalog.enrollments.table.header.progress': {
     id: 'corporate.catalog.enrollments.table.header.progress',
     defaultMessage: 'Progress',

@@ -93,3 +93,20 @@ export interface CellValue<T> {
     original: T;
   };
 }
+
+export interface CourseOverview {
+  id: string;
+  display_name: string;
+}
+
+
+export interface CatalogCourseEnrollment {
+  id: number;
+  active: boolean;
+  progress: number;
+  has_certificate: boolean;
+  catalog_course: number;
+  user: Partial<Learner['user']>;
+  course_overview: CourseOverview;
+}
+

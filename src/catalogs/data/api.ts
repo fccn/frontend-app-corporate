@@ -4,7 +4,7 @@ import { logError } from '@edx/frontend-platform/logging';
 
 import { getCorporateApi } from '@src/constants';
 import {
-  Catalog, CatalogUpdateRequest, Learner, PaginatedResponse,
+  Catalog, CatalogCourseEnrollment, CatalogUpdateRequest, Learner, PaginatedResponse,
 } from '../../types';
 
 export const getPartnerCatalogs = async (
@@ -84,7 +84,7 @@ export const getCatalogsLearners = async (
 
 export const postCatalogInviteLearners = async (
   catalogId: string | number,
-  data: { emails: string[] },
+  data: { catalogId: string, inviteEmail: string[] },
 ): Promise<void> => {
   try {
     const url = getCorporateApi(`manage/catalogs/${catalogId}/invitations/`);
@@ -114,9 +114,23 @@ export const postBulkCatalogInviteLearners = async (
   }
 };
 
+
+export const deleteLearnersFromCatalog = async (
+  catalogId: string,
+  data: { learnerIds: number[] },
+): Promise<void> => {
+  try {
+    const url = getCorporateApi(`manage/catalogs/${catalogId}/invitations/bulk_remove/`);
+    await getAuthenticatedHttpClient().post(url, snakeCaseObject(data));
+  } catch (error) {
+    logError(error);
+    throw error;
+  }
+}
+
 export const getCatalogEnrrollements = async (
   catalogId: string,
-): Promise<PaginatedResponse<Learner>> => {
+): Promise<PaginatedResponse<CatalogCourseEnrollment>> => {
   try {
     const url = new URL(getCorporateApi(`manage/catalogs/${catalogId}/enrollments/`));
     const response = await getAuthenticatedHttpClient().get(url);
