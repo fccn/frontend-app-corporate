@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom';
+import { mergeConfig } from '@edx/frontend-platform';
 import { render } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
@@ -20,6 +21,13 @@ export const renderWrapper = (children) => {
     </QueryClientProvider>,
   );
 };
+
+mergeConfig({
+  LEARNING_PATHS_MFE_URL: process.env.LEARNING_PATHS_MFE_URL || null,
+  PUBLIC_PATH: process.env.PUBLIC_PATH || '/',
+}, 'CorporateManagerConfig');
+
+// Mock ResizeObserver
 
 class ResizeObserver {
   observe() { }

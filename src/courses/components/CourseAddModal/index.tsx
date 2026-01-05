@@ -5,6 +5,7 @@ import {
   Button, Tab, Tabs, Container,
 } from '@openedx/paragon';
 import messages from '@src/courses/messages';
+import Loader from '@src/components/Loader';
 import { useAvailableCourses, useAddCoursesToCatalog } from '../../data/hooks';
 import AvailableCoursesList from './AvailableCoursesList';
 
@@ -45,7 +46,7 @@ const CourseAddModal = ({ isOpen, onClose, catalogId }:CourseAddModalProps) => {
       <Container className="min-vh-100">
         <Tabs className="mt-4">
           <Tab eventKey="all" title="Base Catalog Courses">
-            {loadingAll ? <p>Loading...</p>
+            {loadingAll ? <Loader />
               : (
                 <AvailableCoursesList
                   courses={allCourses.base}
@@ -55,7 +56,7 @@ const CourseAddModal = ({ isOpen, onClose, catalogId }:CourseAddModalProps) => {
               )}
           </Tab>
           <Tab eventKey="current" title="My Organization's Courses">
-            {loadingAll ? <p>Loading...</p>
+            {loadingAll ? <Loader />
               : (
                 <AvailableCoursesList
                   courses={allCourses.organization}

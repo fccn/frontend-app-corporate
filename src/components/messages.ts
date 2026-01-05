@@ -26,6 +26,11 @@ const messages = defineMessages({
     defaultMessage: 'It was not possible to copy, try again',
     description: 'Text for copy text error',
   },
+  'corporate.spinner.loading': {
+    id: 'corporate.spinner.loading',
+    defaultMessage: 'Loading',
+    description: 'Screen reader text for loading spinner',
+  },
 });
 
 export default messages;

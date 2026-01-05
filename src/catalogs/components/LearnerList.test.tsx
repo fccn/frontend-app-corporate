@@ -11,6 +11,14 @@ jest.mock('@src/hooks', () => ({
 
 jest.mock('../data/hooks', () => ({
   useCatalogLearners: jest.fn(),
+  useInviteLearners: jest.fn(() => ({
+    mutate: jest.fn(),
+    isLoading: false,
+  })),
+  useRemoveLearners: jest.fn(() => ({
+    mutate: jest.fn(),
+    isLoading: false,
+  })),
 }));
 
 const mockUseNavigate = require('@src/hooks').useNavigate;
@@ -236,7 +244,6 @@ describe('LearnerList', () => {
 
     expect(mockUseCatalogLearners).toHaveBeenCalledWith({
       catalogId: 'custom-catalog',
-      partnerId: 42,
     });
   });
 

@@ -39,6 +39,22 @@ jest.mock('@src/catalogs/data/hooks', () => ({
     },
     isLoading: false,
   })),
+  useInviteLearners: jest.fn(() => ({
+    mutate: jest.fn(),
+    isLoading: false,
+  })),
+  useRemoveLearners: jest.fn(() => ({
+    mutate: jest.fn(),
+    isLoading: false,
+  })),
+  useCatalogEnrollments: jest.fn(() => ({
+    data: {
+      results: [],
+      count: 0,
+      numPages: 1,
+    },
+    isLoading: false,
+  })),
 }));
 
 jest.mock('@src/partner/data/hooks', () => ({
@@ -101,16 +117,17 @@ describe('CoursesPage', () => {
     });
   });
 
-  it('renders tabs for courses and learners', async () => {
+  it('renders tabs for courses, learners, and enrollments', async () => {
     renderCoursesPage();
 
     await waitFor(() => {
       const tabElements = screen.getAllByRole('tab');
       // Filter out the "More..." dropdown tab
       const contentTabs = tabElements.filter(tab => !tab.textContent?.includes('More...'));
-      expect(contentTabs).toHaveLength(2);
+      expect(contentTabs).toHaveLength(3);
       expect(contentTabs[0]).toHaveTextContent('Courses');
       expect(contentTabs[1]).toHaveTextContent('Learners');
+      expect(contentTabs[2]).toHaveTextContent('Enrollments');
     });
   });
 
@@ -134,7 +151,7 @@ describe('CoursesPage', () => {
 
     await waitFor(() => {
       // Check for elements that indicate LearnerList is rendered
-      expect(screen.getByText('Learner Name')).toBeInTheDocument();
+      expect(screen.getByText('Invite Learners')).toBeInTheDocument();
     });
   });
 

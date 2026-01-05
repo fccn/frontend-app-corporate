@@ -58,7 +58,8 @@ describe('CourseAddModal', () => {
 
     renderWrapper(<CourseAddModal {...defaultProps} />);
 
-    expect(screen.getAllByText('Loading...')).toHaveLength(2);
+    const spinners = screen.getAllByRole('status');
+    expect(spinners).toHaveLength(1);
   });
 
   it('renders courses in base catalog tab', () => {
