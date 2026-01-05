@@ -32,7 +32,7 @@ const CoursesPage = () => {
             context={{
               title: catalogDetails.name,
               imageUrl: catalogDetails.image || null,
-              description: catalogDetails.alternativeLink || `${getConfig().CORPORATE_CATALOGS_MFE_URL}/${partnerDetails?.slug}/catalog/${catalogDetails?.slug}`,
+              description: catalogDetails.alternativeLink || `${getConfig().LEARNING_PATHS_MFE_URL}/${partnerDetails?.slug}/catalog/${catalogDetails?.slug}`,
               copyableDescription: true,
             }}
             info={[

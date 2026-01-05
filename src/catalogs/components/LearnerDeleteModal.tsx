@@ -24,7 +24,6 @@ const LearnerDeleteModal = ({
     if (!selectedLearners || selectedLearners.length === 0) {
       return;
     }
-    console.log('Deleting learners with IDs:', selectedLearners);
     const learnerIds = selectedLearners.map((learner) => learner.id);
     removeLearners({ catalogId, learnerIds });
     onClose();

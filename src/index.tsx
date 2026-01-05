@@ -35,7 +35,7 @@ initialize({
   requireAuthenticatedUser: true,
   config: () => {
     mergeConfig({
-      DASHBOARD_PAGE_SIZE: process.env.DASHBOARD_PAGE_SIZE || null,
-    }, 'LearningPathsConfig');
+      LEARNING_PATHS_MFE_URL: process.env.LEARNING_PATHS_MFE_URL || null,
+    }, 'CorporateManagerConfig');
   },
 });
