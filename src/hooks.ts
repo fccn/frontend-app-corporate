@@ -1,4 +1,6 @@
-import { useContext, useState } from 'react';
+import {
+  useContext, useState, useRef, useCallback, useMemo,
+} from 'react';
 import { useLocation } from 'wouter';
 import { AppContext } from '@edx/frontend-platform/react';
 import { CORPORATE_MANAGER_ROLE } from './constants';
@@ -53,14 +55,96 @@ export const usePagination = () => {
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
 
-  const onPaginationChange = (paginationState: { pageIndex: number; pageSize: number }) => {
+  const onPaginationChange = useCallback((paginationState: { pageIndex: number; pageSize: number }) => {
     if (paginationState.pageIndex !== pageIndex) { setPageIndex(paginationState.pageIndex); }
     if (paginationState.pageSize !== pageSize) { setPageSize(paginationState.pageSize); }
-  };
+  }, [pageIndex, pageSize]);
 
   return {
     pageIndex,
     pageSize,
     onPaginationChange,
   };
+};
+
+interface SortFilterConfig {
+  // optional list of allowed sort fields
+  sortFields?: string[];
+  // map filter id to param name, e.g. { 'name': 'search', 'status': 'status' }
+  filterMappings?: { [key: string]: string };
+  onPaginationChange: (pagination: { pageIndex: number; pageSize: number }) => void;
+}
+
+export const useTableSortFilter = (config: SortFilterConfig) => {
+  const [ordering, setOrdering] = useState<string>();
+  const [searchParams, setSearchParams] = useState<{ [key: string]: string }>({});
+
+  const previousSortByRef = useRef<Array<{ id: string; desc: boolean }>>();
+  const previousFiltersRef = useRef<Array<{ id: string; value: string }>>();
+  const isProcessingRef = useRef(false);
+
+  const handleSortingChange = useCallback((sortBy: Array<{ id: string; desc: boolean }>) => {
+    if (!sortBy || sortBy.length === 0) {
+      setOrdering(undefined);
+    } else {
+      const { id, desc } = sortBy[0];
+      // Check if id is allowed
+      if (config.sortFields && !config.sortFields.includes(id)) {
+        return;
+      }
+      // Convert to snake_case
+      const snakeCaseId = id.replace(/([A-Z])/g, '_$1').toLowerCase();
+      setOrdering(desc ? `-${snakeCaseId}` : snakeCaseId);
+    }
+  }, [config.sortFields]);
+
+  const handleFilteringChange = useCallback((filters: Array<{ id: string; value: string }>) => {
+    if (!filters) {
+      setSearchParams({});
+    } else {
+      const params: { [key: string]: string } = {};
+      filters.forEach(f => {
+        const param = config.filterMappings?.[f.id];
+        if (param) {
+          params[param] = f.value;
+        }
+      });
+      setSearchParams(params);
+    }
+  }, [config.filterMappings]);
+
+  const fetchData = useCallback((state: any) => {
+    if (isProcessingRef.current) { return; }
+    isProcessingRef.current = true;
+
+    const {
+      pageIndex: newPageIndex, pageSize: newPageSize, sortBy, filters,
+    } = state;
+
+    const sortByChanged = JSON.stringify(sortBy) !== JSON.stringify(previousSortByRef.current);
+    const filtersChanged = JSON.stringify(filters) !== JSON.stringify(previousFiltersRef.current);
+
+    if (sortByChanged || filtersChanged) {
+      // Reset page to 0
+      config.onPaginationChange({ pageIndex: 0, pageSize: newPageSize });
+    } else {
+      config.onPaginationChange({ pageIndex: newPageIndex, pageSize: newPageSize });
+    }
+
+    previousSortByRef.current = sortBy;
+    previousFiltersRef.current = filters;
+
+    handleSortingChange(sortBy);
+    handleFilteringChange(filters);
+
+    isProcessingRef.current = false;
+  }, [config, handleSortingChange, handleFilteringChange]);
+
+  return useMemo(() => ({
+    ordering,
+    searchParams,
+    handleSortingChange,
+    handleFilteringChange,
+    fetchData,
+  }), [ordering, searchParams, handleSortingChange, handleFilteringChange, fetchData]);
 };

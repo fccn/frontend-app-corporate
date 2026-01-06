@@ -4,12 +4,23 @@ import { logError } from '@edx/frontend-platform/logging';
 import { Course, CourseRun, PaginatedResponse } from '@src/types';
 import { getCorporateApi } from '@src/constants';
 
-export const getCourses = async (catalogId: string, pageIndex, pageSize)
-: Promise<PaginatedResponse<Course>> => {
+export const getCourses = async (
+  catalogId: string,
+  pageIndex: number,
+  pageSize: number,
+  ordering?: string,
+  search?: string,
+): Promise<PaginatedResponse<Course>> => {
   try {
     const url = new URL(getCorporateApi(`manage/catalogs/${catalogId}/courses/`));
-    url.searchParams.append('page', pageIndex);
-    url.searchParams.append('page_size', pageSize);
+    url.searchParams.append('page', pageIndex.toString());
+    url.searchParams.append('page_size', pageSize.toString());
+    if (ordering) {
+      url.searchParams.append('ordering', ordering);
+    }
+    if (search) {
+      url.searchParams.append('search', search);
+    }
     const { data } = await getAuthenticatedHttpClient().get(url);
     return camelCaseObject(data);
   } catch (error) {

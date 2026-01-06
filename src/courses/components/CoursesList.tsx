@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useParams } from 'wouter';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
@@ -10,7 +10,7 @@ import {
 import { CellValue, Course } from '@src/types';
 import { ActionItem, TableFooter } from '@src/components/Table';
 
-import { useNavigate, usePagination } from '@src/hooks';
+import { useNavigate, usePagination, useTableSortFilter } from '@src/hooks';
 
 import { paths } from '@src/constants';
 import { Add, SaveAlt } from '@openedx/paragon/icons';
@@ -81,12 +81,18 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
   const [isdeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
   const [selectedRowsForDelete, setSelectedRowsForDelete] = useState<any[]>([]);
   const { pageSize, pageIndex, onPaginationChange } = usePagination();
+  const tableConfig = useMemo(() => ({
+    sortFields: ['position'],
+    filterMappings: { name: 'search' },
+    onPaginationChange,
+  }), [onPaginationChange]);
+  const { ordering, searchParams, fetchData } = useTableSortFilter(tableConfig);
   const {
     courses,
     count,
     pageCount,
     isLoading,
-  } = useCatalogCourses(catalogId!, pageIndex + 1, pageSize);
+  } = useCatalogCourses(catalogId!, pageIndex + 1, pageSize, ordering, searchParams.search);
   const updateCatalogCourse = useUpdateCatalogCourse();
 
   const positions = Array.from({ length: count + 1 || 0 }, (_, i) => i);
@@ -120,14 +126,18 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
         isFilterable
         isSortable
         manualPagination
-        itemCount={count}
-        pageCount={pageCount || 0}
-        fetchData={onPaginationChange}
+        manualSortBy
+        manualFilters
         defaultColumnValues={{ Filter: TextFilter }}
         initialState={{
           pageSize,
           pageIndex,
+          sortBy: [],
+          filters: [],
         }}
+        fetchData={fetchData}
+        itemCount={count}
+        pageCount={pageCount || 0}
         data={courses}
         tableActions={[
           <TableAction catalogId={catalogId!} />,
@@ -152,7 +162,7 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
           {
             Header: intl.formatMessage(messages['corporate.courses.table.header.name']),
             accessor: 'name',
-            // eslint-disable-next-line react/no-unstable-nested-components
+            disableSortBy: true,
             Cell: CourseNameCell,
           },
           {
@@ -179,7 +189,7 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
           {
             Header: intl.formatMessage(messages['corporate.courses.table.header.course.dates']),
             accessor: 'courseDates',
-            // eslint-disable-next-line react/no-unstable-nested-components
+            disableSortBy: true,
             Cell: ({ row }: CoursesCell) => {
               const { start, end } = row.original.courseRun;
               return `${formatDate(start)} - ${formatDate(end)}`;
@@ -188,7 +198,7 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
           {
             Header: intl.formatMessage(messages['corporate.courses.table.header.enrollment.dates']),
             accessor: 'enrollmentDates',
-            // eslint-disable-next-line react/no-unstable-nested-components
+            disableSortBy: true,
             Cell: ({ row }: CoursesCell) => {
               const { enrollmentStart, enrollmentEnd } = row.original.courseRun;
               return `${formatDate(enrollmentStart)} - ${formatDate(enrollmentEnd)}`;
@@ -197,14 +207,17 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
           {
             Header: intl.formatMessage(messages['corporate.courses.table.header.enrollment']),
             accessor: 'enrollments',
+            disableSortBy: true,
           },
           {
             Header: intl.formatMessage(messages['corporate.courses.table.header.certified']),
             accessor: 'certified',
+            disableSortBy: true,
           },
           {
             Header: intl.formatMessage(messages['corporate.courses.table.header.completion']),
             accessor: 'completionRate',
+            disableSortBy: true,
             Cell: ({ row }: CoursesCell) => `${row.original.completionRate}%`,
           },
         ]}

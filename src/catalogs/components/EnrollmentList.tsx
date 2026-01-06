@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   Badge, Button, DataTable, TextFilter,
+  DropdownFilter,
 } from '@openedx/paragon';
 
 import { TableFooter } from '@src/components/Table/';
-import { usePagination } from '@src/hooks';
+import { usePagination, useTableSortFilter } from '@src/hooks';
 
 import { HowToReg, SaveAlt } from '@openedx/paragon/icons';
 import { useCatalogEnrollments } from '../data/hooks';
@@ -73,8 +74,25 @@ const EnrollmentsList = ({ catalogId }) => {
 
   const { pageIndex, pageSize, onPaginationChange } = usePagination();
 
+  const tableConfig = useMemo(() => ({
+    sortFields: ['invite_sent_at', 'accepted_at', 'last_login_at', 'removed_at'],
+    filterMappings: { fullName: 'search', email: 'search', active: 'active' },
+    onPaginationChange,
+  }), [onPaginationChange]);
+
+  const {
+    ordering,
+    searchParams,
+    fetchData,
+  } = useTableSortFilter(tableConfig);
+
   const { data, isLoading } = useCatalogEnrollments({
     catalogId,
+    pageIndex: pageIndex + 1,
+    pageSize,
+    ordering,
+    search: searchParams.search,
+    active: searchParams.active,
   });
 
   return (
@@ -82,13 +100,17 @@ const EnrollmentsList = ({ catalogId }) => {
       isLoading={isLoading}
       isPaginated
       isFilterable
+      isSortable
       defaultColumnValues={{ Filter: TextFilter }}
       initialState={{
         pageSize,
         pageIndex,
+        filters: [{ id: 'active', value: 'true' }],
       }}
       manualPagination
-      fetchData={onPaginationChange}
+      manualSortBy
+      manualFilters
+      fetchData={fetchData}
       pageCount={data?.numPages || 0}
       tableActions={[
         <TableAction catalogId={catalogId!} />,
@@ -99,18 +121,27 @@ const EnrollmentsList = ({ catalogId }) => {
         {
           Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.name']),
           accessor: 'fullName',
+          disableSortBy: true,
           Cell: LearnerName,
 
         },
         {
           Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.email']),
           accessor: 'email',
+          disableSortBy: true,
           Cell: LearnerEmail,
         },
         {
           Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.status']),
-          accessor: 'status',
+          accessor: 'active',
+          disableSortBy: true,
           Cell: LearnerStatus,
+          Filter: DropdownFilter,
+          filterChoices: [
+            { value: 'true', name: intl.formatMessage(messages['corporate.catalog.learners.filter.active.only']) },
+            { value: 'false', name: intl.formatMessage(messages['corporate.catalog.learners.filter.inactive.only']) },
+            { value: 'all', name: intl.formatMessage(messages['corporate.catalog.learners.filter.all']) },
+          ],
         },
         {
           Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.invite.sent.at']),
@@ -131,17 +162,25 @@ const EnrollmentsList = ({ catalogId }) => {
           Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.enrollments']),
           accessor: 'course',
           Cell: CourseNameCell,
+          disableSortBy: true,
 
         },
         {
           Header: intl.formatMessage(messages['corporate.catalog.enrollments.table.header.progress']),
           accessor: 'progress',
           Cell: ({ row }) => `${row.original.progress}%`,
+          disableSortBy: true,
         },
         {
           Header: intl.formatMessage(messages['corporate.catalog.enrollments.table.header.hasCertificate']),
           accessor: 'hasCertificate',
           Cell: ({ row }) => (row.original.hasCertificate ? 'Yes' : 'No'),
+          disableSortBy: true,
+        },
+        {
+          Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.removed.at']),
+          accessor: 'removedAt',
+          Cell: ({ row }) => dateFormat(row.original.removedAt),
         },
       ]}
     >

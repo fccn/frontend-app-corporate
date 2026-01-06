@@ -9,8 +9,8 @@ import {
 
 const queryKey = {
   all: [appId, 'courses'],
-  courseList: (catalogId: string, pageIndex: number, pageSize: number) => [
-    ...queryKey.all, catalogId, pageIndex, pageSize,
+  courseList: (catalogId: string, pageIndex: number, pageSize: number, ordering?: string, search?: string) => [
+    ...queryKey.all, catalogId, pageIndex, pageSize, ordering, search,
   ],
   courseDetails: (catalogId: string, courseId: string) => [...queryKey.all, 'details', catalogId, courseId],
   availableCourses: (catalogId: string) => [...queryKey.all, 'available', catalogId],
@@ -19,15 +19,18 @@ const queryKey = {
   ],
 };
 
-export const useCatalogCourses = (catalogId: string, pageIndex, pageSize) => {
+export const useCatalogCourses = (catalogId, pageIndex, pageSize, ordering, search) => {
   const { data, isLoading } = useQuery({
-    queryKey: queryKey.courseList(catalogId, pageIndex, pageSize),
-    queryFn: () => getCourses(catalogId, pageIndex, pageSize),
+    queryKey: queryKey.courseList(catalogId, pageIndex, pageSize, ordering, search),
+    queryFn: () => getCourses(catalogId, pageIndex, pageSize, ordering, search),
     enabled: !!catalogId,
   });
 
   return {
-    courses: data?.results || [], count: data?.count || 0, pageCount: data?.numPages, isLoading,
+    courses: data?.results.filter(item => item != null) || [],
+    count: data?.count || 0,
+    pageCount: data?.numPages,
+    isLoading,
   };
 };
 

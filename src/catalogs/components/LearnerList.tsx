@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   Badge, Button, DataTable, TextFilter,
   useToggle,
+  DropdownFilter,
 } from '@openedx/paragon';
 
 import { CellValue, Learner } from '@src/types';
 import { ActionItem, TableFooter } from '@src/components/Table/';
-import { usePagination } from '@src/hooks';
+import { usePagination, useTableSortFilter } from '@src/hooks';
 
 import { PersonAddAlt, SaveAlt } from '@openedx/paragon/icons';
 import { useCatalogLearners } from '../data/hooks';
@@ -83,8 +84,25 @@ const LearnerList = ({ catalogId, catalogName }) => {
   const [selectedRowsForDelete, setSelectedRowsForDelete] = useState<any[]>([]);
   const { pageIndex, pageSize, onPaginationChange } = usePagination();
 
+  const tableConfig = useMemo(() => ({
+    sortFields: ['invite_sent_at', 'accepted_at', 'last_login_at', 'removed_at'],
+    filterMappings: { fullName: 'search', email: 'search', active: 'active' },
+    onPaginationChange,
+  }), [onPaginationChange]);
+
+  const {
+    ordering,
+    searchParams,
+    fetchData,
+  } = useTableSortFilter(tableConfig);
+
   const { data, isLoading } = useCatalogLearners({
     catalogId,
+    pageIndex: pageIndex + 1,
+    pageSize,
+    ordering,
+    search: searchParams.search,
+    active: searchParams.active,
   });
 
   const tableActions = [{
@@ -101,14 +119,18 @@ const LearnerList = ({ catalogId, catalogName }) => {
         isLoading={isLoading}
         isPaginated
         isFilterable
+        isSortable
         isSelectable
         defaultColumnValues={{ Filter: TextFilter }}
         initialState={{
           pageSize,
           pageIndex,
+          filters: [{ id: 'active', value: 'true' }],
         }}
         manualPagination
-        fetchData={onPaginationChange}
+        manualSortBy
+        manualFilters
+        fetchData={fetchData}
         pageCount={data?.numPages || 0}
         tableActions={[
           <TableAction catalogId={catalogId!} />,
@@ -136,23 +158,31 @@ const LearnerList = ({ catalogId, catalogName }) => {
           {
             Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.name']),
             accessor: 'fullName',
+            disableSortBy: true,
             Cell: LearnerName,
-
           },
           {
             Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.email']),
             accessor: 'email',
+            disableSortBy: true,
             Cell: LearnerEmail,
           },
           {
             Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.status']),
-            accessor: 'status',
+            accessor: 'active',
             Cell: LearnerStatus,
+            Filter: DropdownFilter,
+            filterChoices: [
+              { value: 'true', name: intl.formatMessage(messages['corporate.catalog.learners.filter.active.only']) },
+              { value: 'false', name: intl.formatMessage(messages['corporate.catalog.learners.filter.inactive.only']) },
+              { value: 'all', name: intl.formatMessage(messages['corporate.catalog.learners.filter.all']) },
+            ],
           },
           {
             Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.invite.sent.at']),
             accessor: 'inviteSentAt',
             Cell: ({ row }) => dateFormat(row.original.inviteSentAt),
+            disableSortBy: true,
           },
           {
             Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.accept.at']),
@@ -162,15 +192,18 @@ const LearnerList = ({ catalogId, catalogName }) => {
           {
             Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.last.login']),
             accessor: 'lastLogin',
+            disableSortBy: true,
             Cell: ({ row }) => dateFormat(row.original.user.lastLogin),
           },
           {
             Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.enrollments']),
             accessor: 'enrollments',
+            disableSortBy: true,
           },
           {
             Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.certified']),
             accessor: 'certified',
+            disableSortBy: true,
           },
           {
             Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.removed.at']),

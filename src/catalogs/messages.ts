@@ -195,6 +195,21 @@ const messages = defineMessages({
     defaultMessage: 'Pre-enroll Learner',
     description: 'Action button text for pre-enrolling a learner in the enrollments table',
   },
+  'corporate.catalog.learners.filter.active.only': {
+    id: 'corporate.catalog.learners.filter.active.only',
+    defaultMessage: 'Active Only',
+    description: 'Option for active only filter',
+  },
+  'corporate.catalog.learners.filter.inactive.only': {
+    id: 'corporate.catalog.learners.filter.inactive.only',
+    defaultMessage: 'Inactive Only',
+    description: 'Option for inactive only filter',
+  },
+  'corporate.catalog.learners.filter.all': {
+    id: 'corporate.catalog.learners.filter.all',
+    defaultMessage: 'All',
+    description: 'Option for all status filter',
+  },
 });
 
 export default messages;

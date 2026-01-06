@@ -63,9 +63,25 @@ export const updateCatalog = async (
 
 export const getCatalogsLearners = async (
   catalogId: string | number,
+  pageIndex: number,
+  pageSize: number,
+  ordering?: string,
+  search?: string,
+  active?: string,
 ): Promise<PaginatedResponse<Learner>> => {
   try {
-    const url = getCorporateApi(`manage/catalogs/${catalogId}/learners/`);
+    const url = new URL(getCorporateApi(`manage/catalogs/${catalogId}/learners/`));
+    url.searchParams.append('page', pageIndex.toString());
+    url.searchParams.append('page_size', pageSize.toString());
+    if (ordering) {
+      url.searchParams.append('ordering', ordering);
+    }
+    if (search) {
+      url.searchParams.append('search', search);
+    }
+    if (active && active !== 'all') {
+      url.searchParams.append('active', active);
+    }
     const response = await getAuthenticatedHttpClient().get(url);
     return camelCaseObject(response.data);
   } catch (error) {
@@ -128,10 +144,26 @@ export const deleteLearnersFromCatalog = async (
 };
 
 export const getCatalogEnrrollements = async (
-  catalogId: string,
+  catalogId: string | number,
+  pageIndex: number,
+  pageSize: number,
+  ordering?: string,
+  search?: string,
+  active?: string,
 ): Promise<PaginatedResponse<CatalogCourseEnrollment>> => {
   try {
     const url = new URL(getCorporateApi(`manage/catalogs/${catalogId}/enrollments/`));
+    url.searchParams.append('page', pageIndex.toString());
+    url.searchParams.append('page_size', pageSize.toString());
+    if (ordering) {
+      url.searchParams.append('ordering', ordering);
+    }
+    if (search) {
+      url.searchParams.append('search', search);
+    }
+    if (active && active !== 'all') {
+      url.searchParams.append('active', active);
+    }
     const response = await getAuthenticatedHttpClient().get(url);
     return camelCaseObject(response.data);
   } catch (error) {

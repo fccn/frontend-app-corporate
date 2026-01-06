@@ -17,8 +17,26 @@ const queryKey = {
     ...queryKey.all, partnerId, pageIndex, pageSize,
   ],
   catalogDetail: (catalogSlug: string) => [...queryKey.all, 'detail', catalogSlug],
-  catalogLearners: (catalogId: string) => [...queryKey.all, 'learners', catalogId],
-  catalogEnrollments: (catalogId: string) => [...queryKey.all, 'enrollments', catalogId],
+  catalogLearners: (
+    catalogId: string,
+    pageIndex: number,
+    pageSize: number,
+    ordering?: string,
+    search?: string,
+    active?: string,
+  ) => [
+    ...queryKey.all, 'learners', catalogId, pageIndex, pageSize, ordering, search, active,
+  ],
+  catalogEnrollments: (
+    catalogId: string,
+    pageIndex: number,
+    pageSize: number,
+    ordering?: string,
+    search?: string,
+    active?: string,
+  ) => [
+    ...queryKey.all, 'enrollments', catalogId, pageIndex, pageSize, ordering, search, active,
+  ],
 };
 
 export const usePartnerCatalogs = (
@@ -63,9 +81,21 @@ export const useUpdateCatalog = () => {
 
 export const useCatalogLearners = ({
   catalogId,
-}: { catalogId: string }) => useQuery({
-  queryKey: queryKey.catalogLearners(catalogId),
-  queryFn: () => getCatalogsLearners(catalogId),
+  pageIndex,
+  pageSize,
+  ordering,
+  search,
+  active,
+}: {
+  catalogId: string;
+  pageIndex: number;
+  pageSize: number;
+  ordering?: string;
+  search?: string;
+  active?: string;
+}) => useQuery({
+  queryKey: queryKey.catalogLearners(catalogId, pageIndex, pageSize, ordering, search, active),
+  queryFn: () => getCatalogsLearners(catalogId, pageIndex, pageSize, ordering, search, active),
 });
 
 type InvitePayload = {
@@ -134,7 +164,19 @@ export const useRemoveLearners = () => {
 
 export const useCatalogEnrollments = ({
   catalogId,
-}: { catalogId: string }) => useQuery({
-  queryKey: queryKey.catalogEnrollments(catalogId),
-  queryFn: () => getCatalogEnrrollements(catalogId),
+  pageIndex,
+  pageSize,
+  ordering,
+  search,
+  active,
+}: {
+  catalogId: string;
+  pageIndex: number;
+  pageSize: number;
+  ordering?: string;
+  search?: string;
+  active?: string;
+}) => useQuery({
+  queryKey: queryKey.catalogEnrollments(catalogId, pageIndex, pageSize, ordering, search, active),
+  queryFn: () => getCatalogEnrrollements(catalogId, pageIndex, pageSize, ordering, search, active),
 });
