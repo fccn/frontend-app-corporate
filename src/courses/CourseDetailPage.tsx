@@ -9,10 +9,12 @@ import { useCatalogCourseDetails } from './data/hooks';
 import CourseLernerList from './components/CourseLearnerList';
 
 import messages from './messages';
+import { paths } from '@src/constants';
 
 const CourseDetailPage = () => {
   const intl = useIntl();
-  const { catalogSlug, courseId } = useParams<{
+  const { partnerSlug, catalogSlug, courseId } = useParams<{
+    partnerSlug: string | undefined
     catalogSlug: string | undefined
     courseId: string | undefined
   }>();
@@ -20,7 +22,7 @@ const CourseDetailPage = () => {
   const { data: courseDetails } = useCatalogCourseDetails(catalogDetails?.id || '', courseId || '');
 
   return (
-    <AppLayout>
+    <AppLayout withBackButton backPath={paths.courses.buildPath(partnerSlug || '', catalogSlug || '')}>
       {courseDetails
         && (
           <>
