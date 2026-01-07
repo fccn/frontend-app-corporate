@@ -25,6 +25,7 @@ export const renderWrapper = (children) => {
 mergeConfig({
   LEARNING_PATHS_MFE_URL: process.env.LEARNING_PATHS_MFE_URL || null,
   PUBLIC_PATH: process.env.PUBLIC_PATH || '/',
+  LMS_BASE_URL: process.env.LMS_BASE_URL || 'http://localhost:8000',
 }, 'CorporateManagerConfig');
 
 // Mock ResizeObserver

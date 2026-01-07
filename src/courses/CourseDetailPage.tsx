@@ -23,17 +23,18 @@ const CourseDetailPage = () => {
     <AppLayout>
       {courseDetails
         && (
-          <>          <HeaderDescription
-            context={{
-              title: courseDetails.courseRun.displayName,
-              imageUrl: courseDetails.courseRun.courseImageUrl ? `${getConfig().LMS_BASE_URL}${courseDetails.courseRun.courseImageUrl}` : null,
-            }}
-            info={[
-              { title: intl.formatMessage(messages['corporate.courses.page.enrolledUsers']), value: courseDetails.enrollments },
-              { title: intl.formatMessage(messages['corporate.courses.page.certifiedUsers']), value: courseDetails.certified },
-              { title: intl.formatMessage(messages['corporate.courses.page.completionRate']), value: `${courseDetails.completionRate}%` },
-            ]}
-          />
+          <>
+            <HeaderDescription
+              context={{
+                title: courseDetails.courseRun.displayName,
+                imageUrl: courseDetails.courseRun.courseImageUrl ? `${getConfig().LMS_BASE_URL}${courseDetails.courseRun.courseImageUrl}` : null,
+              }}
+              info={[
+                { title: intl.formatMessage(messages['corporate.courses.page.enrolledUsers']), value: courseDetails.enrollments },
+                { title: intl.formatMessage(messages['corporate.courses.page.certifiedUsers']), value: courseDetails.certified },
+                { title: intl.formatMessage(messages['corporate.courses.page.completionRate']), value: `${courseDetails.completionRate}%` },
+              ]}
+            />
 
             <CourseLernerList catalogId={catalogDetails?.id || ''} courseId={courseDetails.courseRun.id} />
           </>
