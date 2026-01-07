@@ -1,6 +1,5 @@
-import {
-  screen, waitFor, fireEvent, act,
-} from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { renderWrapper } from '@src/setupTest';
 import CoursesPage from './CoursesPage';
 
@@ -75,6 +74,11 @@ jest.mock('@src/hooks', () => ({
     pageSize: 10,
     onPaginationChange: jest.fn(),
   }),
+  useTableSortFilter: () => ({
+    ordering: '',
+    searchParams: {},
+    fetchData: jest.fn(),
+  }),
 }));
 
 jest.mock('./data/hooks', () => ({
@@ -141,13 +145,12 @@ describe('CoursesPage', () => {
   });
 
   it('renders LearnerList component in learners tab', async () => {
+    const user = userEvent.setup();
     renderCoursesPage();
 
     // Switch to learners tab
     const learnersTab = screen.getByRole('tab', { name: /learners/i });
-    await act(async () => {
-      fireEvent.click(learnersTab);
-    });
+    await user.click(learnersTab);
 
     await waitFor(() => {
       // Check for elements that indicate LearnerList is rendered

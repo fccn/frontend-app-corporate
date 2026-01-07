@@ -1,5 +1,5 @@
-import React from 'react';
-import { screen, fireEvent } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { renderWrapper } from '@src/setupTest';
 import CourseAddModal from './index';
 import * as hooks from '../../data/hooks';
@@ -76,17 +76,19 @@ describe('CourseAddModal', () => {
     expect(screen.getByText('Course 2')).toBeInTheDocument();
   });
 
-  it('calls onClose when modal is closed', () => {
+  it('calls onClose when modal is closed', async () => {
+    const user = userEvent.setup();
     renderWrapper(<CourseAddModal {...defaultProps} />);
 
     // Click the close button (assuming ModalLayout has a close button)
     const closeButton = screen.getByRole('button', { name: /close/i });
-    fireEvent.click(closeButton);
+    await user.click(closeButton);
 
     expect(defaultProps.onClose).toHaveBeenCalled();
   });
 
-  it('calls add mutation when save button is clicked', () => {
+  it('calls add mutation when save button is clicked', async () => {
+    const user = userEvent.setup();
     const mockMutate = jest.fn();
     mockUseAddCoursesToCatalog.mockReturnValue({
       mutate: mockMutate,
@@ -96,12 +98,12 @@ describe('CourseAddModal', () => {
     renderWrapper(<CourseAddModal {...defaultProps} />);
 
     // Select a course first
-    const courseCheckbox = screen.getByLabelText('Course 1');
-    fireEvent.click(courseCheckbox);
+    const courseCheckbox = screen.getByLabelText(/Course 1/i);
+    await user.click(courseCheckbox);
 
     // Click save button
     const saveButton = screen.getByText('Add Selected Courses');
-    fireEvent.click(saveButton);
+    await user.click(saveButton);
 
     expect(mockMutate).toHaveBeenCalledWith({
       catalogId: 'catalog-123',
@@ -121,23 +123,23 @@ describe('CourseAddModal', () => {
     expect(saveButton).toBeDisabled();
   });
 
-  it('shares selected courses between tabs', () => {
+  it('shares selected courses between tabs', async () => {
+    const user = userEvent.setup();
     renderWrapper(<CourseAddModal {...defaultProps} />);
 
     // Select a course from base tab
-    const course1Checkbox = screen.getByLabelText('Course 1');
-    fireEvent.click(course1Checkbox);
+    const course1Checkbox = screen.getByLabelText(/Course 1/i);
+    await user.click(course1Checkbox);
 
     // Switch to organization tab
-    fireEvent.click(screen.getByText("My Organization's Courses"));
+    await user.click(screen.getByText("My Organization's Courses"));
 
     // Select a course from organization tab
-    const course3Checkbox = screen.getByLabelText('Course 3');
-    fireEvent.click(course3Checkbox);
-
+    const course3Checkbox = screen.getByLabelText(/Course 3/i);
+    await user.click(course3Checkbox);
     // Click save button
     const saveButton = screen.getByRole('button', { name: /add selected courses/i });
-    fireEvent.click(saveButton);
+    await user.click(saveButton);
 
     const mockMutate = mockUseAddCoursesToCatalog.mock.results[0].value.mutate;
     expect(mockMutate).toHaveBeenCalledWith({

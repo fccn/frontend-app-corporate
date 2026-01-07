@@ -1,10 +1,9 @@
-import React from 'react';
-import {
-  screen, waitFor, fireEvent,
-
-} from '@testing-library/react';
-
+import { ReactNode } from 'react';
+import { screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { renderWrapper } from '@src/setupTest';
+import * as appHooks from '@src/hooks';
+import * as hooks from '@src/catalogs/data/hooks';
 import { CatalogSettingsModal } from './index';
 
 // Mock hooks
@@ -17,9 +16,9 @@ jest.mock('@src/catalogs/data/hooks', () => ({
   useUpdateCatalog: jest.fn(),
 }));
 
-const mockUseCurrentUser = require('@src/hooks').useCurrentUser;
-const mockUseCatalogDetails = require('@src/catalogs/data/hooks').useCatalogDetails;
-const mockUseUpdateCatalog = require('@src/catalogs/data/hooks').useUpdateCatalog;
+const mockUseCurrentUser = appHooks.useCurrentUser as jest.Mock;
+const mockUseCatalogDetails = hooks.useCatalogDetails as jest.Mock;
+const mockUseUpdateCatalog = hooks.useUpdateCatalog as jest.Mock;
 
 const mockCatalogDetails = {
   id: 1,
@@ -36,7 +35,7 @@ const mockCatalogDetails = {
 
 const renderCatalogSettingsModal = (
   children: (openModal: (catalogSlug: string) => void
-  ) => React.ReactNode,
+  ) => ReactNode,
 ) => renderWrapper(
   <CatalogSettingsModal>
     {children}
@@ -61,6 +60,7 @@ describe('CatalogSettingsModal', () => {
   });
 
   it('renders trigger button and opens modal when clicked', async () => {
+    const user = userEvent.setup();
     renderCatalogSettingsModal((openModal) => (
       <button type="button" onClick={() => openModal('test-catalog')}>
         Open Modal
@@ -70,7 +70,7 @@ describe('CatalogSettingsModal', () => {
     const openButton = screen.getByRole('button', { name: /open modal/i });
     expect(openButton).toBeInTheDocument();
 
-    fireEvent.click(openButton);
+    await user.click(openButton);
 
     await waitFor(() => {
       expect(screen.getByText('Catalog settings')).toBeInTheDocument();
@@ -78,6 +78,7 @@ describe('CatalogSettingsModal', () => {
   });
 
   it('closes modal when close button is clicked', async () => {
+    const user = userEvent.setup();
     renderCatalogSettingsModal((openModal) => (
       <button type="button" onClick={() => openModal('test-catalog')}>
         Open Modal
@@ -85,7 +86,7 @@ describe('CatalogSettingsModal', () => {
     ));
     const openButton = screen.getByRole('button', { name: /open modal/i });
 
-    fireEvent.click(openButton);
+    await user.click(openButton);
 
     await waitFor(() => {
       expect(screen.getByText('Catalog settings')).toBeInTheDocument();
@@ -93,7 +94,7 @@ describe('CatalogSettingsModal', () => {
 
     // Click cancel button
     const cancelButton = screen.getByRole('button', { name: /cancel/i });
-    fireEvent.click(cancelButton);
+    await user.click(cancelButton);
 
     await waitFor(() => {
       expect(screen.queryByText('Catalog settings')).not.toBeInTheDocument();
@@ -101,13 +102,14 @@ describe('CatalogSettingsModal', () => {
   });
 
   it('displays save button in modal actions', async () => {
+    const user = userEvent.setup();
     renderCatalogSettingsModal((openModal) => (
       <button type="button" onClick={() => openModal('test-catalog')}>
         Open Modal
       </button>
     ));
 
-    fireEvent.click(screen.getByRole('button', { name: /open modal/i }));
+    await user.click(screen.getByRole('button', { name: /open modal/i }));
 
     await waitFor(() => {
       expect(screen.getByRole('button', { name: /save/i })).toBeInTheDocument();
@@ -115,13 +117,14 @@ describe('CatalogSettingsModal', () => {
   });
 
   it('passes catalogSlug to CatalogSettingsForm', async () => {
+    const user = userEvent.setup();
     renderCatalogSettingsModal((openModal) => (
       <button type="button" onClick={() => openModal('test-catalog')}>
         Open Modal
       </button>
     ));
 
-    fireEvent.click(screen.getByRole('button', { name: /open modal/i }));
+    await user.click(screen.getByRole('button', { name: /open modal/i }));
 
     await waitFor(() => {
       // The form should be rendered with the catalog slug
@@ -132,6 +135,7 @@ describe('CatalogSettingsModal', () => {
   });
 
   it('calls onSuccess callback when form is saved', async () => {
+    const user = userEvent.setup();
     const mockMutate = jest.fn();
     mockUseUpdateCatalog.mockReturnValue({
       mutate: mockMutate,
@@ -143,14 +147,14 @@ describe('CatalogSettingsModal', () => {
       </button>
     ));
 
-    fireEvent.click(screen.getByRole('button', { name: /open modal/i }));
+    await user.click(screen.getByRole('button', { name: /open modal/i }));
 
     await waitFor(() => {
       expect(screen.getByRole('button', { name: /save/i })).toBeInTheDocument();
     });
 
     // Click save button
-    fireEvent.click(screen.getByRole('button', { name: /save/i }));
+    await user.click(screen.getByRole('button', { name: /save/i }));
 
     // The form's submitForm should be called, which should trigger the mutation
     // This is a bit tricky to test directly, but we can verify the setup

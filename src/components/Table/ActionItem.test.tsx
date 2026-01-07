@@ -1,4 +1,5 @@
-import { screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { renderWrapper } from '@src/setupTest';
 import ActionItem from './ActionItem';
 
@@ -7,11 +8,12 @@ describe('ActionItem', () => {
 
   types.forEach((type) => {
     it(`renders correctly for type "${type}"`, async () => {
+      const user = userEvent.setup();
       renderWrapper(<ActionItem type={type} />);
       const button = screen.getByRole('button');
       expect(button).toBeInTheDocument();
       expect(button).toHaveAttribute('aria-label', `${type}-action`);
-      fireEvent.mouseOver(button);
+      await user.hover(button);
 
       // Tooltip appears asynchronously
       await waitFor(() => {
@@ -21,11 +23,12 @@ describe('ActionItem', () => {
     });
   });
 
-  it('calls onClick when button is clicked', () => {
+  it('calls onClick when button is clicked', async () => {
+    const user = userEvent.setup();
     const onClick = jest.fn();
     renderWrapper(<ActionItem type="view" onClick={onClick} />);
     const button = screen.getByRole('button');
-    fireEvent.click(button);
+    await user.click(button);
     expect(onClick).toHaveBeenCalled();
   });
 

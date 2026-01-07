@@ -1,10 +1,9 @@
-import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { renderWrapper } from '@src/setupTest';
 import * as wouter from 'wouter';
 import * as partnerHooks from '@src/partner/data/hooks';
-import PartnerCatalogsPage from './PartnerCatalogsPage';
 import { usePartnerCatalogs } from './data/hooks';
+import PartnerCatalogsPage from './PartnerCatalogsPage';
 
 // Mock hooks
 jest.mock('@src/partner/data/hooks', () => ({
@@ -20,14 +19,19 @@ jest.mock('wouter', () => ({
   useLocation: jest.fn(),
 }));
 
+const mockUseParams = wouter.useParams as jest.Mock;
+const mockUseLocation = wouter.useLocation as jest.Mock;
+const mockUsePartnerDetails = partnerHooks.usePartnerDetails as jest.Mock;
+const mockUsePartnerCatalogs = usePartnerCatalogs as jest.Mock;
+
 const renderPartnerCatalogsPage = () => renderWrapper(<PartnerCatalogsPage />);
 
 describe('PartnerCatalogsPage', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (wouter.useParams as jest.Mock).mockReturnValue({ partnerSlug: 'test-partner' });
-    (wouter.useLocation as jest.Mock).mockReturnValue(['/', jest.fn()]);
-    (partnerHooks.usePartnerDetails as jest.Mock).mockReturnValue({
+    mockUseParams.mockReturnValue({ partnerSlug: 'test-partner' });
+    mockUseLocation.mockReturnValue(['/', jest.fn()]);
+    mockUsePartnerDetails.mockReturnValue({
       partnerDetails: {
         id: 'partner-123',
         name: 'Test Partner Corp',
@@ -39,7 +43,6 @@ describe('PartnerCatalogsPage', () => {
       },
     });
     // Mock usePartnerCatalogs
-    const mockUsePartnerCatalogs = usePartnerCatalogs as jest.Mock;
     mockUsePartnerCatalogs.mockReturnValue({
       partnerCatalogs: {
         results: [],
@@ -99,7 +102,7 @@ describe('PartnerCatalogsPage', () => {
 
   it('handles missing partner details gracefully', () => {
     // Mock hook to return null partner details
-    (partnerHooks.usePartnerDetails as jest.Mock).mockReturnValue({
+    mockUsePartnerDetails.mockReturnValue({
       partnerDetails: null,
     });
 
@@ -132,7 +135,7 @@ describe('PartnerCatalogsPage', () => {
 
   it('uses correct URL parameters', () => {
     // Test that useParams is called correctly
-    (wouter.useParams as jest.Mock).mockReturnValue({ partnerSlug: 'test-partner' });
+    mockUseParams.mockReturnValue({ partnerSlug: 'test-partner' });
 
     renderPartnerCatalogsPage();
 
@@ -151,10 +154,10 @@ describe('PartnerCatalogsPage', () => {
         certified: 120,
       },
     };
-    (partnerHooks.usePartnerDetails as jest.Mock).mockReturnValue(mockPartnerDetails);
+    mockUsePartnerDetails.mockReturnValue(mockPartnerDetails);
 
     renderPartnerCatalogsPage();
 
-    expect(partnerHooks.usePartnerDetails).toHaveBeenCalledWith({ partnerSlug: 'test-partner' });
+    expect(mockUsePartnerDetails).toHaveBeenCalledWith({ partnerSlug: 'test-partner' });
   });
 });

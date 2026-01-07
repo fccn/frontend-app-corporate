@@ -4,16 +4,14 @@ import {
   Button, Card, Container, Dropzone, Form, IconButton,
 } from '@openedx/paragon';
 import messages from '@src/catalogs/messages';
+import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupValidationResolver } from '@src/utils';
 import { useInviteLearners } from '@src/catalogs/data/hooks';
 import { Delete } from '@openedx/paragon/icons';
 import { inviteSchema } from './utils';
 
-type FormValues = {
-  emails?: string;
-  csvFile?: File | null;
-};
+type FormValues = yup.InferType<typeof inviteSchema>;
 
 interface CourseAddModalProps {
   isOpen: boolean;
@@ -35,7 +33,7 @@ const InviteLearnersModal = ({ isOpen, onClose, catalogId }: CourseAddModalProps
     mode: 'onChange',
   });
   const csvFile = watch('csvFile');
-  const { mutate: inviteLearners, isLoading } = useInviteLearners();
+  const { mutate: inviteLearners, isPending } = useInviteLearners();
   const fileName = csvFile ? csvFile.name : null;
 
   const onSubmit = (data: FormValues) => {
@@ -67,7 +65,7 @@ const InviteLearnersModal = ({ isOpen, onClose, catalogId }: CourseAddModalProps
         onClose();
       }}
       actions={(
-        <Button onClick={handleSubmit(onSubmit)} disabled={!isValid || isSubmitting || isLoading}>
+        <Button onClick={handleSubmit(onSubmit)} disabled={!isValid || isSubmitting || isPending}>
           {intl.formatMessage(messages['corporate.catalog.learners.modal.invite.action'])}
         </Button>
       )}

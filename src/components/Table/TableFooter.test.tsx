@@ -1,4 +1,5 @@
-import { screen, fireEvent } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { DataTableContext } from '@openedx/paragon';
 import { renderWrapper } from '@src/setupTest';
 import TableFooter from './TableFooter';
@@ -35,21 +36,23 @@ describe('TableFooter', () => {
     expect(screen.getByText('20')).toBeInTheDocument();
   });
 
-  it('renders all page size options in dropdown', () => {
+  it('renders all page size options in dropdown', async () => {
+    const user = userEvent.setup();
     const pageOptions = [10, 50, 100];
     renderWithContext(10, pageOptions);
     // Open the dropdown first
-    fireEvent.click(screen.getByRole('button', { name: '10' }));
+    await user.click(screen.getByRole('button', { name: '10' }));
     expect(document.querySelectorAll('a').length).toBe(pageOptions.length);
     pageOptions.forEach((option, index) => {
       expect(document.querySelectorAll('a')[index].textContent).toBe(option.toString());
     });
   });
 
-  it('calls setPageSize with selected value on item click', () => {
+  it('calls setPageSize with selected value on item click', async () => {
+    const user = userEvent.setup();
     renderWithContext(10);
-    fireEvent.click(screen.getByRole('button', { name: '10' }));
-    fireEvent.click(screen.getByText('30'));
+    await user.click(screen.getByRole('button', { name: '10' }));
+    await user.click(screen.getByText('30'));
     expect(mockSetPageSize).toHaveBeenCalledWith(30);
   });
 

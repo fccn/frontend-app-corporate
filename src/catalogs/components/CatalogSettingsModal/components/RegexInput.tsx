@@ -38,8 +38,8 @@ const RegexInput = ({ value, onChange, isEditable }: RegexInputProps) => {
 
   return (
     <Form.Group controlId="emailRegexes">
-      <Form.Label>
-        <h5>{intl.formatMessage(messages['corporate.catalog.form.email.regexes.field'])}</h5>
+      <Form.Label className="h5 x-small">
+        {intl.formatMessage(messages['corporate.catalog.form.email.regexes.field'])}
       </Form.Label>
       <Form.Control
         id="emailRegexes"

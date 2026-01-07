@@ -50,7 +50,7 @@ jest.mock('@src/courses/CoursesPage', () => function CoursesPage() {
   return <main><h1>Courses Page</h1></main>;
 });
 
-const renderApp = (userOverrides = {}) => {
+const renderApp = (userOverrides: { administrator?: boolean; roles?: string[] } = {}) => {
   const { administrator = false, roles = [] } = userOverrides;
   const isAdmin = administrator;
   const isCatalogManager = roles.includes('catalog_manager:active');

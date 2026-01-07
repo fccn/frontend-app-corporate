@@ -30,6 +30,7 @@ export type Learner = {
 export interface CourseRun {
   id: string;
   displayName: string;
+  courseImageUrl: string | null;
   start: string | null;
   end: string | null;
   enrollmentStart: string | null;

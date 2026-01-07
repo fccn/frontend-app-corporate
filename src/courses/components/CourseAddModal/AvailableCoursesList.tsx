@@ -24,6 +24,8 @@ const AvailableCoursesList = ({ courses, selectedCourses, setSelectedCourses }: 
     && filteredCourses.every(course => selectedCourses.has(course.id));
 
   const someSelected = filteredCourses.some(course => selectedCourses.has(course.id));
+  const hasCourses = filteredCourses.length > 0;
+  const isEmptySearch = searchQuery.trim() === '';
 
   const handleSelectAll = (checked: boolean) => {
     const newSet = new Set(selectedCourses);
@@ -37,27 +39,36 @@ const AvailableCoursesList = ({ courses, selectedCourses, setSelectedCourses }: 
         placeholder={intl.formatMessage(messages['corporate.courses.modal.add.search.placeholder'])}
         className="mb-3"
         value={searchQuery}
-        onSubmit={value => setSearchQuery(value)}
+        onChange={value => setSearchQuery(value)}
         onClear={() => setSearchQuery('')}
       />
 
-      {filteredCourses.length > 0
-        ? (
-          <Card className="p-3 shadow-none border-bottom rounded-0 bg-light-300">
-            <Form.Checkbox
-              checked={allSelected}
-              indeterminate={someSelected && !allSelected}
-              onChange={e => handleSelectAll(e.target.checked)}
-            >
-              {intl.formatMessage(messages['corporate.courses.modal.add.select.all'], { count: filteredCourses.length })}
-            </Form.Checkbox>
-          </Card>
-        )
-        : (
-          <p className="text-center text-muted my-5">
-            {intl.formatMessage(messages['corporate.courses.modal.add.no.courses'])}
-          </p>
-        )}
+      {hasCourses && (
+        <Card className="p-3 shadow-none border-bottom rounded-0 bg-light-300">
+          <Form.Checkbox
+            checked={allSelected}
+            indeterminate={someSelected && !allSelected}
+            onChange={e => handleSelectAll(e.target.checked)}
+          >
+            {intl.formatMessage(
+              messages['corporate.courses.modal.add.select.all'],
+              { count: filteredCourses.length },
+            )}
+          </Form.Checkbox>
+        </Card>
+      )}
+
+      {!hasCourses && (
+        <p className="text-center text-muted my-5">
+          {intl.formatMessage(
+            messages[
+              isEmptySearch
+                ? 'corporate.courses.modal.add.all.courses.added'
+                : 'corporate.courses.modal.add.no.courses'
+            ],
+          )}
+        </p>
+      )}
 
       {filteredCourses.map(course => (
         <Card key={course.id} className="p-3 shadow-none border-bottom rounded-0">
@@ -73,7 +84,10 @@ const AvailableCoursesList = ({ courses, selectedCourses, setSelectedCourses }: 
               setSelectedCourses(newSet);
             }}
           >
-            {course.displayName}
+            <div className="d-flex direction-column">
+              <span>{course.displayName}</span>
+              <span className="text-muted x-small">{course.id}</span>
+            </div>
           </Form.Checkbox>
         </Card>
       ))}

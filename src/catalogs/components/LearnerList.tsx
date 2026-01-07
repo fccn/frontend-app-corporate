@@ -49,9 +49,14 @@ const TableAction = ({ catalogId }: { catalogId: string }) => {
     </>
   );
 };
-
-const BulkAction = ({ selectedFlatRows, setRowsForDelete, openDeleteModal }) => {
+type BulkActionProps = {
+  selectedFlatRows?: any[];
+  setRowsForDelete: (rows: any[]) => void;
+  openDeleteModal: () => void;
+};
+const BulkAction = ({ selectedFlatRows, setRowsForDelete, openDeleteModal }:BulkActionProps) => {
   const intl = useIntl();
+  if (!selectedFlatRows?.length) { return null; }
   return (
     <Button
       variant="outline-danger"

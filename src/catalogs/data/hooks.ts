@@ -19,8 +19,8 @@ const queryKey = {
   catalogDetail: (catalogSlug: string) => [...queryKey.all, 'detail', catalogSlug],
   catalogLearners: (
     catalogId: string,
-    pageIndex: number,
-    pageSize: number,
+    pageIndex?: number,
+    pageSize?: number,
     ordering?: string,
     search?: string,
     active?: string,

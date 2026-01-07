@@ -1,4 +1,5 @@
-import { screen, fireEvent } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { renderWrapper } from '@src/setupTest';
 import AvailableCoursesList from './AvailableCoursesList';
 
@@ -28,42 +29,42 @@ describe('AvailableCoursesList', () => {
   it('renders all courses when no search query', () => {
     renderWrapper(<AvailableCoursesList {...defaultProps} />);
 
-    expect(screen.getByText('Introduction to React')).toBeInTheDocument();
-    expect(screen.getByText('Advanced JavaScript')).toBeInTheDocument();
-    expect(screen.getByText('Python Programming')).toBeInTheDocument();
+    expect(screen.getByText(/Introduction to React/i)).toBeInTheDocument();
+    expect(screen.getByText(/Advanced JavaScript/i)).toBeInTheDocument();
+    expect(screen.getByText(/Python Programming/i)).toBeInTheDocument();
   });
 
-  it('filters courses based on search query', () => {
+  it('filters courses based on search query', async () => {
+    const user = userEvent.setup();
     renderWrapper(<AvailableCoursesList {...defaultProps} />);
 
     const searchField = screen.getByPlaceholderText('Search courses by name or ID');
-    fireEvent.change(searchField, { target: { value: 'react' } });
-    fireEvent.submit(searchField);
+    await user.type(searchField, 'react');
 
-    expect(screen.getByText('Introduction to React')).toBeInTheDocument();
-    expect(screen.queryByText('Advanced JavaScript')).not.toBeInTheDocument();
-    expect(screen.queryByText('Python Programming')).not.toBeInTheDocument();
+    expect(screen.getByText(/Introduction to React/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Advanced JavaScript/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Python Programming/i)).not.toBeInTheDocument();
   });
 
-  it('filters courses based on course ID', () => {
+  it('filters courses based on course ID', async () => {
+    const user = userEvent.setup();
     renderWrapper(<AvailableCoursesList {...defaultProps} />);
 
     const searchField = screen.getByPlaceholderText('Search courses by name or ID');
-    fireEvent.change(searchField, { target: { value: 'course1' } });
-    fireEvent.submit(searchField);
+    await user.type(searchField, 'course1');
 
-    expect(screen.getByText('Introduction to React')).toBeInTheDocument();
-    expect(screen.queryByText('Advanced JavaScript')).not.toBeInTheDocument();
+    expect(screen.getByText(/Introduction to React/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Advanced JavaScript/i)).not.toBeInTheDocument();
   });
 
-  it('shows "no courses found" message when search yields no results', () => {
+  it('shows "no courses found" message when search yields no results', async () => {
+    const user = userEvent.setup();
     renderWrapper(<AvailableCoursesList {...defaultProps} />);
 
     const searchField = screen.getByPlaceholderText('Search courses by name or ID');
-    fireEvent.change(searchField, { target: { value: 'nonexistent' } });
-    fireEvent.submit(searchField);
+    await user.type(searchField, 'nonexistent');
 
-    expect(screen.getByText("You've already added all available courses for this section.")).toBeInTheDocument();
+    expect(screen.getByText(/No courses found. Try adjusting your search/i)).toBeInTheDocument();
   });
 
   it('renders select all checkbox', () => {
@@ -72,7 +73,8 @@ describe('AvailableCoursesList', () => {
     expect(screen.getByLabelText('Select All (3 courses)')).toBeInTheDocument();
   });
 
-  it('selects all courses when select all checkbox is clicked', () => {
+  it('selects all courses when select all checkbox is clicked', async () => {
+    const user = userEvent.setup();
     const mockSetSelectedCourses = jest.fn();
     renderWrapper(
       <AvailableCoursesList
@@ -82,12 +84,13 @@ describe('AvailableCoursesList', () => {
     );
 
     const selectAllCheckbox = screen.getByLabelText('Select All (3 courses)');
-    fireEvent.click(selectAllCheckbox);
+    await user.click(selectAllCheckbox);
 
     expect(mockSetSelectedCourses).toHaveBeenCalledWith(new Set(['course1', 'course2', 'course3']));
   });
 
-  it('deselects all courses when select all checkbox is unchecked', () => {
+  it('deselects all courses when select all checkbox is unchecked', async () => {
+    const user = userEvent.setup();
     const mockSetSelectedCourses = jest.fn();
     renderWrapper(
       <AvailableCoursesList
@@ -98,12 +101,13 @@ describe('AvailableCoursesList', () => {
     );
 
     const selectAllCheckbox = screen.getByLabelText('Select All (3 courses)');
-    fireEvent.click(selectAllCheckbox);
+    await user.click(selectAllCheckbox);
 
     expect(mockSetSelectedCourses).toHaveBeenCalledWith(new Set());
   });
 
-  it('selects individual course when checkbox is clicked', () => {
+  it('selects individual course when checkbox is clicked', async () => {
+    const user = userEvent.setup();
     const mockSetSelectedCourses = jest.fn();
     renderWrapper(
       <AvailableCoursesList
@@ -112,13 +116,14 @@ describe('AvailableCoursesList', () => {
       />,
     );
 
-    const courseCheckbox = screen.getByLabelText('Introduction to React');
-    fireEvent.click(courseCheckbox);
+    const courseCheckbox = screen.getByLabelText(/Introduction to React/i);
+    await user.click(courseCheckbox);
 
     expect(mockSetSelectedCourses).toHaveBeenCalledWith(new Set(['course1']));
   });
 
-  it('deselects individual course when checkbox is unchecked', () => {
+  it('deselects individual course when checkbox is unchecked', async () => {
+    const user = userEvent.setup();
     const mockSetSelectedCourses = jest.fn();
     renderWrapper(
       <AvailableCoursesList
@@ -128,13 +133,14 @@ describe('AvailableCoursesList', () => {
       />,
     );
 
-    const courseCheckbox = screen.getByLabelText('Introduction to React');
-    fireEvent.click(courseCheckbox);
+    const courseCheckbox = screen.getByLabelText(/Introduction to React/i);
+    await user.click(courseCheckbox);
 
     expect(mockSetSelectedCourses).toHaveBeenCalledWith(new Set());
   });
 
-  it('maintains other selections when selecting additional course', () => {
+  it('maintains other selections when selecting additional course', async () => {
+    const user = userEvent.setup();
     const mockSetSelectedCourses = jest.fn();
     renderWrapper(
       <AvailableCoursesList
@@ -144,8 +150,8 @@ describe('AvailableCoursesList', () => {
       />,
     );
 
-    const courseCheckbox = screen.getByLabelText('Advanced JavaScript');
-    fireEvent.click(courseCheckbox);
+    const courseCheckbox = screen.getByLabelText(/Advanced JavaScript/i);
+    await user.click(courseCheckbox);
 
     expect(mockSetSelectedCourses).toHaveBeenCalledWith(new Set(['course1', 'course2']));
   });
@@ -158,27 +164,27 @@ describe('AvailableCoursesList', () => {
       />,
     );
 
-    expect(screen.getByLabelText('Introduction to React')).toBeChecked();
-    expect(screen.getByLabelText('Advanced JavaScript')).not.toBeChecked();
-    expect(screen.getByLabelText('Python Programming')).toBeChecked();
+    expect(screen.getByLabelText(/Introduction to React/i)).toBeChecked();
+    expect(screen.getByLabelText(/Advanced JavaScript/i)).not.toBeChecked();
+    expect(screen.getByLabelText(/Python Programming/i)).toBeChecked();
   });
 
-  it('clears search when clear button is clicked', () => {
+  it('clears search when clear button is clicked', async () => {
+    const user = userEvent.setup();
     renderWrapper(<AvailableCoursesList {...defaultProps} />);
 
     const searchField = screen.getByPlaceholderText('Search courses by name or ID');
-    fireEvent.change(searchField, { target: { value: 'react' } });
-    fireEvent.submit(searchField);
+    await user.type(searchField, 'react');
 
-    expect(screen.getByText('Introduction to React')).toBeInTheDocument();
-    expect(screen.queryByText('Advanced JavaScript')).not.toBeInTheDocument();
+    expect(screen.getByText(/Introduction to React/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Advanced JavaScript/i)).not.toBeInTheDocument();
 
     const clearButton = screen.getByRole('button', { name: /clear search/i });
-    fireEvent.click(clearButton);
+    await user.click(clearButton);
 
-    expect(screen.getByText('Introduction to React')).toBeInTheDocument();
-    expect(screen.getByText('Advanced JavaScript')).toBeInTheDocument();
-    expect(screen.getByText('Python Programming')).toBeInTheDocument();
+    expect(screen.getByText(/Introduction to React/i)).toBeInTheDocument();
+    expect(screen.getByText(/Advanced JavaScript/i)).toBeInTheDocument();
+    expect(screen.getByText(/Python Programming/i)).toBeInTheDocument();
   });
 
   it('handles empty courses array', () => {

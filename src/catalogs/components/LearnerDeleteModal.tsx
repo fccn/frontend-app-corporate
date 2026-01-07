@@ -42,7 +42,14 @@ const LearnerDeleteModal = ({
     >
       <Container className="pt-5">
         <h4>
-          { intl.formatMessage(messages['corporate.catalog.learners.modal.delete.confirmation'], { learnerName: selectedLearners ? selectedLearners[0]?.user.fullName : '', email: selectedLearners ? selectedLearners[0]?.user.email : '', catalogName }) }
+          { intl.formatMessage(
+            messages['corporate.catalog.learners.modal.delete.confirmation'],
+            {
+              learnerName: (selectedLearners && selectedLearners[0]?.user?.fullName) || '',
+              email: (selectedLearners && selectedLearners[0]?.user?.email) || '',
+              catalogName,
+            },
+          ) }
         </h4>
         <ul className="mt-4">
           {intl.formatMessage(messages['corporate.catalog.learners.modal.delete.description'], { li: ListItem })}

@@ -1,4 +1,5 @@
-import { screen, fireEvent } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { renderWrapper } from '@src/setupTest';
 import ModalLayout from './ModalLayout';
 
@@ -33,14 +34,15 @@ describe('ModalLayout', () => {
     expect(screen.queryByText('Modal content')).not.toBeInTheDocument();
   });
 
-  it('calls onClose when cancel button is clicked', () => {
+  it('calls onClose when cancel button is clicked', async () => {
+    const user = userEvent.setup();
     const onCloseMock = jest.fn();
     renderWrapper(
       <ModalLayout {...defaultProps} onClose={onCloseMock} />,
     );
 
     const cancelButton = screen.getByText('Cancel');
-    fireEvent.click(cancelButton);
+    await user.click(cancelButton);
 
     expect(onCloseMock).toHaveBeenCalledTimes(1);
   });

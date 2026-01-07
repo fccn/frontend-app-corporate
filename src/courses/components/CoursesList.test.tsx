@@ -10,6 +10,11 @@ jest.mock('@src/hooks', () => ({
     pageSize: 10,
     onPaginationChange: jest.fn(),
   }),
+  useTableSortFilter: () => ({
+    ordering: '',
+    searchParams: {},
+    fetchData: jest.fn(),
+  }),
 }));
 
 jest.mock('wouter', () => ({
@@ -41,22 +46,28 @@ const mockCourses = [
   },
 ];
 
+const mockuseCatalogCourses = hooks.useCatalogCourses as jest.Mock;
+const mockuseDeleteCatalogCourse = hooks.useDeleteCatalogCourse as jest.Mock;
+const mockuseAvailableCourses = hooks.useAvailableCourses as jest.Mock;
+const mockuseAddCoursesToCatalog = hooks.useAddCoursesToCatalog as jest.Mock;
+const mockuseUpdateCatalogCourse = hooks.useUpdateCatalogCourse as jest.Mock;
+
 describe('CoursesList', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (hooks.useCatalogCourses as jest.Mock).mockReturnValue({
+    mockuseCatalogCourses.mockReturnValue({
       courses: mockCourses,
       count: mockCourses.length,
       pageCount: 1,
       isLoading: false,
     });
-    (hooks.useDeleteCatalogCourse as jest.Mock).mockReturnValue(jest.fn());
-    (hooks.useAvailableCourses as jest.Mock).mockReturnValue({
+    mockuseDeleteCatalogCourse.mockReturnValue(jest.fn());
+    mockuseAvailableCourses.mockReturnValue({
       data: [],
       isLoading: false,
     });
-    (hooks.useAddCoursesToCatalog as jest.Mock).mockReturnValue(jest.fn());
-    (hooks.useUpdateCatalogCourse as jest.Mock).mockReturnValue(jest.fn());
+    mockuseAddCoursesToCatalog.mockReturnValue(jest.fn());
+    mockuseUpdateCatalogCourse.mockReturnValue(jest.fn());
   });
 
   it('renders a table with course data', () => {
@@ -82,7 +93,7 @@ describe('CoursesList', () => {
   });
 
   it('shows loading state if data is still loading', () => {
-    (hooks.useCatalogCourses as jest.Mock).mockReturnValue({
+    mockuseCatalogCourses.mockReturnValue({
       courses: [],
       count: 0,
       pageCount: 0,

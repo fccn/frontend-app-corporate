@@ -30,8 +30,8 @@ const AppLayout = ({
       <Container size="xl" className="p-4">
         {withBackButton && (
           <Button variant="link" className="d-flex align-items-center" onClick={handleGoBackPath}>
-            <ArrowBack className="mr-3 text-primary-400" />
-            <span className="text-primary-400">{intl.formatMessage(messages['corporate.back.button'])}</span>
+            <ArrowBack className="mr-3 text-primary" aria-label={intl.formatMessage(messages['corporate.back.button'])} />
+            <span className="text-primary">{intl.formatMessage(messages['corporate.back.button'])}</span>
           </Button>
         )}
         {title && <h1 className="my-4">{title}</h1>}

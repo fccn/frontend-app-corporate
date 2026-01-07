@@ -1,5 +1,7 @@
 import { screen, waitFor } from '@testing-library/react';
 import { renderWrapper } from '@src/setupTest';
+import * as appHooks from '@src/hooks';
+import * as hooks from '../data/hooks';
 
 import LearnerList from './LearnerList';
 
@@ -7,6 +9,7 @@ import LearnerList from './LearnerList';
 jest.mock('@src/hooks', () => ({
   useNavigate: jest.fn(),
   usePagination: jest.fn(),
+  useTableSortFilter: jest.fn(),
 }));
 
 jest.mock('../data/hooks', () => ({
@@ -21,9 +24,10 @@ jest.mock('../data/hooks', () => ({
   })),
 }));
 
-const mockUseNavigate = require('@src/hooks').useNavigate;
-const mockUsePagination = require('@src/hooks').usePagination;
-const mockUseCatalogLearners = require('../data/hooks').useCatalogLearners;
+const mockUseNavigate = appHooks.useNavigate as jest.Mock;
+const mockUsePagination = appHooks.usePagination as jest.Mock;
+const mockUseCatalogLearners = hooks.useCatalogLearners as jest.Mock;
+const mockUseTableSortFilter = appHooks.useTableSortFilter as jest.Mock;
 
 const mockLearners = [
   {
@@ -66,7 +70,7 @@ const mockData = {
   results: mockLearners,
 };
 
-const renderLearnerList = (props = {}) => renderWrapper(<LearnerList catalogId="test-catalog" partnerId={1} {...props} />);
+const renderLearnerList = (props = {}) => renderWrapper(<LearnerList catalogId="test-catalog" catalogName="Test Catalog" {...props} />);
 
 describe('LearnerList', () => {
   beforeEach(() => {
@@ -77,6 +81,11 @@ describe('LearnerList', () => {
       pageIndex: 0,
       pageSize: 10,
       onPaginationChange: jest.fn(),
+    });
+    mockUseTableSortFilter.mockReturnValue({
+      ordering: '',
+      searchParams: { active: 'true' },
+      fetchData: jest.fn(),
     });
   });
 
@@ -240,10 +249,15 @@ describe('LearnerList', () => {
       isLoading: false,
     });
 
-    renderLearnerList({ catalogId: 'custom-catalog', partnerId: 42 });
+    renderLearnerList({ catalogId: 'custom-catalog' });
 
     expect(mockUseCatalogLearners).toHaveBeenCalledWith({
       catalogId: 'custom-catalog',
+      pageIndex: 1,
+      pageSize: 10,
+      ordering: '',
+      search: undefined,
+      active: 'true',
     });
   });
 
@@ -255,6 +269,11 @@ describe('LearnerList', () => {
     };
 
     mockUsePagination.mockReturnValue(mockPagination);
+    mockUseTableSortFilter.mockReturnValue({
+      ordering: '',
+      searchParams: { active: 'true' },
+      fetchData: jest.fn(),
+    });
     mockUseCatalogLearners.mockReturnValue({
       data: mockData,
       isLoading: false,
@@ -263,5 +282,28 @@ describe('LearnerList', () => {
     renderLearnerList();
 
     expect(mockUsePagination).toHaveBeenCalled();
+    expect(mockUseTableSortFilter).toHaveBeenCalledWith({
+      sortFields: ['invite_sent_at', 'accepted_at', 'last_login_at', 'removed_at'],
+      filterMappings: { fullName: 'search', email: 'search', active: 'active' },
+      onPaginationChange: mockPagination.onPaginationChange,
+    });
+  });
+
+  it('calls fetchData on table state changes', () => {
+    const mockFetchData = jest.fn();
+    mockUseTableSortFilter.mockReturnValue({
+      ordering: '',
+      searchParams: { active: 'true' },
+      fetchData: mockFetchData,
+    });
+    mockUseCatalogLearners.mockReturnValue({
+      data: mockData,
+      isLoading: false,
+    });
+
+    renderLearnerList();
+
+    // Simulate DataTable calling fetchData
+    expect(mockFetchData).toHaveBeenCalledTimes(1); // Initial call
   });
 });

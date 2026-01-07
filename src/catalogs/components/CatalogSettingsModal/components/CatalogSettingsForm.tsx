@@ -86,8 +86,8 @@ const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFo
 
         {/* Catalog Name */}
         <Form.Group controlId="name" isInvalid={!!errors.name}>
-          <Form.Label>
-            <h5>{intl.formatMessage(messages['corporate.catalog.form.name.field'])}</h5>
+          <Form.Label className="h5 x-small">
+            {intl.formatMessage(messages['corporate.catalog.form.name.field'])}
           </Form.Label>
           <Form.Control id="name" {...register('name')} type="text" disabled={!isEditable('name')} />
           {errors.name && (
@@ -99,8 +99,8 @@ const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFo
 
         {/* Alternative Link */}
         <Form.Group controlId="alternativeLink" isInvalid={!!errors.alternativeLink}>
-          <Form.Label>
-            <h5>{intl.formatMessage(messages['corporate.catalog.form.alternative.link.field'])}</h5>
+          <Form.Label className="h5 x-small">
+            {intl.formatMessage(messages['corporate.catalog.form.alternative.link.field'])}
           </Form.Label>
           <Form.Control
             id="alternativeLink"
@@ -117,8 +117,8 @@ const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFo
 
         {/* Support Email */}
         <Form.Group controlId="supportEmail" isInvalid={!!errors.supportEmail}>
-          <Form.Label>
-            <h5>{intl.formatMessage(messages['corporate.catalog.form.support.email.field'])}</h5>
+          <Form.Label className="h5 x-small">
+            {intl.formatMessage(messages['corporate.catalog.form.support.email.field'])}
           </Form.Label>
           <Form.Control
             id="supportEmail"
@@ -144,8 +144,8 @@ const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFo
         {/* Enrollment Limits Group */}
         <Form.Row>
           <Form.Group as={Col} controlId="courseEnrollmentLimit">
-            <Form.Label className="font-weight-bold">
-              <h5>{intl.formatMessage(messages['corporate.catalog.form.course.enrollment.limit.field'])}</h5>
+            <Form.Label className="h5 x-small">
+              {intl.formatMessage(messages['corporate.catalog.form.course.enrollment.limit.field'])}
             </Form.Label>
             <Form.Control
               id="courseEnrollmentLimit"
@@ -156,8 +156,8 @@ const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFo
           </Form.Group>
 
           <Form.Group as={Col} controlId="userLimit">
-            <Form.Label>
-              <h5>{intl.formatMessage(messages['corporate.catalog.form.user.limit.field'])}</h5>
+            <Form.Label className="h5 x-small">
+              {intl.formatMessage(messages['corporate.catalog.form.user.limit.field'])}
             </Form.Label>
             <Form.Control
               id="userLimit"
@@ -175,8 +175,8 @@ const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFo
             name="availableStartDate"
             render={({ field: { value, onChange } }) => (
               <Form.Group as={Col} controlId="availableStartDate">
-                <Form.Label>
-                  <h5>{intl.formatMessage(messages['corporate.catalog.form.available.start.date.field'])}</h5>
+                <Form.Label className="h5 x-small">
+                  {intl.formatMessage(messages['corporate.catalog.form.available.start.date.field'])}
                 </Form.Label>
                 <Form.Control
                   id="availableStartDate"
@@ -194,8 +194,8 @@ const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFo
             name="availableEndDate"
             render={({ field: { value, onChange }, fieldState: { error } }) => (
               <Form.Group isInvalid={!!error} as={Col} controlId="availableEndDate">
-                <Form.Label>
-                  <h5>{intl.formatMessage(messages['corporate.catalog.form.available.end.date.field'])}</h5>
+                <Form.Label className="h5 x-small">
+                  {intl.formatMessage(messages['corporate.catalog.form.available.end.date.field'])}
                 </Form.Label>
                 <Form.Control
                   id="availableEndDate"
@@ -218,8 +218,8 @@ const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFo
         {/* Authorization Message */}
         <Form.Row>
           <Form.Group as={Col} controlId="authorizationMessage">
-            <Form.Label>
-              <h5>{intl.formatMessage(messages['corporate.catalog.form.authorization.message.field'])}</h5>
+            <Form.Label className="h5 x-small">
+              {intl.formatMessage(messages['corporate.catalog.form.authorization.message.field'])}
             </Form.Label>
             <Form.Control
               id="authorizationMessage"
@@ -243,8 +243,8 @@ const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFo
 
         {/* Self Enrollment */}
         <Form.Group controlId="isSelfEnrollment" className="d-flex align-items-center">
-          <Form.Label className="mb-0 flex-grow-1">
-            <h5>{intl.formatMessage(messages['corporate.catalog.form.self.enrollment.field'])}</h5>
+          <Form.Label className="mb-0 flex-grow-1 h5 x-small">
+            {intl.formatMessage(messages['corporate.catalog.form.self.enrollment.field'])}
           </Form.Label>
           <Form.Switch
             {...register('isSelfEnrollment')}

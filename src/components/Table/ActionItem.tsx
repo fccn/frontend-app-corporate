@@ -54,7 +54,13 @@ const ActionItem = ({
     <OverlayTrigger
       overlay={<Tooltip id={`tooltip-${type}`}>{intl.formatMessage(tooltip)}</Tooltip>}
     >
-      <IconButton src={icon} onClick={onClick} alt={ariaLabel || `${type}-action`} variant={disabled ? 'secondary' : color} disabled={disabled} />
+      <IconButton
+        src={icon}
+        alt={ariaLabel || `${type}-action`}
+        variant={disabled ? 'secondary' : color}
+        onClick={disabled ? undefined : onClick}
+        className={disabled ? 'disabled' : ''}
+      />
     </OverlayTrigger>
   );
 };
