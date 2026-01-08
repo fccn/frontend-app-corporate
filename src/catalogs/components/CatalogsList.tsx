@@ -7,7 +7,7 @@ import { paths } from '@src/constants';
 import { useNavigate, usePagination } from '@src/hooks';
 
 import messages from '../messages';
-import { usePartnerCatalogs } from '../data/hooks';
+import { useCatalogs } from '../data/hooks';
 
 type CatalogCell = CellValue<Catalog>;
 
@@ -22,7 +22,10 @@ const CatalogsList = ({ partnerId, partnerSlug }: CatalogsListProps) => {
 
   const { pageIndex, pageSize, onPaginationChange } = usePagination();
 
-  const { partnerCatalogs, isLoadingCatalogs } = usePartnerCatalogs({
+  const {
+    data:
+    { catalogs, count, pageCount }, isLoading,
+  } = useCatalogs({
     partnerId,
     pageIndex: pageIndex + 1,
     pageSize,
@@ -35,7 +38,7 @@ const CatalogsList = ({ partnerId, partnerSlug }: CatalogsListProps) => {
 
   return (
     <DataTable
-      isLoading={isLoadingCatalogs}
+      isLoading={isLoading}
       isPaginated
       isFilterable
       defaultColumnValues={{ Filter: TextFilter }}
@@ -45,7 +48,7 @@ const CatalogsList = ({ partnerId, partnerSlug }: CatalogsListProps) => {
       }}
       manualPagination
       fetchData={onPaginationChange}
-      pageCount={partnerCatalogs.numPages}
+      pageCount={pageCount}
       additionalColumns={[
         {
           id: 'action',
@@ -59,8 +62,8 @@ const CatalogsList = ({ partnerId, partnerSlug }: CatalogsListProps) => {
           )),
         },
       ]}
-      itemCount={partnerCatalogs.count}
-      data={partnerCatalogs.results}
+      itemCount={count}
+      data={catalogs}
       columns={[
         {
           Header: intl.formatMessage(messages['corporate.catalog.table.header.name']),

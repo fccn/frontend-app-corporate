@@ -15,7 +15,7 @@ jest.mock('wouter', () => ({
 // Mock hooks
 jest.mock('@src/catalogs/data/hooks', () => ({
   useCatalogDetails: jest.fn(() => ({
-    catalogDetails: {
+    data: {
       id: 'catalog-123',
       name: 'Test Catalog',
       slug: 'test-catalog',
@@ -58,7 +58,7 @@ jest.mock('@src/catalogs/data/hooks', () => ({
 
 jest.mock('@src/partner/data/hooks', () => ({
   usePartnerDetails: () => ({
-    partnerDetails: {
+    data: {
       id: 'partner-123',
       slug: 'test-partner',
       name: 'Test Partner',

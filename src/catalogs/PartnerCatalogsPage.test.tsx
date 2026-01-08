@@ -2,7 +2,7 @@ import { screen, waitFor } from '@testing-library/react';
 import { renderWrapper } from '@src/setupTest';
 import * as wouter from 'wouter';
 import * as partnerHooks from '@src/partner/data/hooks';
-import { usePartnerCatalogs } from './data/hooks';
+import { useCatalogs } from './data/hooks';
 import PartnerCatalogsPage from './PartnerCatalogsPage';
 
 // Mock hooks
@@ -11,7 +11,7 @@ jest.mock('@src/partner/data/hooks', () => ({
 }));
 
 jest.mock('@src/catalogs/data/hooks', () => ({
-  usePartnerCatalogs: jest.fn(),
+  useCatalogs: jest.fn(),
 }));
 
 jest.mock('wouter', () => ({
@@ -22,7 +22,7 @@ jest.mock('wouter', () => ({
 const mockUseParams = wouter.useParams as jest.Mock;
 const mockUseLocation = wouter.useLocation as jest.Mock;
 const mockUsePartnerDetails = partnerHooks.usePartnerDetails as jest.Mock;
-const mockUsePartnerCatalogs = usePartnerCatalogs as jest.Mock;
+const mockUseCatalogs = useCatalogs as jest.Mock;
 
 const renderPartnerCatalogsPage = () => renderWrapper(<PartnerCatalogsPage />);
 
@@ -32,7 +32,7 @@ describe('PartnerCatalogsPage', () => {
     mockUseParams.mockReturnValue({ partnerSlug: 'test-partner' });
     mockUseLocation.mockReturnValue(['/', jest.fn()]);
     mockUsePartnerDetails.mockReturnValue({
-      partnerDetails: {
+      data: {
         id: 'partner-123',
         name: 'Test Partner Corp',
         logo: 'https://example.com/logo.png',
@@ -42,12 +42,12 @@ describe('PartnerCatalogsPage', () => {
         certified: 120,
       },
     });
-    // Mock usePartnerCatalogs
-    mockUsePartnerCatalogs.mockReturnValue({
-      partnerCatalogs: {
-        results: [],
+    // Mock useCatalogs
+    mockUseCatalogs.mockReturnValue({
+      data: {
+        catalogs: [],
         count: 0,
-        numPages: 1,
+        pageCount: 1,
       },
       isLoadingCatalogs: false,
     });
@@ -103,7 +103,7 @@ describe('PartnerCatalogsPage', () => {
   it('handles missing partner details gracefully', () => {
     // Mock hook to return null partner details
     mockUsePartnerDetails.mockReturnValue({
-      partnerDetails: null,
+      data: null,
     });
 
     renderPartnerCatalogsPage();
@@ -115,8 +115,8 @@ describe('PartnerCatalogsPage', () => {
 
   it('handles partner without logo', () => {
     // Mock hook to return partner without logo
-    (partnerHooks.usePartnerDetails as jest.Mock).mockReturnValue({
-      partnerDetails: {
+    mockUsePartnerDetails.mockReturnValue({
+      data: {
         id: 'partner-123',
         name: 'Test Partner Corp',
         logo: null,
@@ -144,7 +144,7 @@ describe('PartnerCatalogsPage', () => {
 
   it('passes partnerSlug to usePartnerDetails hook', () => {
     const mockPartnerDetails = {
-      partnerDetails: {
+      data: {
         id: 'partner-123',
         name: 'Test Partner Corp',
         logo: 'https://example.com/logo.png',

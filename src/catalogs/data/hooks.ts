@@ -1,7 +1,7 @@
 import {
   useMutation, useQuery, useQueryClient, useSuspenseQuery,
 } from '@tanstack/react-query';
-import { CatalogUpdateRequest } from '@src/types';
+import { Catalog, CatalogUpdateRequest, UseQueryResult } from '@src/types';
 import { appId } from '@src/constants';
 import {
   getCatalogDetails, getPartnerCatalogs, updateCatalog, getCatalogsLearners,
@@ -11,13 +11,16 @@ import {
   deleteLearnersFromCatalog,
 } from './api';
 
+
 const queryKey = {
   all: [appId, 'catalogs'],
+  catalogLists: () => [...queryKey.all, 'list'],
   catalogList: (partnerId: number, pageIndex: number, pageSize: number) => [
-    ...queryKey.all, partnerId, pageIndex, pageSize,
+    ...queryKey.catalogLists(), partnerId, pageIndex, pageSize,
   ],
   catalogDetail: (catalogSlug: string) => [...queryKey.all, 'detail', catalogSlug],
-  catalogLearners: (
+  catalogLearners: () => [...queryKey.all, 'learners'],
+  catalogLearnersList: (
     catalogId: string,
     pageIndex?: number,
     pageSize?: number,
@@ -25,9 +28,10 @@ const queryKey = {
     search?: string,
     active?: string,
   ) => [
-    ...queryKey.all, 'learners', catalogId, pageIndex, pageSize, ordering, search, active,
+    ...queryKey.catalogLearners(), catalogId, pageIndex, pageSize, ordering, search, active,
   ],
-  catalogEnrollments: (
+  catalogEnrollments: () => [...queryKey.all, 'enrollments'],
+  catalogEnrollmentsList: (
     catalogId: string,
     pageIndex: number,
     pageSize: number,
@@ -35,39 +39,81 @@ const queryKey = {
     search?: string,
     active?: string,
   ) => [
-    ...queryKey.all, 'enrollments', catalogId, pageIndex, pageSize, ordering, search, active,
+    ...queryKey.catalogEnrollments(), catalogId, pageIndex, pageSize, ordering, search, active,
   ],
 };
 
-export const usePartnerCatalogs = (
-  { partnerId, pageIndex, pageSize }: { partnerId: number; pageIndex: number; pageSize: number; },
-) => {
-  const { data: partnerCatalogs, isLoading: isLoadingCatalogs } = useSuspenseQuery({
+/**
+ * Hook to fetch catalogs for a partner.
+ *
+ * @param partnerId - The partner's ID.
+ * @param pageIndex - Current page index.
+ * @param pageSize - Number of catalogs per page.
+ * @returns partnerCatalogs and loading state.
+ *
+ * @example
+ * const { partnerCatalogs, isLoadingCatalogs } = usePartnerCatalogs({ partnerId: 1, pageIndex: 1, pageSize: 20 });
+ */
+export const useCatalogs = ({
+  partnerId,
+  pageIndex,
+  pageSize,
+}: {
+  partnerId: number; pageIndex: number; pageSize: number
+}): UseQueryResult<{ catalogs: Catalog[], count: number; pageCount: number }> => {
+  const {
+    data, isLoading, isError, error, isSuccess,
+  } = useQuery({
     queryKey: queryKey.catalogList(partnerId, pageIndex, pageSize),
     queryFn: () => getPartnerCatalogs(partnerId, pageIndex, pageSize),
   });
 
-  return { partnerCatalogs, isLoadingCatalogs };
-};
-
-export const useCatalogDetails = ({
-  catalogSlug,
-}: { catalogSlug: string }) => {
-  const { data: catalogDetails } = useSuspenseQuery({
-    queryKey: queryKey.catalogDetail(catalogSlug),
-    queryFn: () => getCatalogDetails(catalogSlug),
-  });
-
   return {
-    catalogDetails: catalogDetails || null,
+    data: {
+      catalogs: data?.results || [],
+      count: data?.count || 0,
+      pageCount: data?.numPages || 0,
+    },
+    isLoading,
+    isError,
+    error,
+    isSuccess,
   };
 };
 
+/**
+ * Hook to fetch catalog details.
+ *
+ * @param catalogSlug - The catalog's unique slug.
+ * @returns catalogDetails object or null if not found.
+ *
+ * @example
+ * const { catalogDetails } = useCatalogDetails({ catalogSlug: 'catalog-123' });
+ */
+export const useCatalogDetails = ({ catalogSlug }: { catalogSlug: string }) => useSuspenseQuery({
+  queryKey: queryKey.catalogDetail(catalogSlug),
+  queryFn: () => getCatalogDetails(catalogSlug),
+});
+
+/**
+ * Hook to update a catalog.
+ *
+ * Uses a React Query mutation to update a catalog and automatically
+ * updates the cached catalog detail on success.
+ *
+ * @returns mutation function to update catalog.
+ *
+ * @example
+ * const updateCatalog = useUpdateCatalog();
+ * await updateCatalog.mutateAsync({ catalogId: 'c1', data: { name: 'New Name' } });
+ */
 export const useUpdateCatalog = () => {
   const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: async ({ catalogId, data }:
-    { catalogId: string; data: CatalogUpdateRequest }) => updateCatalog(catalogId, data),
+    mutationFn: async ({ catalogId, data }: {
+      catalogId: string; data: CatalogUpdateRequest
+    }) => updateCatalog(catalogId, data),
     onSuccess(data) {
       if (data) {
         queryClient.setQueryData(
@@ -79,6 +125,18 @@ export const useUpdateCatalog = () => {
   });
 };
 
+/**
+ * Hook to fetch learners of a catalog.
+ *
+ * @param catalogId - The catalog's unique ID.
+ * @param pageIndex - Current page index.
+ * @param pageSize - Number of learners per page.
+ * @param ordering - Optional ordering string.
+ * @param search - Optional search string.
+ * @param active - Optional active filter.
+ *
+ * @returns Query result from React Query.
+ */
 export const useCatalogLearners = ({
   catalogId,
   pageIndex,
@@ -94,7 +152,7 @@ export const useCatalogLearners = ({
   search?: string;
   active?: string;
 }) => useQuery({
-  queryKey: queryKey.catalogLearners(catalogId, pageIndex, pageSize, ordering, search, active),
+  queryKey: queryKey.catalogLearnersList(catalogId, pageIndex, pageSize, ordering, search, active),
   queryFn: () => getCatalogsLearners(catalogId, pageIndex, pageSize, ordering, search, active),
 });
 
@@ -103,65 +161,64 @@ type InvitePayload = {
   csvFile?: File;
 };
 
+/**
+ * Hook to invite learners to a catalog.
+ *
+ * Supports both email invites and CSV file uploads.
+ * Invalidates learners query on success.
+ *
+ * @returns mutation function for inviting learners.
+ */
 export const useInviteLearners = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({
-      catalogId,
-      data,
-    }: {
-      catalogId: string;
-      data: InvitePayload;
-    }) => {
-      // Emails
+    mutationFn: async ({ catalogId, data }: { catalogId: string; data: InvitePayload }) => {
       if (data.emails?.length) {
-        await postCatalogInviteLearners(catalogId, {
-          inviteEmail: data.emails,
-          catalogId,
-        });
+        await postCatalogInviteLearners(catalogId, { inviteEmail: data.emails, catalogId });
       }
-
-      // CSV
       if (data.csvFile) {
-        await postBulkCatalogInviteLearners(catalogId, {
-          csvFile: data.csvFile,
-        });
+        await postBulkCatalogInviteLearners(catalogId, { csvFile: data.csvFile });
       }
     },
-
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: queryKey.catalogLearners(variables.catalogId),
-      });
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKey.catalogLearners() });
     },
   });
 };
 
+/**
+ * Hook to remove learners from a catalog.
+ *
+ * Invalidates learners query on success.
+ *
+ * @returns mutation function for removing learners.
+ */
 export const useRemoveLearners = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({
-      catalogId,
-      learnerIds,
-    }: {
-      catalogId: string;
-      learnerIds: number[];
-    }) => {
-      deleteLearnersFromCatalog(catalogId, {
-        learnerIds,
-      });
+    mutationFn: async ({ catalogId, learnerIds }: { catalogId: string; learnerIds: number[] }) => {
+      await deleteLearnersFromCatalog(catalogId, { learnerIds });
     },
-
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: queryKey.catalogLearners(variables.catalogId),
-      });
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKey.catalogLearners() });
     },
   });
 };
 
+/**
+ * Hook to fetch catalog enrollments with pagination.
+ *
+ * @param catalogId - Catalog unique ID.
+ * @param pageIndex - Current page index.
+ * @param pageSize - Number of items per page.
+ * @param ordering - Optional ordering string.
+ * @param search - Optional search string.
+ * @param active - Optional active filter.
+ *
+ * @returns Query result from React Query.
+ */
 export const useCatalogEnrollments = ({
   catalogId,
   pageIndex,
@@ -177,6 +234,6 @@ export const useCatalogEnrollments = ({
   search?: string;
   active?: string;
 }) => useQuery({
-  queryKey: queryKey.catalogEnrollments(catalogId, pageIndex, pageSize, ordering, search, active),
+  queryKey: queryKey.catalogEnrollmentsList(catalogId, pageIndex, pageSize, ordering, search, active),
   queryFn: () => getCatalogEnrrollements(catalogId, pageIndex, pageSize, ordering, search, active),
 });

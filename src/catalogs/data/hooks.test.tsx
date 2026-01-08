@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { usePartnerCatalogs, useCatalogDetails } from './hooks';
+import { useCatalogs, useCatalogDetails } from './hooks';
 import * as api from './api';
 import { Catalog, PaginatedResponse } from '../../types';
 
@@ -90,13 +90,17 @@ describe('Catalog Hooks', () => {
       mockedGetPartnerCatalogs.mockResolvedValueOnce(mockCatalogsResponse);
 
       const { result } = renderHook(
-        () => usePartnerCatalogs({ partnerId: 1, pageIndex: 1, pageSize: 10 }),
+        () => useCatalogs({ partnerId: 1, pageIndex: 1, pageSize: 10 }),
         { wrapper: createWrapper },
       );
 
       await waitFor(() => {
-        expect(result.current.partnerCatalogs).toEqual(mockCatalogsResponse);
-        expect(result.current.isLoadingCatalogs).toBe(false);
+        expect(result.current.data).toEqual({
+          catalogs: mockCatalogsResponse.results,
+          count: mockCatalogsResponse.count,
+          pageCount: mockCatalogsResponse.numPages,
+        });
+        expect(result.current.isLoading).toBe(false);
       });
 
       expect(mockedGetPartnerCatalogs).toHaveBeenCalledWith(1, 1, 10);
@@ -123,7 +127,7 @@ describe('Catalog Hooks', () => {
         .mockResolvedValueOnce(secondPageResponse);
 
       const { result, rerender } = renderHook(
-        ({ partnerId, pageIndex, pageSize }) => usePartnerCatalogs({ partnerId, pageIndex, pageSize }),
+        ({ partnerId, pageIndex, pageSize }) => useCatalogs({ partnerId, pageIndex, pageSize }),
         {
           wrapper: createWrapper,
           initialProps: { partnerId: 1, pageIndex: 1, pageSize: 10 },
@@ -133,7 +137,11 @@ describe('Catalog Hooks', () => {
       expect(mockedGetPartnerCatalogs).toHaveBeenCalledTimes(1);
 
       await waitFor(() => {
-        expect(result.current.partnerCatalogs).toEqual(mockCatalogsResponse);
+        expect(result.current.data).toEqual({
+          catalogs: mockCatalogsResponse.results,
+          count: mockCatalogsResponse.count,
+          pageCount: mockCatalogsResponse.numPages,
+        });
       });
 
       // Rerender with same params should not call API again due to caching
@@ -144,7 +152,11 @@ describe('Catalog Hooks', () => {
       rerender({ partnerId: 1, pageIndex: 2, pageSize: 10 });
       await waitFor(() => {
         expect(mockedGetPartnerCatalogs).toHaveBeenCalledTimes(2);
-        expect(result.current.partnerCatalogs).toEqual(secondPageResponse);
+        expect(result.current.data).toEqual({
+          catalogs: secondPageResponse.results,
+          count: secondPageResponse.count,
+          pageCount: secondPageResponse.numPages,
+        });
       });
     });
   });
@@ -182,7 +194,7 @@ describe('Catalog Hooks', () => {
       );
 
       await waitFor(() => {
-        expect(result.current.catalogDetails).toEqual(mockCatalog);
+        expect(result.current.data).toEqual(mockCatalog);
       });
 
       expect(mockedGetCatalogDetails).toHaveBeenCalledWith('1');

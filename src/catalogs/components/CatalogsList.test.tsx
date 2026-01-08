@@ -1,10 +1,10 @@
 import { screen } from '@testing-library/react';
 import { renderWrapper } from '@src/setupTest';
 import CatalogsList from './CatalogsList';
-import { usePartnerCatalogs } from '../data/hooks';
+import { useCatalogs } from '../data/hooks';
 
 jest.mock('../data/hooks', () => ({
-  usePartnerCatalogs: jest.fn(),
+  useCatalogs: jest.fn(),
 }));
 
 jest.mock('@src/hooks', () => ({
@@ -46,16 +46,17 @@ const mockCatalogs = [
 ];
 
 const mockPartnerCatalogs = {
-  results: mockCatalogs,
+  catalogs: mockCatalogs,
   count: 3,
-  numPages: 1,
+  pageCount: 1,
 };
 
+const mockUseCatalogs = useCatalogs as jest.Mock;
 describe('CatalogsList', () => {
   beforeEach(() => {
-    (usePartnerCatalogs as jest.Mock).mockReturnValue({
-      partnerCatalogs: mockPartnerCatalogs,
-      isLoadingCatalogs: false,
+    mockUseCatalogs.mockReturnValue({
+      data: mockPartnerCatalogs,
+      isLoading: false,
     });
   });
 
@@ -76,9 +77,9 @@ describe('CatalogsList', () => {
   });
 
   it('shows loading state if data is still loading', () => {
-    (usePartnerCatalogs as jest.Mock).mockReturnValue({
-      partnerCatalogs: { results: [], count: 0, numPages: 0 },
-      isLoadingCatalogs: true,
+    mockUseCatalogs.mockReturnValue({
+      data: { catalogs: [], count: 0, pageCount: 0 },
+      isLoading: true,
     });
 
     renderWrapper(<CatalogsList partnerId={1} partnerSlug="test-partner" />);
@@ -86,9 +87,9 @@ describe('CatalogsList', () => {
   });
 
   it('renders empty table message when no catalogs are available', () => {
-    (usePartnerCatalogs as jest.Mock).mockReturnValue({
-      partnerCatalogs: { results: [], count: 0, numPages: 0 },
-      isLoadingCatalogs: false,
+    mockUseCatalogs.mockReturnValue({
+      data: { catalogs: [], count: 0, pageCount: 0 },
+      isLoading: false,
     });
 
     renderWrapper(<CatalogsList partnerId={1} partnerSlug="test-partner" />);
@@ -110,14 +111,14 @@ describe('CatalogsList', () => {
 
   it('handles pagination data correctly', () => {
     const mockPaginationData = {
-      results: [mockCatalogs[0]], // Only first catalog
+      catalogs: [mockCatalogs[0]], // Only first catalog
       count: 1,
-      numPages: 1,
+      pageCount: 1,
     };
 
-    (usePartnerCatalogs as jest.Mock).mockReturnValue({
-      partnerCatalogs: mockPaginationData,
-      isLoadingCatalogs: false,
+    mockUseCatalogs.mockReturnValue({
+      data: mockPaginationData,
+      isLoading: false,
     });
 
     renderWrapper(<CatalogsList partnerId={1} partnerSlug="test-partner" />);

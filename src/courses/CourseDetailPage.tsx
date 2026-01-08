@@ -18,7 +18,7 @@ const CourseDetailPage = () => {
     catalogSlug: string | undefined
     courseId: string | undefined
   }>();
-  const { catalogDetails } = useCatalogDetails({ catalogSlug: catalogSlug! });
+  const { data: catalogDetails } = useCatalogDetails({ catalogSlug: catalogSlug! });
   const { data: courseDetails } = useCatalogCourseDetails(catalogDetails?.id || '', courseId || '');
 
   return (

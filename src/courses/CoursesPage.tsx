@@ -21,8 +21,8 @@ const CoursesPage = () => {
     partnerSlug: string | undefined,
     catalogSlug: string | undefined
   }>();
-  const { partnerDetails } = usePartnerDetails({ partnerSlug: partnerSlug! });
-  const { catalogDetails } = useCatalogDetails({ catalogSlug: catalogSlug! });
+  const { data: partnerDetails } = usePartnerDetails({ partnerSlug: partnerSlug! });
+  const { data: catalogDetails } = useCatalogDetails({ catalogSlug: catalogSlug! });
 
   return (
     <AppLayout withBackButton backPath={paths.catalogs.buildPath(partnerSlug!)}>

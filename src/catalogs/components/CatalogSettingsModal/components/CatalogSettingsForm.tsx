@@ -33,7 +33,7 @@ const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFo
     const intl = useIntl();
     const { isAdmin } = useCurrentUser();
     const updateCatalogMutation = useUpdateCatalog();
-    const { catalogDetails } = useCatalogDetails({
+    const { data: catalogDetails } = useCatalogDetails({
       catalogSlug,
     });
     const schema = getCatalogSchema(intl);
