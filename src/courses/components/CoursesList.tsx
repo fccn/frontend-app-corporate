@@ -94,9 +94,11 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
   }), [onPaginationChange]);
   const { ordering, searchParams, fetchData } = useTableSortFilter(tableConfig);
   const {
-    courses,
-    count,
-    pageCount,
+    data: {
+      courses,
+      count,
+      pageCount,
+    },
     isLoading,
   } = useCatalogCourses(catalogId!, pageIndex + 1, pageSize, ordering, searchParams.search);
   const updateCatalogCourse = useUpdateCatalogCourse();
@@ -120,7 +122,7 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
   }];
 
   const handleChange = (courseId: string, e: React.ChangeEvent<HTMLSelectElement>) => {
-    updateCatalogCourse({ catalogId: catalogId!, courseId, data: { position: Number(e.target.value) } });
+    updateCatalogCourse.mutateAsync({ catalogId: catalogId!, courseId, data: { position: Number(e.target.value) } });
   };
 
   return (
@@ -143,7 +145,7 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
         }}
         fetchData={fetchData}
         itemCount={count}
-        pageCount={pageCount || 0}
+        pageCount={pageCount}
         data={courses}
         tableActions={[
           <TableAction catalogId={catalogId!} />,

@@ -37,10 +37,10 @@ describe('useCatalogCourses', () => {
       { wrapper: createWrapper() },
     );
 
-    await waitFor(() => result.current.courses.length > 0);
-    expect(result.current.courses[0].id).toBe(1);
-    expect(result.current.count).toBe(1);
-    expect(result.current.pageCount).toBe(1);
+    await waitFor(() => result.current.data.courses.length > 0);
+    expect(result.current.data.courses[0].id).toBe(1);
+    expect(result.current.data.count).toBe(1);
+    expect(result.current.data.pageCount).toBe(1);
   });
 
   it('returns loading state', async () => {
@@ -65,10 +65,10 @@ describe('useCatalogCourses', () => {
       { wrapper: createWrapper() },
     );
 
-    await waitFor(() => result.current.courses.length === 0 && result.current.count === 0);
-    expect(result.current.courses.length).toBe(0);
-    expect(result.current.count).toBe(0);
-    expect(result.current.pageCount).toBe(0);
+    await waitFor(() => result.current.data.courses.length === 0 && result.current.data.count === 0);
+    expect(result.current.data.courses.length).toBe(0);
+    expect(result.current.data.count).toBe(0);
+    expect(result.current.data.pageCount).toBe(0);
   });
 
   it('returns multiple pages', async () => {
@@ -83,8 +83,8 @@ describe('useCatalogCourses', () => {
       { wrapper: createWrapper() },
     );
 
-    await waitFor(() => result.current.pageCount === 2);
-    expect(result.current.pageCount).toBe(2);
+    await waitFor(() => result.current.data.pageCount === 2);
+    expect(result.current.data.pageCount).toBe(2);
   });
 
   it('handles API error', async () => {
@@ -95,9 +95,9 @@ describe('useCatalogCourses', () => {
       { wrapper: createWrapper() },
     );
 
-    await waitFor(() => result.current.courses.length === 0 && result.current.count === 0);
-    expect(result.current.courses.length).toBe(0);
-    expect(result.current.count).toBe(0);
+    await waitFor(() => result.current.data.courses.length === 0 && result.current.data.count === 0);
+    expect(result.current.data.courses.length).toBe(0);
+    expect(result.current.data.count).toBe(0);
   });
 });
 
@@ -114,7 +114,7 @@ describe('useDeleteCatalogCourse', () => {
     });
 
     await act(async () => {
-      await result.current({ catalogId: 'c1', data: { catalogCourseIds: [1] } });
+      await result.current.mutateAsync({ catalogId: 'c1', data: { catalogCourseIds: [1] } });
     });
 
     expect(api.deleteCourse).toHaveBeenCalledWith('c1', { catalogCourseIds: [1] });
@@ -128,7 +128,7 @@ describe('useDeleteCatalogCourse', () => {
     });
 
     await expect(
-      result.current({ catalogId: 'c1', data: { catalogCourseIds: [1] } }),
+      result.current.mutateAsync({ catalogId: 'c1', data: { catalogCourseIds: [1] } }),
     ).rejects.toThrow('Delete error');
   });
 });

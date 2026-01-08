@@ -56,9 +56,11 @@ describe('CoursesList', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockuseCatalogCourses.mockReturnValue({
-      courses: mockCourses,
-      count: mockCourses.length,
-      pageCount: 1,
+      data: {
+        courses: mockCourses,
+        count: mockCourses.length,
+        pageCount: 1,
+      },
       isLoading: false,
     });
     mockuseDeleteCatalogCourse.mockReturnValue(jest.fn());
@@ -94,9 +96,11 @@ describe('CoursesList', () => {
 
   it('shows loading state if data is still loading', () => {
     mockuseCatalogCourses.mockReturnValue({
-      courses: [],
-      count: 0,
-      pageCount: 0,
+      data: {
+        courses: [],
+        count: 0,
+        pageCount: 0,
+      },
       isLoading: true,
     });
     renderWrapper(<CoursesList catalogId="c1" />);

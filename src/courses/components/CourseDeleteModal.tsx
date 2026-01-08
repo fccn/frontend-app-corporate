@@ -24,7 +24,7 @@ const CourseDeleteModal = ({
     if (!selectedCourses || selectedCourses.length === 0) {
       return;
     }
-    deleteCatalogCourses({ catalogId: catalogId!, data: { catalogCourseIds: selectedCourses } });
+    deleteCatalogCourses.mutate({ catalogId: catalogId!, data: { catalogCourseIds: selectedCourses } });
     onClose();
   };
 

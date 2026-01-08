@@ -25,7 +25,10 @@ describe('CourseDeleteModal', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    mockUseDeleteCatalogCourse.mockReturnValue(mockDeleteMutation);
+    mockUseDeleteCatalogCourse.mockReturnValue({
+      mutate: mockDeleteMutation,
+      mutateAsync: mockDeleteMutation,
+    });
   });
 
   it('renders modal when isOpen is true', () => {

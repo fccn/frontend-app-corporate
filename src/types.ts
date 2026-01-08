@@ -1,3 +1,4 @@
+// Entity types
 export type Partner = {
   id: number;
   slug: string;
@@ -26,6 +27,19 @@ export type Learner = {
   enrollments: number;
   certified: number;
 };
+
+export interface LearnerUser {
+  fullName: string;
+  email: string;
+}
+
+export interface LearnerStatus {
+  user: LearnerUser;
+  completedAssessments: number;
+  assessmentsToComplete: number;
+  progress: number;
+  hasCertificate: boolean;
+}
 
 export interface CourseRun {
   id: string;
@@ -80,22 +94,6 @@ export type CatalogUpdateRequest = Partial<
 Omit<Catalog, 'id' | 'slug' | 'enrollments' | 'certified' | 'completionRate' | 'courses' | 'partnerId'>
 >;
 
-export interface PaginatedResponse<T> {
-  next: string | null;
-  previous: string | null;
-  count: number;
-  numPages: number;
-  currentPage: number;
-  start: number;
-  results: T[];
-}
-
-export interface CellValue<T> {
-  row: {
-    original: T;
-  };
-}
-
 export interface CourseOverview {
   id: string;
   display_name: string;
@@ -109,4 +107,31 @@ export interface CatalogCourseEnrollment {
   catalog_course: number;
   user: Partial<Learner['user']>;
   course_overview: CourseOverview;
+}
+
+// API response types
+export interface PaginatedResponse<T> {
+  next: string | null;
+  previous: string | null;
+  count: number;
+  numPages: number;
+  currentPage: number;
+  start: number;
+  results: T[];
+}
+
+// Paragon types
+export interface CellValue<T> {
+  row: {
+    original: T;
+  };
+}
+
+// Hooks types
+export interface UseQueryResult<T> {
+  data: T;
+  isLoading: boolean;
+  isError: boolean;
+  error?: unknown;
+  isSuccess: boolean;
 }

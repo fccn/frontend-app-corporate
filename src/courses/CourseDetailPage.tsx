@@ -4,12 +4,12 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import HeaderDescription from '@src/components/HeaderDescription';
 import { useCatalogDetails } from '@src/catalogs/data/hooks';
 
+import { paths } from '@src/constants';
 import AppLayout from '../components/AppLayout';
 import { useCatalogCourseDetails } from './data/hooks';
 import CourseLernerList from './components/CourseLearnerList';
 
 import messages from './messages';
-import { paths } from '@src/constants';
 
 const CourseDetailPage = () => {
   const intl = useIntl();

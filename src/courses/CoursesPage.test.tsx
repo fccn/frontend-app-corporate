@@ -83,9 +83,11 @@ jest.mock('@src/hooks', () => ({
 
 jest.mock('./data/hooks', () => ({
   useCatalogCourses: () => ({
-    courses: [],
-    count: 0,
-    pageCount: 0,
+    data: {
+      courses: [],
+      count: 0,
+      pageCount: 0,
+    },
     isLoading: false,
   }),
   useDeleteCatalogCourse: () => jest.fn(),

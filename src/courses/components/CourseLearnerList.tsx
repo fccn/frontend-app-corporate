@@ -42,7 +42,10 @@ const CourseLernerList = ({ catalogId, courseId }) => {
 
   const { pageIndex, pageSize, onPaginationChange } = usePagination();
 
-  const { data, isLoading } = useCourseLearnersStatus(catalogId, courseId, pageIndex + 1, pageSize);
+  const {
+    data: { results, count, pageCount },
+    isLoading,
+  } = useCourseLearnersStatus(catalogId, courseId, pageIndex + 1, pageSize);
 
   return (
     <DataTable
@@ -56,12 +59,12 @@ const CourseLernerList = ({ catalogId, courseId }) => {
       }}
       manualPagination
       fetchData={onPaginationChange}
-      pageCount={data?.numPages || 0}
+      pageCount={pageCount || 0}
       // tableActions={[
       //   <TableAction catalogId={catalogId!} />,
       // ]}
-      itemCount={data?.count || 0}
-      data={data?.results || []}
+      itemCount={count || 0}
+      data={results || []}
       columns={[
         {
           Header: intl.formatMessage(messages['corporate.course.learners.table.header.name']),
