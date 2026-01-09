@@ -35,7 +35,7 @@ export const getCourseDetails = async (catalogId: string, courseId: string): Pro
   try {
     const url = getCorporateApi(`manage/catalogs/${catalogId}/courses/${courseId}/`);
     const { data } = await getAuthenticatedHttpClient().get(url);
-    return camelCaseObject(data);
+    return camelCaseObject(data) || null;
   } catch (error) {
     logError(error);
     return null;

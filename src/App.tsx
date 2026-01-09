@@ -6,6 +6,7 @@ import { AppProvider } from '@edx/frontend-platform/react';
 import { paths, STALE_TIME } from './constants';
 import { useCurrentUser } from './hooks';
 import Loader from './components/Loader';
+import ErrorPage from './components/ErrorPage';
 
 const CorporatePartnerPage = lazy(() => import('@src/partner/CorporatePartnerPage'));
 const PartnerCatalogsPage = lazy(() => import('@src/catalogs/PartnerCatalogsPage'));
@@ -24,7 +25,7 @@ const Router = () => {
   const { isAdmin, isCatalogManager } = useCurrentUser();
 
   if (!isAdmin && !isCatalogManager) {
-    return <h1>Access Denied</h1>;
+    return <ErrorPage status={403} />;
   }
 
   return (
@@ -34,8 +35,11 @@ const Router = () => {
         <Route path={paths.catalogs.path} component={PartnerCatalogsPage} />
         <Route path={paths.courses.path} component={CoursesPage} />
         <Route path={paths.courseDetail.path} component={CourseDetailPage} />
+        <Route path={paths.notFound.path}>
+          <ErrorPage status={404} />
+        </Route>
         <Route>
-          <h1>404 Not Found</h1>
+          <ErrorPage status={404} />
         </Route>
       </Switch>
     </WouterRouter>

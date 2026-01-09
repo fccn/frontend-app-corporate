@@ -1,18 +1,21 @@
+import { useEffect } from 'react';
 import { useParams } from 'wouter';
 import { getConfig } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import HeaderDescription from '@src/components/HeaderDescription';
+import { useNavigate } from '@src/hooks';
 import { useCatalogDetails } from '@src/catalogs/data/hooks';
-
 import { paths } from '@src/constants';
-import AppLayout from '../components/AppLayout';
+
+import HeaderDescription from '@src/components/HeaderDescription';
 import { useCatalogCourseDetails } from './data/hooks';
+import AppLayout from '../components/AppLayout';
 import CourseLernerList from './components/CourseLearnerList';
 
 import messages from './messages';
 
 const CourseDetailPage = () => {
   const intl = useIntl();
+  const navigate = useNavigate();
   const { partnerSlug, catalogSlug, courseId } = useParams<{
     partnerSlug: string | undefined
     catalogSlug: string | undefined
@@ -20,6 +23,12 @@ const CourseDetailPage = () => {
   }>();
   const { data: catalogDetails } = useCatalogDetails({ catalogSlug: catalogSlug! });
   const { data: courseDetails } = useCatalogCourseDetails(catalogDetails?.id || '', courseId || '');
+
+  useEffect(() => {
+    if (catalogDetails === null || courseDetails === null) {
+      navigate(paths.notFound.path);
+    }
+  }, [catalogDetails, courseDetails, navigate]);
 
   return (
     <AppLayout withBackButton backPath={paths.courses.buildPath(partnerSlug || '', catalogSlug || '')}>

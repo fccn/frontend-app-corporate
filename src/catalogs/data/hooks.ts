@@ -11,7 +11,6 @@ import {
   deleteLearnersFromCatalog,
 } from './api';
 
-
 const queryKey = {
   all: [appId, 'catalogs'],
   catalogLists: () => [...queryKey.all, 'list'],

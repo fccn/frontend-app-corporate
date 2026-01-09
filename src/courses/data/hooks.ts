@@ -1,4 +1,6 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  useMutation, useQuery, useQueryClient, useSuspenseQuery,
+} from '@tanstack/react-query';
 import { appId } from '@src/constants';
 import { Course, LearnerStatus, UseQueryResult } from '@src/types';
 import {
@@ -103,23 +105,10 @@ export const useCatalogCourses = (
 export const useCatalogCourseDetails = (
   catalogId: string,
   courseId: string,
-): UseQueryResult<Course | null> => {
-  const {
-    data, isLoading, isError, error, isSuccess,
-  } = useQuery({
-    queryKey: queryKey.courseDetails(catalogId, courseId),
-    queryFn: () => getCourseDetails(catalogId, courseId),
-    enabled: !!catalogId && !!courseId,
-  });
-
-  return {
-    data: data || null,
-    isLoading,
-    isError,
-    error,
-    isSuccess,
-  };
-};
+) => useSuspenseQuery({
+  queryKey: queryKey.courseDetails(catalogId, courseId),
+  queryFn: () => getCourseDetails(catalogId, courseId),
+});
 
 /**
  * React hook for deleting one or more courses from a catalog.

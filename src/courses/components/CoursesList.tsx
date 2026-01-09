@@ -64,7 +64,7 @@ type BulkActionProps = {
   setRowsForDelete: (rows: any[]) => void;
   openDeleteModal: () => void;
 };
-const BulkAction = ({ selectedFlatRows, setRowsForDelete, openDeleteModal }:BulkActionProps) => {
+const BulkAction = ({ selectedFlatRows, setRowsForDelete, openDeleteModal }: BulkActionProps) => {
   const intl = useIntl();
   if (!selectedFlatRows?.length) { return null; }
   return (
@@ -233,6 +233,7 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
       >
         <DataTable.TableControlBar />
         <DataTable.Table />
+        <DataTable.EmptyTable content={intl.formatMessage(messages['corporate.courses.table.empty.content'])} />
         <TableFooter />
       </DataTable>
       <CourseDeleteModal

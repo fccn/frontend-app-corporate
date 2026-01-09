@@ -38,9 +38,9 @@ export const getCatalogDetails = async (
 ): Promise<Catalog | null> => {
   try {
     const url = new URL(getCorporateApi('manage/catalogs/'));
-    url.searchParams.append('slug', catalogSlug || '');
+    url.searchParams.append('search', catalogSlug || '');
     const response = await getAuthenticatedHttpClient().get(url);
-    return camelCaseObject(response.data.results[0]);
+    return camelCaseObject(response.data.results[0]) || null;
   } catch (error) {
     logError(error);
     return null;

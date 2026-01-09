@@ -28,7 +28,7 @@ export const getPartnerDetails = async (partnerSlug?: string): Promise<Partner> 
     const url = new URL(getCorporateApi('partners/'));
     url.searchParams.append('slug', partnerSlug || '');
     const response = await getAuthenticatedHttpClient().get(url);
-    return camelCaseObject(response.data.results[0]);
+    return camelCaseObject(response.data.results[0]) || null;
   } catch (error) {
     logError(error);
     return {

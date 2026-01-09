@@ -205,6 +205,11 @@ const messages = defineMessages({
     defaultMessage: 'No learners found for this course.',
     description: 'Message displayed when there are no learners for the course',
   },
+  'corporate.courses.table.empty.content': {
+    id: 'corporate.courses.table.empty.content',
+    defaultMessage: 'No courses found.',
+    description: 'Message displayed when there are no courses in the catalog',
+  },
 });
 
 export default messages;

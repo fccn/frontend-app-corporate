@@ -5,15 +5,25 @@ import AppLayout from '@src/components/AppLayout';
 import { usePartnerDetails } from '@src/partner/data/hooks';
 import HeaderDescription from '@src/components/HeaderDescription';
 
-import CatalogsList from './components/CatalogsList';
+import { useNavigate } from '@src/hooks';
+import { paths } from '@src/constants';
+import { useEffect } from 'react';
 import messages from './messages';
+import CatalogsList from './components/CatalogsList';
 
 const PartnerCatalogsPage = () => {
   const intl = useIntl();
+  const navigate = useNavigate();
 
   const { partnerSlug } = useParams<{ partnerSlug: string }>();
 
   const { data: partnerDetails } = usePartnerDetails({ partnerSlug });
+
+  useEffect(() => {
+    if (partnerDetails === null) {
+      navigate(paths.notFound.path);
+    }
+  }, [partnerDetails, navigate]);
 
   return (
     <AppLayout withBackButton backPath="/">

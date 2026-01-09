@@ -7,23 +7,26 @@ import { getConfig } from '@edx/frontend-platform';
 export const paths = {
   base: getConfig().PUBLIC_PATH.endsWith('/') ? getConfig().PUBLIC_PATH.slice(0, -1) : getConfig().PUBLIC_PATH,
   partners: {
-    path: '/',
-    buildPath: () => '/',
+    path: 'partners/',
+    buildPath: () => '/partners/',
   },
 
   catalogs: {
-    path: '/:partnerSlug/',
-    buildPath: (partnerSlug: string) => `/${partnerSlug}/`,
+    path: '/:partnerSlug/catalogs/',
+    buildPath: (partnerSlug: string) => `/${partnerSlug}/catalogs/`,
   },
 
   courses: {
-    path: '/:partnerSlug/:catalogSlug/',
-    buildPath: (partnerSlug: string, catalogSlug: string) => `/${partnerSlug}/${catalogSlug}/`,
+    path: '/:partnerSlug/catalogs/:catalogSlug/courses/',
+    buildPath: (partnerSlug: string, catalogSlug: string) => `/${partnerSlug}/catalogs/${catalogSlug}/courses/`,
   },
 
   courseDetail: {
-    path: '/:partnerSlug/:catalogSlug/:courseId/',
-    buildPath: (partnerSlug: string, catalogSlug: string, courseId: string) => `/${partnerSlug}/${catalogSlug}/${courseId}/`,
+    path: '/:partnerSlug/catalogs/:catalogSlug/courses/:courseId/',
+    buildPath: (partnerSlug: string, catalogSlug: string, courseId: string) => `/${partnerSlug}/catalogs/${catalogSlug}/courses/${courseId}/`,
+  },
+  notFound: {
+    path: '/not-found',
   },
 } as const;
 

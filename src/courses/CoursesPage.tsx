@@ -1,9 +1,11 @@
+import { useEffect } from 'react';
 import { useParams } from 'wouter';
 import { getConfig } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import HeaderDescription from '@src/components/HeaderDescription';
+import { useNavigate } from '@src/hooks';
 import { useCatalogDetails } from '@src/catalogs/data/hooks';
 import { usePartnerDetails } from '@src/partner/data/hooks';
+import HeaderDescription from '@src/components/HeaderDescription';
 import { IconButton, Tab, Tabs } from '@openedx/paragon';
 import { Settings } from '@openedx/paragon/icons';
 import { paths } from '@src/constants';
@@ -17,12 +19,19 @@ import messages from './messages';
 
 const CoursesPage = () => {
   const intl = useIntl();
+  const navigate = useNavigate();
   const { partnerSlug, catalogSlug } = useParams<{
     partnerSlug: string | undefined,
     catalogSlug: string | undefined
   }>();
   const { data: partnerDetails } = usePartnerDetails({ partnerSlug: partnerSlug! });
   const { data: catalogDetails } = useCatalogDetails({ catalogSlug: catalogSlug! });
+
+  useEffect(() => {
+    if (partnerDetails === null || catalogDetails === null) {
+      navigate(paths.notFound.path);
+    }
+  }, [partnerDetails, catalogDetails, navigate]);
 
   return (
     <AppLayout withBackButton backPath={paths.catalogs.buildPath(partnerSlug!)}>
