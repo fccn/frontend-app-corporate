@@ -59,8 +59,8 @@ const HeaderDescription = ({ context, info, children }: HeaderDescriptionProps) 
 
         <Stack className="justify-content-center">
           <h3 className="mb-0 truncate-1-line">{context.title}</h3>
-          <span className="x-small d-inline-flex">
-            <span className="w-70 truncate-2-line">{context?.description}</span>
+          <span className="x-small d-inline-flex align-items-center">
+            <span className="w-75 truncate-2-line header-link">{context?.description}</span>
             {context.copyableDescription && (
               <IconButtonWithTooltip
                 invertColors
