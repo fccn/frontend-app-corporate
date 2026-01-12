@@ -257,6 +257,11 @@ export const useAddCoursesToCatalog = () => {
         queryKey: queryKey.courseLists(),
       });
     },
+    onSettled: (_, __, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: queryKey.availableCourses(variables.catalogId),
+      });
+    }
   });
 };
 

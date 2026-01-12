@@ -8,6 +8,7 @@ import messages from '@src/courses/messages';
 import Loader from '@src/components/Loader';
 import { useAvailableCourses, useAddCoursesToCatalog } from '../../data/hooks';
 import AvailableCoursesList from './AvailableCoursesList';
+import { useNotification } from '@src/components/NotificationProvider';
 
 interface CourseAddModalProps {
   isOpen: boolean;
@@ -15,9 +16,10 @@ interface CourseAddModalProps {
   catalogId: string;
 }
 
-const CourseAddModal = ({ isOpen, onClose, catalogId }:CourseAddModalProps) => {
+const CourseAddModal = ({ isOpen, onClose, catalogId }: CourseAddModalProps) => {
   const intl = useIntl();
   const [selectedCourses, setSelectedCourses] = useState<Set<string>>(new Set());
+  const { showNotification } = useNotification();
   const {
     data: allCourses = {
       base: [],
@@ -28,8 +30,25 @@ const CourseAddModal = ({ isOpen, onClose, catalogId }:CourseAddModalProps) => {
   const addMutation = useAddCoursesToCatalog();
 
   const handleSave = () => {
-    addMutation.mutate({ catalogId, courseIds: Array.from(selectedCourses) });
-    onClose();
+    addMutation.mutate(
+      { catalogId, courseIds: Array.from(selectedCourses) },
+      {
+        onSuccess: () => {
+          showNotification(
+            intl.formatMessage(messages['corporate.courses.modal.add.notification.success'], { count: selectedCourses.size }),
+            'success',
+          );
+          setSelectedCourses(new Set());
+          onClose();
+        },
+        onError: () => {
+          showNotification(
+            intl.formatMessage(messages['corporate.courses.modal.add.notification.error']),
+            'error',
+          );
+        }
+      }
+    );
   };
 
   return (

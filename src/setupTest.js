@@ -3,6 +3,7 @@ import { mergeConfig } from '@edx/frontend-platform';
 import { render } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
+import NotificationProvider from './components/NotificationProvider';
 
 export const renderWrapper = (children) => {
   const queryClient = new QueryClient({
@@ -15,9 +16,11 @@ export const renderWrapper = (children) => {
   return render(
     // eslint-disable-next-line react/jsx-filename-extension
     <QueryClientProvider client={queryClient}>
-      <IntlProvider locale="en">
-        {children}
-      </IntlProvider>
+      <NotificationProvider>
+        <IntlProvider locale="en">
+          {children}
+        </IntlProvider>
+      </NotificationProvider>
     </QueryClientProvider>,
   );
 };

@@ -210,6 +210,16 @@ const messages = defineMessages({
     defaultMessage: 'No courses found.',
     description: 'Message displayed when there are no courses in the catalog',
   },
+  'corporate.courses.modal.add.notification.success': {
+    id: 'corporate.courses.modal.add.notification.success',
+    defaultMessage: '{count, plural, one {# course} other {# courses}} have been successfully added to the catalog.',
+    description: 'Notification message displayed when courses are successfully added to the catalog',
+  },
+  'corporate.courses.modal.add.notification.error': {
+    id: 'corporate.courses.modal.add.notification.error',
+    defaultMessage: 'An error occurred while adding courses to the catalog. Please try again.',
+    description: 'Notification message displayed when there is an error adding courses to the catalog',
+  },
 });
 
 export default messages;

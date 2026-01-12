@@ -7,6 +7,7 @@ import { paths, STALE_TIME } from './constants';
 import { useCurrentUser } from './hooks';
 import Loader from './components/Loader';
 import ErrorPage from './components/ErrorPage';
+import NotificationProvider from './components/NotificationProvider';
 
 const CorporatePartnerPage = lazy(() => import('@src/partner/CorporatePartnerPage'));
 const PartnerCatalogsPage = lazy(() => import('@src/catalogs/PartnerCatalogsPage'));
@@ -49,9 +50,11 @@ const Router = () => {
 const App = () => (
   <AppProvider wrapWithRouter={false}>
     <QueryClientProvider client={queryClient}>
+      <NotificationProvider>
       <Suspense fallback={<Loader fullPage />}>
         <Router />
       </Suspense>
+      </NotificationProvider>
     </QueryClientProvider>
   </AppProvider>
 );

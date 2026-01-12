@@ -47,7 +47,7 @@ const AvailableCoursesList = ({ courses, selectedCourses, setSelectedCourses }: 
         <Card className="p-3 shadow-none border-bottom rounded-0 bg-light-300">
           <Form.Checkbox
             checked={allSelected}
-            indeterminate={someSelected && !allSelected}
+            indeterminate={(someSelected && !allSelected).toString()}
             onChange={e => handleSelectAll(e.target.checked)}
           >
             {intl.formatMessage(
@@ -84,7 +84,7 @@ const AvailableCoursesList = ({ courses, selectedCourses, setSelectedCourses }: 
               setSelectedCourses(newSet);
             }}
           >
-            <div className="d-flex direction-column">
+            <div className="d-flex flex-column">
               <span>{course.displayName}</span>
               <span className="text-muted x-small">{course.id}</span>
             </div>

@@ -26,7 +26,6 @@ const mockUseCurrentUser = jest.fn();
 jest.mock('@src/hooks', () => ({
   ...jest.requireActual('@src/hooks'),
   useCurrentUser: () => mockUseCurrentUser(),
-  useNavigate: jest.requireActual('@src/hooks').useNavigate,
 }));
 
 // Simple wouter mock
@@ -48,6 +47,9 @@ jest.mock('@src/catalogs/PartnerCatalogsPage', () => function PartnerCatalogsPag
 
 jest.mock('@src/courses/CoursesPage', () => function CoursesPage() {
   return <main><h1>Courses Page</h1></main>;
+});
+jest.mock('@src/components/ErrorPage', () => function ErrorPaage() {
+  return <main><h1>Error Page</h1></main>;
 });
 
 const renderApp = (userOverrides: { administrator?: boolean; roles?: string[] } = {}) => {
