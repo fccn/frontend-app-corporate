@@ -10,6 +10,7 @@ import { yupValidationResolver } from '@src/utils';
 import { useCatalogDetails, useUpdateCatalog } from '@src/catalogs/data/hooks';
 import { useCurrentUser } from '@src/hooks';
 import { InferType } from 'yup';
+import { useNotification } from '@src/components/NotificationProvider';
 import { getCatalogSchema, isoToDateInputValue } from '../utils';
 import messages from '../messages';
 import RegexInput from './RegexInput';
@@ -31,6 +32,7 @@ const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFo
     onSuccess,
   }, ref) => {
     const intl = useIntl();
+    const { showNotification } = useNotification();
     const { isAdmin } = useCurrentUser();
     const updateCatalogMutation = useUpdateCatalog();
     const { data: catalogDetails } = useCatalogDetails({
@@ -48,6 +50,7 @@ const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFo
         availableEndDate: catalogDetails?.availableEndDate ?? '',
       },
       resolver: yupValidationResolver(schema) as Resolver<CatalogFormValues>,
+      mode: 'onBlur',
     });
 
     const canEditAllFields = isAdmin;
@@ -67,7 +70,15 @@ const CatalogSettingsForm = forwardRef<CatalogSettingsFormRef, CatalogSettingsFo
           },
         }, {
           onSuccess: () => {
+            showNotification(intl.formatMessage(
+              messages['corporate.catalog.settings.modal.notification.success'],
+            ), 'success');
             onSuccess?.();
+          },
+          onError: () => {
+            showNotification(intl.formatMessage(
+              messages['corporate.catalog.settings.modal.notification.error'],
+            ), 'error');
           },
         });
       }

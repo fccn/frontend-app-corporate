@@ -15,6 +15,7 @@ import { useNavigate, usePagination, useTableSortFilter } from '@src/hooks';
 import { paths } from '@src/constants';
 import { Add, SaveAlt } from '@openedx/paragon/icons';
 import CourseAddModal from '@src/courses/components/CourseAddModal';
+import { useNotification } from '@src/components/NotificationProvider';
 import { useCatalogCourses, useUpdateCatalogCourse } from '../data/hooks';
 import CourseDeleteModal from './CourseDeleteModal';
 
@@ -84,23 +85,25 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
   const intl = useIntl();
   const navigate = useNavigate();
   const { partnerSlug, catalogSlug } = useParams<{ partnerSlug: string, catalogSlug: string }>();
+  const { showNotification } = useNotification();
+
   const [isdeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
-  const [selectedRowsForDelete, setSelectedRowsForDelete] = useState<any[]>([]);
+  const [selectedRowsForDelete, setSelectedRowsForDelete] = useState<string[]>([]);
+  const [courseNameForDelete, setCourseNameForDelete] = useState<string>('');
+
   const { pageSize, pageIndex, onPaginationChange } = usePagination();
   const tableConfig = useMemo(() => ({
     sortFields: ['position'],
     filterMappings: { name: 'search' },
     onPaginationChange,
   }), [onPaginationChange]);
+
   const { ordering, searchParams, fetchData } = useTableSortFilter(tableConfig);
   const {
-    data: {
-      courses,
-      count,
-      pageCount,
-    },
+    data: { courses, count, pageCount },
     isLoading,
   } = useCatalogCourses(catalogId!, pageIndex + 1, pageSize, ordering, searchParams.search);
+
   const updateCatalogCourse = useUpdateCatalogCourse();
 
   const positions = Array.from({ length: count + 1 || 0 }, (_, i) => i);
@@ -117,12 +120,29 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
     type: 'delete',
     action: (course) => {
       setSelectedRowsForDelete([course.id]);
+      setCourseNameForDelete(course.courseRun.displayName);
       openDeleteModal();
     },
   }];
 
   const handleChange = (courseId: string, e: React.ChangeEvent<HTMLSelectElement>) => {
-    updateCatalogCourse.mutateAsync({ catalogId: catalogId!, courseId, data: { position: Number(e.target.value) } });
+    updateCatalogCourse.mutate(
+      { catalogId: catalogId!, courseId, data: { position: Number(e.target.value) } },
+      {
+        onSuccess: () => {
+          showNotification(
+            intl.formatMessage(messages['corporate.courses.notification.position.update.success']),
+            'success',
+          );
+        },
+        onError: () => {
+          showNotification(
+            intl.formatMessage(messages['corporate.courses.notification.position.update.error']),
+            'error',
+          );
+        }
+      },
+    );
   };
 
   return (
@@ -238,10 +258,11 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
       </DataTable>
       <CourseDeleteModal
         isOpen={isdeleteModalOpen}
-        onClose={() => { closeDeleteModal(); setSelectedRowsForDelete([]); }}
+        onClose={() => { closeDeleteModal(); setSelectedRowsForDelete([]); setCourseNameForDelete(''); }}
         selectedCourses={selectedRowsForDelete}
         catalogId={catalogId!}
         catalogName={catalogName}
+        courseName={courseNameForDelete}
       />
     </>
   );

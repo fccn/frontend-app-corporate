@@ -1,4 +1,6 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import {
+  createContext, useContext, useMemo, useState,
+} from 'react';
 import { Toast } from '@openedx/paragon';
 
 type ToastType = 'success' | 'error';
@@ -13,7 +15,7 @@ const NotificationContext = createContext<{
   showNotification:(message: string, type?: ToastType) => void;
 } | null>(null);
 
-export const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
+const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
   const [toasts, setToasts] = useState<ToastProps[]>([]);
   const [counter, setCounter] = useState(0);
 
@@ -25,7 +27,7 @@ export const NotificationProvider = ({ children }: { children: React.ReactNode }
         id, message, type, visible: true,
       }]);
     },
-  }), []);
+  }), [counter]);
 
   const closeToast = (id: string) => {
     setToasts(prev => prev.map(t => (t.id === id ? { ...t, visible: false } : t)));
@@ -38,15 +40,15 @@ export const NotificationProvider = ({ children }: { children: React.ReactNode }
   return (
     <NotificationContext.Provider value={notificationValue}>
       {children}
-        {toasts.map(toast => (
-          <Toast
-            key={toast.id}
-            show={toast.visible}
-            onClose={() => closeToast(toast.id)}
-          >
-            {toast.message}
-          </Toast>
-        ))}
+      {toasts.map(toast => (
+        <Toast
+          key={toast.id}
+          show={toast.visible}
+          onClose={() => closeToast(toast.id)}
+        >
+          {toast.message}
+        </Toast>
+      ))}
     </NotificationContext.Provider>
   );
 };
@@ -58,4 +60,5 @@ export const useNotification = (): { showNotification: (message: string, type?: 
   }
   return context;
 };
+
 export default NotificationProvider;

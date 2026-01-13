@@ -6,9 +6,9 @@ import {
 } from '@openedx/paragon';
 import messages from '@src/courses/messages';
 import Loader from '@src/components/Loader';
+import { useNotification } from '@src/components/NotificationProvider';
 import { useAvailableCourses, useAddCoursesToCatalog } from '../../data/hooks';
 import AvailableCoursesList from './AvailableCoursesList';
-import { useNotification } from '@src/components/NotificationProvider';
 
 interface CourseAddModalProps {
   isOpen: boolean;
@@ -46,8 +46,8 @@ const CourseAddModal = ({ isOpen, onClose, catalogId }: CourseAddModalProps) => 
             intl.formatMessage(messages['corporate.courses.modal.add.notification.error']),
             'error',
           );
-        }
-      }
+        },
+      },
     );
   };
 

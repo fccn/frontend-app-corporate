@@ -105,13 +105,16 @@ describe('CourseAddModal', () => {
     const saveButton = screen.getByText('Add Selected Courses');
     await user.click(saveButton);
 
-    expect(mockMutate).toHaveBeenCalledWith({
-      catalogId: 'catalog-123',
-      courseIds: ['course1'],
-    },
-    { onSuccess: expect.any(Function),
-      onError: expect.any(Function),
-    });
+    expect(mockMutate).toHaveBeenCalledWith(
+      {
+        catalogId: 'catalog-123',
+        courseIds: ['course1'],
+      },
+      {
+        onSuccess: expect.any(Function),
+        onError: expect.any(Function),
+      },
+    );
   });
 
   it('disables save button when mutation is pending', () => {
@@ -147,13 +150,13 @@ describe('CourseAddModal', () => {
     const mockMutate = mockUseAddCoursesToCatalog.mock.results[0].value.mutate;
     expect(mockMutate).toHaveBeenCalledWith(
       {
-        catalogId: "catalog-123",
-        courseIds: ["course1", "course3"],
+        catalogId: 'catalog-123',
+        courseIds: ['course1', 'course3'],
       },
       {
         onError: expect.any(Function),
         onSuccess: expect.any(Function),
-      }
+      },
     );
   });
   it('shows notification on successful addition of courses', async () => {

@@ -163,6 +163,18 @@ const messages = defineMessages({
     defaultMessage: 'User limit must be a whole number',
     description: 'Error message for non-integer user limit',
   },
+
+  // notification messages
+  'corporate.catalog.settings.modal.notification.success': {
+    id: 'corporate.catalog.settings.modal.notification.success',
+    defaultMessage: 'Catalog settings have been successfully updated.',
+    description: 'Notification message displayed when catalog settings are successfully updated',
+  },
+  'corporate.catalog.settings.modal.notification.error': {
+    id: 'corporate.catalog.settings.modal.notification.error',
+    defaultMessage: 'An error occurred while updating catalog settings. Please try again.',
+    description: 'Notification message displayed when there is an error updating catalog settings',
+  },
 });
 
 export default messages;

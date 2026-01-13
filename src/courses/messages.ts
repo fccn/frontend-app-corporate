@@ -153,7 +153,7 @@ const messages = defineMessages({
   },
   'corporate.courses.modal.delete.subtitle': {
     id: 'corporate.courses.modal.delete.subtitle',
-    defaultMessage: 'You are about to delete {count, plural, one {a course} other {# courses}} from {catalogName} catalog.',
+    defaultMessage: 'You are about to delete {count, plural, one {{courseName}} other {# courses}} from {catalogName} catalog.',
     description: 'Subtitle for the delete courses modal',
   },
   'corporate.courses.modal.delete.description': {
@@ -219,6 +219,26 @@ const messages = defineMessages({
     id: 'corporate.courses.modal.add.notification.error',
     defaultMessage: 'An error occurred while adding courses to the catalog. Please try again.',
     description: 'Notification message displayed when there is an error adding courses to the catalog',
+  },
+  'corporate.courses.modal.delete.notification.success': {
+    id: 'corporate.courses.modal.delete.notification.success',
+    defaultMessage: '{count, plural, one {# course} other {# courses}} have been successfully removed from the catalog.',
+    description: 'Notification message displayed when courses are successfully deleted from the catalog',
+  },
+  'corporate.courses.modal.delete.notification.error': {
+    id: 'corporate.courses.modal.delete.notification.error',
+    defaultMessage: 'An error occurred while deleting courses from the catalog. Please try again.',
+    description: 'Notification message displayed when there is an error deleting courses from the catalog',
+  },
+  'corporate.courses.notification.position.update.success': {
+    id: 'corporate.courses.notification.position.update.success',
+    defaultMessage: 'Course position have been changed.',
+    description: 'Notification message displayed when course positions are successfully updated',
+  },
+  'corporate.courses.notification.position.update.error': {
+    id: 'corporate.courses.notification.position.update.error',
+    defaultMessage: 'An error occurred while updating course position. Please try again.',
+    description: 'Notification message displayed when there is an error updating course positions',
   },
 });
 

@@ -51,9 +51,9 @@ const App = () => (
   <AppProvider wrapWithRouter={false}>
     <QueryClientProvider client={queryClient}>
       <NotificationProvider>
-      <Suspense fallback={<Loader fullPage />}>
-        <Router />
-      </Suspense>
+        <Suspense fallback={<Loader fullPage />}>
+          <Router />
+        </Suspense>
       </NotificationProvider>
     </QueryClientProvider>
   </AppProvider>

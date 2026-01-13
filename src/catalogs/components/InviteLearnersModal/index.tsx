@@ -30,7 +30,7 @@ const InviteLearnersModal = ({ isOpen, onClose, catalogId }: CourseAddModalProps
     formState: { errors, isValid, isSubmitting },
   } = useForm<FormValues>({
     resolver: yupValidationResolver(inviteSchema),
-    mode: 'onChange',
+    mode: 'onBlur',
   });
   const csvFile = watch('csvFile');
   const { mutate: inviteLearners, isPending } = useInviteLearners();

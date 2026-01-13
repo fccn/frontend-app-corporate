@@ -142,9 +142,12 @@ export const useDeleteCatalogCourse = () => {
       data: { catalogCourseIds: number[] };
     }) => deleteCourse(catalogId, data),
 
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
         queryKey: queryKey.courseLists(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: queryKey.availableCourses(variables.catalogId),
       });
     },
   });
@@ -261,7 +264,7 @@ export const useAddCoursesToCatalog = () => {
       queryClient.invalidateQueries({
         queryKey: queryKey.availableCourses(variables.catalogId),
       });
-    }
+    },
   });
 };
 

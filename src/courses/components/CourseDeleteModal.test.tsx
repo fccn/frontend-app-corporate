@@ -94,17 +94,19 @@ describe('CourseDeleteModal', () => {
     expect(screen.getByRole('button', { name: 'Yes, Delete' })).toBeInTheDocument();
   });
 
-  it('calls delete mutation and onClose when delete button is clicked', async () => {
+  it('calls delete mutation', async () => {
     const user = userEvent.setup();
     renderWrapper(<CourseDeleteModal {...defaultProps} />);
 
     await user.click(screen.getByRole('button', { name: 'Yes, Delete' }));
 
-    expect(mockDeleteMutation).toHaveBeenCalledWith({
-      catalogId: 'catalog-123',
-      data: { catalogCourseIds: [1, 2, 3] },
-    });
-    expect(mockOnClose).toHaveBeenCalledTimes(1);
+    expect(mockDeleteMutation).toHaveBeenCalledWith(
+      {
+        catalogId: 'catalog-123',
+        data: { catalogCourseIds: [1, 2, 3] },
+      },
+      { onSuccess: expect.any(Function), onError: expect.any(Function) },
+    );
   });
 
   it('does not call delete mutation when no courses selected', async () => {
@@ -156,5 +158,47 @@ describe('CourseDeleteModal', () => {
     expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent(
       'You are about to delete 0 courses from Test Catalog catalog.',
     );
+  });
+
+  it('display notification on delete error', async () => {
+    const user = userEvent.setup();
+    renderWrapper(<CourseDeleteModal {...defaultProps} />);
+
+    let deleteErrorCallback: () => void;
+
+    mockUseDeleteCatalogCourse.mockReturnValue({
+      mutate: (_, { onError }: any) => {
+        deleteErrorCallback = onError;
+      },
+      mutateAsync: mockDeleteMutation,
+    });
+
+    await user.click(screen.getByRole('button', { name: 'Yes, Delete' }));
+
+    // Simulate error callback
+    deleteErrorCallback!();
+
+    expect(mockOnClose).toHaveBeenCalledTimes(1);
+  });
+
+  it('display notification on delete success', async () => {
+    const user = userEvent.setup();
+    renderWrapper(<CourseDeleteModal {...defaultProps} />);
+
+    let deleteSuccessCallback: () => void;
+
+    mockUseDeleteCatalogCourse.mockReturnValue({
+      mutate: (_, { onSuccess }: any) => {
+        deleteSuccessCallback = onSuccess;
+      },
+      mutateAsync: mockDeleteMutation,
+    });
+
+    await user.click(screen.getByRole('button', { name: 'Yes, Delete' }));
+
+    // Simulate success callback
+    deleteSuccessCallback!();
+
+    expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
 });
