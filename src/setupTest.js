@@ -15,13 +15,13 @@ export const renderWrapper = (children) => {
   });
   return render(
     // eslint-disable-next-line react/jsx-filename-extension
-    <QueryClientProvider client={queryClient}>
-      <NotificationProvider>
-        <IntlProvider locale="en">
+    <IntlProvider locale="en">
+      <QueryClientProvider client={queryClient}>
+        <NotificationProvider>
           {children}
-        </IntlProvider>
-      </NotificationProvider>
-    </QueryClientProvider>,
+        </NotificationProvider>
+      </QueryClientProvider>
+    </IntlProvider>,
   );
 };
 

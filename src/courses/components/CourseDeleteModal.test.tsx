@@ -71,10 +71,10 @@ describe('CourseDeleteModal', () => {
   });
 
   it('displays correct subtitle for single course', () => {
-    renderWrapper(<CourseDeleteModal {...defaultProps} selectedCourses={[1]} />);
+    renderWrapper(<CourseDeleteModal {...defaultProps} selectedCourses={[1]} courseName="Course Test" />);
 
     expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent(
-      'You are about to delete a course from Test Catalog catalog.',
+      'You are about to delete Course Test from Test Catalog catalog.',
     );
   });
 
@@ -162,42 +162,24 @@ describe('CourseDeleteModal', () => {
 
   it('display notification on delete error', async () => {
     const user = userEvent.setup();
+    mockDeleteMutation.mockImplementationOnce((_, { onError }) => {
+      onError();
+    });
     renderWrapper(<CourseDeleteModal {...defaultProps} />);
 
-    let deleteErrorCallback: () => void;
-
-    mockUseDeleteCatalogCourse.mockReturnValue({
-      mutate: (_, { onError }: any) => {
-        deleteErrorCallback = onError;
-      },
-      mutateAsync: mockDeleteMutation,
-    });
-
     await user.click(screen.getByRole('button', { name: 'Yes, Delete' }));
-
-    // Simulate error callback
-    deleteErrorCallback!();
 
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
 
   it('display notification on delete success', async () => {
     const user = userEvent.setup();
+    mockDeleteMutation.mockImplementationOnce((_, { onSuccess }) => {
+      onSuccess();
+    });
     renderWrapper(<CourseDeleteModal {...defaultProps} />);
 
-    let deleteSuccessCallback: () => void;
-
-    mockUseDeleteCatalogCourse.mockReturnValue({
-      mutate: (_, { onSuccess }: any) => {
-        deleteSuccessCallback = onSuccess;
-      },
-      mutateAsync: mockDeleteMutation,
-    });
-
     await user.click(screen.getByRole('button', { name: 'Yes, Delete' }));
-
-    // Simulate success callback
-    deleteSuccessCallback!();
 
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });

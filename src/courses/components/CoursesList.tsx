@@ -140,7 +140,7 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
             intl.formatMessage(messages['corporate.courses.notification.position.update.error']),
             'error',
           );
-        }
+        },
       },
     );
   };
