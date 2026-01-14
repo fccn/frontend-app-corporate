@@ -163,7 +163,7 @@ const messages = defineMessages({
   },
   'corporate.catalog.learners.modal.delete.confirmation': {
     id: 'corporate.catalog.learners.modal.delete.confirmation',
-    defaultMessage: 'You are about to remove {learnerName} ({email}) from the “{catalogName}” catalog.',
+    defaultMessage: 'You are about to remove {count, plural, one {{learnerName} ({email})} other {# learners}} from "{catalogName}" catalog.',
     description: 'Confirmation message for deleting learners from the catalog',
   },
   'corporate.catalog.learners.modal.delete.description': {
@@ -209,6 +209,11 @@ const messages = defineMessages({
     id: 'corporate.catalog.learners.filter.all',
     defaultMessage: 'All',
     description: 'Option for all status filter',
+  },
+  'corporate.catalog.learners.modal.delete.success': {
+    id: 'corporate.catalog.learners.modal.delete.success',
+    defaultMessage: 'Learners removed successfully.',
+    description: 'Success notification message when learners are removed from the catalog',
   },
 });
 

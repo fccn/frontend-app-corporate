@@ -197,9 +197,9 @@ export const useRemoveLearners = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ catalogId, learnerIds }: { catalogId: string; learnerIds: number[] }) => {
-      await deleteLearnersFromCatalog(catalogId, { learnerIds });
-    },
+    mutationFn: async ({ catalogId, learnerIds }: {
+      catalogId: string; learnerIds: number[]
+    }) => deleteLearnersFromCatalog(catalogId, { learnerIds }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKey.catalogLearners() });
     },

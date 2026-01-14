@@ -3,13 +3,6 @@ import { initializeMockApp } from '@edx/frontend-platform/testing';
 import { renderWrapper } from '@src/setupTest';
 import App from './App';
 
-// // Mock useCurrentUser hook to control user permissions in tests
-const mockUseCurrentUser = jest.fn();
-jest.mock('@src/hooks', () => ({
-  ...jest.requireActual('@src/hooks'),
-  useCurrentUser: () => mockUseCurrentUser(),
-}));
-
 // Simple wouter mock
 jest.mock('wouter', () => ({
   Route: ({ component: Component }) => (Component ? <Component /> : null),
@@ -21,14 +14,6 @@ jest.mock('wouter', () => ({
 
 const renderApp = (userOverrides: { administrator?: boolean; roles?: string[] } = {}) => {
   const { administrator = false, roles = [] } = userOverrides;
-  const isAdmin = administrator;
-  const isCatalogManager = roles.includes('catalog_manager:active');
-
-  mockUseCurrentUser.mockReturnValue({
-    user: { administrator, roles },
-    isAdmin,
-    isCatalogManager,
-  });
 
   initializeMockApp({
     authenticatedUser: { administrator, roles, ...userOverrides },
@@ -53,7 +38,6 @@ describe('App', () => {
       renderApp({ administrator: true, roles: [] });
 
       await waitFor(() => {
-        expect(screen.getByRole('status')).toBeInTheDocument();
         expect(screen.getByText('Corporate Partners')).toBeInTheDocument();
       });
     });

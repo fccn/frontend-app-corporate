@@ -1,5 +1,6 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { DataTable, TextFilter } from '@openedx/paragon';
+import { Button, DataTable, TextFilter } from '@openedx/paragon';
+import { SaveAlt } from '@openedx/paragon/icons';
 
 import { TableFooter } from '@src/components/Table/';
 import { usePagination } from '@src/hooks';
@@ -16,26 +17,15 @@ const LearnerEmail = ({ row }) => (
   <span>{row.original.user.email}</span>
 );
 
-// const TableAction = ({ catalogId }: { catalogId: string }) => {
-//   const intl = useIntl();
-//   const [isModalOpen, setIsModalOpen] = useState(false);
+const TableAction = () => {
+  const intl = useIntl();
 
-//   return (
-//     <>
-//       <Button iconBefore={Add} size="sm" onClick={() => setIsModalOpen(true)}>
-//         {intl.formatMessage(messages['corporate.courses.table.action.add.course'])}
-//       </Button>
-//       <Button iconBefore={SaveAlt} size="sm">
-//         {intl.formatMessage(messages['corporate.courses.table.action.download.report'])}
-//       </Button>
-//       <CourseAddModal
-//         isOpen={isModalOpen}
-//         onClose={() => setIsModalOpen(false)}
-//         catalogId={catalogId!}
-//       />
-//     </>
-//   );
-// };
+  return (
+    <Button iconBefore={SaveAlt} size="sm">
+      {intl.formatMessage(messages['corporate.courses.table.action.download.report'])}
+    </Button>
+  );
+};
 
 const CourseLernerList = ({ catalogId, courseId }) => {
   const intl = useIntl();
@@ -60,9 +50,9 @@ const CourseLernerList = ({ catalogId, courseId }) => {
       manualPagination
       fetchData={onPaginationChange}
       pageCount={pageCount || 0}
-      // tableActions={[
-      //   <TableAction catalogId={catalogId!} />,
-      // ]}
+      tableActions={[
+        <TableAction />,
+      ]}
       itemCount={count || 0}
       data={results || []}
       columns={[

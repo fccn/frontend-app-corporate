@@ -153,7 +153,7 @@ const messages = defineMessages({
   },
   'corporate.courses.modal.delete.subtitle': {
     id: 'corporate.courses.modal.delete.subtitle',
-    defaultMessage: 'You are about to delete {count, plural, one {{courseName}} other {# courses}} from {catalogName} catalog.',
+    defaultMessage: 'You are about to delete {count, plural, one {{courseName}} other {# courses}} from "{catalogName}" catalog.',
     description: 'Subtitle for the delete courses modal',
   },
   'corporate.courses.modal.delete.description': {

@@ -133,10 +133,14 @@ export const postBulkCatalogInviteLearners = async (
 export const deleteLearnersFromCatalog = async (
   catalogId: string,
   data: { learnerIds: number[] },
-): Promise<void> => {
+): Promise<{
+  taskId: string;
+  status: string;
+}> => {
   try {
     const url = getCorporateApi(`manage/catalogs/${catalogId}/invitations/bulk_remove/`);
-    await getAuthenticatedHttpClient().post(url, snakeCaseObject(data));
+    const response = await getAuthenticatedHttpClient().post(url, snakeCaseObject(data));
+    return camelCaseObject(response.data);
   } catch (error) {
     logError(error);
     throw error;

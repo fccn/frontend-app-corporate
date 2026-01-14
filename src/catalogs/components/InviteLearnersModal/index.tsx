@@ -44,13 +44,24 @@ const InviteLearnersModal = ({ isOpen, onClose, catalogId }: CourseAddModalProps
         .filter(Boolean)
       : [];
 
-    inviteLearners({
-      catalogId,
-      data: {
-        emails: emails.length ? emails : undefined,
-        csvFile: data.csvFile || undefined,
+    inviteLearners(
+      {
+        catalogId,
+        data: {
+          emails: emails.length ? emails : undefined,
+          csvFile: data.csvFile || undefined,
+        },
       },
-    });
+      {
+        onSuccess: () => {
+          reset({
+            emails: '',
+            csvFile: null,
+          });
+          onClose();
+        },
+      },
+    );
   };
 
   return (
@@ -84,6 +95,7 @@ const InviteLearnersModal = ({ isOpen, onClose, catalogId }: CourseAddModalProps
               messages['corporate.catalog.learners.modal.invite.manually.input.placeholder'],
             )}
             isInvalid={!!errors.emails}
+            disabled={isSubmitting || isPending || !!csvFile}
           />
           {errors.emails && (
             <Form.Control.Feedback type="invalid">
@@ -115,6 +127,7 @@ const InviteLearnersModal = ({ isOpen, onClose, catalogId }: CourseAddModalProps
               <Dropzone
                 accept={{ 'text/csv': ['.csv'] }}
                 maxSize={5 * 1024 * 1024} // 5 MB
+                className={watch('emails') ? 'invisible' : ''}
                 onProcessUpload={async ({ fileData, requestConfig, handleError }) => {
                   try {
                     const file = await fileData.get('file');

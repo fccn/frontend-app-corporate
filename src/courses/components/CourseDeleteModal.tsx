@@ -9,9 +9,9 @@ interface CourseDeleteProps {
   isOpen: boolean;
   onClose: () => void;
   catalogId: string;
-  catalogName?: string;
+  catalogName: string;
+  selectedCourses: any[];
   courseName?: string;
-  selectedCourses?: any[];
 }
 
 const ListItem = (content: string) => <li key={content}>{content}</li>;

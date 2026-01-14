@@ -62,7 +62,7 @@ const BulkAction = ({ selectedFlatRows, setRowsForDelete, openDeleteModal }:Bulk
       variant="outline-danger"
       size="sm"
       onClick={() => {
-        setRowsForDelete(selectedFlatRows.map((row) => row.original.id));
+        setRowsForDelete(selectedFlatRows.map((row) => row.original));
         openDeleteModal();
       }}
     >
@@ -86,7 +86,7 @@ const LearnerList = ({ catalogId, catalogName }) => {
   const intl = useIntl();
 
   const [isdeleteModalOpen, openDeleteModal, closeDeleteModal] = useToggle(false);
-  const [selectedRowsForDelete, setSelectedRowsForDelete] = useState<any[]>([]);
+  const [selectedRowsForDelete, setSelectedRowsForDelete] = useState<Learner[]>([]);
   const { pageIndex, pageSize, onPaginationChange } = usePagination();
 
   const tableConfig = useMemo(() => ({

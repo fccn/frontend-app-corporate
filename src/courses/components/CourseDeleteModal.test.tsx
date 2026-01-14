@@ -35,7 +35,7 @@ describe('CourseDeleteModal', () => {
     renderWrapper(<CourseDeleteModal {...defaultProps} />);
 
     expect(screen.getByText('Delete Courses from Catalog')).toBeInTheDocument();
-    expect(screen.getByText('You are about to delete 3 courses from Test Catalog catalog.')).toBeInTheDocument();
+    expect(screen.getByText('You are about to delete 3 courses from "Test Catalog" catalog.')).toBeInTheDocument();
   });
 
   it('does not render modal when isOpen is false', () => {
@@ -66,7 +66,7 @@ describe('CourseDeleteModal', () => {
     renderWrapper(<CourseDeleteModal {...defaultProps} />);
 
     expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent(
-      'You are about to delete 3 courses from Test Catalog catalog.',
+      'You are about to delete 3 courses from "Test Catalog" catalog.',
     );
   });
 
@@ -74,7 +74,7 @@ describe('CourseDeleteModal', () => {
     renderWrapper(<CourseDeleteModal {...defaultProps} selectedCourses={[1]} courseName="Course Test" />);
 
     expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent(
-      'You are about to delete Course Test from Test Catalog catalog.',
+      'You are about to delete Course Test from "Test Catalog" catalog.',
     );
   });
 
@@ -119,24 +119,6 @@ describe('CourseDeleteModal', () => {
     expect(mockOnClose).not.toHaveBeenCalled();
   });
 
-  it('does not call delete mutation when selectedCourses is undefined', async () => {
-    const user = userEvent.setup();
-    renderWrapper(<CourseDeleteModal {...defaultProps} selectedCourses={undefined} />);
-
-    await user.click(screen.getByRole('button', { name: 'Yes, Delete' }));
-
-    expect(mockDeleteMutation).not.toHaveBeenCalled();
-    expect(mockOnClose).not.toHaveBeenCalled();
-  });
-
-  it('handles missing catalogName gracefully', () => {
-    renderWrapper(<CourseDeleteModal {...defaultProps} catalogName={undefined} />);
-
-    expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent(
-      'You are about to delete 3 courses from catalog.',
-    );
-  });
-
   it('calls onClose when modal close button is clicked', async () => {
     const user = userEvent.setup();
     renderWrapper(<CourseDeleteModal {...defaultProps} />);
@@ -144,20 +126,6 @@ describe('CourseDeleteModal', () => {
     await user.click(screen.getByText('Cancel'));
 
     expect(mockOnClose).toHaveBeenCalledTimes(1);
-  });
-
-  it('handles null selectedCourses count in title', () => {
-    renderWrapper(<CourseDeleteModal {...defaultProps} selectedCourses={undefined} />);
-
-    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('Delete Courses from Catalog');
-  });
-
-  it('handles null selectedCourses count in subtitle', () => {
-    renderWrapper(<CourseDeleteModal {...defaultProps} selectedCourses={undefined} />);
-
-    expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent(
-      'You are about to delete 0 courses from Test Catalog catalog.',
-    );
   });
 
   it('display notification on delete error', async () => {

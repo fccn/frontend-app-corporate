@@ -53,3 +53,12 @@ export const DATE_FORMAT = 'YYYY-MM-DD';
 export const MIN_NAME_LENGTH = 3;
 export const MAX_NAME_LENGTH = 255;
 export const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+
+export const CELERY_STATUS = {
+  PENDING: 'PENDING',
+  STARTED: 'STARTED',
+  SUCCESS: 'SUCCESS',
+  FAILURE: 'FAILURE',
+  RETRY: 'RETRY',
+  REVOKED: 'REVOKED',
+};

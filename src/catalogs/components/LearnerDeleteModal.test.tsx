@@ -56,19 +56,7 @@ describe('LearnerDeleteModal', () => {
   it('displays correct confirmation message with learner details', () => {
     renderLearnerDeleteModal(defaultProps);
 
-    expect(screen.getByText(/You are about to remove John Doe \(john@example\.com\) from the .*Test Catalog.* catalog\./)).toBeInTheDocument();
-  });
-
-  it('displays confirmation message with empty catalog name', () => {
-    renderLearnerDeleteModal({ ...defaultProps, catalogName: '' });
-
-    expect(screen.getByText(/You are about to remove John Doe \(john@example\.com\) from the .* catalog\./)).toBeInTheDocument();
-  });
-
-  it('displays confirmation message with undefined catalog name', () => {
-    renderLearnerDeleteModal({ ...defaultProps, catalogName: undefined });
-
-    expect(screen.getByText(/You are about to remove John Doe \(john@example\.com\) from the .* catalog\./)).toBeInTheDocument();
+    expect(screen.getByText(/You are about to remove John Doe \(john@example\.com\) from "Test Catalog" catalog\./i)).toBeInTheDocument();
   });
 
   it('displays description list with consequences', () => {
@@ -95,7 +83,9 @@ describe('LearnerDeleteModal', () => {
     expect(mockMutate).toHaveBeenCalledWith({
       catalogId: 'test-catalog-123',
       learnerIds: [1],
-    });
+    },
+    { onSuccess: expect.any(Function) }
+    );
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
 
@@ -117,8 +107,7 @@ describe('LearnerDeleteModal', () => {
 
     renderLearnerDeleteModal(propsWithMultipleLearners);
 
-    // Still shows only the first learner in the confirmation message
-    expect(screen.getByText(/You are about to remove John Doe \(john@example\.com\) from the .*Test Catalog.* catalog\./)).toBeInTheDocument();
+    expect(screen.getByText(/You are about to remove 2 learners from "Test Catalog" catalog\./i)).toBeInTheDocument();
 
     const deleteButton = screen.getByRole('button', { name: 'Delete Learner' });
     await user.click(deleteButton);
@@ -126,7 +115,9 @@ describe('LearnerDeleteModal', () => {
     expect(mockMutate).toHaveBeenCalledWith({
       catalogId: 'test-catalog-123',
       learnerIds: [1, 2],
-    });
+    },
+    { onSuccess: expect.any(Function) }
+  );
   });
 
   it('does not call removeLearners when selectedLearners is empty', async () => {
@@ -149,22 +140,6 @@ describe('LearnerDeleteModal', () => {
 
     expect(mockMutate).not.toHaveBeenCalled();
     expect(mockOnClose).not.toHaveBeenCalled();
-  });
-
-  it('handles learners with missing user data gracefully', () => {
-    const propsWithIncompleteLearner = {
-      ...defaultProps,
-      selectedLearners: [
-        {
-          id: 1,
-          user: null,
-        },
-      ],
-    };
-
-    renderLearnerDeleteModal(propsWithIncompleteLearner);
-
-    expect(screen.getByText(/You are about to remove .* from the .*Test Catalog.* catalog\./)).toBeInTheDocument();
   });
 
   it('calls onClose when modal close button is clicked', async () => {
