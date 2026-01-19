@@ -80,11 +80,12 @@ describe('LearnerDeleteModal', () => {
     const deleteButton = screen.getByRole('button', { name: 'Delete Learner' });
     await user.click(deleteButton);
 
-    expect(mockMutate).toHaveBeenCalledWith({
-      catalogId: 'test-catalog-123',
-      learnerIds: [1],
-    },
-    { onSuccess: expect.any(Function) }
+    expect(mockMutate).toHaveBeenCalledWith(
+      {
+        catalogId: 'test-catalog-123',
+        learnerIds: [1],
+      },
+      { onSuccess: expect.any(Function) },
     );
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
@@ -112,12 +113,13 @@ describe('LearnerDeleteModal', () => {
     const deleteButton = screen.getByRole('button', { name: 'Delete Learner' });
     await user.click(deleteButton);
 
-    expect(mockMutate).toHaveBeenCalledWith({
-      catalogId: 'test-catalog-123',
-      learnerIds: [1, 2],
-    },
-    { onSuccess: expect.any(Function) }
-  );
+    expect(mockMutate).toHaveBeenCalledWith(
+      {
+        catalogId: 'test-catalog-123',
+        learnerIds: [1, 2],
+      },
+      { onSuccess: expect.any(Function) },
+    );
   });
 
   it('does not call removeLearners when selectedLearners is empty', async () => {

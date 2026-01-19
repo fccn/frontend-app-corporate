@@ -21,11 +21,11 @@ const CoursesPage = () => {
   const intl = useIntl();
   const navigate = useNavigate();
   const { partnerSlug, catalogSlug } = useParams<{
-    partnerSlug: string | undefined,
-    catalogSlug: string | undefined
+    partnerSlug: string,
+    catalogSlug: string
   }>();
-  const { data: partnerDetails } = usePartnerDetails({ partnerSlug: partnerSlug! });
-  const { data: catalogDetails } = useCatalogDetails({ catalogSlug: catalogSlug! });
+  const { data: partnerDetails } = usePartnerDetails({ partnerSlug: partnerSlug });
+  const { data: catalogDetails } = useCatalogDetails({ catalogSlug: catalogSlug });
 
   useEffect(() => {
     if (partnerDetails === null || catalogDetails === null) {
@@ -34,43 +34,45 @@ const CoursesPage = () => {
   }, [partnerDetails, catalogDetails, navigate]);
 
   return (
-    <AppLayout withBackButton backPath={paths.catalogs.buildPath(partnerSlug!)}>
+    <AppLayout withBackButton backPath={paths.catalogs.buildPath(partnerSlug)}>
       {catalogDetails
         && (
-          <HeaderDescription
-            context={{
-              title: catalogDetails.name,
-              imageUrl: catalogDetails.image || null,
-              description: catalogDetails.alternativeLink || `${getConfig().LEARNING_PATHS_MFE_URL}/${partnerDetails?.slug}/catalog/${catalogDetails?.slug}`,
-              copyableDescription: true,
-            }}
-            info={[
-              { title: intl.formatMessage(messages['corporate.courses.page.seats']), value: `${catalogDetails.userLimit - catalogDetails.activeLearners} / ${catalogDetails.userLimit}` },
-              { title: intl.formatMessage(messages['corporate.courses.page.learners']), value: catalogDetails.totalLearners },
-              { title: intl.formatMessage(messages['corporate.courses.page.totalCourses']), value: catalogDetails.courses },
-              { title: intl.formatMessage(messages['corporate.courses.page.enrolledUsers']), value: catalogDetails.enrollments },
-              { title: intl.formatMessage(messages['corporate.courses.page.certifiedUsers']), value: catalogDetails.certified },
-              { title: intl.formatMessage(messages['corporate.courses.page.completionRate']), value: `${catalogDetails.completionRate}%` },
-            ]}
-          >
-            <CatalogSettingsModal>
-              {(openModal) => (
-                <IconButton src={Settings} alt="edit catalog" onClick={() => openModal(catalogDetails.slug)} />
-              )}
-            </CatalogSettingsModal>
-          </HeaderDescription>
+          <>
+            <HeaderDescription
+              context={{
+                title: catalogDetails.name,
+                imageUrl: catalogDetails.image || null,
+                description: catalogDetails.alternativeLink || `${getConfig().LEARNING_PATHS_MFE_URL}/${partnerDetails?.slug}/catalog/${catalogDetails?.slug}`,
+                copyableDescription: true,
+              }}
+              info={[
+                { title: intl.formatMessage(messages['corporate.courses.page.seats']), value: `${catalogDetails.userLimit - catalogDetails.activeLearners} / ${catalogDetails.userLimit}` },
+                { title: intl.formatMessage(messages['corporate.courses.page.learners']), value: catalogDetails.totalLearners },
+                { title: intl.formatMessage(messages['corporate.courses.page.totalCourses']), value: catalogDetails.courses },
+                { title: intl.formatMessage(messages['corporate.courses.page.enrolledUsers']), value: catalogDetails.enrollments },
+                { title: intl.formatMessage(messages['corporate.courses.page.certifiedUsers']), value: catalogDetails.certified },
+                { title: intl.formatMessage(messages['corporate.courses.page.completionRate']), value: `${catalogDetails.completionRate}%` },
+              ]}
+            >
+              <CatalogSettingsModal>
+                {(openModal) => (
+                  <IconButton src={Settings} alt="edit catalog" onClick={() => openModal(catalogDetails.slug)} />
+                )}
+              </CatalogSettingsModal>
+            </HeaderDescription>
+            <Tabs defaultActiveKey="courses">
+              <Tab eventKey="courses" title={intl.formatMessage(messages['corporate.courses.page.tab.courses'])} alt="Courses Tab">
+                <CoursesList catalogId={catalogDetails.id} catalogName={catalogDetails.name} />
+              </Tab>
+              <Tab eventKey="learners" title={intl.formatMessage(messages['corporate.courses.page.tab.learners'])} alt="Learners Tab">
+                <LearnerList catalogId={catalogDetails.id} catalogName={catalogDetails.name} />
+              </Tab>
+              <Tab eventKey="enrollments" title={intl.formatMessage(messages['corporate.courses.page.tab.enrollments'])} alt="Enrollments Tab">
+                <EnrollmentList catalogId={catalogDetails.id} />
+              </Tab>
+            </Tabs>
+          </>
         )}
-      <Tabs defaultActiveKey="courses">
-        <Tab eventKey="courses" title={intl.formatMessage(messages['corporate.courses.page.tab.courses'])} alt="Courses Tab">
-          <CoursesList catalogId={catalogDetails?.id} catalogName={catalogDetails?.name} />
-        </Tab>
-        <Tab eventKey="learners" title={intl.formatMessage(messages['corporate.courses.page.tab.learners'])} alt="Learners Tab">
-          <LearnerList catalogId={catalogDetails?.id} catalogName={catalogDetails?.name} />
-        </Tab>
-        <Tab eventKey="enrollments" title={intl.formatMessage(messages['corporate.courses.page.tab.enrollments'])} alt="Enrollments Tab">
-          <EnrollmentList catalogId={catalogDetails?.id} />
-        </Tab>
-      </Tabs>
     </AppLayout>
   );
 };

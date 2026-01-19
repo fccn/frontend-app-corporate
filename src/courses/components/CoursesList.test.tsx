@@ -73,7 +73,7 @@ describe('CoursesList', () => {
   });
 
   it('renders a table with course data', () => {
-    renderWrapper(<CoursesList catalogId="c1" />);
+    renderWrapper(<CoursesList catalogId="c1" catalogName='Catalog 1' />);
     // Check if course names are rendered
     expect(screen.getByText('Course 1')).toBeInTheDocument();
     expect(screen.getByText('Course 2')).toBeInTheDocument();
@@ -89,7 +89,7 @@ describe('CoursesList', () => {
   });
 
   it('renders action buttons for each course', () => {
-    renderWrapper(<CoursesList catalogId="c1" />);
+    renderWrapper(<CoursesList catalogId="c1" catalogName='Catalog 1' />);
     // There should be at least one button for each action per course
     expect(screen.getAllByRole('button', { name: /action/i }).length).toBeGreaterThanOrEqual(2);
   });
@@ -103,7 +103,7 @@ describe('CoursesList', () => {
       },
       isLoading: true,
     });
-    renderWrapper(<CoursesList catalogId="c1" />);
+    renderWrapper(<CoursesList catalogId="c1" catalogName='Catalog 1' />);
     expect(screen.getByRole('status')).toBeInTheDocument();
   });
 });

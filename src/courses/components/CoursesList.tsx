@@ -24,8 +24,8 @@ import messages from '../messages';
 type CoursesCell = CellValue<Course>;
 
 interface CoursesListProps {
-  catalogId?: string;
-  catalogName?: string;
+  catalogId: string;
+  catalogName: string;
 }
 
 const CourseNameCell = ({ row }: CoursesCell) => (
@@ -156,7 +156,7 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
         manualPagination
         manualSortBy
         manualFilters
-        defaultColumnValues={{ Filter: TextFilter }}
+      defaultColumnValues={{ Filter: TextFilter, disableFilters: true }}
         initialState={{
           pageSize,
           pageIndex,
@@ -191,6 +191,7 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
             Header: intl.formatMessage(messages['corporate.courses.table.header.name']),
             accessor: 'name',
             disableSortBy: true,
+            disableFilters: false,
             Cell: CourseNameCell,
           },
           {
