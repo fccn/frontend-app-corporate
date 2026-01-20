@@ -38,3 +38,14 @@ export const fileUploadStatus = {
   failure: 'FAILURE',
   pending: 'PENDING',
 };
+
+export const dateFormat = (isoDateString) => {
+  if (!isoDateString) {
+    return null;
+  }
+  const date = new Date(isoDateString);
+  const pad = n => n.toString().padStart(2, '0');
+  const formatted = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} `
+    + `${pad(date.getHours())}:${pad(date.getMinutes())}`;
+  return formatted;
+};

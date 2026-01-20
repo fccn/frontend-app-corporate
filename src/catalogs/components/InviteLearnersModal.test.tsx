@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { renderWrapper } from '@src/setupTest';
 import * as hooks from '@src/catalogs/data/hooks';
-import InviteLearnersModal from './index';
+import InviteLearnersModal from './InviteLearnersModal';
 
 jest.mock('@src/catalogs/data/hooks', () => ({
   useInviteLearners: jest.fn(),

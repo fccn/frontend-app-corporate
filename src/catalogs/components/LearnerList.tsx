@@ -12,10 +12,13 @@ import { usePagination, useTableSortFilter } from '@src/hooks';
 
 import { PersonAddAlt, SaveAlt } from '@openedx/paragon/icons';
 import { useCatalogLearners } from '../data/hooks';
+import { dateFormat } from './utils';
 import InviteLearnersModal from './InviteLearnersModal';
 
 import messages from '../messages';
 import LearnerDeleteModal from './LearnerDeleteModal';
+
+import messages from '../messages';
 
 const LearnerName = ({ row }) => (
   <span>{row.original.user.fullName}</span>
@@ -69,17 +72,6 @@ const BulkAction = ({ selectedFlatRows, setRowsForDelete, openDeleteModal }:Bulk
       {intl.formatMessage(messages['corporate.catalog.learners.bulk.delete.action'])}
     </Button>
   );
-};
-
-const dateFormat = (isoDateString) => {
-  if (!isoDateString) {
-    return null;
-  }
-  const date = new Date(isoDateString);
-  const pad = n => n.toString().padStart(2, '0');
-  const formatted = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} `
-    + `${pad(date.getHours())}:${pad(date.getMinutes())}`;
-  return formatted;
 };
 
 const LearnerList = ({ catalogId, catalogName }) => {
