@@ -39,7 +39,11 @@ const ErrorPage = ({ status }: ErrorPageProps) => {
             {intl.formatMessage(titleMsg)}
           </h1>
           <p className="lead mb-4 text-center d-flex align-items-center justify-content-center">
-            <Icon src={Report} className="mr-3" /> <span>{intl.formatMessage(messageMsg)}</span>
+            <Icon
+              src={Report}
+              className="mr-3"
+              screenReaderText="Report Error Icon"
+            /> <span>{intl.formatMessage(messageMsg)}</span>
           </p>
         </article>
       </Container>
