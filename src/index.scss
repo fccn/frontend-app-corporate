@@ -23,6 +23,9 @@ button[aria-label="Copy description"] svg {
     border-top: 1px solid var(--pgn-color-gray-200);
 }
 
+.pgn__data-table-wrapper{
+    box-shadow: var(--pgn-elevation-box-shadow-centered-1);
+}
 .truncate-1-line {
     display: -webkit-box;
     -webkit-box-orient: vertical;

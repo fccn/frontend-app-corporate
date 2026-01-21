@@ -1,6 +1,6 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
-  Hyperlink, Image, Truncate, Row,
+  Hyperlink, Image,
   Badge,
 } from '@openedx/paragon';
 import messages from './messages';
@@ -19,7 +19,7 @@ export const CellName = ({
     destination={destination}
     isInline
   >
-    <Row>
+    <div className="d-flex align-items-center">
       {image && (
         <Image
           alt={`${name} logo`}
@@ -27,8 +27,8 @@ export const CellName = ({
           className="mr-2 col-lg-3"
         />
       )}
-      <Truncate.Deprecated lines={2}>{name}</Truncate.Deprecated>
-    </Row>
+      <span className="truncate-2-line">{name}</span>
+    </div>
   </Hyperlink>
 );
 
