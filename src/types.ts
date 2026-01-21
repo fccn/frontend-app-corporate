@@ -127,6 +127,43 @@ export interface CellValue<T> {
   };
 }
 
+interface Filter {
+  id: string;
+  value: string;
+}
+interface SortBy {
+  id: string;
+  desc: boolean;
+}
+
+interface Column {
+  id: string;
+  Header: string;
+  accessor: string;
+  Cell: React.ComponentType<{ row: CellValue<any> }>;
+  Filter: React.ComponentType<{ column: Column }>;
+  meta?: {
+    searchIds?: string[];
+  };
+}
+
+interface Header {
+  id: string;
+  Header: string;
+}
+
+export interface TableContext {
+  state: {
+    filters: Filter[];
+    sortBy: SortBy[];
+  };
+  columns: Column[];
+  headers: Header[];
+  setAllFilters: (filters: Filter[]) => void;
+  setAllSortBy: (sortBy: SortBy[]) => void;
+  clearAllFilters: () => void;
+  clearAllSortBy: () => void;
+}
 // Hooks types
 export interface UseQueryResult<T> {
   data: T;

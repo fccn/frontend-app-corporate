@@ -24,8 +24,8 @@ const CoursesPage = () => {
     partnerSlug: string,
     catalogSlug: string
   }>();
-  const { data: partnerDetails } = usePartnerDetails({ partnerSlug: partnerSlug });
-  const { data: catalogDetails } = useCatalogDetails({ catalogSlug: catalogSlug });
+  const { data: partnerDetails } = usePartnerDetails({ partnerSlug });
+  const { data: catalogDetails } = useCatalogDetails({ catalogSlug });
 
   useEffect(() => {
     if (partnerDetails === null || catalogDetails === null) {

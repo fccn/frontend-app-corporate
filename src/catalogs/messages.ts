@@ -83,7 +83,7 @@ const messages = defineMessages({
   },
   'corporate.catalog.learners.table.header.accept.at': {
     id: 'corporate.catalog.learners.table.header.accept.at',
-    defaultMessage: 'Accept At',
+    defaultMessage: 'Accepted At',
     description: 'Header for the accept at column',
   },
   'corporate.catalog.learners.table.header.last.login': {
@@ -190,6 +190,16 @@ const messages = defineMessages({
     defaultMessage: 'Has Certificate',
     description: 'Header for the has certificate column in the enrollments table',
   },
+  'corporate.catalog.enrollments.table.certificate.yes': {
+    id: 'corporate.catalog.enrollments.table.certificate.yes',
+    defaultMessage: 'Yes',
+    description: 'Text to indicate the user has a certificate',
+  },
+  'corporate.catalog.enrollments.table.certificate.no': {
+    id: 'corporate.catalog.enrollments.table.certificate.no',
+    defaultMessage: 'No',
+    description: 'Text to indicate the user has not get the certificate',
+  },
   'corporate.catalog.enrollments.table.action.preenroll': {
     id: 'corporate.catalog.enrollments.table.action.preenroll',
     defaultMessage: 'Pre-enroll Learner',
@@ -197,18 +207,13 @@ const messages = defineMessages({
   },
   'corporate.catalog.learners.filter.active.only': {
     id: 'corporate.catalog.learners.filter.active.only',
-    defaultMessage: 'Active Only',
+    defaultMessage: 'Active',
     description: 'Option for active only filter',
   },
   'corporate.catalog.learners.filter.inactive.only': {
     id: 'corporate.catalog.learners.filter.inactive.only',
-    defaultMessage: 'Inactive Only',
+    defaultMessage: 'Inactive',
     description: 'Option for inactive only filter',
-  },
-  'corporate.catalog.learners.filter.all': {
-    id: 'corporate.catalog.learners.filter.all',
-    defaultMessage: 'All',
-    description: 'Option for all status filter',
   },
   'corporate.catalog.learners.modal.delete.success': {
     id: 'corporate.catalog.learners.modal.delete.success',

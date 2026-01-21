@@ -8,7 +8,7 @@ import {
 } from '@openedx/paragon';
 
 import { CellValue, Course } from '@src/types';
-import { ActionItem, TableFooter } from '@src/components/Table';
+import { ActionItem, SearchFilter, TableFooter } from '@src/components/Table';
 
 import { useNavigate, usePagination, useTableSortFilter } from '@src/hooks';
 
@@ -81,6 +81,12 @@ const BulkAction = ({ selectedFlatRows, setRowsForDelete, openDeleteModal }: Bul
     </Button>
   );
 };
+
+const searchIds = ['name'];
+const filterMappings = searchIds.reduce((prev, curr) => ({
+  ...prev, [curr]: 'search',
+}), {});
+
 const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
   const intl = useIntl();
   const navigate = useNavigate();
@@ -92,9 +98,10 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
   const [courseNameForDelete, setCourseNameForDelete] = useState<string>('');
 
   const { pageSize, pageIndex, onPaginationChange } = usePagination();
+
   const tableConfig = useMemo(() => ({
     sortFields: ['position'],
-    filterMappings: { name: 'search' },
+    filterMappings,
     onPaginationChange,
   }), [onPaginationChange]);
 
@@ -156,12 +163,10 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
         manualPagination
         manualSortBy
         manualFilters
-      defaultColumnValues={{ Filter: TextFilter, disableFilters: true }}
+        defaultColumnValues={{ disableFilters: true }}
         initialState={{
           pageSize,
           pageIndex,
-          sortBy: [],
-          filters: [],
         }}
         fetchData={fetchData}
         itemCount={count}
@@ -190,9 +195,13 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
           {
             Header: intl.formatMessage(messages['corporate.courses.table.header.name']),
             accessor: 'name',
-            disableSortBy: true,
             disableFilters: false,
+            disableSortBy: true,
             Cell: CourseNameCell,
+            Filter: SearchFilter,
+            meta: {
+              searchIds,
+            },
           },
           {
             Header: intl.formatMessage(messages['corporate.courses.table.header.position']),
@@ -219,7 +228,6 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
           {
             Header: intl.formatMessage(messages['corporate.courses.table.header.course.dates']),
             accessor: 'courseDates',
-            disableSortBy: true,
             Cell: ({ row }: CoursesCell) => {
               const { start, end } = row.original.courseRun;
               return `${formatDate(start)} - ${formatDate(end)}`;
@@ -228,7 +236,6 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
           {
             Header: intl.formatMessage(messages['corporate.courses.table.header.enrollment.dates']),
             accessor: 'enrollmentDates',
-            disableSortBy: true,
             Cell: ({ row }: CoursesCell) => {
               const { enrollmentStart, enrollmentEnd } = row.original.courseRun;
               return `${formatDate(enrollmentStart)} - ${formatDate(enrollmentEnd)}`;
@@ -237,12 +244,10 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
           {
             Header: intl.formatMessage(messages['corporate.courses.table.header.enrollment']),
             accessor: 'enrollments',
-            disableSortBy: true,
           },
           {
             Header: intl.formatMessage(messages['corporate.courses.table.header.certified']),
             accessor: 'certified',
-            disableSortBy: true,
           },
           {
             Header: intl.formatMessage(messages['corporate.courses.table.header.completion']),

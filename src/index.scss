@@ -57,3 +57,7 @@ button[aria-label="Copy description"] svg {
 .header-link {
     height: fit-content;
 }
+
+input:placeholder-shown {
+  text-overflow: ellipsis;
+}

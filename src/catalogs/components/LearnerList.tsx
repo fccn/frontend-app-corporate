@@ -3,34 +3,21 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   Badge, Button, DataTable, TextFilter,
   useToggle,
-  DropdownFilter,
+  CheckboxFilter,
 } from '@openedx/paragon';
 
 import { CellValue, Learner } from '@src/types';
-import { ActionItem, TableFooter } from '@src/components/Table/';
+import { ActionItem, FilterStatus, LearnerEmail, LearnerName, LearnerStatus, SearchFilter, TableFooter } from '@src/components/Table/';
 import { usePagination, useTableSortFilter } from '@src/hooks';
 
 import { PersonAddAlt, SaveAlt } from '@openedx/paragon/icons';
 import { useCatalogLearners } from '../data/hooks';
 import { dateFormat } from './utils';
 import InviteLearnersModal from './InviteLearnersModal';
-
-import messages from '../messages';
 import LearnerDeleteModal from './LearnerDeleteModal';
 
 import messages from '../messages';
 
-const LearnerName = ({ row }) => (
-  <span>{row.original.user.fullName}</span>
-);
-
-const LearnerEmail = ({ row }) => (
-  <span>{row.original.user.email}</span>
-);
-
-const LearnerStatus = ({ row }) => (
-  <Badge variant={row.original.active ? 'success' : 'danger'}>{row.original.active ? 'Active' : 'Inactive'}</Badge>
-);
 
 const TableAction = ({ catalogId }: { catalogId: string }) => {
   const intl = useIntl();
@@ -52,12 +39,14 @@ const TableAction = ({ catalogId }: { catalogId: string }) => {
     </>
   );
 };
+
 type BulkActionProps = {
   selectedFlatRows?: any[];
   setRowsForDelete: (rows: any[]) => void;
   openDeleteModal: () => void;
 };
-const BulkAction = ({ selectedFlatRows, setRowsForDelete, openDeleteModal }:BulkActionProps) => {
+
+const BulkAction = ({ selectedFlatRows, setRowsForDelete, openDeleteModal }: BulkActionProps) => {
   const intl = useIntl();
   if (!selectedFlatRows?.length) { return null; }
   return (
@@ -74,6 +63,11 @@ const BulkAction = ({ selectedFlatRows, setRowsForDelete, openDeleteModal }:Bulk
   );
 };
 
+const searchIds = ['fullName', 'email'];
+const filterMappings = searchIds.reduce((prev, curr) => ({
+  ...prev, [curr]: 'search',
+}), { active: 'active' });
+
 const LearnerList = ({ catalogId, catalogName }) => {
   const intl = useIntl();
 
@@ -83,7 +77,7 @@ const LearnerList = ({ catalogId, catalogName }) => {
 
   const tableConfig = useMemo(() => ({
     sortFields: ['invite_sent_at', 'accepted_at', 'last_login_at', 'removed_at'],
-    filterMappings: { fullName: 'search', email: 'search', active: 'active' },
+    filterMappings,
     onPaginationChange,
   }), [onPaginationChange]);
 
@@ -118,11 +112,12 @@ const LearnerList = ({ catalogId, catalogName }) => {
         isFilterable
         isSortable
         isSelectable
-        defaultColumnValues={{ Filter: TextFilter }}
+        defaultColumnValues={{ disableFilters: true, disableSortBy: true }}
+        FilterStatusComponent={FilterStatus}
         initialState={{
           pageSize,
           pageIndex,
-          filters: [{ id: 'active', value: 'true' }],
+          filters: [{ id: 'active', value: ['true'] }],
         }}
         manualPagination
         manualSortBy
@@ -155,56 +150,66 @@ const LearnerList = ({ catalogId, catalogName }) => {
           {
             Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.name']),
             accessor: 'fullName',
-            disableSortBy: true,
+            disableFilters: false,
             Cell: LearnerName,
+            Filter: SearchFilter,
+            meta: {
+              searchIds,
+            }
           },
           {
             Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.email']),
             accessor: 'email',
-            disableSortBy: true,
             Cell: LearnerEmail,
           },
           {
             Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.status']),
             accessor: 'active',
+            disableFilters: false,
             Cell: LearnerStatus,
-            Filter: DropdownFilter,
+            Filter: CheckboxFilter,
+            filter: 'includesValue',
             filterChoices: [
-              { value: 'true', name: intl.formatMessage(messages['corporate.catalog.learners.filter.active.only']) },
-              { value: 'false', name: intl.formatMessage(messages['corporate.catalog.learners.filter.inactive.only']) },
-              { value: 'all', name: intl.formatMessage(messages['corporate.catalog.learners.filter.all']) },
+              {
+                value: 'true',
+                name: intl.formatMessage(messages['corporate.catalog.learners.filter.active.only']),
+              },
+              {
+                value: 'false',
+                name: intl.formatMessage(messages['corporate.catalog.learners.filter.inactive.only']),
+              },
             ],
           },
           {
             Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.invite.sent.at']),
             accessor: 'inviteSentAt',
+            disableSortBy: false,
             Cell: ({ row }) => dateFormat(row.original.inviteSentAt),
-            disableSortBy: true,
           },
           {
             Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.accept.at']),
             accessor: 'acceptedAt',
+            disableSortBy: false,
             Cell: ({ row }) => dateFormat(row.original.acceptedAt),
           },
           {
             Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.last.login']),
             accessor: 'lastLogin',
-            disableSortBy: true,
+            disableSortBy: false,
             Cell: ({ row }) => dateFormat(row.original.user.lastLogin),
           },
           {
             Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.enrollments']),
             accessor: 'enrollments',
-            disableSortBy: true,
           },
           {
             Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.certified']),
             accessor: 'certified',
-            disableSortBy: true,
           },
           {
             Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.removed.at']),
             accessor: 'removedAt',
+            disableSortBy: false,
             Cell: ({ row }) => dateFormat(row.original.removedAt),
           },
         ]}
