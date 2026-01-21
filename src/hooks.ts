@@ -67,13 +67,59 @@ export const usePagination = () => {
   };
 };
 
+type SortResolver =
+  | string
+  | {
+    asc: string;
+    desc: string;
+  };
+
 interface SortFilterConfig {
   // optional list of allowed sort fields
-  sortFields?: string[];
+  sortMappings?: Record<string, SortResolver>;
   // map filter id to param name, e.g. { 'name': 'search', 'status': 'status' }
   filterMappings?: { [key: string]: string };
   onPaginationChange: (pagination: { pageIndex: number; pageSize: number }) => void;
 }
+
+/**
+ * A React hook that translates table sorting, filtering, and pagination state
+ * into backend-compatible query parameters.
+ *
+ * The hook decouples table column accessors from backend field names, supports
+ * custom sort resolution (including direction-dependent fields such as date
+ * ranges), and automatically resets pagination when sorting or filtering changes.
+ *
+ * @returns An object containing:
+ * - `ordering`: A backend-compatible ordering string (e.g. `"name"`, `"-created_at"`),
+ *   or `undefined` when no sorting is applied.
+ * - `searchParams`: An object of backend query parameters derived from table filters.
+ * - `handleSortingChange`: A handler that converts table sort state into `ordering`.
+ * - `handleFilteringChange`: A handler that converts table filter state into `searchParams`.
+ * - `fetchData`: A table state handler that coordinates sorting, filtering, and pagination
+ *   updates and resets pagination when necessary.
+ *
+ * @example
+ * ```ts
+ * const {
+ *   ordering,
+ *   searchParams,
+ *   fetchData,
+ * } = useTableSortFilter({
+ *   sortMappings: {
+ *     name: "organization__name",
+ *     dateRange: { asc: "start_date", desc: "end_date" },
+ *   },
+ *   filterMappings: {
+ *     name: "search",
+ *   },
+ *   onPaginationChange: setPagination,
+ * });
+ *
+ * // Pass ordering & searchParams directly to your API request
+ * fetchList({ ordering, ...searchParams });
+ * ```
+ */
 
 export const useTableSortFilter = (config: SortFilterConfig) => {
   const [ordering, setOrdering] = useState<string>();
@@ -83,20 +129,33 @@ export const useTableSortFilter = (config: SortFilterConfig) => {
   const previousFiltersRef = useRef<Array<{ id: string; value: string }>>();
   const isProcessingRef = useRef(false);
 
-  const handleSortingChange = useCallback((sortBy: Array<{ id: string; desc: boolean }>) => {
-    if (!sortBy || sortBy.length === 0) {
-      setOrdering(undefined);
-    } else {
-      const { id, desc } = sortBy[0];
-      // Check if id is allowed
-      if (config.sortFields && !config.sortFields.includes(id)) {
+  const handleSortingChange = useCallback(
+    (sortBy: Array<{ id: string; desc: boolean }>) => {
+      if (!sortBy || sortBy.length === 0) {
+        setOrdering(undefined);
         return;
       }
-      // Convert to snake_case
-      const snakeCaseId = id.replace(/([A-Z])/g, '_$1').toLowerCase();
-      setOrdering(desc ? `-${snakeCaseId}` : snakeCaseId);
-    }
-  }, [config.sortFields]);
+
+      const { id, desc } = sortBy[0];
+
+      const resolver = config.sortMappings?.[id];
+      if (!resolver) {
+        // not allowed / unknown sort column
+        return;
+      }
+
+      let backendField: string;
+
+      if (typeof resolver === 'string') {
+        backendField = resolver;
+      } else {
+        backendField = desc ? resolver.desc : resolver.asc;
+      }
+
+      setOrdering(desc ? `-${backendField}` : backendField);
+    },
+    [config.sortMappings],
+  );
 
   const handleFilteringChange = useCallback((filters: Array<{ id: string; value: string }>) => {
     if (!filters) {

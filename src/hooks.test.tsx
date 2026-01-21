@@ -188,8 +188,13 @@ describe('hooks', () => {
         expect(result.current.ordering).toBeUndefined();
       });
 
-      it('converts camelCase to snake_case and sets ordering', () => {
-        const { result } = renderHook(() => useTableSortFilter(defaultConfig));
+      it('map the table accessor to return the backend ordering key', () => {
+        const { result } = renderHook(() => useTableSortFilter({
+          ...defaultConfig,
+          sortMappings: {
+            inviteSentAt: 'invite_sent_at',
+          },
+        }));
 
         act(() => {
           result.current.handleSortingChange([{ id: 'inviteSentAt', desc: false }]);
@@ -199,7 +204,12 @@ describe('hooks', () => {
       });
 
       it('adds minus prefix for descending sort', () => {
-        const { result } = renderHook(() => useTableSortFilter(defaultConfig));
+        const { result } = renderHook(() => useTableSortFilter({
+          ...defaultConfig,
+          sortMappings: {
+            acceptedAt: 'accepted_at',
+          },
+        }));
 
         act(() => {
           result.current.handleSortingChange([{ id: 'acceptedAt', desc: true }]);
@@ -208,10 +218,10 @@ describe('hooks', () => {
         expect(result.current.ordering).toBe('-accepted_at');
       });
 
-      it('ignores sort fields not in sortFields config', () => {
+      it('ignores sort fields not in sortMappings config', () => {
         const config = {
           ...defaultConfig,
-          sortFields: ['invite_sent_at', 'accepted_at'],
+          sortMappings: { inviteSentAt: 'invite_sent_at', acceptedAt: 'accepted_at' },
         };
 
         const { result } = renderHook(() => useTableSortFilter(config));
@@ -223,10 +233,10 @@ describe('hooks', () => {
         expect(result.current.ordering).toBeUndefined();
       });
 
-      it('allows sort fields in sortFields config', () => {
+      it('allows sort fields in sortMappings config', () => {
         const config = {
           ...defaultConfig,
-          sortFields: ['inviteSentAt', 'acceptedAt'],
+          sortMappings: { inviteSentAt: 'invite_sent_at', acceptedAt: 'accepted_at' },
         };
 
         const { result } = renderHook(() => useTableSortFilter(config));
@@ -396,7 +406,12 @@ describe('hooks', () => {
       });
 
       it('calls handleSortingChange and handleFilteringChange', () => {
-        const { result } = renderHook(() => useTableSortFilter(defaultConfig));
+        const { result } = renderHook(() => useTableSortFilter({
+          ...defaultConfig,
+          sortMappings: {
+            acceptedAt: 'accepted_at',
+          },
+        }));
 
         const sortBy = [{ id: 'acceptedAt', desc: true }];
         const filters = [{ id: 'fullName', value: 'John' }];

@@ -85,6 +85,14 @@ const filterMappings = searchIds.reduce((prev, curr) => ({
   ...prev, [curr]: 'search',
 }), {});
 
+const sortMappings = {
+  position: 'position',
+  courseDates: { asc: 'course_start', desc: 'course_end' },
+  enrollmentDates: { asc: 'enrollment_start', desc: 'enrollment_end' },
+  enrollments: 'enrollments',
+  certified: 'certified',
+};
+
 const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
   const intl = useIntl();
   const navigate = useNavigate();
@@ -98,7 +106,7 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
   const { pageSize, pageIndex, onPaginationChange } = usePagination();
 
   const tableConfig = useMemo(() => ({
-    sortFields: ['position'],
+    sortMappings,
     filterMappings,
     onPaginationChange,
   }), [onPaginationChange]);

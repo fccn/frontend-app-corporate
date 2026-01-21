@@ -27,7 +27,7 @@ const CorpotatePartnerList = () => {
   const { pageIndex, pageSize, onPaginationChange } = usePagination();
 
   const tableConfig = useMemo(() => ({
-    sortFilds: ['name'],
+    sortMappings: { name: 'organization__name' },
     filterMappings,
     onPaginationChange,
   }), [onPaginationChange]);

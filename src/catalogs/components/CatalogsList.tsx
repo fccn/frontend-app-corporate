@@ -31,7 +31,7 @@ const CatalogsList = ({ partnerId, partnerSlug }: CatalogsListProps) => {
   const { pageIndex, pageSize, onPaginationChange } = usePagination();
 
   const tableConfig = useMemo(() => ({
-    sortFilds: ['name'],
+    sortMappings: { name: 'name' },
     filterMappings,
     onPaginationChange,
   }), [onPaginationChange]);
