@@ -2,13 +2,15 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { DataTable } from '@openedx/paragon';
 
 import { Catalog, CellValue } from '@src/types';
-import { ActionItem, FilterStatus, SearchFilter, TableFooter } from '@src/components/Table/';
+import {
+  ActionItem, FilterStatus, SearchFilter, TableFooter,
+} from '@src/components/Table/';
 import { paths } from '@src/constants';
 import { useNavigate, usePagination, useTableSortFilter } from '@src/hooks';
 
+import { useMemo } from 'react';
 import messages from '../messages';
 import { useCatalogs } from '../data/hooks';
-import { useMemo } from 'react';
 
 type CatalogCell = CellValue<Catalog>;
 
@@ -22,7 +24,6 @@ const filterMappings = searchIds.reduce((prev, curr) => ({
   ...prev, [curr]: 'search',
 }), {});
 
-
 const CatalogsList = ({ partnerId, partnerSlug }: CatalogsListProps) => {
   const navigate = useNavigate();
   const intl = useIntl();
@@ -30,7 +31,7 @@ const CatalogsList = ({ partnerId, partnerSlug }: CatalogsListProps) => {
   const { pageIndex, pageSize, onPaginationChange } = usePagination();
 
   const tableConfig = useMemo(() => ({
-    sortFilds: ["name"],
+    sortFilds: ['name'],
     filterMappings,
     onPaginationChange,
   }), [onPaginationChange]);
@@ -94,7 +95,7 @@ const CatalogsList = ({ partnerId, partnerSlug }: CatalogsListProps) => {
           Filter: SearchFilter,
           meta: {
             searchIds,
-          }
+          },
         },
         {
           Header: intl.formatMessage(messages['corporate.catalog.table.header.courses']),

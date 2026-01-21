@@ -45,6 +45,6 @@ export const getPartnerDetails = async (partnerSlug?: string): Promise<Partner |
     return camelCaseObject(response.data.results[0]) || null;
   } catch (error) {
     logError(error);
-    return null
+    return null;
   }
 };

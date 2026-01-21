@@ -142,7 +142,7 @@ describe('CoursesPage', () => {
 
     await waitFor(() => {
       // Check for elements that indicate CoursesList is rendered
-      expect(screen.getByText('Search by course name')).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Search by course name')).toBeInTheDocument();
     });
   });
 
@@ -173,8 +173,7 @@ describe('CoursesPage', () => {
     renderCoursesPage();
 
     await waitFor(() => {
-      // Since we mocked CoursesList, we can verify it renders
-      expect(screen.getByText('Search by course name')).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Search by course name')).toBeInTheDocument();
     });
   });
 

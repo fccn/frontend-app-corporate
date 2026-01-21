@@ -14,8 +14,13 @@ import {
 const queryKey = {
   all: [appId, 'catalogs'],
   catalogLists: () => [...queryKey.all, 'list'],
-  catalogList: (partnerId: number, pageIndex: number, pageSize: number, ordering?: string,
-    search?: string,) => [
+  catalogList: (
+    partnerId: number,
+    pageIndex: number,
+    pageSize: number,
+    ordering?: string,
+    search?: string,
+  ) => [
     ...queryKey.catalogLists(), partnerId, pageIndex, pageSize, ordering, search,
   ],
   catalogDetail: (catalogSlug: string) => [...queryKey.all, 'detail', catalogSlug],

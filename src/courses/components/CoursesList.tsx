@@ -2,9 +2,7 @@ import { useState, useMemo } from 'react';
 import { useParams } from 'wouter';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
-  Button,
-  DataTable, Form, TextFilter,
-  useToggle,
+  Button, DataTable, Form, useToggle,
 } from '@openedx/paragon';
 
 import { CellValue, Course } from '@src/types';

@@ -31,6 +31,11 @@ describe('Partner Hooks', () => {
   });
 
   describe('usePartners', () => {
+    const config = {
+      pageIndex: 1,
+      pageSize: 10,
+    };
+
     const mockPartnersResponse: PaginatedResponse<Partner> = {
       next: null,
       previous: null,
@@ -67,12 +72,16 @@ describe('Partner Hooks', () => {
     it('should fetch partners successfully', async () => {
       mockedGetPartners.mockResolvedValueOnce(mockPartnersResponse);
 
-      const { result } = renderHook(() => usePartners(), {
+      const { result } = renderHook(() => usePartners(config), {
         wrapper: createWrapper,
       });
 
       await waitFor(() => {
-        expect(result.current.data).toEqual(mockPartnersResponse);
+        expect(result.current.data).toEqual({
+          partners: mockPartnersResponse.results,
+          count: mockPartnersResponse.count,
+          pageCount: mockPartnersResponse.numPages,
+        });
       });
 
       expect(mockedGetPartners).toHaveBeenCalledTimes(1);
@@ -81,7 +90,7 @@ describe('Partner Hooks', () => {
     it('should use correct query key for caching', async () => {
       mockedGetPartners.mockResolvedValueOnce(mockPartnersResponse);
 
-      const { result, rerender } = renderHook(() => usePartners(), {
+      const { result, rerender } = renderHook(() => usePartners(config), {
         wrapper: createWrapper,
       });
 
@@ -111,15 +120,19 @@ describe('Partner Hooks', () => {
 
       mockedGetPartners.mockResolvedValueOnce(emptyResponse);
 
-      const { result } = renderHook(() => usePartners(), {
+      const { result } = renderHook(() => usePartners(config), {
         wrapper: createWrapper,
       });
 
       await waitFor(() => {
-        expect(result.current.data).toEqual(emptyResponse);
+        expect(result.current.data).toEqual({
+          partners: [],
+          count: 0,
+          pageCount: 0,
+        });
       });
 
-      expect(result.current.data.results).toHaveLength(0);
+      expect(result.current.data.partners).toHaveLength(0);
       expect(result.current.data.count).toBe(0);
     });
   });

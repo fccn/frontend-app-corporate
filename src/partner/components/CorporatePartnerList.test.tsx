@@ -1,49 +1,43 @@
 import { screen } from '@testing-library/react';
-import { useSuspenseQuery } from '@tanstack/react-query';
 import { renderWrapper } from '@src/setupTest';
 import CorporatePartnerList from './CorporatePartnerList';
 
-jest.mock('@tanstack/react-query');
 jest.mock('wouter', () => ({
   useLocation: () => jest.fn(),
 }));
-jest.mock('../data/api');
 
-const mockPartners = {
-  count: 11,
-  numPages: 2,
-  currentPage: 1,
-  start: 0,
-  results: [{
-    id: 1,
-    name: 'Example University',
-    homepage: 'https://exampleu.com/university',
-    logo: 'https://exampleu.com/logo.png',
-    catalogs: 5,
-    courses: 12,
-    enrollments: 1000,
-    certified: 400,
-  },
-  {
-    code: 2,
-    name: 'Test Institute',
-    homepage: 'https://test.com/institute',
-    logo: 'https://test.com/logo.png',
-    catalogs: 2,
-    courses: 8,
-    enrollments: 700,
-    certified: 300,
-  },
-  ],
-};
+jest.mock('@src/partner/data/hooks', () => ({
+  usePartners: () => ({
+    data: {
+      partners: [{
+        id: 1,
+        name: 'Example University',
+        homepage: 'https://exampleu.com/university',
+        logo: 'https://exampleu.com/logo.png',
+        catalogs: 5,
+        courses: 12,
+        enrollments: 1000,
+        certified: 400,
+      },
+      {
+        code: 2,
+        name: 'Test Institute',
+        homepage: 'https://test.com/institute',
+        logo: 'https://test.com/logo.png',
+        catalogs: 2,
+        courses: 8,
+        enrollments: 700,
+        certified: 300,
+      },
+      ],
+      count: 2,
+      numPages: 1,
+    },
+    isLoading: false,
+  }),
+}));
 
 describe('CorporatePartnerList', () => {
-  beforeEach(() => {
-    (useSuspenseQuery as jest.Mock).mockReturnValue({
-      data: mockPartners,
-    });
-  });
-
   afterEach(() => {
     jest.clearAllMocks();
   });

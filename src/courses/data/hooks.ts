@@ -20,7 +20,14 @@ const queryKey = {
   ],
   courseDetails: (catalogId: string, courseId: string) => [...queryKey.all, 'details', catalogId, courseId],
   availableCourses: (catalogId: string) => [...queryKey.all, 'available.list', catalogId],
-  courseLearnersList: (catalogId: string, courseId: string, pageIndex: number, pageSize: number, ordering?: string, search?: string) => [
+  courseLearnersList: (
+    catalogId: string,
+    courseId: string,
+    pageIndex: number,
+    pageSize: number,
+    ordering?: string,
+    search?: string,
+  ) => [
     ...queryKey.all, 'learners', catalogId, courseId, pageIndex, pageSize, ordering, search,
   ],
 };

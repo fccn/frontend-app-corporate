@@ -1,13 +1,17 @@
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
-import { getPartnerDetails, getPartners } from './api';
 import { Partner, UseQueryResult } from '@src/types';
 import { appId } from '@src/constants';
+import { getPartnerDetails, getPartners } from './api';
 
 const queryKey = {
   all: [appId, 'partners'],
   partnerLists: () => [...queryKey.all, 'list'],
-  partnerList: (pageIndex: number, pageSize: number, ordering?: string,
-    search?: string,) => [
+  partnerList: (
+    pageIndex: number,
+    pageSize: number,
+    ordering?: string,
+    search?: string,
+  ) => [
     ...queryKey.partnerLists(), pageIndex, pageSize, ordering, search,
   ],
   partnerDetails: (partnerSlug: string) => ['partnerDetails', partnerSlug],

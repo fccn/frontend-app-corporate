@@ -1,13 +1,13 @@
 import { useState, useMemo } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
-  Badge, Button, DataTable, TextFilter,
-  useToggle,
-  CheckboxFilter,
+  Button, DataTable, useToggle, CheckboxFilter,
 } from '@openedx/paragon';
 
 import { CellValue, Learner } from '@src/types';
-import { ActionItem, FilterStatus, LearnerEmail, LearnerName, LearnerStatus, SearchFilter, TableFooter } from '@src/components/Table/';
+import {
+  ActionItem, FilterStatus, LearnerEmail, LearnerName, LearnerStatus, SearchFilter, TableFooter,
+} from '@src/components/Table/';
 import { usePagination, useTableSortFilter } from '@src/hooks';
 
 import { PersonAddAlt, SaveAlt } from '@openedx/paragon/icons';
@@ -17,7 +17,6 @@ import InviteLearnersModal from './InviteLearnersModal';
 import LearnerDeleteModal from './LearnerDeleteModal';
 
 import messages from '../messages';
-
 
 const TableAction = ({ catalogId }: { catalogId: string }) => {
   const intl = useIntl();
@@ -155,7 +154,7 @@ const LearnerList = ({ catalogId, catalogName }) => {
             Filter: SearchFilter,
             meta: {
               searchIds,
-            }
+            },
           },
           {
             Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.email']),

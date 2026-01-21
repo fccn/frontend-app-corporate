@@ -1,39 +1,33 @@
 import { screen } from '@testing-library/react';
-import { useSuspenseQuery } from '@tanstack/react-query';
 import { renderWrapper } from '@src/setupTest';
 import CorporatePartnerPage from './CorporatePartnerPage';
 
-jest.mock('@tanstack/react-query');
 jest.mock('wouter', () => ({
   useLocation: () => jest.fn(),
 }));
-jest.mock('./data/api');
 
-const mockPartners = {
-  count: 2,
-  numPages: 1,
-  currentPage: 1,
-  start: 0,
-  results: [{
-    id: 1,
-    name: 'Example University',
-    slug: 'example-university',
-    homepageUrl: 'https://exampleu.com',
-    logo: 'https://exampleu.com/logo.png',
-    catalogs: 5,
-    courses: 12,
-    enrollments: 1000,
-    certified: 400,
-  }],
-};
+jest.mock('@src/partner/data/hooks', () => ({
+  usePartners: () => ({
+    data: {
+      partners: [{
+        id: 1,
+        name: 'Example University',
+        slug: 'example-university',
+        homepageUrl: 'https://exampleu.com',
+        logo: 'https://exampleu.com/logo.png',
+        catalogs: 5,
+        courses: 12,
+        enrollments: 1000,
+        certified: 400,
+      }],
+      count: 2,
+      numPages: 1,
+    },
+    isLoading: false,
+  }),
+}));
 
 describe('CorporatePartnerPage', () => {
-  beforeEach(() => {
-    (useSuspenseQuery as jest.Mock).mockReturnValue({
-      data: mockPartners,
-    });
-  });
-
   afterEach(() => {
     jest.clearAllMocks();
   });

@@ -1,14 +1,14 @@
 import { useMemo } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import {
-  DataTable, TextFilter,
-} from '@openedx/paragon';
+import { DataTable } from '@openedx/paragon';
 
 import { Partner, CellValue } from '@src/types';
-import { ActionItem, CellName, FilterStatus, SearchFilter, TableFooter } from '@src/components/Table';
+import {
+  ActionItem, CellName, FilterStatus, SearchFilter, TableFooter,
+} from '@src/components/Table';
 import { useNavigate, usePagination, useTableSortFilter } from '@src/hooks';
-import { usePartners } from '../data/hooks';
 import { paths } from '@src/constants';
+import { usePartners } from '../data/hooks';
 
 import messages from '../messages';
 
@@ -27,7 +27,7 @@ const CorpotatePartnerList = () => {
   const { pageIndex, pageSize, onPaginationChange } = usePagination();
 
   const tableConfig = useMemo(() => ({
-    sortFilds: ["name"],
+    sortFilds: ['name'],
     filterMappings,
     onPaginationChange,
   }), [onPaginationChange]);
@@ -94,7 +94,7 @@ const CorpotatePartnerList = () => {
           Filter: SearchFilter,
           meta: {
             searchIds,
-          }
+          },
         },
         {
           Header: intl.formatMessage(messages['corporate.partner.table.header.catalogs']),

@@ -9,6 +9,11 @@ jest.mock('@src/hooks', () => ({
     pageSize: 10,
     onPaginationChange: jest.fn(),
   }),
+  useTableSortFilter: () => ({
+    ordering: '',
+    searchParams: {},
+    fetchData: jest.fn(),
+  }),
 }));
 
 jest.mock('../data/hooks', () => ({

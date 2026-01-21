@@ -103,7 +103,7 @@ describe('Catalog Hooks', () => {
         expect(result.current.isLoading).toBe(false);
       });
 
-      expect(mockedGetPartnerCatalogs).toHaveBeenCalledWith(1, 1, 10);
+      expect(mockedGetPartnerCatalogs).toHaveBeenCalledWith(1, 1, 10, undefined, undefined);
       expect(mockedGetPartnerCatalogs).toHaveBeenCalledTimes(1);
     });
 

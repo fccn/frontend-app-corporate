@@ -1,9 +1,11 @@
 import { useMemo } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { Button, DataTable, TextFilter } from '@openedx/paragon';
+import { Button, DataTable } from '@openedx/paragon';
 import { SaveAlt } from '@openedx/paragon/icons';
 
-import { FilterStatus, LearnerEmail, LearnerName, SearchFilter, TableFooter } from '@src/components/Table/';
+import {
+  FilterStatus, LearnerEmail, LearnerName, SearchFilter, TableFooter,
+} from '@src/components/Table/';
 import { usePagination, useTableSortFilter } from '@src/hooks';
 
 import { useCourseLearnersStatus } from '../data/hooks';
@@ -34,7 +36,7 @@ const CourseLernerList = ({ catalogId, courseId }) => {
     onPaginationChange,
   }), [onPaginationChange]);
 
-  const { ordering, searchParams, fetchData } = useTableSortFilter(tableConfig);    
+  const { ordering, searchParams, fetchData } = useTableSortFilter(tableConfig);
 
   const {
     data: { results, count, pageCount },
