@@ -205,6 +205,16 @@ const messages = defineMessages({
     defaultMessage: 'No learners found for this course.',
     description: 'Message displayed when there are no learners for the course',
   },
+  'corporate.course.learners.table.certificate.yes': {
+    id: 'corporate.courses.learners.table.certificate.yes',
+    defaultMessage: 'Yes',
+    description: 'Text to indicate the user has a certificate',
+  },
+  'corporate.course.learners.table.certificate.no': {
+    id: 'corporate.courses.learners.table.certificate.no',
+    defaultMessage: 'No',
+    description: 'Text to indicate the user has not get the certificate',
+  },
   'corporate.courses.table.empty.content': {
     id: 'corporate.courses.table.empty.content',
     defaultMessage: 'No courses found.',

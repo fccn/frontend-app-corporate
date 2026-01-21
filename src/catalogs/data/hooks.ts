@@ -14,8 +14,9 @@ import {
 const queryKey = {
   all: [appId, 'catalogs'],
   catalogLists: () => [...queryKey.all, 'list'],
-  catalogList: (partnerId: number, pageIndex: number, pageSize: number) => [
-    ...queryKey.catalogLists(), partnerId, pageIndex, pageSize,
+  catalogList: (partnerId: number, pageIndex: number, pageSize: number, ordering?: string,
+    search?: string,) => [
+    ...queryKey.catalogLists(), partnerId, pageIndex, pageSize, ordering, search,
   ],
   catalogDetail: (catalogSlug: string) => [...queryKey.all, 'detail', catalogSlug],
   catalogLearners: () => [...queryKey.all, 'learners'],
@@ -57,14 +58,17 @@ export const useCatalogs = ({
   partnerId,
   pageIndex,
   pageSize,
+  ordering,
+  search,
 }: {
-  partnerId: number; pageIndex: number; pageSize: number
+  partnerId: number; pageIndex: number; pageSize: number, ordering?: string,
+  search?: string,
 }): UseQueryResult<{ catalogs: Catalog[], count: number; pageCount: number }> => {
   const {
     data, isLoading, isError, error, isSuccess,
   } = useQuery({
-    queryKey: queryKey.catalogList(partnerId, pageIndex, pageSize),
-    queryFn: () => getPartnerCatalogs(partnerId, pageIndex, pageSize),
+    queryKey: queryKey.catalogList(partnerId, pageIndex, pageSize, ordering, search),
+    queryFn: () => getPartnerCatalogs(partnerId, pageIndex, pageSize, ordering, search),
   });
 
   return {

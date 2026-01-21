@@ -5,9 +5,23 @@ import { logError } from '@edx/frontend-platform/logging';
 import { getCorporateApi } from '@src/constants';
 import { PaginatedResponse, Partner } from '@src/types';
 
-export const getPartners = async (): Promise<PaginatedResponse<Partner>> => {
+export const getPartners = async (
+  page: number,
+  pageSize: number,
+  ordering?: string,
+  search?: string,
+): Promise<PaginatedResponse<Partner>> => {
   try {
-    const response = await getAuthenticatedHttpClient().get(getCorporateApi('partners/'));
+    const url = new URL(getCorporateApi('partners/'));
+    url.searchParams.append('page', page.toString());
+    url.searchParams.append('page_size', pageSize.toString());
+    if (ordering) {
+      url.searchParams.append('ordering', ordering);
+    }
+    if (search) {
+      url.searchParams.append('search', search);
+    }
+    const response = await getAuthenticatedHttpClient().get(url);
     return camelCaseObject(response.data);
   } catch (error) {
     logError(error);
@@ -23,7 +37,7 @@ export const getPartners = async (): Promise<PaginatedResponse<Partner>> => {
   }
 };
 
-export const getPartnerDetails = async (partnerSlug?: string): Promise<Partner> => {
+export const getPartnerDetails = async (partnerSlug?: string): Promise<Partner | null> => {
   try {
     const url = new URL(getCorporateApi('partners/'));
     url.searchParams.append('slug', partnerSlug || '');
@@ -31,16 +45,6 @@ export const getPartnerDetails = async (partnerSlug?: string): Promise<Partner> 
     return camelCaseObject(response.data.results[0]) || null;
   } catch (error) {
     logError(error);
-    return {
-      id: 0,
-      slug: '',
-      name: '',
-      logo: '',
-      homepageUrl: '',
-      catalogs: 0,
-      courses: 0,
-      enrollments: 0,
-      certified: 0,
-    };
+    return null
   }
 };

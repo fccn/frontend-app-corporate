@@ -84,12 +84,18 @@ export const addCoursesToCatalog = async (catalogId: string, data: { courseIds: 
   }
 };
 
-export const getCourseLearnersStatus = async (catalogId: string, courseId: string, pageIndex, pageSize)
+export const getCourseLearnersStatus = async (catalogId: string, courseId: string, pageIndex, pageSize, ordering, search)
 : Promise<PaginatedResponse<any>> => {
   try {
     const url = new URL(getCorporateApi(`manage/catalogs/${catalogId}/courses/${courseId}/enrollments/`));
     url.searchParams.append('page', pageIndex);
     url.searchParams.append('page_size', pageSize);
+    if (ordering) {
+      url.searchParams.append('ordering', ordering);
+    }
+    if (search) {
+      url.searchParams.append('search', search);
+    }
     const { data } = await getAuthenticatedHttpClient().get(url);
     return camelCaseObject(data);
   } catch (error) {

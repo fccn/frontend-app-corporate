@@ -26,7 +26,7 @@ const PartnerCatalogsPage = () => {
   }, [partnerDetails, navigate]);
 
   return (
-    <AppLayout withBackButton backPath="/">
+    <AppLayout withBackButton backPath={paths.partners.buildPath()}>
       {partnerDetails && (
         <>
           <HeaderDescription

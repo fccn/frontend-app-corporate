@@ -1,21 +1,14 @@
+import { useMemo } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Button, DataTable, TextFilter } from '@openedx/paragon';
 import { SaveAlt } from '@openedx/paragon/icons';
 
-import { TableFooter } from '@src/components/Table/';
-import { usePagination } from '@src/hooks';
+import { FilterStatus, LearnerEmail, LearnerName, SearchFilter, TableFooter } from '@src/components/Table/';
+import { usePagination, useTableSortFilter } from '@src/hooks';
 
 import { useCourseLearnersStatus } from '../data/hooks';
 
 import messages from '../messages';
-
-const LearnerName = ({ row }) => (
-  <span>{row.original.user.fullName}</span>
-);
-
-const LearnerEmail = ({ row }) => (
-  <span>{row.original.user.email}</span>
-);
 
 const TableAction = () => {
   const intl = useIntl();
@@ -27,54 +20,62 @@ const TableAction = () => {
   );
 };
 
+const searchIds = ['fullName', 'email'];
+const filterMappings = searchIds.reduce((prev, curr) => ({
+  ...prev, [curr]: 'search',
+}), {});
+
 const CourseLernerList = ({ catalogId, courseId }) => {
   const intl = useIntl();
 
   const { pageIndex, pageSize, onPaginationChange } = usePagination();
+  const tableConfig = useMemo(() => ({
+    filterMappings,
+    onPaginationChange,
+  }), [onPaginationChange]);
+
+  const { ordering, searchParams, fetchData } = useTableSortFilter(tableConfig);    
 
   const {
     data: { results, count, pageCount },
     isLoading,
-  } = useCourseLearnersStatus(catalogId, courseId, pageIndex + 1, pageSize);
+  } = useCourseLearnersStatus(catalogId, courseId, pageIndex + 1, pageSize, ordering, searchParams.search);
 
   return (
     <DataTable
       isLoading={isLoading}
       isPaginated
       isFilterable
-      defaultColumnValues={{ Filter: TextFilter }}
+      manualFilters
+      defaultColumnValues={{ disableFilters: true }}
+      FilterStatusComponent={FilterStatus}
       initialState={{
         pageSize,
         pageIndex,
       }}
       manualPagination
-      fetchData={onPaginationChange}
-      pageCount={pageCount || 0}
+      fetchData={fetchData}
+      pageCount={pageCount}
       tableActions={[
         <TableAction />,
       ]}
-      itemCount={count || 0}
-      data={results || []}
+      itemCount={count}
+      data={results}
       columns={[
         {
           Header: intl.formatMessage(messages['corporate.course.learners.table.header.name']),
           accessor: 'fullName',
+          disableFilters: false,
           Cell: LearnerName,
+          Filter: SearchFilter,
+          meta: {
+            searchIds,
+          },
         },
         {
           Header: intl.formatMessage(messages['corporate.course.learners.table.header.email']),
           accessor: 'email',
           Cell: LearnerEmail,
-        },
-        {
-          Header: intl.formatMessage(messages['corporate.course.learners.table.header.completed.assessments']),
-          accessor: 'completedAssessments',
-          Cell: ({ row }) => row.original.completedAssessments,
-        },
-        {
-          Header: intl.formatMessage(messages['corporate.course.learners.table.header.assessments.to.complete']),
-          accessor: 'assessmentsToComplete',
-          Cell: ({ row }) => row.original.assessmentsToComplete,
         },
         {
           Header: intl.formatMessage(messages['corporate.course.learners.table.header.progress']),
@@ -84,7 +85,10 @@ const CourseLernerList = ({ catalogId, courseId }) => {
         {
           Header: intl.formatMessage(messages['corporate.course.learners.table.header.certificate']),
           accessor: 'hasCertificate',
-          Cell: ({ row }) => (row.original.hasCertificate ? 'Yes' : 'No'),
+          Cell: ({ row }) => (row.original.hasCertificate
+            ? intl.formatMessage(messages['corporate.course.learners.table.certificate.yes'])
+            : intl.formatMessage(messages['corporate.course.learners.table.certificate.no'])
+          ),
         },
       ]}
     >

@@ -1,32 +1,61 @@
+import { useMemo } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   DataTable, TextFilter,
 } from '@openedx/paragon';
 
 import { Partner, CellValue } from '@src/types';
-import { ActionItem, CellName, TableFooter } from '@src/components/Table';
-import { useNavigate, usePagination } from '@src/hooks';
+import { ActionItem, CellName, FilterStatus, SearchFilter, TableFooter } from '@src/components/Table';
+import { useNavigate, usePagination, useTableSortFilter } from '@src/hooks';
+import { usePartners } from '../data/hooks';
 import { paths } from '@src/constants';
 
 import messages from '../messages';
-import { usePartners } from '../data/hooks';
 
 type PartnersTableCell = CellValue<Partner>;
 
 const tableActions = ['view'];
 
+const searchIds = ['name'];
+const filterMappings = searchIds.reduce((prev, curr) => ({
+  ...prev, [curr]: 'search',
+}), {});
+
 const CorpotatePartnerList = () => {
   const navigate = useNavigate();
   const intl = useIntl();
-  const { pageIndex, pageSize } = usePagination();
-  const { data } = usePartners();
+  const { pageIndex, pageSize, onPaginationChange } = usePagination();
+
+  const tableConfig = useMemo(() => ({
+    sortFilds: ["name"],
+    filterMappings,
+    onPaginationChange,
+  }), [onPaginationChange]);
+
+  const { ordering, searchParams, fetchData } = useTableSortFilter(tableConfig);
+
+  const {
+    data:
+    { partners, count, pageCount }, isLoading,
+  } = usePartners({
+    pageIndex: pageIndex + 1,
+    pageSize,
+    ordering,
+    search: searchParams.search,
+  });
 
   return (
     <DataTable
+      isLoading={isLoading}
       isPaginated
       isFilterable
+      isSortable
       manualPagination
-      defaultColumnValues={{ Filter: TextFilter }}
+      manualFilters
+      manualSortBy
+      fetchData={fetchData}
+      defaultColumnValues={{ disableFilters: true, disableSortBy: true }}
+      FilterStatusComponent={FilterStatus}
       initialState={{
         pageSize,
         pageIndex,
@@ -44,13 +73,15 @@ const CorpotatePartnerList = () => {
           )),
         },
       ]}
-      itemCount={data?.count || 0}
-      data={data?.results}
-      pageCount={data?.numPages || 0}
+      itemCount={count}
+      data={partners}
+      pageCount={pageCount}
       columns={[
         {
           Header: intl.formatMessage(messages['corporate.partner.table.header.name']),
           accessor: 'name',
+          disableFilters: false,
+          disableSortBy: false,
           // eslint-disable-next-line react/no-unstable-nested-components
           Cell: ({ row }: PartnersTableCell) => (
             <CellName
@@ -60,6 +91,10 @@ const CorpotatePartnerList = () => {
               image={row.original.logo}
             />
           ),
+          Filter: SearchFilter,
+          meta: {
+            searchIds,
+          }
         },
         {
           Header: intl.formatMessage(messages['corporate.partner.table.header.catalogs']),

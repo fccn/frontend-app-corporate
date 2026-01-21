@@ -11,12 +11,20 @@ export const getPartnerCatalogs = async (
   partnerId: number,
   page: number,
   pageSize: number,
+  ordering?: string,
+  search?: string,
 ): Promise<PaginatedResponse<Catalog>> => {
   try {
     const url = new URL(getCorporateApi('manage/catalogs/'));
     url.searchParams.append('page', page.toString());
     url.searchParams.append('page_size', pageSize.toString());
     url.searchParams.append('partner', partnerId.toString());
+    if (ordering) {
+      url.searchParams.append('ordering', ordering);
+    }
+    if (search) {
+      url.searchParams.append('search', search);
+    }
     const response = await getAuthenticatedHttpClient().get(url);
     return camelCaseObject(response.data);
   } catch (error) {

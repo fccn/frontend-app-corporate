@@ -1,8 +1,15 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { getPartnerDetails, getPartners } from './api';
+import { Partner, UseQueryResult } from '@src/types';
+import { appId } from '@src/constants';
 
 const queryKey = {
-  partners: () => ['partners'],
+  all: [appId, 'partners'],
+  partnerLists: () => [...queryKey.all, 'list'],
+  partnerList: (pageIndex: number, pageSize: number, ordering?: string,
+    search?: string,) => [
+    ...queryKey.partnerLists(), pageIndex, pageSize, ordering, search,
+  ],
   partnerDetails: (partnerSlug: string) => ['partnerDetails', partnerSlug],
 };
 
@@ -17,10 +24,34 @@ const queryKey = {
  * partners.map(partner => <div key={partner.id}>{partner.name}</div>);
  * ```
  */
-export const usePartners = () => useSuspenseQuery({
-  queryKey: queryKey.partners(),
-  queryFn: () => getPartners(),
-});
+export const usePartners = ({
+  pageIndex,
+  pageSize,
+  ordering,
+  search,
+}: {
+  pageIndex: number; pageSize: number, ordering?: string,
+  search?: string,
+}): UseQueryResult<{ partners: Partner[], count: number; pageCount: number }> => {
+  const {
+    data, isLoading, isError, error, isSuccess,
+  } = useQuery({
+    queryKey: queryKey.partnerList(pageIndex, pageSize, ordering, search),
+    queryFn: () => getPartners(pageIndex, pageSize, ordering, search),
+  });
+
+  return {
+    data: {
+      partners: data?.results || [],
+      count: data?.count || 0,
+      pageCount: data?.numPages || 0,
+    },
+    isLoading,
+    isError,
+    error,
+    isSuccess,
+  };
+};
 
 /**
  * React hook to fetch the details of a specific partner by slug.

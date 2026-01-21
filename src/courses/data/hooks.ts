@@ -20,8 +20,8 @@ const queryKey = {
   ],
   courseDetails: (catalogId: string, courseId: string) => [...queryKey.all, 'details', catalogId, courseId],
   availableCourses: (catalogId: string) => [...queryKey.all, 'available.list', catalogId],
-  courseLearnersList: (catalogId: string, courseId: string, pageIndex: number, pageSize: number) => [
-    ...queryKey.all, 'learners', catalogId, courseId, pageIndex, pageSize,
+  courseLearnersList: (catalogId: string, courseId: string, pageIndex: number, pageSize: number, ordering?: string, search?: string) => [
+    ...queryKey.all, 'learners', catalogId, courseId, pageIndex, pageSize, ordering, search,
   ],
 };
 
@@ -303,12 +303,14 @@ export const useCourseLearnersStatus = (
   courseId: string,
   pageIndex: number,
   pageSize: number,
+  ordering?: string,
+  search?: string,
 ): UseQueryResult<{ results: LearnerStatus[], count: number, pageCount: number }> => {
   const {
     data, isLoading, isError, error, isSuccess,
   } = useQuery({
-    queryKey: queryKey.courseLearnersList(catalogId, courseId, pageIndex, pageSize),
-    queryFn: () => getCourseLearnersStatus(catalogId, courseId, pageIndex, pageSize),
+    queryKey: queryKey.courseLearnersList(catalogId, courseId, pageIndex, pageSize, ordering, search),
+    queryFn: () => getCourseLearnersStatus(catalogId, courseId, pageIndex, pageSize, ordering, search),
     enabled: !!catalogId && !!courseId,
   });
 
