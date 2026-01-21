@@ -34,14 +34,18 @@ const SearchFilter = ({
     }
   };
 
+  const inputText = intl.formatMessage(messages['table.search.filter.placeholder'], { searchFilds });
   return (
-    <Form.Control
-      type="text"
-      trailingElement={<Icon src={Search} size="sm" screenReaderText="Search" />}
-      value={filterValue || ''}
-      onChange={handleChange}
-      placeholder={intl.formatMessage(messages['table.search.filter.placeholder'], { searchFilds })}
-    />
+    <Form.Group controlId="search-input-table">
+      <Form.Label className="sr-only">{inputText}</Form.Label>
+      <Form.Control
+        type="text"
+        trailingElement={<Icon src={Search} size="sm" screenReaderText="Search" />}
+        value={filterValue || ''}
+        onChange={handleChange}
+        placeholder={inputText}
+      />
+    </Form.Group>
   );
 };
 
