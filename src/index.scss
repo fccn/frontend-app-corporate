@@ -12,14 +12,6 @@ button[aria-label="Copy description"] svg {
     height: 16px;
 }
 
-.pgn__data-table td {
-    text-align: center;
-}
-
-.pgn__data-table th:not(:first-of-type) span {
-    margin: auto;
-}
-
 .pgn__data-table th,
 .pgn__data-table tr,
 .pgn__data-table.is-striped tr:nth-child(2n) {

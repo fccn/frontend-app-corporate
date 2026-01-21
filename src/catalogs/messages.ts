@@ -63,7 +63,7 @@ const messages = defineMessages({
   },
   'corporate.catalog.learners.table.header.name': {
     id: 'corporate.catalog.learners.table.header.name',
-    defaultMessage: 'Learner Name',
+    defaultMessage: 'Learner Username/Name',
     description: 'Header for the learner name column',
   },
   'corporate.catalog.learners.table.header.email': {

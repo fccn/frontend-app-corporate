@@ -33,7 +33,17 @@ export const CellName = ({
 );
 
 export const LearnerName = ({ row }) => (
-  <span>{row.original.user.fullName}</span>
+  <div>
+    <span className="d-block truncate-1-line">
+      {row.original.user.username}
+    </span>
+    {(row.original.user.fullName !== row.original.user.username)
+      && (
+      <span className="small text-muted truncate-1-line">
+        {row.original.user.fullName}
+      </span>
+      )}
+  </div>
 );
 
 export const LearnerEmail = ({ row }) => (
