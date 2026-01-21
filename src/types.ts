@@ -35,8 +35,6 @@ export interface LearnerUser {
 
 export interface LearnerStatus {
   user: LearnerUser;
-  completedAssessments: number;
-  assessmentsToComplete: number;
   progress: number;
   hasCertificate: boolean;
 }

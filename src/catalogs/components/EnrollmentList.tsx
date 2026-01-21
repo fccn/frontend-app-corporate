@@ -15,7 +15,7 @@ import { dateFormat } from './utils';
 import messages from '../messages';
 
 const CourseNameCell = ({ row }) => (
-  <div className="text-center small">
+  <div className="small">
     <span className="d-block font-weight-bold truncate-1-line">
       {row.original.courseOverview.displayName}
     </span>
@@ -57,7 +57,9 @@ const EnrollmentsList = ({ catalogId }) => {
   const { pageIndex, pageSize, onPaginationChange } = usePagination();
 
   const tableConfig = useMemo(() => ({
-    sortFields: ['invite_sent_at', 'accepted_at', 'last_login_at', 'removed_at'],
+    sortMappings: {
+      lastLogin: 'user__last_login',
+    },
     filterMappings,
     onPaginationChange,
   }), [onPaginationChange]);
@@ -135,18 +137,6 @@ const EnrollmentsList = ({ catalogId }) => {
           ],
         },
         {
-          Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.invite.sent.at']),
-          accessor: 'inviteSentAt',
-          disableSortBy: false,
-          Cell: ({ row }) => dateFormat(row.original.inviteSentAt),
-        },
-        {
-          Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.accept.at']),
-          accessor: 'acceptedAt',
-          disableSortBy: false,
-          Cell: ({ row }) => dateFormat(row.original.acceptedAt),
-        },
-        {
           Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.last.login']),
           accessor: 'lastLogin',
           disableSortBy: false,
@@ -169,12 +159,6 @@ const EnrollmentsList = ({ catalogId }) => {
           Cell: ({ row }) => (row.original.hasCertificate
             ? intl.formatMessage(messages['corporate.catalog.enrollments.table.certificate.yes'])
             : intl.formatMessage(messages['corporate.catalog.enrollments.table.certificate.no'])),
-        },
-        {
-          Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.removed.at']),
-          accessor: 'removedAt',
-          disableSortBy: false,
-          Cell: ({ row }) => dateFormat(row.original.removedAt),
         },
       ]}
     >

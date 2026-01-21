@@ -75,7 +75,12 @@ const LearnerList = ({ catalogId, catalogName }) => {
   const { pageIndex, pageSize, onPaginationChange } = usePagination();
 
   const tableConfig = useMemo(() => ({
-    sortFields: ['invite_sent_at', 'accepted_at', 'last_login_at', 'removed_at'],
+    sortMappings: {
+      inviteSentAt: 'invite_sent_at',
+      acceptedAt: 'accepted_at',
+      lastLogin: 'user__last_login',
+      removedAt: 'removed_at',
+    },
     filterMappings,
     onPaginationChange,
   }), [onPaginationChange]);

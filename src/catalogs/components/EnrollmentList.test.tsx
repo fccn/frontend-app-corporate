@@ -39,9 +39,6 @@ const mockEnrollments = [
       id: 'course-v1:edX+DemoX+Demo_Course',
       displayName: 'Demo Course',
     },
-    inviteSentAt: '2023-01-01T10:00:00Z',
-    acceptedAt: '2023-01-02T10:00:00Z',
-    removedAt: null,
   },
   {
     id: 2,
@@ -58,9 +55,6 @@ const mockEnrollments = [
       id: 'course-v1:edX+TestX+Test_Course',
       displayName: 'Test Course',
     },
-    inviteSentAt: '2023-01-03T10:00:00Z',
-    acceptedAt: null,
-    removedAt: '2023-01-10T10:00:00Z',
   },
 ];
 
@@ -140,8 +134,7 @@ describe('EnrollmentList', () => {
     renderEnrollmentList();
 
     await waitFor(() => {
-      expect(screen.getByText('2023-01-01 10:00')).toBeInTheDocument();
-      expect(screen.getByText('2023-01-02 10:00')).toBeInTheDocument();
+      expect(screen.getByText('2023-01-15 10:00')).toBeInTheDocument();
     });
   });
 
