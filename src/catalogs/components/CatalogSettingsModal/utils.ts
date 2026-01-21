@@ -94,7 +94,7 @@ export const getCatalogSchema = (intl) => {
  * // ""
  * ```
  */
-export function isoToDateInputValue(isoString: string): string {
+export const isoToDateInputValue = (isoString: string): string => {
   const date = new Date(isoString);
   if (Number.isNaN(date.getTime())) { return ''; }
 
@@ -103,4 +103,4 @@ export function isoToDateInputValue(isoString: string): string {
   const day = String(date.getDate()).padStart(2, '0');
 
   return `${year}-${month}-${day}`;
-}
+};

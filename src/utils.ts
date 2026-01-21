@@ -1,10 +1,9 @@
 import { Resolver, FieldValues, FieldErrorsImpl } from 'react-hook-form';
 import { SchemaOf, ValidationError } from 'yup';
 
-export function yupValidationResolver<TFieldValues extends FieldValues>(
+export const yupValidationResolver = <TFieldValues extends FieldValues>(
   validationSchema: SchemaOf<TFieldValues>,
-): Resolver<TFieldValues> {
-  return async (values) => {
+): Resolver<TFieldValues> => async (values) => {
     try {
       const validatedValues = await validationSchema.validate(values, {
         abortEarly: false,
@@ -33,4 +32,3 @@ export function yupValidationResolver<TFieldValues extends FieldValues>(
       };
     }
   };
-}
