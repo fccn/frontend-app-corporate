@@ -33,9 +33,9 @@ const CourseAddModal = ({ isOpen, onClose, catalogId }: CourseAddModalProps) => 
     addMutation.mutate(
       { catalogId, courseIds: Array.from(selectedCourses) },
       {
-        onSuccess: () => {
+        onSuccess: (data) => {
           showNotification(
-            intl.formatMessage(messages['corporate.courses.modal.add.notification.success'], { count: selectedCourses.size }),
+            intl.formatMessage(messages['corporate.courses.modal.add.notification.success'], { count: data.length }),
             'success',
           );
           setSelectedCourses(new Set());

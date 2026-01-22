@@ -3,6 +3,7 @@ import {
 } from '@tanstack/react-query';
 import { Catalog, CatalogUpdateRequest, UseQueryResult } from '@src/types';
 import { appId } from '@src/constants';
+import { useParams } from 'wouter';
 import {
   getCatalogDetails, getPartnerCatalogs, updateCatalog, getCatalogsLearners,
   postCatalogInviteLearners,
@@ -117,7 +118,6 @@ export const useCatalogDetails = ({ catalogSlug }: { catalogSlug: string }) => u
  */
 export const useUpdateCatalog = () => {
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: async ({ catalogId, data }: {
       catalogId: string; data: CatalogUpdateRequest
@@ -179,6 +179,7 @@ type InvitePayload = {
  */
 export const useInviteLearners = () => {
   const queryClient = useQueryClient();
+  const { catalogSlug } = useParams<{ catalogSlug: string }>();
 
   return useMutation({
     mutationFn: async ({ catalogId, data }: { catalogId: string; data: InvitePayload }) => {
@@ -191,6 +192,7 @@ export const useInviteLearners = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKey.catalogLearners() });
+      queryClient.invalidateQueries({ queryKey: queryKey.catalogDetail(catalogSlug) });
     },
   });
 };
@@ -204,6 +206,7 @@ export const useInviteLearners = () => {
  */
 export const useRemoveLearners = () => {
   const queryClient = useQueryClient();
+  const { catalogSlug } = useParams<{ catalogSlug: string }>();
 
   return useMutation({
     mutationFn: async ({ catalogId, learnerIds }: {
@@ -211,6 +214,7 @@ export const useRemoveLearners = () => {
     }) => deleteLearnersFromCatalog(catalogId, { learnerIds }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKey.catalogLearners() });
+      queryClient.invalidateQueries({ queryKey: queryKey.catalogDetail(catalogSlug) });
     },
   });
 };

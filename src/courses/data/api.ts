@@ -42,10 +42,14 @@ export const getCourseDetails = async (catalogId: string, courseId: string): Pro
   }
 };
 
-export const deleteCourse = async (catalogId: string, data: { catalogCourseIds: number[] }) => {
+export const deleteCourse = async (
+  catalogId: string,
+  data: { catalogCourseIds: number[] },
+):Promise<{ deletedCount: number; }> => {
   try {
     const url = getCorporateApi(`manage/catalogs/${catalogId}/remove_courses/`);
-    await getAuthenticatedHttpClient().post(url, snakeCaseObject(data));
+    const response = await getAuthenticatedHttpClient().post(url, snakeCaseObject(data));
+    return camelCaseObject(response.data);
   } catch (error) {
     logError(error);
     throw error;
@@ -74,10 +78,11 @@ export const getAvailableCourses = async (catalogId: string): Promise<{
   }
 };
 
-export const addCoursesToCatalog = async (catalogId: string, data: { courseIds: string[] }): Promise<void> => {
+export const addCoursesToCatalog = async (catalogId: string, data: { courseIds: string[] }): Promise<Course[]> => {
   try {
     const url = getCorporateApi(`manage/catalogs/${catalogId}/add_courses/`);
-    await getAuthenticatedHttpClient().post(url, snakeCaseObject(data));
+    const response = await getAuthenticatedHttpClient().post(url, snakeCaseObject(data));
+    return response.data;
   } catch (error) {
     logError(error);
     throw error;

@@ -65,7 +65,7 @@ export const updateCatalog = async (
     return camelCaseObject(response.data);
   } catch (error) {
     logError(error);
-    return null;
+    throw error;
   }
 };
 

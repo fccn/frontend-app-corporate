@@ -195,7 +195,7 @@ export const useUpdateCatalogCourse = () => {
       data: { position: number };
     }) => updateCourse(catalogId, courseId, data),
 
-    onSettled: () => {
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: queryKey.courseLists(),
       });

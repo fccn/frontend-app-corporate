@@ -161,7 +161,13 @@ describe('CourseAddModal', () => {
   });
   it('shows notification on successful addition of courses', async () => {
     const user = userEvent.setup();
-    const mockMutate = jest.fn();
+
+    const mockMutate = jest.fn().mockImplementationOnce(
+      (_, { onSuccess }) => {
+        onSuccess([mockCourses.base[0]]);
+      },
+    );
+
     mockUseAddCoursesToCatalog.mockReturnValue({
       mutate: mockMutate,
       isPending: false,
@@ -169,20 +175,20 @@ describe('CourseAddModal', () => {
 
     renderWrapper(<CourseAddModal {...defaultProps} />);
 
-    // Select a course first
-    const courseCheckbox = screen.getByLabelText(/Course 1/i);
-    await user.click(courseCheckbox);
+    // Select a course
+    await user.click(screen.getByLabelText(/Course 1/i));
 
-    // Click save button
-    const saveButton = screen.getByText('Add Selected Courses');
-    await user.click(saveButton);
+    // Submit
+    await user.click(
+      screen.getByRole('button', { name: /add selected courses/i }),
+    );
 
-    // Simulate successful mutation callback
-    const onSuccessCallback = mockMutate.mock.calls[0][1].onSuccess;
-    onSuccessCallback();
+    expect(mockMutate).toHaveBeenCalled();
 
-    waitFor(() => {
-      expect(screen.getByText('1 course have been successfully added to the catalog.')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByRole('alert')).toHaveTextContent(
+        /1 course.*successfully added to the catalog/i,
+      );
     });
   });
 });

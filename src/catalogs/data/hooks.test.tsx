@@ -6,6 +6,9 @@ import * as api from './api';
 import { Catalog, PaginatedResponse } from '../../types';
 
 jest.mock('./api');
+jest.mock('wouter', () => ({
+  useParams: () => ({ catalogSlug: 'Catalog 1' }),
+}));
 const mockedGetPartnerCatalogs = api.getPartnerCatalogs as jest.MockedFunction<typeof api.getPartnerCatalogs>;
 const mockedGetCatalogDetails = api.getCatalogDetails as jest.MockedFunction<typeof api.getCatalogDetails>;
 

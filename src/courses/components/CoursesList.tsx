@@ -119,7 +119,7 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
 
   const updateCatalogCourse = useUpdateCatalogCourse();
 
-  const positions = Array.from({ length: count + 1 || 0 }, (_, i) => i);
+  const positions = Array.from({ length: count || 0 }, (_, i) => i);
   const formatDate = (date: string | null) => {
     if (!date) { return ''; }
     return intl.formatDate(date);

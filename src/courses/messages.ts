@@ -222,7 +222,7 @@ const messages = defineMessages({
   },
   'corporate.courses.modal.add.notification.success': {
     id: 'corporate.courses.modal.add.notification.success',
-    defaultMessage: '{count, plural, one {# course} other {# courses}} have been successfully added to the catalog.',
+    defaultMessage: '{count, plural, one {# course has} other {# courses have}} been successfully added to the catalog.',
     description: 'Notification message displayed when courses are successfully added to the catalog',
   },
   'corporate.courses.modal.add.notification.error': {
@@ -232,7 +232,7 @@ const messages = defineMessages({
   },
   'corporate.courses.modal.delete.notification.success': {
     id: 'corporate.courses.modal.delete.notification.success',
-    defaultMessage: '{count, plural, one {# course} other {# courses}} have been successfully removed from the catalog.',
+    defaultMessage: '{count, plural, one {# course has} other {# courses have}} been successfully removed from the catalog.',
     description: 'Notification message displayed when courses are successfully deleted from the catalog',
   },
   'corporate.courses.modal.delete.notification.error': {
@@ -242,7 +242,7 @@ const messages = defineMessages({
   },
   'corporate.courses.notification.position.update.success': {
     id: 'corporate.courses.notification.position.update.success',
-    defaultMessage: 'Course position have been changed.',
+    defaultMessage: 'Course position has been changed.',
     description: 'Notification message displayed when course positions are successfully updated',
   },
   'corporate.courses.notification.position.update.error': {

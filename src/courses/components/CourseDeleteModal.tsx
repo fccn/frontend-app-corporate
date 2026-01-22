@@ -30,11 +30,11 @@ const CourseDeleteModal = ({
     deleteCatalogCourses.mutate(
       { catalogId: catalogId!, data: { catalogCourseIds: selectedCourses } },
       {
-        onSuccess: () => {
+        onSuccess: (data) => {
           showNotification(
             intl.formatMessage(
               messages['corporate.courses.modal.delete.notification.success'],
-              { count: selectedCourses.length },
+              { count: data.deletedCount },
             ),
             'success',
           );

@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWrapper } from '@src/setupTest';
 import * as hooks from '../data/hooks';
@@ -140,15 +140,20 @@ describe('CourseDeleteModal', () => {
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
 
-  it('display notification on delete success', async () => {
+  it('displays notification on delete success', async () => {
     const user = userEvent.setup();
+
     mockDeleteMutation.mockImplementationOnce((_, { onSuccess }) => {
-      onSuccess();
+      onSuccess({ deletedCount: 1 });
     });
+
     renderWrapper(<CourseDeleteModal {...defaultProps} />);
 
-    await user.click(screen.getByRole('button', { name: 'Yes, Delete' }));
+    await user.click(screen.getByRole('button', { name: /yes, delete/i }));
 
-    expect(mockOnClose).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(mockOnClose).toHaveBeenCalledTimes(1);
+      expect(screen.getByText(/1 course has been successfully removed from the catalog./i)).toBeInTheDocument();
+    });
   });
 });
