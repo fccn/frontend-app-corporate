@@ -10,6 +10,7 @@ import {
   postBulkCatalogInviteLearners,
   getCatalogEnrrollements,
   deleteLearnersFromCatalog,
+  getBulkInviteTaskStatus,
 } from './api';
 
 const queryKey = {
@@ -22,8 +23,8 @@ const queryKey = {
     ordering?: string,
     search?: string,
   ) => [
-    ...queryKey.catalogLists(), partnerId, pageIndex, pageSize, ordering, search,
-  ],
+      ...queryKey.catalogLists(), partnerId, pageIndex, pageSize, ordering, search,
+    ],
   catalogDetail: (catalogSlug: string) => [...queryKey.all, 'detail', catalogSlug],
   catalogLearners: () => [...queryKey.all, 'learners'],
   catalogLearnersList: (
@@ -34,8 +35,8 @@ const queryKey = {
     search?: string,
     active?: string,
   ) => [
-    ...queryKey.catalogLearners(), catalogId, pageIndex, pageSize, ordering, search, active,
-  ],
+      ...queryKey.catalogLearners(), catalogId, pageIndex, pageSize, ordering, search, active,
+    ],
   catalogEnrollments: () => [...queryKey.all, 'enrollments'],
   catalogEnrollmentsList: (
     catalogId: string,
@@ -45,8 +46,8 @@ const queryKey = {
     search?: string,
     active?: string,
   ) => [
-    ...queryKey.catalogEnrollments(), catalogId, pageIndex, pageSize, ordering, search, active,
-  ],
+      ...queryKey.catalogEnrollments(), catalogId, pageIndex, pageSize, ordering, search, active,
+    ],
 };
 
 /**
@@ -184,10 +185,10 @@ export const useInviteLearners = () => {
   return useMutation({
     mutationFn: async ({ catalogId, data }: { catalogId: string; data: InvitePayload }) => {
       if (data.emails?.length) {
-        await postCatalogInviteLearners(catalogId, { inviteEmail: data.emails, catalogId });
+        return await postCatalogInviteLearners(catalogId, { inviteEmail: data.emails, catalogId });
       }
       if (data.csvFile) {
-        await postBulkCatalogInviteLearners(catalogId, { csvFile: data.csvFile });
+        return await postBulkCatalogInviteLearners(catalogId, { csvFile: data.csvFile });
       }
     },
     onSuccess: () => {
@@ -248,4 +249,13 @@ export const useCatalogEnrollments = ({
 }) => useQuery({
   queryKey: queryKey.catalogEnrollmentsList(catalogId, pageIndex, pageSize, ordering, search, active),
   queryFn: () => getCatalogEnrrollements(catalogId, pageIndex, pageSize, ordering, search, active),
+});
+
+/**
+ * Hook to check the status of a bulk invite task.
+ *
+ * @returns mutation function to check status.
+ */
+export const useBulkInviteTaskStatus = () => useMutation({
+  mutationFn: async ({ catalogId, taskId }: { catalogId: string; taskId: string }) => getBulkInviteTaskStatus(catalogId, taskId),
 });

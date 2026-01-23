@@ -220,6 +220,36 @@ const messages = defineMessages({
     defaultMessage: 'Learners removed successfully.',
     description: 'Success notification message when learners are removed from the catalog',
   },
+  'corporate.catalog.learners.modal.invite.notification.success': {
+    id: 'corporate.catalog.learners.modal.invite.notification.success',
+    defaultMessage: '{count, plural, one {One invitation sent successfully.} other {# invitations sent successfully.}}',
+    description: 'Success notification for sending invites',
+  },
+  'corporate.catalog.learners.modal.invite.notification.error': {
+    id: 'corporate.catalog.learners.modal.invite.notification.error',
+    defaultMessage: '{count, plural, one {Failed to send invitation.} other {Failed to send # invitations.}}',
+    description: 'Error notification for failed invites',
+  },
+  'corporate.catalog.learners.modal.invite.notification.processing': {
+    id: 'corporate.catalog.learners.modal.invite.notification.processing',
+    defaultMessage: 'File uploaded. Invitations are being processed in the background.',
+    description: 'Notification for background processing of bulk invites',
+  },
+  'corporate.catalog.learners.modal.invite.notification.generic.error': {
+    id: 'corporate.catalog.learners.modal.invite.notification.generic.error',
+    defaultMessage: 'An error occurred while sending invitations.',
+    description: 'Generic error notification',
+  },
+  'corporate.catalog.learners.modal.invite.notification.duplicate': {
+    id: 'corporate.catalog.learners.modal.invite.notification.duplicate',
+    defaultMessage: '{count, plural, one {An active invitation already exists for this user {email}} other {Active invitations already exist for # users {email}}}',
+    description: 'Error notification for duplicate invites',
+  },
+  'corporate.catalog.learners.modal.invite.notification.error_details_header': {
+    id: 'corporate.catalog.learners.modal.invite.notification.error_details_header',
+    defaultMessage: 'The following error happened during the invitation:',
+    description: 'Header for the detailed error list in the invite modal',
+  },
 });
 
 export default messages;

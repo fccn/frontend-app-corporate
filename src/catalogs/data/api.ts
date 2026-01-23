@@ -4,7 +4,7 @@ import { logError } from '@edx/frontend-platform/logging';
 
 import { getCorporateApi } from '@src/constants';
 import {
-  Catalog, CatalogCourseEnrollment, CatalogUpdateRequest, Learner, PaginatedResponse,
+  Catalog, CatalogCourseEnrollment, CatalogInviteResponse, CatalogUpdateRequest, Learner, PaginatedResponse,
 } from '../../types';
 
 export const getPartnerCatalogs = async (
@@ -109,10 +109,11 @@ export const getCatalogsLearners = async (
 export const postCatalogInviteLearners = async (
   catalogId: string | number,
   data: { catalogId: string, inviteEmail: string[] },
-): Promise<void> => {
+): Promise<CatalogInviteResponse> => {
   try {
     const url = getCorporateApi(`manage/catalogs/${catalogId}/invitations/`);
-    await getAuthenticatedHttpClient().post(url, snakeCaseObject(data));
+    const response = await getAuthenticatedHttpClient().post(url, snakeCaseObject(data));
+    return camelCaseObject(response.data);
   } catch (error) {
     logError(error);
     throw error;
@@ -122,16 +123,17 @@ export const postCatalogInviteLearners = async (
 export const postBulkCatalogInviteLearners = async (
   catalogId: string | number,
   data: { csvFile: File },
-): Promise<void> => {
+): Promise<{ taskId: string }> => {
   try {
     const url = getCorporateApi(`manage/catalogs/${catalogId}/invitations/bulk_invite/`);
     const formData = new FormData();
     formData.append('file', data.csvFile);
-    await getAuthenticatedHttpClient().post(url, formData, {
+    const response = await getAuthenticatedHttpClient().post(url, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     });
+    return camelCaseObject(response.data);
   } catch (error) {
     logError(error);
     throw error;
@@ -189,5 +191,19 @@ export const getCatalogEnrrollements = async (
       start: 0,
       results: [],
     };
+  }
+};
+
+export const getBulkInviteTaskStatus = async (
+  catalogId: string | number,
+  taskId: string,
+): Promise<{ status: string, result: any }> => {
+  try {
+    const url = getCorporateApi(`manage/catalogs/${catalogId}/invitations/bulk_task/status/${taskId}/`);
+    const response = await getAuthenticatedHttpClient().get(url);
+    return camelCaseObject(response.data);
+  } catch (error) {
+    logError(error);
+    throw error;
   }
 };

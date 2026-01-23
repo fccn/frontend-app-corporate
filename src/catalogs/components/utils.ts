@@ -37,7 +37,12 @@ export const fileUploadStatus = {
   success: 'SUCCESS',
   failure: 'FAILURE',
   pending: 'PENDING',
+  started: 'STARTED',
 };
+
+export const inviteError = {
+  duplicate: 'An active invitation already exists for this user.',
+}
 
 export const dateFormat = (isoDateString) => {
   if (!isoDateString) {

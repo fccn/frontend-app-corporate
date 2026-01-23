@@ -94,17 +94,32 @@ Omit<Catalog, 'id' | 'slug' | 'enrollments' | 'certified' | 'completionRate' | '
 
 export interface CourseOverview {
   id: string;
-  display_name: string;
+  displayName: string;
 }
 
 export interface CatalogCourseEnrollment {
   id: number;
   active: boolean;
   progress: number;
-  has_certificate: boolean;
-  catalog_course: number;
+  hasCertificate: boolean;
+  catalogCourse: number;
   user: Partial<Learner['user']>;
-  course_overview: CourseOverview;
+  courseOverview: CourseOverview;
+}
+
+export interface Invitation {
+  id: number;
+  catalogId: string;
+  inviteEmail: string;
+  invitedAt: string;
+  acceptedAt: string | null;
+  declinedAt: string | null;
+  status: string;
+}
+
+export interface InvitationError {
+  email: string;
+  error: string;
 }
 
 // API response types
@@ -116,6 +131,13 @@ export interface PaginatedResponse<T> {
   currentPage: number;
   start: number;
   results: T[];
+}
+
+export interface CatalogInviteResponse {
+  invitations: Invitation[];
+  createdCount: number;
+  totalRequested: number;
+  errors?: InvitationError[];
 }
 
 // Paragon types

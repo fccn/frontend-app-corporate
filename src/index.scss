@@ -23,9 +23,10 @@ button[aria-label="Copy description"] svg {
     border-top: 1px solid var(--pgn-color-gray-200);
 }
 
-.pgn__data-table-wrapper{
+.pgn__data-table-wrapper {
     box-shadow: var(--pgn-elevation-box-shadow-centered-1);
 }
+
 .truncate-1-line {
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -43,13 +44,13 @@ button[aria-label="Copy description"] svg {
 }
 
 .toast-container {
-  z-index: var(--pgn-elevation-modal-zindex);
+    z-index: var(--pgn-elevation-modal-zindex);
 }
 
 // Fix a bug with a toast on edit tags sheet component: can't click on close toast button
 // https://github.com/openedx/frontend-app-authoring/issues/1898
 #toast-root[data-focus-on-hidden] {
-  pointer-events: initial !important;
+    pointer-events: initial !important;
 }
 
 @media (--pgn-size-breakpoint-min-width-md) {
@@ -64,5 +65,10 @@ button[aria-label="Copy description"] svg {
 }
 
 input:placeholder-shown {
-  text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+
+.upload-disabled {
+    pointer-events: none;
+    background-color: var(--pgn-color-form-input-bg-disabled);
 }
