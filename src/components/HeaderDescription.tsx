@@ -25,7 +25,7 @@ interface HeaderDescriptionProps {
 const HeaderDescription = ({ context, info, children }: HeaderDescriptionProps) => {
   const intl = useIntl();
   const isSmall = useMediaQuery({ maxWidth: breakpoints.small.maxWidth });
-  const isMedium = useMediaQuery({ maxWidth: breakpoints.medium.maxWidth });
+  const isLarge = useMediaQuery({ maxWidth: breakpoints.large.maxWidth });
   const [copied, setCopied] = useState(intl.formatMessage(messages['corporate.copy.action']));
 
   const handleCopy = async () => {
@@ -44,10 +44,10 @@ const HeaderDescription = ({ context, info, children }: HeaderDescriptionProps) 
   return (
     <Stack
       className={`border rounded bg-light-100 px-${isSmall ? 3 : 4} py-3 my-3 justify-content-between`}
-      direction={isMedium ? 'vertical' : 'horizontal'}
-      gap={4}
+      direction={isLarge ? 'vertical' : 'horizontal'}
+      gap={2}
     >
-      <Stack direction={isSmall ? 'vertical' : 'horizontal'} gap={3}>
+      <Stack direction={isSmall ? 'vertical' : 'horizontal'} gap={2}>
         {context.imageUrl && (
           <ImageWithSkeleton
             src={context.imageUrl}
@@ -76,7 +76,7 @@ const HeaderDescription = ({ context, info, children }: HeaderDescriptionProps) 
         </Stack>
       </Stack>
 
-      <Stack direction="horizontal" gap={4} className="flex-wrap flex-md-nowrap">
+      <Stack direction="horizontal" gap={2} className="flex-wrap flex-md-nowrap">
         {info.map((item, index) => (
           <Fragment key={item.title}>
             <div className="d-flex flex-column">
