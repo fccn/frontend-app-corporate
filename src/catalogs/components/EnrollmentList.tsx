@@ -1,13 +1,13 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Button, DataTable, CheckboxFilter } from '@openedx/paragon';
-import { HowToReg, SaveAlt } from '@openedx/paragon/icons';
+import { SaveAlt } from '@openedx/paragon/icons';
 
 import {
   TableFooter, FilterStatus, SearchFilter, LearnerName, LearnerEmail, LearnerStatus,
 } from '@src/components/Table/';
 import { usePagination, useTableSortFilter } from '@src/hooks';
-import InviteLearnersModal from './InviteLearnersModal';
+import InviteLearnerAction from './InviteTableAction';
 
 import { useCatalogEnrollments } from '../data/hooks';
 import { dateFormat } from './utils';
@@ -27,21 +27,12 @@ const CourseNameCell = ({ row }) => (
 
 const TableAction = ({ catalogId }: { catalogId: string }) => {
   const intl = useIntl();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   return (
     <>
-      <Button iconBefore={HowToReg} size="sm" onClick={() => setIsModalOpen(true)}>
-        {intl.formatMessage(messages['corporate.catalog.enrollments.table.action.preenroll'])}
-      </Button>
+      <InviteLearnerAction catalogId={catalogId} />
       <Button iconBefore={SaveAlt} size="sm">
         {intl.formatMessage(messages['corporate.catalog.learners.table.action.download.report'])}
       </Button>
-      <InviteLearnersModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        catalogId={catalogId}
-      />
     </>
   );
 };

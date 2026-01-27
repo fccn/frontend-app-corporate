@@ -54,6 +54,7 @@ jest.mock('@src/catalogs/data/hooks', () => ({
     },
     isLoading: false,
   })),
+  useBulkInviteTaskStatus: jest.fn(() => ({ data: undefined })),
 }));
 
 jest.mock('@src/partner/data/hooks', () => ({
@@ -156,7 +157,7 @@ describe('CoursesPage', () => {
 
     await waitFor(() => {
       // Check for elements that indicate LearnerList is rendered
-      expect(screen.getByText('Invite Learners')).toBeInTheDocument();
+      expect(screen.getAllByText('Invite Learners').length).toBeGreaterThan(0);
     });
   });
 

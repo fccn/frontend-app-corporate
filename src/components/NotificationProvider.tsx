@@ -5,7 +5,6 @@ import { Toast } from '@openedx/paragon';
 
 type ToastType = 'success' | 'error' | 'info';
 
-
 interface ToastProps {
   id: string;
   message: string;
@@ -14,7 +13,7 @@ interface ToastProps {
   duration?: number;
 }
 const NotificationContext = createContext<{
-  showNotification: (message: string, type?: ToastType, duration?: number) => void;
+  showNotification:(message: string, type?: ToastType, duration?: number) => void;
 } | null>(null);
 
 const NotificationProvider = ({ children }: { children: React.ReactNode }) => {

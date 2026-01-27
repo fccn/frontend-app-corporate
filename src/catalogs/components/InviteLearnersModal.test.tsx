@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { renderWrapper } from '@src/setupTest';
 import * as hooks from '@src/catalogs/data/hooks';
+import NotificationProvider from '@src/components/NotificationProvider';
 import InviteLearnersModal from './InviteLearnersModal';
 
 jest.mock('@src/catalogs/data/hooks', () => ({
@@ -27,6 +28,7 @@ describe('InviteLearnersModal', () => {
         isOpen
         onClose={jest.fn()}
         catalogId="test-catalog"
+        onTaskCreated={jest.fn()}
       />,
     );
 
@@ -39,6 +41,7 @@ describe('InviteLearnersModal', () => {
         isOpen={false}
         onClose={jest.fn()}
         catalogId="test-catalog"
+        onTaskCreated={jest.fn()}
       />,
     );
 
@@ -51,6 +54,7 @@ describe('InviteLearnersModal', () => {
         isOpen
         onClose={jest.fn()}
         catalogId="test-catalog"
+        onTaskCreated={jest.fn()}
       />,
     );
 
@@ -64,6 +68,7 @@ describe('InviteLearnersModal', () => {
         isOpen
         onClose={jest.fn()}
         catalogId="test-catalog"
+        onTaskCreated={jest.fn()}
       />,
     );
 
@@ -78,6 +83,7 @@ describe('InviteLearnersModal', () => {
         isOpen
         onClose={jest.fn()}
         catalogId="test-catalog"
+        onTaskCreated={jest.fn()}
       />,
     );
 
@@ -100,6 +106,7 @@ describe('InviteLearnersModal', () => {
         isOpen
         onClose={jest.fn()}
         catalogId="test-catalog"
+        onTaskCreated={jest.fn()}
       />,
     );
 
@@ -137,6 +144,7 @@ describe('InviteLearnersModal', () => {
         isOpen
         onClose={jest.fn()}
         catalogId="test-catalog"
+        onTaskCreated={jest.fn()}
       />,
     );
 
@@ -168,6 +176,7 @@ describe('InviteLearnersModal', () => {
         isOpen
         onClose={onCloseMock}
         catalogId="test-catalog"
+        onTaskCreated={jest.fn()}
       />,
     );
 
@@ -186,6 +195,7 @@ describe('InviteLearnersModal', () => {
         isOpen
         onClose={onCloseMock}
         catalogId="test-catalog"
+        onTaskCreated={jest.fn()}
       />,
     );
 
@@ -198,22 +208,28 @@ describe('InviteLearnersModal', () => {
     // Modal closed
     rerender(
       <IntlProvider locale="en">
-        <InviteLearnersModal
-          isOpen={false}
-          onClose={onCloseMock}
-          catalogId="test-catalog"
-        />
+        <NotificationProvider>
+          <InviteLearnersModal
+            isOpen={false}
+            onClose={onCloseMock}
+            catalogId="test-catalog"
+            onTaskCreated={jest.fn()}
+          />
+        </NotificationProvider>
       </IntlProvider>,
     );
 
     // Modal reopened
     rerender(
       <IntlProvider locale="en">
-        <InviteLearnersModal
-          isOpen
-          onClose={onCloseMock}
-          catalogId="test-catalog"
-        />
+        <NotificationProvider>
+          <InviteLearnersModal
+            isOpen
+            onClose={onCloseMock}
+            catalogId="test-catalog"
+            onTaskCreated={jest.fn()}
+          />
+        </NotificationProvider>
       </IntlProvider>,
     );
 
@@ -227,6 +243,7 @@ describe('InviteLearnersModal', () => {
         isOpen
         onClose={jest.fn()}
         catalogId="test-catalog"
+        onTaskCreated={jest.fn()}
       />,
     );
 
@@ -245,6 +262,7 @@ describe('InviteLearnersModal', () => {
         isOpen
         onClose={jest.fn()}
         catalogId="test-catalog"
+        onTaskCreated={jest.fn()}
       />,
     );
 
@@ -260,6 +278,7 @@ describe('InviteLearnersModal', () => {
         isOpen
         onClose={jest.fn()}
         catalogId="test-catalog"
+        onTaskCreated={jest.fn()}
       />,
     );
 
@@ -289,6 +308,7 @@ describe('InviteLearnersModal', () => {
         isOpen
         onClose={onCloseMock}
         catalogId="test-catalog"
+        onTaskCreated={jest.fn()}
       />,
     );
 

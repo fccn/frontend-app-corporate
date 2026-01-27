@@ -10,31 +10,22 @@ import {
 } from '@src/components/Table/';
 import { usePagination, useTableSortFilter } from '@src/hooks';
 
-import { PersonAddAlt, SaveAlt } from '@openedx/paragon/icons';
+import { SaveAlt } from '@openedx/paragon/icons';
 import { useCatalogLearners } from '../data/hooks';
 import { dateFormat } from './utils';
-import InviteLearnersModal from './InviteLearnersModal';
 import LearnerDeleteModal from './LearnerDeleteModal';
 
 import messages from '../messages';
+import InviteLearnerAction from './InviteTableAction';
 
 const TableAction = ({ catalogId }: { catalogId: string }) => {
   const intl = useIntl();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   return (
     <>
-      <Button iconBefore={PersonAddAlt} size="sm" onClick={() => setIsModalOpen(true)}>
-        {intl.formatMessage(messages['corporate.catalog.learners.table.action.add.learner'])}
-      </Button>
+      <InviteLearnerAction catalogId={catalogId} />
       <Button iconBefore={SaveAlt} size="sm">
         {intl.formatMessage(messages['corporate.catalog.learners.table.action.download.report'])}
       </Button>
-      <InviteLearnersModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        catalogId={catalogId}
-      />
     </>
   );
 };

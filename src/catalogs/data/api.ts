@@ -4,7 +4,8 @@ import { logError } from '@edx/frontend-platform/logging';
 
 import { getCorporateApi } from '@src/constants';
 import {
-  Catalog, CatalogCourseEnrollment, CatalogInviteResponse, CatalogUpdateRequest, Learner, PaginatedResponse,
+  Catalog, CatalogCourseEnrollment, CatalogInviteResponse, CatalogUpdateRequest,
+  Learner, PaginatedResponse, CatalogBulkInviteResponse,
 } from '../../types';
 
 export const getPartnerCatalogs = async (
@@ -123,7 +124,7 @@ export const postCatalogInviteLearners = async (
 export const postBulkCatalogInviteLearners = async (
   catalogId: string | number,
   data: { csvFile: File },
-): Promise<{ taskId: string }> => {
+): Promise<CatalogBulkInviteResponse> => {
   try {
     const url = getCorporateApi(`manage/catalogs/${catalogId}/invitations/bulk_invite/`);
     const formData = new FormData();
@@ -197,7 +198,7 @@ export const getCatalogEnrrollements = async (
 export const getBulkInviteTaskStatus = async (
   catalogId: string | number,
   taskId: string,
-): Promise<{ status: string, result: any }> => {
+): Promise<CatalogBulkInviteResponse> => {
   try {
     const url = getCorporateApi(`manage/catalogs/${catalogId}/invitations/bulk_task/status/${taskId}/`);
     const response = await getAuthenticatedHttpClient().get(url);

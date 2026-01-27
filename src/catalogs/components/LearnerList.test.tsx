@@ -22,6 +22,7 @@ jest.mock('../data/hooks', () => ({
     mutate: jest.fn(),
     isLoading: false,
   })),
+  useBulkInviteTaskStatus: jest.fn(() => ({ data: undefined })),
 }));
 
 const mockUseNavigate = appHooks.useNavigate as jest.Mock;

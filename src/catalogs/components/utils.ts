@@ -1,3 +1,4 @@
+import { InvitationError } from '@src/types';
 import * as yup from 'yup';
 
 const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([^<>()[\]\\.,;:\s@"]+\.)+[^<>()[\]\\.,;:\s@"]{2,})$/i;
@@ -42,7 +43,7 @@ export const fileUploadStatus = {
 
 export const inviteError = {
   duplicate: 'An active invitation already exists for this user.',
-}
+};
 
 export const dateFormat = (isoDateString) => {
   if (!isoDateString) {
@@ -53,4 +54,32 @@ export const dateFormat = (isoDateString) => {
   const formatted = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} `
     + `${pad(date.getHours())}:${pad(date.getMinutes())}`;
   return formatted;
+};
+
+export const parseEmails = (value?: string): string[] => {
+  if (!value) { return []; }
+
+  return value
+    .split(/[\s,;]+/)
+    .map(email => email.trim())
+    .filter(Boolean);
+};
+
+export const groupInviteErrors = (errors: InvitationError[]) => {
+  const duplicateErrors = errors.filter(err => err.error === inviteError.duplicate);
+  const otherErrors = errors.filter(err => err.error !== inviteError.duplicate);
+
+  const groupedOtherErrors: Record<string, string[]> = {};
+  otherErrors.forEach(err => {
+    if (!groupedOtherErrors[err.error]) {
+      groupedOtherErrors[err.error] = [];
+    }
+    groupedOtherErrors[err.error].push(err.email);
+  });
+
+  return {
+    duplicateErrors,
+    otherErrors,
+    groupedOtherErrors,
+  };
 };

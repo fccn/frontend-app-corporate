@@ -227,7 +227,7 @@ const messages = defineMessages({
   },
   'corporate.catalog.learners.modal.invite.notification.error': {
     id: 'corporate.catalog.learners.modal.invite.notification.error',
-    defaultMessage: '{count, plural, one {Failed to send invitation.} other {Failed to send # invitations.}}',
+    defaultMessage: '{count, plural, one {Failed to send invitation ({email}).} other {Failed to send # invitations ({email}).}}',
     description: 'Error notification for failed invites',
   },
   'corporate.catalog.learners.modal.invite.notification.processing': {
@@ -242,7 +242,7 @@ const messages = defineMessages({
   },
   'corporate.catalog.learners.modal.invite.notification.duplicate': {
     id: 'corporate.catalog.learners.modal.invite.notification.duplicate',
-    defaultMessage: '{count, plural, one {An active invitation already exists for this user {email}} other {Active invitations already exist for # users {email}}}',
+    defaultMessage: '{count, plural, one {An active invitation already exists for one user.} other {Active invitations already exist for # users}}',
     description: 'Error notification for duplicate invites',
   },
   'corporate.catalog.learners.modal.invite.notification.error_details_header': {

@@ -1,7 +1,9 @@
 import {
   useMutation, useQuery, useQueryClient, useSuspenseQuery,
 } from '@tanstack/react-query';
-import { Catalog, CatalogUpdateRequest, UseQueryResult } from '@src/types';
+import {
+  Catalog, CatalogUpdateRequest, UseQueryResult, CatalogInviteResponse, CatalogBulkInviteResponse,
+} from '@src/types';
 import { appId } from '@src/constants';
 import { useParams } from 'wouter';
 import {
@@ -12,6 +14,7 @@ import {
   deleteLearnersFromCatalog,
   getBulkInviteTaskStatus,
 } from './api';
+import { fileUploadStatus } from '../components/utils';
 
 const queryKey = {
   all: [appId, 'catalogs'],
@@ -23,8 +26,8 @@ const queryKey = {
     ordering?: string,
     search?: string,
   ) => [
-      ...queryKey.catalogLists(), partnerId, pageIndex, pageSize, ordering, search,
-    ],
+    ...queryKey.catalogLists(), partnerId, pageIndex, pageSize, ordering, search,
+  ],
   catalogDetail: (catalogSlug: string) => [...queryKey.all, 'detail', catalogSlug],
   catalogLearners: () => [...queryKey.all, 'learners'],
   catalogLearnersList: (
@@ -35,8 +38,8 @@ const queryKey = {
     search?: string,
     active?: string,
   ) => [
-      ...queryKey.catalogLearners(), catalogId, pageIndex, pageSize, ordering, search, active,
-    ],
+    ...queryKey.catalogLearners(), catalogId, pageIndex, pageSize, ordering, search, active,
+  ],
   catalogEnrollments: () => [...queryKey.all, 'enrollments'],
   catalogEnrollmentsList: (
     catalogId: string,
@@ -46,8 +49,8 @@ const queryKey = {
     search?: string,
     active?: string,
   ) => [
-      ...queryKey.catalogEnrollments(), catalogId, pageIndex, pageSize, ordering, search, active,
-    ],
+    ...queryKey.catalogEnrollments(), catalogId, pageIndex, pageSize, ordering, search, active,
+  ],
 };
 
 /**
@@ -183,13 +186,13 @@ export const useInviteLearners = () => {
   const { catalogSlug } = useParams<{ catalogSlug: string }>();
 
   return useMutation({
-    mutationFn: async ({ catalogId, data }: { catalogId: string; data: InvitePayload }) => {
-      if (data.emails?.length) {
-        return await postCatalogInviteLearners(catalogId, { inviteEmail: data.emails, catalogId });
-      }
+    mutationFn: async (
+      { catalogId, data }: { catalogId: string; data: InvitePayload },
+    ): Promise<CatalogInviteResponse | CatalogBulkInviteResponse> => {
       if (data.csvFile) {
-        return await postBulkCatalogInviteLearners(catalogId, { csvFile: data.csvFile });
+        return postBulkCatalogInviteLearners(catalogId, { csvFile: data.csvFile });
       }
+      return postCatalogInviteLearners(catalogId, { inviteEmail: data.emails || [], catalogId });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKey.catalogLearners() });
@@ -251,11 +254,14 @@ export const useCatalogEnrollments = ({
   queryFn: () => getCatalogEnrrollements(catalogId, pageIndex, pageSize, ordering, search, active),
 });
 
-/**
- * Hook to check the status of a bulk invite task.
- *
- * @returns mutation function to check status.
- */
-export const useBulkInviteTaskStatus = () => useMutation({
-  mutationFn: async ({ catalogId, taskId }: { catalogId: string; taskId: string }) => getBulkInviteTaskStatus(catalogId, taskId),
+export const useBulkInviteTaskStatus = (
+  catalogId: string,
+  taskId: string | null,
+) => useQuery({
+  queryKey: ['bulkInviteTaskStatus', catalogId, taskId],
+  queryFn: () => getBulkInviteTaskStatus(catalogId, taskId!),
+  enabled: !!taskId,
+  refetchInterval: (query) => (
+    query.state.data?.status === fileUploadStatus.pending
+      || query.state.data?.status === fileUploadStatus.started ? 2000 : false),
 });

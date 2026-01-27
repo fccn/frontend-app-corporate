@@ -140,6 +140,18 @@ export interface CatalogInviteResponse {
   errors?: InvitationError[];
 }
 
+export interface CatalogBulkInviteResponse {
+  taskId: string;
+  status: string;
+  result?: {
+    successCount: number;
+    failedCount: number;
+    failed: InvitationError[];
+    success: Invitation[];
+    total: number;
+  }
+}
+
 // Paragon types
 export interface CellValue<T> {
   row: {
