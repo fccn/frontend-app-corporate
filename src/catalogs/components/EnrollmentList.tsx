@@ -134,7 +134,7 @@ const EnrollmentsList = ({ catalogId }) => {
           Cell: ({ row }) => dateFormat(row.original.user.lastLogin),
         },
         {
-          Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.enrollments']),
+          Header: intl.formatMessage(messages['corporate.catalog.learners.table.header.course']),
           accessor: 'course',
           Cell: CourseNameCell,
 

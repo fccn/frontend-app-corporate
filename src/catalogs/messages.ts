@@ -86,6 +86,11 @@ const messages = defineMessages({
     defaultMessage: 'Accepted At',
     description: 'Header for the accept at column',
   },
+  'corporate.catalog.learners.table.header.course':{
+    id: 'corporate.catalog.learners.table.header.course',
+    defaultMessage: 'Course',
+    description: 'Header for the course header',
+  },
   'corporate.catalog.learners.table.header.last.login': {
     id: 'corporate.catalog.learners.table.header.last.login',
     defaultMessage: 'Last Login Date',
