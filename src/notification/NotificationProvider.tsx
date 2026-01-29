@@ -1,5 +1,5 @@
 import {
-  createContext, useContext, useMemo, useState,
+  createContext, useMemo, useState,
 } from 'react';
 import { Toast } from '@openedx/paragon';
 
@@ -12,7 +12,7 @@ interface ToastProps {
   visible: boolean;
   duration?: number;
 }
-const NotificationContext = createContext<{
+export const NotificationContext = createContext<{
   showNotification:(message: string, type?: ToastType, duration?: number) => void;
 } | null>(null);
 
@@ -53,14 +53,6 @@ const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
       ))}
     </NotificationContext.Provider>
   );
-};
-
-export const useNotification = (): { showNotification: (message: string, type?: 'success' | 'error' | 'info', duration?: number) => void } => {
-  const context = useContext(NotificationContext);
-  if (!context) {
-    throw new Error('useNotification must be used within a NotificationProvider');
-  }
-  return context;
 };
 
 export default NotificationProvider;

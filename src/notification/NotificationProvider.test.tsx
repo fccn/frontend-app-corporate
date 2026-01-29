@@ -3,7 +3,7 @@ import {
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWrapper } from '@src/setupTest';
-import { useNotification } from './NotificationProvider';
+import { useNotification } from '@src/notification';
 
 const TestComponent = () => {
   const { showNotification } = useNotification();
