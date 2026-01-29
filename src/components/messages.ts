@@ -18,7 +18,7 @@ const messages = defineMessages({
   },
   'corporate.copy.success': {
     id: 'corporate.copy.success',
-    defaultMessage: 'Cancel',
+    defaultMessage: 'Copied!',
     description: 'Text for copy text sucess',
   },
   'corporate.copy.error': {
