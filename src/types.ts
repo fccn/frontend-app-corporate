@@ -11,27 +11,23 @@ export type Partner = {
   certified: number;
 };
 
+export interface LearnerUser {
+  username: string;
+  fullName: string;
+  email: string;
+  lastLogin?: string;
+}
+
 export type Learner = {
   id: number;
   active: boolean;
-  user: {
-    id: number;
-    username: string;
-    email: string;
-    fullName: string;
-    lastLogin: string;
-  },
+  user: LearnerUser,
   inviteSentAt: string;
   acceptedAt: string;
   removedAt: string;
   enrollments: number;
   certified: number;
 };
-
-export interface LearnerUser {
-  fullName: string;
-  email: string;
-}
 
 export interface LearnerStatus {
   user: LearnerUser;
