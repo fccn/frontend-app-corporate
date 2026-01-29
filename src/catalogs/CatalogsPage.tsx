@@ -8,8 +8,9 @@ import HeaderDescription from '@src/components/HeaderDescription';
 import { useNavigate } from '@src/hooks';
 import { paths } from '@src/constants';
 import { useEffect } from 'react';
+import { CatalogList } from './catalog-list';
+
 import messages from './messages';
-import CatalogsList from './components/CatalogsList';
 
 const PartnerCatalogsPage = () => {
   const intl = useIntl();
@@ -42,7 +43,7 @@ const PartnerCatalogsPage = () => {
             ]}
           />
 
-          <CatalogsList partnerId={partnerDetails.id} partnerSlug={partnerSlug} />
+          <CatalogList partnerId={partnerDetails.id} partnerSlug={partnerSlug} />
         </>
       )}
     </AppLayout>

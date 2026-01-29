@@ -9,15 +9,15 @@ import HeaderDescription from '@src/components/HeaderDescription';
 import { IconButton, Tab, Tabs } from '@openedx/paragon';
 import { Settings } from '@openedx/paragon/icons';
 import { paths } from '@src/constants';
-import { CatalogSettingsModal } from '@src/catalogs/components/CatalogSettingsModal';
-import LearnerList from '@src/catalogs/components/LearnerList';
-import EnrollmentList from '@src/catalogs/components/EnrollmentList';
-import CoursesList from './components/CoursesList';
-import AppLayout from '../components/AppLayout';
+import AppLayout from '@src/components/AppLayout';
+import { CatalogSettingsModal } from './catalog-settings';
+import { LearnerList } from './learner-list';
+import { EnrollmentList } from './enrollment-list';
+import { CourseList } from './course-list';
 
 import messages from './messages';
 
-const CoursesPage = () => {
+const CatalogDetailPage = () => {
   const intl = useIntl();
   const navigate = useNavigate();
   const { partnerSlug, catalogSlug } = useParams<{
@@ -46,12 +46,12 @@ const CoursesPage = () => {
                 copyableDescription: true,
               }}
               info={[
-                { title: intl.formatMessage(messages['corporate.courses.page.seats']), value: `${catalogDetails.userLimit - catalogDetails.activeLearners} / ${catalogDetails.userLimit}` },
-                { title: intl.formatMessage(messages['corporate.courses.page.learners']), value: catalogDetails.totalLearners },
-                { title: intl.formatMessage(messages['corporate.courses.page.totalCourses']), value: catalogDetails.courses },
-                { title: intl.formatMessage(messages['corporate.courses.page.enrolledUsers']), value: catalogDetails.enrollments },
-                { title: intl.formatMessage(messages['corporate.courses.page.certifiedUsers']), value: catalogDetails.certified },
-                { title: intl.formatMessage(messages['corporate.courses.page.completionRate']), value: `${catalogDetails.completionRate}%` },
+                { title: intl.formatMessage(messages['corporate.catalog.header.info.seats']), value: `${catalogDetails.userLimit - catalogDetails.activeLearners} / ${catalogDetails.userLimit}` },
+                { title: intl.formatMessage(messages['corporate.catalog.header.info.learners']), value: catalogDetails.totalLearners },
+                { title: intl.formatMessage(messages['corporate.catalog.header.info.courses']), value: catalogDetails.courses },
+                { title: intl.formatMessage(messages['corporate.catalog.header.info.enrollments']), value: catalogDetails.enrollments },
+                { title: intl.formatMessage(messages['corporate.catalog.header.info.certified']), value: catalogDetails.certified },
+                { title: intl.formatMessage(messages['corporate.catalog.header.info.completionRate']), value: `${catalogDetails.completionRate}%` },
               ]}
             >
               <CatalogSettingsModal>
@@ -61,13 +61,13 @@ const CoursesPage = () => {
               </CatalogSettingsModal>
             </HeaderDescription>
             <Tabs defaultActiveKey="courses">
-              <Tab eventKey="courses" title={intl.formatMessage(messages['corporate.courses.page.tab.courses'])} alt="Courses Tab">
-                <CoursesList catalogId={catalogDetails.id} catalogName={catalogDetails.name} />
+              <Tab eventKey="courses" title={intl.formatMessage(messages['corporate.catalog.detail.page.tab.courses'])} alt="Courses Tab">
+                <CourseList catalogId={catalogDetails.id} catalogName={catalogDetails.name} />
               </Tab>
-              <Tab eventKey="learners" title={intl.formatMessage(messages['corporate.courses.page.tab.learners'])} alt="Learners Tab">
+              <Tab eventKey="learners" title={intl.formatMessage(messages['corporate.catalog.detail.page.tab.learners'])} alt="Learners Tab">
                 <LearnerList catalogId={catalogDetails.id} catalogName={catalogDetails.name} />
               </Tab>
-              <Tab eventKey="enrollments" title={intl.formatMessage(messages['corporate.courses.page.tab.enrollments'])} alt="Enrollments Tab">
+              <Tab eventKey="enrollments" title={intl.formatMessage(messages['corporate.catalog.detail.page.tab.enrollments'])} alt="Enrollments Tab">
                 <EnrollmentList catalogId={catalogDetails.id} />
               </Tab>
             </Tabs>
@@ -77,4 +77,4 @@ const CoursesPage = () => {
   );
 };
 
-export default CoursesPage;
+export default CatalogDetailPage;

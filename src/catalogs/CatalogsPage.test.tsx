@@ -2,8 +2,7 @@ import { screen, waitFor } from '@testing-library/react';
 import { renderWrapper } from '@src/setupTest';
 import * as wouter from 'wouter';
 import * as partnerHooks from '@src/partner/data/hooks';
-import { useCatalogs } from './data/hooks';
-import PartnerCatalogsPage from './PartnerCatalogsPage';
+import CatalogsPage from './CatalogsPage';
 
 // Mock hooks
 jest.mock('@src/partner/data/hooks', () => ({

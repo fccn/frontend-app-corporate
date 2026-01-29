@@ -158,8 +158,8 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
         pageCount={pageCount}
         data={courses}
         tableActions={[
-          <CourseAddModal catalogId={catalogId} />,
           <DownloadReportButton onClick={handleReportCreation} />,
+          <CourseAddModal catalogId={catalogId} />,
         ]}
         bulkActions={[
           <BulkAction setRowsForDelete={setSelectedRowsForDelete} openDeleteModal={openDeleteModal} />,

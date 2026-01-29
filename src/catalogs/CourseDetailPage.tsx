@@ -3,13 +3,12 @@ import { useParams } from 'wouter';
 import { getConfig } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useNavigate } from '@src/hooks';
-import { useCatalogDetails } from '@src/catalogs/data/hooks';
+import { useCatalogDetails, useCatalogCourseDetails } from './data/hooks';
 import { paths } from '@src/constants';
 
 import HeaderDescription from '@src/components/HeaderDescription';
-import { useCatalogCourseDetails } from './data/hooks';
 import AppLayout from '../components/AppLayout';
-import CourseLernerList from './components/CourseLearnerList';
+import { CourseLearnerList } from './course-detail';
 
 import messages from './messages';
 
@@ -41,13 +40,13 @@ const CourseDetailPage = () => {
                 imageUrl: courseDetails.courseRun.courseImageUrl ? `${getConfig().LMS_BASE_URL}${courseDetails.courseRun.courseImageUrl}` : null,
               }}
               info={[
-                { title: intl.formatMessage(messages['corporate.courses.page.enrolledUsers']), value: courseDetails.enrollments },
-                { title: intl.formatMessage(messages['corporate.courses.page.certifiedUsers']), value: courseDetails.certified },
-                { title: intl.formatMessage(messages['corporate.courses.page.completionRate']), value: `${courseDetails.completionRate}%` },
+                { title: intl.formatMessage(messages['corporate.catalog.header.info.enrollments']), value: courseDetails.enrollments },
+                { title: intl.formatMessage(messages['corporate.catalog.header.info.certified']), value: courseDetails.certified },
+                { title: intl.formatMessage(messages['corporate.catalog.header.info.completionRate']), value: `${courseDetails.completionRate}%` },
               ]}
             />
 
-            <CourseLernerList catalogId={catalogDetails?.id || ''} courseId={courseDetails.courseRun.id} />
+            <CourseLearnerList catalogId={catalogDetails?.id || ''} courseId={courseDetails.courseRun.id} />
           </>
         )}
     </AppLayout>

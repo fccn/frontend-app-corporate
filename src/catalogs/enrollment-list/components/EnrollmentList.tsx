@@ -79,8 +79,8 @@ const EnrollmentsList = ({ catalogId }) => {
       fetchData={fetchData}
       pageCount={data?.numPages || 0}
       tableActions={[
-        <InviteLearnerAction catalogId={catalogId} />,
         <DownloadReportButton onClick={handleReportCreation} />,
+        <InviteLearnerAction catalogId={catalogId} />,
       ]}
       itemCount={data?.count || 0}
       data={data?.results || []}
