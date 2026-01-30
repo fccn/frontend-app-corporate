@@ -18,7 +18,7 @@ const ImageWithSkeleton: FC<ImageWithSkeletonProps> = ({
   return (
     <div>
       {isImageError
-        ? <div style={{ width, height }} className={className ?? 'bg-light-200'} />
+        ? <div style={{ width, height }} className={className ?? 'bg-light-200'} role="img" aria-label={alt} />
         : (
           <img
             src={src}

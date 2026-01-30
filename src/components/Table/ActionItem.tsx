@@ -56,7 +56,7 @@ const ActionItem = ({
     >
       <IconButton
         src={icon}
-        alt={ariaLabel || `${type}-action`}
+        alt={ariaLabel || intl.formatMessage(tooltip)}
         variant={disabled ? 'secondary' : color}
         onClick={disabled ? undefined : onClick}
         className={disabled ? 'disabled' : ''}
