@@ -60,7 +60,7 @@ const HeaderDescription = ({ context, info, children }: HeaderDescriptionProps) 
         <Stack className="justify-content-center">
           <h3 className="mb-0 truncate-1-line">{context.title}</h3>
           <span className="x-small d-inline-flex align-items-center">
-            <span className="w-75 truncate-2-line header-link">{context?.description}</span>
+            <span className="truncate-2-line header-link">{context?.description}</span>
             {context.copyableDescription && (
               <IconButtonWithTooltip
                 invertColors
@@ -76,14 +76,14 @@ const HeaderDescription = ({ context, info, children }: HeaderDescriptionProps) 
         </Stack>
       </Stack>
 
-      <Stack direction="horizontal" gap={2} className="flex-wrap flex-md-nowrap">
+      <Stack direction="horizontal" gap={2} className="flex-wrap flex-md-nowrap text-center">
         {info.map((item, index) => (
           <Fragment key={item.title}>
             <div className="d-flex flex-column">
-              <span className="x-small text-gray">{item.title}</span>
+              <span className="x-small">{item.title}</span>
               <span className="small text-gray">{item.value}</span>
             </div>
-            {index < info.length - 1 && !isSmall && <hr className="border border-left-1 h-25 m-0" />}
+            {index < info.length - 1 && <hr className="border border-left-1 header-splitter m-0" />}
           </Fragment>
         ))}
       </Stack>

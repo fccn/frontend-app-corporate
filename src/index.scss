@@ -58,10 +58,18 @@ button[aria-label="Copy description"] svg {
         right: var(--pgn-spacing-toast-container-gutter-lg);
         left: auto;
     }
+
+    .header-link {
+        max-width: 75%;
+    }
 }
 
 .header-link {
     height: fit-content;
+}
+
+.header-splitter {
+    height: 25px;
 }
 
 input:placeholder-shown {

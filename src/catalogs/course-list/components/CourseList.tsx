@@ -122,13 +122,13 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
       {
         onSuccess: () => {
           showNotification(
-            intl.formatMessage(messages['corporate.courses.notification.position.update.success']),
+            intl.formatMessage(messages['corporate.courses.table.position.notification.update.success']),
             'success',
           );
         },
         onError: () => {
           showNotification(
-            intl.formatMessage(messages['corporate.courses.notification.position.update.error']),
+            intl.formatMessage(messages['corporate.courses.table.position.notification.update.error']),
             'error',
           );
         },

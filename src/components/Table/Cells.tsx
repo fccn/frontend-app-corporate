@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   Hyperlink, Image,
@@ -13,24 +14,28 @@ interface CellNameProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export const CellName = ({
   name, destination, image = null, className,
-}: CellNameProps) => (
-  <Hyperlink
-    className={`d-block ${className || ''} text-body`}
-    destination={destination}
-    isInline
-  >
-    <div className="d-flex align-items-center">
-      {image && (
+}: CellNameProps) => {
+  const [srcImage, setSrcImage] = useState(image);
+  return (
+    <Hyperlink
+      className={`d-block ${className || ''} text-body`}
+      destination={destination}
+      isInline
+    >
+      <div className="d-flex align-items-center">
+        {srcImage && (
         <Image
           alt={`${name} logo`}
-          src={image}
+          src={srcImage}
           className="mr-2 col-lg-3"
+          onError={() => { setSrcImage(null); }}
         />
-      )}
-      <span className="truncate-2-line">{name}</span>
-    </div>
-  </Hyperlink>
-);
+        )}
+        <span className="truncate-2-line">{name}</span>
+      </div>
+    </Hyperlink>
+  );
+};
 
 export const LearnerName = ({ row }) => (
   <div>
@@ -39,9 +44,9 @@ export const LearnerName = ({ row }) => (
     </span>
     {(row.original.user.fullName !== row.original.user.username)
       && (
-      <span className="small text-muted truncate-1-line">
-        {row.original.user.fullName}
-      </span>
+        <span className="small text-muted truncate-1-line">
+          {row.original.user.fullName}
+        </span>
       )}
   </div>
 );
