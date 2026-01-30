@@ -3,10 +3,10 @@ import { useParams } from 'wouter';
 import { getConfig } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useNavigate } from '@src/hooks';
-import { useCatalogDetails, useCatalogCourseDetails } from './data/hooks';
 import { paths } from '@src/constants';
 
 import HeaderDescription from '@src/components/HeaderDescription';
+import { useCatalogDetails, useCatalogCourseDetails } from './data/hooks';
 import AppLayout from '../components/AppLayout';
 import { CourseLearnerList } from './course-detail';
 

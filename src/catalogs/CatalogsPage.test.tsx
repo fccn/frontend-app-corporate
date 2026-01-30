@@ -2,6 +2,7 @@ import { screen, waitFor } from '@testing-library/react';
 import { renderWrapper } from '@src/setupTest';
 import * as wouter from 'wouter';
 import * as partnerHooks from '@src/partner/data/hooks';
+import * as catalogsHooks from '@src/catalogs/catalog-list/data/hooks';
 import CatalogsPage from './CatalogsPage';
 
 // Mock hooks
@@ -9,23 +10,23 @@ jest.mock('@src/partner/data/hooks', () => ({
   usePartnerDetails: jest.fn(),
 }));
 
-jest.mock('@src/catalogs/data/hooks', () => ({
-  useCatalogs: jest.fn(),
-}));
-
 jest.mock('wouter', () => ({
   useParams: jest.fn(),
   useLocation: jest.fn(),
 }));
 
+jest.mock('@src/catalogs/catalog-list/data/hooks', () => ({
+  useCatalogs: jest.fn(),
+}));
+
 const mockUseParams = wouter.useParams as jest.Mock;
 const mockUseLocation = wouter.useLocation as jest.Mock;
 const mockUsePartnerDetails = partnerHooks.usePartnerDetails as jest.Mock;
-const mockUseCatalogs = useCatalogs as jest.Mock;
+const mockUseCatalogs = catalogsHooks.useCatalogs as jest.Mock;
 
-const renderPartnerCatalogsPage = () => renderWrapper(<PartnerCatalogsPage />);
+const renderPartnerCatalogsPage = () => renderWrapper(<CatalogsPage />);
 
-describe('PartnerCatalogsPage', () => {
+describe('CatalogsPage', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockUseParams.mockReturnValue({ partnerSlug: 'test-partner' });

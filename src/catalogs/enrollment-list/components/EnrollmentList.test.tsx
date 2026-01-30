@@ -3,13 +3,6 @@ import { renderWrapper } from '@src/setupTest';
 
 import EnrollmentList from './EnrollmentList';
 
-// Mock wouter
-jest.mock('wouter', () => ({
-  useParams: jest.fn(),
-  useLocation: () => ['/', jest.fn()],
-  Link: ({ children }) => <a>{children}</a>,
-}));
-
 // Mock hooks
 jest.mock('@src/hooks', () => ({
   useNavigate: jest.fn(),

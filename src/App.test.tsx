@@ -3,7 +3,7 @@ import { initializeMockApp } from '@edx/frontend-platform/testing';
 import { renderWrapper } from '@src/setupTest';
 import App from './App';
 
-// Simple wouter mock
+// Mock hooks
 jest.mock('wouter', () => ({
   Route: ({ component: Component }) => (Component ? <Component /> : null),
   Router: ({ children }) => <div data-testid="wouter-router">{children}</div>,
@@ -72,17 +72,21 @@ describe('App', () => {
   });
 
   describe('Providers', () => {
-    it('wraps app with AppProvider without router wrapping', () => {
+    it('wraps app with AppProvider without router wrapping', async () => {
       renderApp({ administrator: true, roles: [] });
 
-      expect(screen.getByText('Corporate Partners')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText('Corporate Partners')).toBeInTheDocument();
+      });
       expect(screen.getByTestId('wouter-router')).toBeInTheDocument();
     });
 
-    it('provides QueryClient with correct default options', () => {
+    it('provides QueryClient with correct default options', async () => {
       renderApp({ administrator: true, roles: [] });
 
-      expect(screen.getByText('Corporate Partners')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText('Corporate Partners')).toBeInTheDocument();
+      });
     });
   });
 });

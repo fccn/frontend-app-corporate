@@ -7,12 +7,12 @@ import { paths, STALE_TIME } from './constants';
 import { useCurrentUser } from './hooks';
 import Loader from './components/Loader';
 import ErrorPage from './components/ErrorPage';
-import NotificationProvider from './components/NotificationProvider';
+import { NotificationProvider } from './notification';
 
 const CorporatePartnerPage = lazy(() => import('@src/partner/CorporatePartnerPage'));
-const PartnerCatalogsPage = lazy(() => import('@src/catalogs/PartnerCatalogsPage'));
-const CoursesPage = lazy(() => import('@src/courses/CoursesPage'));
-const CourseDetailPage = lazy(() => import('@src/courses/CourseDetailPage'));
+const CatalogsPage = lazy(() => import('@src/catalogs/CatalogsPage'));
+const CoursesPage = lazy(() => import('@src/catalogs/CatalogDetailPage'));
+const CourseDetailPage = lazy(() => import('@src/catalogs/CourseDetailPage'));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,7 +33,7 @@ const Router = () => {
     <WouterRouter base={paths.base}>
       <Switch>
         <Route path={paths.partners.path} component={CorporatePartnerPage} />
-        <Route path={paths.catalogs.path} component={PartnerCatalogsPage} />
+        <Route path={paths.catalogs.path} component={CatalogsPage} />
         <Route path={paths.courses.path} component={CoursesPage} />
         <Route path={paths.courseDetail.path} component={CourseDetailPage} />
         <Route path={paths.notFound.path}>

@@ -3,7 +3,7 @@ import { mergeConfig } from '@edx/frontend-platform';
 import { render } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
-import NotificationProvider from './components/NotificationProvider';
+import { NotificationProvider } from './notification';
 
 export const renderWrapper = (children) => {
   const queryClient = new QueryClient({
@@ -29,6 +29,7 @@ mergeConfig({
   LEARNING_PATHS_MFE_URL: process.env.LEARNING_PATHS_MFE_URL || null,
   PUBLIC_PATH: process.env.PUBLIC_PATH || '/',
   LMS_BASE_URL: process.env.LMS_BASE_URL || 'http://localhost:8000',
+  BASE_URL: process.env.LMS_BASE_URL || 'http://apps.localhost:8080',
 }, 'CorporateManagerConfig');
 
 // Mock ResizeObserver

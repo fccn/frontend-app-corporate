@@ -10,13 +10,10 @@ jest.mock('wouter', () => ({
   useLocation: () => ['/', jest.fn()],
 }));
 
-jest.mock('@src/catalogs/data/hooks', () => ({
+jest.mock('./data/hooks', () => ({
   useCatalogDetails: () => ({
     catalogDetails: { id: 'catalog-1' },
   }),
-}));
-
-jest.mock('./data/hooks', () => ({
   useCatalogCourseDetails: () => ({
     data: {
       courseRun: {
@@ -29,7 +26,10 @@ jest.mock('./data/hooks', () => ({
       completionRate: 50,
     },
   }),
-  useCourseLearnersStatus: () => ({
+}));
+
+jest.mock('./course-detail/data/hooks', () => ({
+  useCourseLearners: () => ({
     isLoading: false,
     data: {
       count: 2,

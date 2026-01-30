@@ -1,7 +1,7 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWrapper } from '@src/setupTest';
-import CoursesPage from './CoursesPage';
+import CatalogDetailPage from './CatalogDetailPage';
 
 // Mock wouter
 jest.mock('wouter', () => ({
@@ -30,6 +30,9 @@ jest.mock('@src/catalogs/data/hooks', () => ({
       completionRate: '75%',
     },
   })),
+}));
+
+jest.mock('@src/catalogs/learner-list/data/hooks', () => ({
   useCatalogLearners: jest.fn(() => ({
     data: {
       results: [],
@@ -38,14 +41,41 @@ jest.mock('@src/catalogs/data/hooks', () => ({
     },
     isLoading: false,
   })),
-  useInviteLearners: jest.fn(() => ({
-    mutate: jest.fn(),
-    isLoading: false,
-  })),
   useRemoveLearners: jest.fn(() => ({
     mutate: jest.fn(),
     isLoading: false,
   })),
+}));
+
+jest.mock('@src/catalogs/course-list/data/hooks', () => ({
+  useCatalogCourses: jest.fn(() => ({
+    data: {
+      courses: [],
+      count: 0,
+      pageCount: 1,
+    },
+    isLoading: false,
+  })),
+  useUpdateCatalogCourse: jest.fn(() => ({
+    mutate: jest.fn(),
+  })),
+  useAvailableCourses: jest.fn(() => ({
+    data: {
+      base: [],
+      organization: [],
+    },
+    isLoading: false,
+  })),
+  useAddCoursesToCatalog: jest.fn(() => ({
+    mutate: jest.fn(),
+    isPending: false,
+  })),
+  useDeleteCatalogCourse: jest.fn(() => ({
+    mutate: jest.fn(),
+  })),
+}));
+
+jest.mock('@src/catalogs/enrollment-list/data/hooks', () => ({
   useCatalogEnrollments: jest.fn(() => ({
     data: {
       results: [],
@@ -54,7 +84,20 @@ jest.mock('@src/catalogs/data/hooks', () => ({
     },
     isLoading: false,
   })),
+}));
+
+jest.mock('@src/catalogs/invite-learners/data/hooks', () => ({
   useBulkInviteTaskStatus: jest.fn(() => ({ data: undefined })),
+  useInviteLearners: jest.fn(() => ({
+    mutate: jest.fn(),
+    isLoading: false,
+  })),
+}));
+
+jest.mock('@src/notification', () => ({
+  useNotification: () => ({
+    showNotification: jest.fn(),
+  }),
 }));
 
 jest.mock('@src/partner/data/hooks', () => ({
@@ -67,7 +110,6 @@ jest.mock('@src/partner/data/hooks', () => ({
   }),
 }));
 
-// Mock hooks used by child components
 jest.mock('@src/hooks', () => ({
   useNavigate: () => jest.fn(),
   usePagination: () => ({
@@ -82,29 +124,15 @@ jest.mock('@src/hooks', () => ({
   }),
 }));
 
-jest.mock('./data/hooks', () => ({
-  useCatalogCourses: () => ({
-    data: {
-      courses: [],
-      count: 0,
-      pageCount: 0,
-    },
-    isLoading: false,
-  }),
-  useDeleteCatalogCourse: () => jest.fn(),
-  useAddCoursesToCatalog: () => jest.fn(),
-  useUpdateCatalogCourse: () => jest.fn(),
-  useAvailableCourses: () => jest.fn(),
-}));
-const renderCoursesPage = () => renderWrapper(<CoursesPage />);
+const renderCatalogDetailPage = () => renderWrapper(<CatalogDetailPage />);
 
-describe('CoursesPage', () => {
+describe('CatalogDetailPage', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   it('renders the page with catalog details', async () => {
-    renderCoursesPage();
+    renderCatalogDetailPage();
 
     await waitFor(() => {
       expect(screen.getByText('Test Catalog')).toBeInTheDocument();
@@ -113,19 +141,19 @@ describe('CoursesPage', () => {
   });
 
   it('displays catalog information in header', async () => {
-    renderCoursesPage();
+    renderCatalogDetailPage();
 
     await waitFor(() => {
       expect(screen.getByText('Test Catalog')).toBeInTheDocument();
       expect(screen.getByText('Available Seats')).toBeInTheDocument();
       expect(screen.getByText('50 / 100')).toBeInTheDocument();
-      expect(screen.getByText('Total Learners')).toBeInTheDocument();
+      expect(screen.getByText('Learners', { selector: 'span' })).toBeInTheDocument();
       expect(screen.getByText('75')).toBeInTheDocument();
     });
   });
 
   it('renders tabs for courses, learners, and enrollments', async () => {
-    renderCoursesPage();
+    renderCatalogDetailPage();
 
     await waitFor(() => {
       const tabElements = screen.getAllByRole('tab');
@@ -139,7 +167,7 @@ describe('CoursesPage', () => {
   });
 
   it('renders CoursesList component in courses tab', async () => {
-    renderCoursesPage();
+    renderCatalogDetailPage();
 
     await waitFor(() => {
       // Check for elements that indicate CoursesList is rendered
@@ -149,7 +177,7 @@ describe('CoursesPage', () => {
 
   it('renders LearnerList component in learners tab', async () => {
     const user = userEvent.setup();
-    renderCoursesPage();
+    renderCatalogDetailPage();
 
     // Switch to learners tab
     const learnersTab = screen.getByRole('tab', { name: /learners/i });
@@ -162,7 +190,7 @@ describe('CoursesPage', () => {
   });
 
   it('includes settings button in header', async () => {
-    renderCoursesPage();
+    renderCatalogDetailPage();
 
     await waitFor(() => {
       const settingsButton = screen.getByRole('button', { name: /edit catalog/i });
@@ -171,7 +199,7 @@ describe('CoursesPage', () => {
   });
 
   it('passes correct props to CoursesList', async () => {
-    renderCoursesPage();
+    renderCatalogDetailPage();
 
     await waitFor(() => {
       expect(screen.getByPlaceholderText('Search by course name')).toBeInTheDocument();
@@ -179,7 +207,7 @@ describe('CoursesPage', () => {
   });
 
   it('displays correct back path', async () => {
-    renderCoursesPage();
+    renderCatalogDetailPage();
 
     await waitFor(() => {
       // The back button should be present
@@ -188,7 +216,7 @@ describe('CoursesPage', () => {
   });
 
   it('shows alternative link when available', async () => {
-    renderCoursesPage();
+    renderCatalogDetailPage();
 
     await waitFor(() => {
       // The alternative link should be displayed in the header

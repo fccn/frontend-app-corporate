@@ -11,7 +11,7 @@ export const getCourseLearners = async (
   pageSize: number,
   ordering?: string,
   search?: string,
-): Promise<PaginatedResponse<LearnerStatus[]>> => {
+): Promise<PaginatedResponse<LearnerStatus>> => {
   try {
     const url = new URL(getCorporateApi(`manage/catalogs/${catalogId}/courses/${courseId}/enrollments/`));
     url.searchParams.append('page', pageIndex.toString());
