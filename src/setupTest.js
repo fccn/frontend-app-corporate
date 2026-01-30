@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { mergeConfig } from '@edx/frontend-platform';
-import { render } from '@testing-library/react';
+import { render, renderHook } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { NotificationProvider } from './notification';
@@ -23,6 +23,27 @@ export const renderWrapper = (children) => {
       </QueryClientProvider>
     </IntlProvider>,
   );
+};
+
+export const renderHookWrapper = (hook) => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
+    },
+  });
+  return renderHook(hook, {
+    wrapper: ({ children }) => (
+      <IntlProvider locale="en">
+        <QueryClientProvider client={queryClient}>
+          <NotificationProvider>
+            {children}
+          </NotificationProvider>
+        </QueryClientProvider>
+      </IntlProvider>
+    ),
+  });
 };
 
 mergeConfig({
