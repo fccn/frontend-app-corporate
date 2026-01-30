@@ -1,6 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { appId } from '@src/constants';
 import { Course, UseQueryResult } from '@src/types';
+import { queryKey as catalogsQueryKey } from '@src/catalogs/data/hooks';
+import { queryKey as enrollmentsQueryKey } from '@src/catalogs/enrollment-list';
+import { useParams } from 'wouter';
 import {
   getCourses, deleteCourse, updateCourse, getAvailableCourses,
   addCoursesToCatalog,
@@ -96,6 +99,7 @@ export const useCatalogCourses = (
 
 export const useDeleteCatalogCourse = () => {
   const queryClient = useQueryClient();
+  const { catalogSlug } = useParams<{ catalogSlug: string; }>();
 
   return useMutation({
     mutationFn: async ({
@@ -112,6 +116,12 @@ export const useDeleteCatalogCourse = () => {
       });
       queryClient.invalidateQueries({
         queryKey: queryKey.availableCourses(variables.catalogId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: catalogsQueryKey.catalogDetail(catalogSlug),
+      });
+      queryClient.invalidateQueries({
+        queryKey: enrollmentsQueryKey.catalogEnrollments(),
       });
     },
   });
@@ -213,6 +223,7 @@ export const useAvailableCourses = (catalogId: string, isOpen: boolean) => useQu
 
 export const useAddCoursesToCatalog = () => {
   const queryClient = useQueryClient();
+  const { catalogSlug } = useParams<{ catalogSlug: string; }>();
 
   return useMutation({
     mutationFn: ({ catalogId, courseIds }: {
@@ -222,6 +233,9 @@ export const useAddCoursesToCatalog = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: queryKey.courseLists(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: catalogsQueryKey.catalogDetail(catalogSlug),
       });
     },
     onSettled: (_, __, variables) => {

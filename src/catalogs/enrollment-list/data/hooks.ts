@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { appId } from '@src/constants';
 import { getCatalogEnrrollements } from './api';
 
-const queryKey = {
+export const queryKey = {
   all: [appId, 'catalogs'],
   catalogEnrollments: () => [...queryKey.all, 'enrollments'],
   catalogEnrollmentsList: (
