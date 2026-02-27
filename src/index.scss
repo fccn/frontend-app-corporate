@@ -57,3 +57,8 @@ button[aria-label="Copy description"] svg {
 .header-link {
     height: fit-content;
 }
+
+.aspects-sidebar-embed-container > iframe {
+    width: 100%;
+    border: 0;
+}

@@ -20,7 +20,7 @@
     "i18n_extract": "fedx-scripts formatjs extract --include=plugins",
     "lint": "fedx-scripts eslint --ext .js --ext .jsx --ext .ts --ext .tsx .",
     "start": "fedx-scripts webpack-dev-server --progress",
-    "dev": "PUBLIC_PATH=/corporate-manager/ MFE_CONFIG_API_URL='http://local.openedx.io:8000/api/mfe_config/v1' fedx-scripts webpack-dev-server --progress --host apps.local.openedx.io",
+    "dev": "PUBLIC_PATH=/corporate-manager/ MFE_CONFIG_API_URL='http://local.openedx.io:8000/api/mfe_config/v1' fedx-scripts webpack-dev-server --progress --host apps.lms.local.openedx.io",
     "test": "TZ=UTC fedx-scripts jest --coverage --passWithNoTests",
     "test:ci": "TZ=UTC fedx-scripts jest --silent --coverage --passWithNoTests",
     "types": "tsc --noEmit"
@@ -33,6 +33,7 @@
     "@openedx/brand": "github:@fccn/brand-nau",
     "@openedx/frontend-plugin-framework": "^1.7.0",
     "@openedx/paragon": "^23.15.1",
+    "@superset-ui/embedded-sdk": "^0.3.0",
     "@tanstack/react-query": "^5.83.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

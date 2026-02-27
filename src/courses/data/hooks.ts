@@ -56,16 +56,16 @@ const queryKey = {
 
 export const useCatalogCourses = (
   catalogId: string,
-  pageIndex: number,
-  pageSize: number,
+  pageIndex?: number,
+  pageSize?: number,
   ordering?: string,
   search?: string,
 ): UseQueryResult<{ courses: Course[]; count: number; pageCount?: number }> => {
   const {
-    data, isLoading, isError, error, isSuccess,
+    data, isError, error, isSuccess, isPending,
   } = useQuery({
     queryKey: queryKey.courseList(catalogId, pageIndex, pageSize, ordering, search),
-    queryFn: () => getCourses(catalogId, pageIndex, pageSize, ordering, search),
+    queryFn: () => getCourses(catalogId, pageIndex || 1, pageSize || 10, ordering, search),
     enabled: !!catalogId,
   });
 
@@ -75,7 +75,7 @@ export const useCatalogCourses = (
       count: data?.count || 0,
       pageCount: data?.numPages,
     },
-    isLoading,
+    isLoading: isPending,
     isError,
     error,
     isSuccess,
