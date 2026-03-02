@@ -51,6 +51,11 @@ const messages = defineMessages({
     defaultMessage: 'Enrollments',
     description: 'Catalog detail page tab title for enrollments',
   },
+  'corporate.courses.page.tab.analytics': {
+    id: 'corporate.courses.page.tab.analytics',
+    defaultMessage: 'Analytics',
+    description: 'Tab title for analytics',
+  },
   'corporate.tables.action.download.report': {
     id: 'corporate.tables.action.download.report',
     defaultMessage: 'Download Report',

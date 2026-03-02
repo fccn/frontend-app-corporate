@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useParams } from 'wouter';
 import { getConfig } from '@edx/frontend-platform';
+import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { useNavigate } from '@src/hooks';
 import { useCatalogDetails } from '@src/catalogs/data/hooks';
@@ -16,9 +17,11 @@ import { EnrollmentList } from './enrollment-list';
 import { CourseList } from './course-list';
 
 import messages from './messages';
+import AnalyticsTab from './analytics-tab';
 
 const CatalogDetailPage = () => {
   const intl = useIntl();
+  const { administrator } = getAuthenticatedUser();
   const navigate = useNavigate();
   const { partnerSlug, catalogSlug } = useParams<{
     partnerSlug: string,
@@ -70,6 +73,11 @@ const CatalogDetailPage = () => {
               <Tab eventKey="enrollments" title={intl.formatMessage(messages['corporate.catalog.detail.page.tab.enrollments'])} alt="Enrollments Tab">
                 <EnrollmentList catalogId={catalogDetails.id} />
               </Tab>
+              {administrator && (
+              <Tab eventKey="analytics" title={intl.formatMessage(messages['corporate.courses.page.tab.analytics'])} alt="Analytics Tab">
+                <AnalyticsTab catalogId={catalogDetails.id} />
+              </Tab>
+              )}
             </Tabs>
           </>
         )}

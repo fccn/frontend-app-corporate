@@ -80,3 +80,8 @@ input:placeholder-shown {
     pointer-events: none;
     background-color: var(--pgn-color-form-input-bg-disabled);
 }
+
+.aspects-sidebar-embed-container > iframe {
+    width: 100%;
+    border: 0;
+}
