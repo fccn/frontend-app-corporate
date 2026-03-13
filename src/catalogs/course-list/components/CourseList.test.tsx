@@ -91,7 +91,7 @@ describe('CoursesList', () => {
   it('renders action buttons for each course', () => {
     renderWrapper(<CoursesList catalogId="c1" catalogName="Catalog 1" />);
     // There should be at least one button for each action per course
-    expect(screen.getAllByRole('button', { name: /action/i }).length).toBeGreaterThanOrEqual(2);
+    expect(screen.getAllByRole('button', { name: /view|delete/i }).length).toBeGreaterThanOrEqual(2);
   });
 
   it('shows loading state if data is still loading', () => {

@@ -170,7 +170,7 @@ describe('LearnerList', () => {
     renderLearnerList();
 
     await waitFor(() => {
-      const deleteButtons = screen.getAllByLabelText('delete-action');
+      const deleteButtons = screen.getAllByLabelText(/delete/i);
       expect(deleteButtons).toHaveLength(2);
     });
   });
