@@ -2,6 +2,7 @@ import {
   FC, useEffect, useRef, useState,
 } from 'react';
 import { embedDashboard, EmbeddedDashboard, Size } from '@superset-ui/embedded-sdk';
+import { useParams } from 'wouter';
 import { fetchGuestToken } from './data/api';
 
 interface AnalyticsIframeProps {
@@ -12,6 +13,8 @@ const AnalyticsIframe: FC<AnalyticsIframeProps> = ({ catalogId }) => {
   const containerDiv = useRef(null);
   const [containerHeight, setContainerHeight] = useState<number>(0);
   const [count, setCount] = useState(0);
+
+  const { courseId } = useParams<{ courseId: string }>();
 
   useEffect(() => {
     // Hide the dashboard when navigating
@@ -48,9 +51,7 @@ const AnalyticsIframe: FC<AnalyticsIframeProps> = ({ catalogId }) => {
           id: 'bcb741a1-a100-51f7-803c-6a3b607eb047',
           supersetDomain: 'http://superset.local.openedx.io:8088/',
           mountPoint: containerDiv.current,
-          fetchGuestToken: () => fetchGuestToken({
-            catalog_id: catalogId,
-          }),
+          fetchGuestToken: () => fetchGuestToken(courseId),
           dashboardUiConfig: {
             hideTitle: true,
             hideChartControls: true,
