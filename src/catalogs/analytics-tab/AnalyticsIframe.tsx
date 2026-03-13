@@ -3,6 +3,7 @@ import {
 } from 'react';
 import { embedDashboard, EmbeddedDashboard, Size } from '@superset-ui/embedded-sdk';
 import { useParams } from 'wouter';
+import { getConfig } from '@edx/frontend-platform';
 import { fetchGuestToken } from './data/api';
 
 interface AnalyticsIframeProps {
@@ -48,8 +49,8 @@ const AnalyticsIframe: FC<AnalyticsIframeProps> = ({ catalogId }) => {
 
       try {
         iframe = await embedDashboard({
-          id: 'bcb741a1-a100-51f7-803c-6a3b607eb047',
-          supersetDomain: 'http://superset.local.openedx.io:8088/',
+          id: getConfig().SUPERSET_DASHBOARD_ID,
+          supersetDomain: getConfig().SUPERSET_HOST,
           mountPoint: containerDiv.current,
           fetchGuestToken: () => fetchGuestToken(courseId),
           dashboardUiConfig: {
