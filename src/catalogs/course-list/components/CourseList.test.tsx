@@ -29,6 +29,14 @@ jest.mock('@src/catalogs/hooks/useDownloadReport', () => ({
   }),
 }));
 
+jest.mock('../data/hooks', () => ({
+  useCatalogCourses: jest.fn(),
+  useDeleteCatalogCourse: jest.fn(),
+  useAvailableCourses: jest.fn(),
+  useAddCoursesToCatalog: jest.fn(),
+  useUpdateCatalogCourse: jest.fn(),
+}));
+
 const mockCourses = [
   {
     id: 1,
