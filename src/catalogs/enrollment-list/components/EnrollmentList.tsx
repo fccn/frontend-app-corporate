@@ -9,6 +9,7 @@ import { usePagination, useTableSortFilter } from '@src/hooks';
 import { InviteLearnerAction } from '@src/catalogs/invite-learners';
 
 import { DownloadReportButton } from '@src/catalogs/components';
+import { useDownloadReport } from '@src/catalogs/hooks/useDownloadReport';
 import { useCatalogEnrollments } from '../data/hooks';
 import { dateFormat } from '../../utils';
 
@@ -58,7 +59,14 @@ const EnrollmentsList = ({ catalogId }) => {
     active: searchParams.active,
   });
 
-  const handleReportCreation = () => {}; // TODO implement once the backend is updated.
+  const downloadEnrollmentsReport = useDownloadReport({
+    endpoint: `manage/catalogs/${catalogId}/enrollments/`,
+    filename: 'enrollments_report.csv',
+  });
+
+  const handleReportCreation = () => {
+    downloadEnrollmentsReport.mutate();
+  };
 
   return (
     <DataTable
@@ -79,7 +87,7 @@ const EnrollmentsList = ({ catalogId }) => {
       fetchData={fetchData}
       pageCount={data?.numPages || 0}
       tableActions={[
-        <DownloadReportButton onClick={handleReportCreation} />,
+        <DownloadReportButton onClick={handleReportCreation} disabled={downloadEnrollmentsReport.isPending} />,
         <InviteLearnerAction catalogId={catalogId} />,
       ]}
       itemCount={data?.count || 0}

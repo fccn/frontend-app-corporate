@@ -10,25 +10,29 @@ import {
 } from '@src/components/Table/';
 import { usePagination, useTableSortFilter } from '@src/hooks';
 
-import { SaveAlt } from '@openedx/paragon/icons';
 import { InviteLearnerAction } from '@src/catalogs/invite-learners';
+import { DownloadReportButton } from '@src/catalogs/components';
 import { dateFormat } from '@src/catalogs/utils';
+import { useDownloadReport } from '@src/catalogs/hooks/useDownloadReport';
 import { useCatalogLearners } from '../data/hooks';
 import LearnerDeleteModal from './LearnerDeleteModal';
 
 import messages from '../messages';
 
-const TableAction = ({ catalogId }: { catalogId: string }) => {
-  const intl = useIntl();
-  return (
-    <>
-      <InviteLearnerAction catalogId={catalogId} />
-      <Button iconBefore={SaveAlt} size="sm">
-        {intl.formatMessage(messages['corporate.catalog.learners.table.action.download.report'])}
-      </Button>
-    </>
-  );
-};
+const TableAction = ({
+  catalogId,
+  onDownloadReport,
+  isDownloadPending,
+}: {
+  catalogId: string;
+  onDownloadReport: () => void;
+  isDownloadPending?: boolean;
+}) => (
+  <>
+    <InviteLearnerAction catalogId={catalogId} />
+    <DownloadReportButton onClick={onDownloadReport} disabled={isDownloadPending} />
+  </>
+);
 
 type BulkActionProps = {
   selectedFlatRows?: any[];
@@ -91,6 +95,11 @@ const LearnerList = ({ catalogId, catalogName }) => {
     active: searchParams.active,
   });
 
+  const downloadLearnersReport = useDownloadReport({
+    endpoint: `manage/catalogs/${catalogId}/learners/`,
+    filename: 'learners_report.csv',
+  });
+
   const tableActions = [{
     type: 'delete',
     onClick: (learner: Learner) => {
@@ -98,6 +107,10 @@ const LearnerList = ({ catalogId, catalogName }) => {
       openDeleteModal();
     },
   }];
+
+  const handleReportCreation = () => {
+    downloadLearnersReport.mutate();
+  };
 
   return (
     <>
@@ -120,7 +133,11 @@ const LearnerList = ({ catalogId, catalogName }) => {
         fetchData={fetchData}
         pageCount={data?.numPages || 0}
         tableActions={[
-          <TableAction catalogId={catalogId!} />,
+          <TableAction
+            catalogId={catalogId!}
+            onDownloadReport={handleReportCreation}
+            isDownloadPending={downloadLearnersReport.isPending}
+          />,
         ]}
         bulkActions={[
           <BulkAction setRowsForDelete={setSelectedRowsForDelete} openDeleteModal={openDeleteModal} />,

@@ -8,6 +8,7 @@ import {
 import { usePagination, useTableSortFilter } from '@src/hooks';
 
 import { DownloadReportButton } from '@src/catalogs/components';
+import { useDownloadReport } from '@src/catalogs/hooks/useDownloadReport';
 import { useCourseLearners } from '../data/hooks';
 
 import messages from '../messages';
@@ -33,7 +34,14 @@ const CourseLernerList = ({ catalogId, courseId }) => {
     isLoading,
   } = useCourseLearners(catalogId, courseId, pageIndex + 1, pageSize, ordering, searchParams.search);
 
-  const handleReportCreation = () => {}; // TODO implement report logic once the API is updated.
+  const downloadCourseEnrollmentsReport = useDownloadReport({
+    endpoint: `manage/catalogs/${catalogId}/courses/${courseId}/enrollments/`,
+    filename: 'course_enrollments_report.csv',
+  });
+
+  const handleReportCreation = () => {
+    downloadCourseEnrollmentsReport.mutate();
+  };
 
   return (
     <DataTable
@@ -51,7 +59,7 @@ const CourseLernerList = ({ catalogId, courseId }) => {
       fetchData={fetchData}
       pageCount={pageCount}
       tableActions={[
-        <DownloadReportButton onClick={handleReportCreation} />,
+        <DownloadReportButton onClick={handleReportCreation} disabled={downloadCourseEnrollmentsReport.isPending} />,
       ]}
       itemCount={count}
       data={results}

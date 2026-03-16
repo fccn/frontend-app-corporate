@@ -7,13 +7,14 @@ import messages from '../messages';
 
 interface DownloadReportButtonProps {
   onClick: () => void;
+  disabled?: boolean;
 }
 
-const DownloadReportButton = ({ onClick }: DownloadReportButtonProps) => {
+const DownloadReportButton = ({ onClick, disabled = false }: DownloadReportButtonProps) => {
   const intl = useIntl();
 
   return (
-    <Button iconBefore={SaveAlt} size="sm" onClick={onClick}>
+    <Button iconBefore={SaveAlt} size="sm" onClick={onClick} disabled={disabled}>
       {intl.formatMessage(messages['corporate.tables.action.download.report'])}
     </Button>
   );

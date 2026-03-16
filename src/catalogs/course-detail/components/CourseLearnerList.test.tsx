@@ -16,6 +16,14 @@ jest.mock('@src/hooks', () => ({
   }),
 }));
 
+jest.mock('@src/catalogs/hooks/useDownloadReport', () => ({
+  useDownloadReport: jest.fn(() => ({
+    mutate: jest.fn(),
+    mutateAsync: jest.fn(),
+    isPending: false,
+  })),
+}));
+
 jest.mock('../data/hooks', () => ({
   useCourseLearners: jest.fn().mockReturnValue({
     isLoading: false,

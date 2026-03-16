@@ -12,6 +12,14 @@ jest.mock('@src/hooks', () => ({
   useTableSortFilter: jest.fn(),
 }));
 
+jest.mock('@src/catalogs/hooks/useDownloadReport', () => ({
+  useDownloadReport: jest.fn(() => ({
+    mutate: jest.fn(),
+    mutateAsync: jest.fn(),
+    isPending: false,
+  })),
+}));
+
 jest.mock('../data/hooks', () => ({
   useCatalogLearners: jest.fn(),
   useRemoveLearners: jest.fn(() => ({
