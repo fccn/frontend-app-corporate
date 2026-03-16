@@ -13,7 +13,7 @@ export const getCourseLearners = async (
   search?: string,
 ): Promise<PaginatedResponse<LearnerStatus>> => {
   try {
-    const url = new URL(getCorporateApi(`manage/catalogs/${catalogId}/courses/${courseId}/enrollments/`));
+    const url = new URL(getCorporateApi(`manage/catalogs/${catalogId}/courses/${courseId}/enrollments/?active=true`));
     url.searchParams.append('page', pageIndex.toString());
     url.searchParams.append('page_size', pageSize.toString());
     if (ordering) {
