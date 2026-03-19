@@ -26,8 +26,8 @@ import { CORPORATE_MANAGER_ROLE } from './constants';
 
 export const useCurrentUser = () => {
   const { authenticatedUser } = useContext<AppContext>(AppContext);
-  const isAdmin = authenticatedUser.administrator;
-  const isCatalogManager = authenticatedUser.roles.includes(CORPORATE_MANAGER_ROLE);
+  const isAdmin = authenticatedUser?.administrator;
+  const isCatalogManager = authenticatedUser?.roles.includes(CORPORATE_MANAGER_ROLE);
   return {
     user: authenticatedUser,
     isAdmin,

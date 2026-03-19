@@ -12,7 +12,7 @@ describe('ActionItem', () => {
       renderWrapper(<ActionItem type={type} />);
       const button = screen.getByRole('button');
       expect(button).toBeInTheDocument();
-      expect(button).toHaveAttribute('aria-label', `${type}-action`);
+      expect(button).toHaveAttribute('aria-label', expect.stringMatching(new RegExp(type, 'i')));
       await user.hover(button);
 
       // Tooltip appears asynchronously

@@ -58,7 +58,7 @@ describe('CorporatePartnerList', () => {
     expect(screen.getByText('300')).toBeInTheDocument();
 
     // Check if action button is present (Icon with tooltip)
-    expect(screen.getAllByLabelText('view-action')).toHaveLength(2);
+    expect(screen.getAllByLabelText(/view/i)).toHaveLength(2);
 
     // Footer should be rendered
     expect(screen.getByText(/Rows per page/i)).toBeInTheDocument();

@@ -10,6 +10,15 @@ jest.mock('wouter', () => ({
   useLocation: () => ['/', jest.fn()],
 }));
 
+jest.mock('@edx/frontend-platform/auth', () => ({
+  getAuthenticatedUser: jest.fn(() => ({
+    administrator: true,
+    roles: [],
+    username: 'test-user',
+    userId: 1,
+  })),
+}));
+
 jest.mock('./data/hooks', () => ({
   useCatalogDetails: () => ({
     catalogDetails: { id: 'catalog-1' },
