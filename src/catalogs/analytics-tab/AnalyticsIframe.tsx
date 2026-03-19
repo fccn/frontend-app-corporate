@@ -1,5 +1,5 @@
 import {
-  FC, useEffect, useRef, useState,
+  useEffect, useRef, useState,
 } from 'react';
 import { embedDashboard, EmbeddedDashboard, Size } from '@superset-ui/embedded-sdk';
 import { useParams } from 'wouter';
@@ -10,7 +10,7 @@ interface AnalyticsIframeProps {
   catalogId: string
 }
 
-const AnalyticsIframe: FC<AnalyticsIframeProps> = ({ catalogId }) => {
+const AnalyticsIframe = ({ catalogId }: AnalyticsIframeProps) => {
   const containerDiv = useRef(null);
   const [containerHeight, setContainerHeight] = useState<number>(0);
   const [count, setCount] = useState(0);
@@ -76,7 +76,7 @@ const AnalyticsIframe: FC<AnalyticsIframeProps> = ({ catalogId }) => {
   return (
     <div
       ref={containerDiv}
-      className="aspects-sidebar-embed-container d-flex w-100"
+      className="aspects-embed-container d-flex w-100"
       style={{ minHeight: containerHeight }}
     />
   );

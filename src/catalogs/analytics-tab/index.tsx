@@ -1,11 +1,10 @@
-import { FC } from 'react';
 import AnalyticsIframe from './AnalyticsIframe';
 
 interface AnalyticsTabProps {
   catalogId: string
 }
 
-const AnalyticsTab: FC<AnalyticsTabProps> = ({ catalogId }) => (
+const AnalyticsTab = ({ catalogId }: AnalyticsTabProps) => (
   <AnalyticsIframe catalogId={catalogId} />
 );
 

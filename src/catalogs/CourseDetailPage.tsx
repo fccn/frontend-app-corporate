@@ -1,9 +1,8 @@
 import { useEffect } from 'react';
 import { useParams } from 'wouter';
 import { getConfig } from '@edx/frontend-platform';
-import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { useNavigate } from '@src/hooks';
+import { useCurrentUser, useNavigate } from '@src/hooks';
 import { paths } from '@src/constants';
 
 import HeaderDescription from '@src/components/HeaderDescription';
@@ -25,7 +24,7 @@ const CourseDetailPage = () => {
   }>();
   const { data: catalogDetails } = useCatalogDetails({ catalogSlug: catalogSlug! });
   const { data: courseDetails } = useCatalogCourseDetails(catalogDetails?.id || '', courseId || '');
-  const { administrator } = getAuthenticatedUser();
+  const { isAdmin } = useCurrentUser();
 
   useEffect(() => {
     if (catalogDetails === null || courseDetails === null) {
@@ -53,7 +52,7 @@ const CourseDetailPage = () => {
               <Tab eventKey="learners" title={intl.formatMessage(messages['corporate.catalog.detail.page.tab.learners'])} alt="Learners Tab">
                 <CourseLearnerList catalogId={catalogDetails?.id || ''} courseId={courseDetails.courseRun.id} />
               </Tab>
-              {administrator && (
+              {isAdmin && (
               <Tab eventKey="analytics" title={intl.formatMessage(messages['corporate.courses.page.tab.analytics'])} alt="Analytics Tab">
                 <AnalyticsTab />
               </Tab>
