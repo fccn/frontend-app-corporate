@@ -9,7 +9,6 @@ import { usePagination, useTableSortFilter } from '@src/hooks';
 import { InviteLearnerAction } from '@src/catalogs/invite-learners';
 
 import { DownloadReportButton } from '@src/catalogs/components';
-import { useDownloadReport } from '@src/catalogs/hooks/useDownloadReport';
 import { useCatalogEnrollments } from '../data/hooks';
 import { dateFormat } from '../../utils';
 
@@ -59,15 +58,6 @@ const EnrollmentsList = ({ catalogId }) => {
     active: searchParams.active,
   });
 
-  const downloadEnrollmentsReport = useDownloadReport({
-    endpoint: `manage/catalogs/${catalogId}/enrollments/`,
-    filename: 'enrollments_report.csv',
-  });
-
-  const handleReportCreation = () => {
-    downloadEnrollmentsReport.mutate();
-  };
-
   return (
     <DataTable
       isLoading={isLoading}
@@ -87,7 +77,10 @@ const EnrollmentsList = ({ catalogId }) => {
       fetchData={fetchData}
       pageCount={data?.numPages || 0}
       tableActions={[
-        <DownloadReportButton onClick={handleReportCreation} disabled={downloadEnrollmentsReport.isPending} />,
+        <DownloadReportButton
+          endpoint={`manage/catalogs/${catalogId}/enrollments/`}
+          filename="enrollments_report.csv"
+        />,
         <InviteLearnerAction catalogId={catalogId} />,
       ]}
       itemCount={data?.count || 0}

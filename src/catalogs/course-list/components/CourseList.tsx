@@ -11,7 +11,6 @@ import { useNavigate, usePagination, useTableSortFilter } from '@src/hooks';
 import { ActionItem, SearchFilter, TableFooter } from '@src/components/Table';
 
 import { DownloadReportButton } from '@src/catalogs/components';
-import { useDownloadReport } from '@src/catalogs/hooks/useDownloadReport';
 import { useNotification } from '@src/notification';
 import { useCatalogCourses, useUpdateCatalogCourse } from '../data/hooks';
 import CourseAddModal from './CourseAddModal';
@@ -97,10 +96,6 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
   } = useCatalogCourses(catalogId!, pageIndex + 1, pageSize, ordering, searchParams.search);
 
   const updateCatalogCourse = useUpdateCatalogCourse();
-  const downloadCoursesReport = useDownloadReport({
-    endpoint: `manage/catalogs/${catalogId}/courses/`,
-    filename: 'courses_report.csv',
-  });
 
   const positions = Array.from({ length: count || 0 }, (_, i) => i);
   const formatDate = (date: string | null) => {
@@ -141,9 +136,6 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
     );
   };
 
-  const handleReportCreation = () => {
-    downloadCoursesReport.mutate();
-  };
   return (
     <>
       <DataTable
@@ -165,7 +157,10 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
         pageCount={pageCount}
         data={courses}
         tableActions={[
-          <DownloadReportButton onClick={handleReportCreation} disabled={downloadCoursesReport.isPending} />,
+          <DownloadReportButton
+            endpoint={`manage/catalogs/${catalogId}/courses/`}
+            filename="courses_report.csv"
+          />,
           <CourseAddModal catalogId={catalogId} />,
         ]}
         bulkActions={[

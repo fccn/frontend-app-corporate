@@ -4,17 +4,34 @@ import { Button } from '@openedx/paragon';
 import { SaveAlt } from '@openedx/paragon/icons';
 
 import messages from '../messages';
+import { useDownloadReport } from '@src/catalogs/hooks/useDownloadReport';
 
-interface DownloadReportButtonProps {
-  onClick: () => void;
+export interface DownloadReportButtonProps {
+  endpoint: string;
+  filename: string;
+  successMessage?: string;
   disabled?: boolean;
 }
 
-const DownloadReportButton = ({ onClick, disabled = false }: DownloadReportButtonProps) => {
+const DownloadReportButton = ({
+  endpoint,
+  filename,
+  successMessage,
+  disabled = false,
+}: DownloadReportButtonProps) => {
   const intl = useIntl();
 
+  const downloadReport = useDownloadReport({ endpoint, filename, successMessage });
+
+  const isDisabled = disabled || downloadReport.isPending;
+
   return (
-    <Button iconBefore={SaveAlt} size="sm" onClick={onClick} disabled={disabled}>
+    <Button
+      iconBefore={SaveAlt}
+      size="sm"
+      onClick={() => downloadReport.mutate()}
+      disabled={isDisabled}
+    >
       {intl.formatMessage(messages['corporate.tables.action.download.report'])}
     </Button>
   );
