@@ -10,25 +10,29 @@ import {
 } from '@src/components/Table/';
 import { usePagination, useTableSortFilter } from '@src/hooks';
 
-import { SaveAlt } from '@openedx/paragon/icons';
 import { InviteLearnerAction } from '@src/catalogs/invite-learners';
+import { DownloadReportButton } from '@src/catalogs/components';
 import { dateFormat } from '@src/catalogs/utils';
 import { useCatalogLearners } from '../data/hooks';
 import LearnerDeleteModal from './LearnerDeleteModal';
 
 import messages from '../messages';
 
-const TableAction = ({ catalogId }: { catalogId: string }) => {
-  const intl = useIntl();
-  return (
-    <>
-      <InviteLearnerAction catalogId={catalogId} />
-      <Button iconBefore={SaveAlt} size="sm">
-        {intl.formatMessage(messages['corporate.catalog.learners.table.action.download.report'])}
-      </Button>
-    </>
-  );
-};
+const LEARNERS_REPORT_CONFIG = (catalogId: string) => ({
+  endpoint: `manage/catalogs/${catalogId}/learners/`,
+  filename: 'learners_report.csv',
+});
+
+const TableAction = ({
+  catalogId,
+}: {
+  catalogId: string;
+}) => (
+  <>
+    <InviteLearnerAction catalogId={catalogId} />
+    <DownloadReportButton {...LEARNERS_REPORT_CONFIG(catalogId!)} />
+  </>
+);
 
 type BulkActionProps = {
   selectedFlatRows?: any[];

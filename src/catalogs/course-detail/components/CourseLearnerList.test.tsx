@@ -16,6 +16,10 @@ jest.mock('@src/hooks', () => ({
   }),
 }));
 
+jest.mock('@src/catalogs/components', () => ({
+  DownloadReportButton: jest.fn(() => <button type="button">Download Report</button>),
+}));
+
 jest.mock('../data/hooks', () => ({
   useCourseLearners: jest.fn().mockReturnValue({
     isLoading: false,

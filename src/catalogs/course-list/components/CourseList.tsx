@@ -8,15 +8,20 @@ import {
 import { CellValue, Course } from '@src/types';
 import { paths } from '@src/constants';
 import { useNavigate, usePagination, useTableSortFilter } from '@src/hooks';
-import { useNotification } from '@src/notification';
 import { ActionItem, SearchFilter, TableFooter } from '@src/components/Table';
 
 import { DownloadReportButton } from '@src/catalogs/components';
+import { useNotification } from '@src/notification';
 import { useCatalogCourses, useUpdateCatalogCourse } from '../data/hooks';
 import CourseAddModal from './CourseAddModal';
 import CourseDeleteModal from './CourseDeleteModal';
 
 import messages from '../messages';
+
+const COURSES_REPORT_CONFIG = (catalogId: string) => ({
+  endpoint: `manage/catalogs/${catalogId}/courses/`,
+  filename: 'courses_report.csv',
+});
 
 type CoursesCell = CellValue<Course>;
 
@@ -136,7 +141,6 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
     );
   };
 
-  const handleReportCreation = () => {}; // TODO implement once the backend is updated.
   return (
     <>
       <DataTable
@@ -158,7 +162,7 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
         pageCount={pageCount}
         data={courses}
         tableActions={[
-          <DownloadReportButton onClick={handleReportCreation} />,
+          <DownloadReportButton {...COURSES_REPORT_CONFIG(catalogId!)} />,
           <CourseAddModal catalogId={catalogId} />,
         ]}
         bulkActions={[

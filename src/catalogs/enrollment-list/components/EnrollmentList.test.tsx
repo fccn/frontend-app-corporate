@@ -10,6 +10,11 @@ jest.mock('@src/hooks', () => ({
   useTableSortFilter: jest.fn(),
 }));
 
+jest.mock('@src/catalogs/components', () => ({
+  DownloadReportButton: jest.fn(() => <button type="button">Download Report</button>),
+  InviteLearnerAction: jest.fn(() => <button type="button">Invite Learner</button>),
+}));
+
 jest.mock('../data/hooks', () => ({
   useCatalogEnrollments: jest.fn(),
   useInviteLearners: jest.fn(() => ({

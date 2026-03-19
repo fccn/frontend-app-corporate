@@ -21,7 +21,18 @@ jest.mock('wouter', () => ({
   useParams: () => ({ partnerSlug: 'partner1', catalogSlug: 'catalog1' }),
 }));
 
-jest.mock('../data/hooks');
+jest.mock('@src/catalogs/components', () => ({
+  DownloadReportButton: jest.fn(() => <button type="button">Download Report</button>),
+  CourseAddModal: jest.fn(() => null),
+}));
+
+jest.mock('../data/hooks', () => ({
+  useCatalogCourses: jest.fn(),
+  useDeleteCatalogCourse: jest.fn(),
+  useAvailableCourses: jest.fn(),
+  useAddCoursesToCatalog: jest.fn(),
+  useUpdateCatalogCourse: jest.fn(),
+}));
 
 const mockCourses = [
   {
