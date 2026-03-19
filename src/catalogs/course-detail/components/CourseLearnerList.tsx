@@ -12,6 +12,11 @@ import { useCourseLearners } from '../data/hooks';
 
 import messages from '../messages';
 
+const COURSE_ENROLLMENT_REPORT_CONFIG = (catalogId: string, courseId: string) => ({
+  endpoint: `manage/catalogs/${catalogId}/courses/${courseId}/enrollments/`,
+  filename: 'course_enrollments_report.csv',
+});
+
 const searchIds = ['fullName', 'email'];
 const filterMappings = searchIds.reduce((prev, curr) => ({
   ...prev, [curr]: 'search',
@@ -50,8 +55,7 @@ const CourseLernerList = ({ catalogId, courseId }) => {
       pageCount={pageCount}
       tableActions={[
         <DownloadReportButton
-          endpoint={`manage/catalogs/${catalogId}/courses/${courseId}/enrollments/`}
-          filename="course_enrollments_report.csv"
+          {...COURSE_ENROLLMENT_REPORT_CONFIG(catalogId, courseId)}
         />,
       ]}
       itemCount={count}

@@ -14,6 +14,11 @@ import { dateFormat } from '../../utils';
 
 import messages from '../messages';
 
+const ENROLLMENTS_REPORT_CONFIG = (catalogId: string) => ({
+  endpoint: `manage/catalogs/${catalogId}/enrollments/`,
+  filename: 'enrollments_report.csv',
+});
+
 const CourseNameCell = ({ row }) => (
   <div className="small">
     <span className="d-block font-weight-bold truncate-1-line">
@@ -77,10 +82,7 @@ const EnrollmentsList = ({ catalogId }) => {
       fetchData={fetchData}
       pageCount={data?.numPages || 0}
       tableActions={[
-        <DownloadReportButton
-          endpoint={`manage/catalogs/${catalogId}/enrollments/`}
-          filename="enrollments_report.csv"
-        />,
+        <DownloadReportButton {...ENROLLMENTS_REPORT_CONFIG(catalogId)} />,
         <InviteLearnerAction catalogId={catalogId} />,
       ]}
       itemCount={data?.count || 0}

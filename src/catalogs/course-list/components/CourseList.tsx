@@ -18,6 +18,11 @@ import CourseDeleteModal from './CourseDeleteModal';
 
 import messages from '../messages';
 
+const COURSES_REPORT_CONFIG = (catalogId: string) => ({
+  endpoint: `manage/catalogs/${catalogId}/courses/`,
+  filename: 'courses_report.csv',
+});
+
 type CoursesCell = CellValue<Course>;
 
 interface CoursesListProps {
@@ -157,10 +162,7 @@ const CoursesList = ({ catalogId, catalogName }: CoursesListProps) => {
         pageCount={pageCount}
         data={courses}
         tableActions={[
-          <DownloadReportButton
-            endpoint={`manage/catalogs/${catalogId}/courses/`}
-            filename="courses_report.csv"
-          />,
+          <DownloadReportButton {...COURSES_REPORT_CONFIG(catalogId!)} />,
           <CourseAddModal catalogId={catalogId} />,
         ]}
         bulkActions={[

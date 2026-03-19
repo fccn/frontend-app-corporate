@@ -18,6 +18,11 @@ import LearnerDeleteModal from './LearnerDeleteModal';
 
 import messages from '../messages';
 
+const LEARNERS_REPORT_CONFIG = (catalogId: string) => ({
+  endpoint: `manage/catalogs/${catalogId}/learners/`,
+  filename: 'learners_report.csv',
+});
+
 const TableAction = ({
   catalogId,
 }: {
@@ -25,10 +30,7 @@ const TableAction = ({
 }) => (
   <>
     <InviteLearnerAction catalogId={catalogId} />
-    <DownloadReportButton
-      endpoint={`manage/catalogs/${catalogId}/learners/`}
-      filename="learners_report.csv"
-    />
+    <DownloadReportButton {...LEARNERS_REPORT_CONFIG(catalogId!)} />
   </>
 );
 

@@ -3,8 +3,8 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { Button } from '@openedx/paragon';
 import { SaveAlt } from '@openedx/paragon/icons';
 
-import messages from '../messages';
 import { useDownloadReport } from '@src/catalogs/hooks/useDownloadReport';
+import messages from '../messages';
 
 export interface DownloadReportButtonProps {
   endpoint: string;
