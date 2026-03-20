@@ -6,13 +6,13 @@
     "nau",
     "partner"
   ],
-  "homepage": "https://github.com/eduNEXT/frontend-app-nau-corporate-partner-access#readme",
+  "homepage": "https://github.com/fccn/frontend-app-corporate#readme",
   "bugs": {
-    "url": "https://github.com/eduNEXT/frontend-app-nau-corporate-partner-access/issues"
+    "url": "https://github.com/fccn/frontend-app-corporate/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/eduNEXT/frontend-app-nau-corporate-partner-access.git"
+    "url": "git+https://github.com/fccn/frontend-app-corporate.git"
   },
   "license": "AGPL-3.0",
   "scripts": {
