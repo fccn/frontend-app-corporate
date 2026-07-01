@@ -61,9 +61,9 @@ pull_translations:
                translations/paragon/src/i18n/messages:paragon \
                translations/frontend-component-footer/src/i18n/messages:frontend-component-footer \
                translations/frontend-component-header/src/i18n/messages:frontend-component-header \
-               # translations/frontend-app-account/src/i18n/messages:frontend-app-account
+               translations/frontend-app-corporate/src/i18n/messages:frontend-app-corporate
 
-	$(intl_imports) frontend-platform paragon frontend-component-header frontend-component-footer
+	$(intl_imports) frontend-platform paragon frontend-component-header frontend-component-footer frontend-app-corporate
 
 # This target is used by Travis.
 validate-no-uncommitted-package-lock-changes:
