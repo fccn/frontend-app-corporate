@@ -78,7 +78,7 @@ const messages = defineMessages({
   },
   'corporate.courses.modal.add.tab.organization': {
     id: 'corporate.courses.modal.add.tab.organization',
-    defaultMessage: 'Organization Courses',
+    defaultMessage: 'My Organization\'s Courses',
     description: 'Tab title for organization courses',
   },
   'corporate.courses.modal.add.button.add': {
