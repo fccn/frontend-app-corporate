@@ -65,7 +65,7 @@ const AddCourseModal = ({ isOpen, onClose, catalogId }: AddCourseModalProps) => 
     >
       <Container className="min-vh-100">
         <Tabs className="mt-4">
-          <Tab eventKey="all" title="Base Catalog Courses">
+          <Tab eventKey="all" title={intl.formatMessage(messages['corporate.courses.modal.add.tab.base'])}>
             {loadingAll ? <Loader />
               : (
                 <AvailableCoursesList
@@ -75,7 +75,7 @@ const AddCourseModal = ({ isOpen, onClose, catalogId }: AddCourseModalProps) => 
                 />
               )}
           </Tab>
-          <Tab eventKey="current" title="My Organization's Courses">
+          <Tab eventKey="current" title={intl.formatMessage(messages['corporate.courses.modal.add.tab.organization'])}>
             {loadingAll ? <Loader />
               : (
                 <AvailableCoursesList
