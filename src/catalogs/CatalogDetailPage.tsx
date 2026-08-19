@@ -72,7 +72,7 @@ const CatalogDetailPage = () => {
                 <LearnerList catalogId={catalogDetails.id} catalogName={catalogDetails.name} />
               </Tab>
               <Tab eventKey="invitations" title={intl.formatMessage(messages['corporate.catalog.detail.page.tab.invitations'])} alt="Invitations Tab">
-                <InvitationList catalogId={catalogDetails.id} catalogName={catalogDetails.name} />
+                <InvitationList catalogId={catalogDetails.id} />
               </Tab>
               <Tab eventKey="enrollments" title={intl.formatMessage(messages['corporate.catalog.detail.page.tab.enrollments'])} alt="Enrollments Tab">
                 <EnrollmentList catalogId={catalogDetails.id} />

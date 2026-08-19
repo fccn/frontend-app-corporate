@@ -41,7 +41,6 @@ export const useCatalogInvitations = ({
 
 export const useResendInvitation = () => {
   const queryClient = useQueryClient();
-  const { catalogSlug } = useParams<{ catalogSlug: string }>();
 
   return useMutation({
     mutationFn: async ({ catalogId, invitationId }: { catalogId: string; invitationId: number }) => (

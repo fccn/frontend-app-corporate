@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
-  Button, DataTable, useToggle, CheckboxFilter, IconButton, OverlayTrigger, Tooltip,
+  DataTable, useToggle, CheckboxFilter, IconButton, OverlayTrigger, Tooltip,
 } from '@openedx/paragon';
 import { Email, Close } from '@openedx/paragon/icons';
 
@@ -27,7 +27,61 @@ const filterMappings = {
   status: 'status',
 };
 
-const InvitationList = ({ catalogId, catalogName }: { catalogId: string; catalogName: string }) => {
+type ActionCellProps = {
+  row: { original: CatalogInvitation };
+  column: {
+    onResend: (inv: CatalogInvitation) => void;
+    onCancel: (inv: CatalogInvitation) => void;
+  };
+};
+
+const InvitationActionCell = ({ row, column }: ActionCellProps) => {
+  const { formatMessage } = useIntl();
+  const isPending = row.original.status === 'pending';
+  return (
+    <>
+      <OverlayTrigger
+        overlay={<Tooltip id={`resend-${row.original.id}`}>{formatMessage(messages['corporate.catalog.invitations.action.resend'])}</Tooltip>}
+      >
+        <IconButton
+          src={Email}
+          alt={formatMessage(messages['corporate.catalog.invitations.action.resend'])}
+          disabled={!isPending}
+          onClick={isPending ? () => column.onResend(row.original) : undefined}
+        />
+      </OverlayTrigger>
+      <OverlayTrigger
+        overlay={<Tooltip id={`cancel-${row.original.id}`}>{formatMessage(messages['corporate.catalog.invitations.action.cancel'])}</Tooltip>}
+      >
+        <IconButton
+          src={Close}
+          alt={formatMessage(messages['corporate.catalog.invitations.action.cancel'])}
+          variant="danger"
+          disabled={!isPending}
+          onClick={isPending ? () => column.onCancel(row.original) : undefined}
+        />
+      </OverlayTrigger>
+    </>
+  );
+};
+
+const InvitationNameCell = ({ row }: CellValue<CatalogInvitation>) => {
+  const { formatMessage } = useIntl();
+  const { username, fullName, isRegistered } = row.original;
+  if (!isRegistered) {
+    return <span className="text-muted">{formatMessage(messages['corporate.catalog.invitations.not.registered'])}</span>;
+  }
+  return (
+    <div>
+      <span className="d-block truncate-1-line">{username}</span>
+      {fullName && fullName !== username && (
+        <span className="small text-muted truncate-1-line">{fullName}</span>
+      )}
+    </div>
+  );
+};
+
+const InvitationList = ({ catalogId }: { catalogId: string }) => {
   const intl = useIntl();
 
   const [isCancelModalOpen, openCancelModal, closeCancelModal] = useToggle(false);
@@ -92,34 +146,9 @@ const InvitationList = ({ catalogId, catalogName }: { catalogId: string; catalog
           {
             id: 'action',
             Header: intl.formatMessage(messages['corporate.catalog.table.header.action']),
-            Cell: ({ row }: CellValue<CatalogInvitation>) => {
-              const isPending = row.original.status === 'pending';
-              return (
-                <>
-                  <OverlayTrigger
-                    overlay={<Tooltip id={`resend-${row.original.id}`}>{intl.formatMessage(messages['corporate.catalog.invitations.action.resend'])}</Tooltip>}
-                  >
-                    <IconButton
-                      src={Email}
-                      alt={intl.formatMessage(messages['corporate.catalog.invitations.action.resend'])}
-                      disabled={!isPending}
-                      onClick={isPending ? () => handleResend(row.original) : undefined}
-                    />
-                  </OverlayTrigger>
-                  <OverlayTrigger
-                    overlay={<Tooltip id={`cancel-${row.original.id}`}>{intl.formatMessage(messages['corporate.catalog.invitations.action.cancel'])}</Tooltip>}
-                  >
-                    <IconButton
-                      src={Close}
-                      alt={intl.formatMessage(messages['corporate.catalog.invitations.action.cancel'])}
-                      variant="danger"
-                      disabled={!isPending}
-                      onClick={isPending ? () => handleCancel(row.original) : undefined}
-                    />
-                  </OverlayTrigger>
-                </>
-              );
-            },
+            onResend: handleResend,
+            onCancel: handleCancel,
+            Cell: InvitationActionCell,
           },
         ]}
         itemCount={data?.count || 0}
@@ -135,20 +164,7 @@ const InvitationList = ({ catalogId, catalogName }: { catalogId: string; catalog
             disableFilters: false,
             Filter: SearchFilter,
             meta: { searchIds },
-            Cell: ({ row }: CellValue<CatalogInvitation>) => {
-              const { username, fullName, isRegistered } = row.original;
-              if (!isRegistered) {
-                return <span className="text-muted">{intl.formatMessage(messages['corporate.catalog.invitations.not.registered'])}</span>;
-              }
-              return (
-                <div>
-                  <span className="d-block truncate-1-line">{username}</span>
-                  {fullName && fullName !== username && (
-                    <span className="small text-muted truncate-1-line">{fullName}</span>
-                  )}
-                </div>
-              );
-            },
+            Cell: InvitationNameCell,
           },
           {
             Header: intl.formatMessage(messages['corporate.catalog.invitations.table.header.status']),

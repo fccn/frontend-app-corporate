@@ -1,5 +1,4 @@
 import { screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { renderWrapper } from '@src/setupTest';
 import * as appHooks from '@src/hooks';
 import * as hooks from '../data/hooks';

@@ -78,7 +78,7 @@ const InviteLearnerAction = ({ catalogId }: { catalogId: string }) => {
 
       setInviteTaskId(null);
     }
-  }, [data, intl, showNotification]);
+  }, [data, intl, showNotification, queryClient]);
 
   return (
     <>
