@@ -4,9 +4,8 @@ import { Button } from '@openedx/paragon';
 import { PersonAddAlt } from '@openedx/paragon/icons';
 import { useQueryClient } from '@tanstack/react-query';
 
-import { CELERY_STATUS } from '@src/constants';
+import { appId, CELERY_STATUS } from '@src/constants';
 import { useNotification } from '@src/notification';
-import { queryKey as invitationsQueryKey } from '@src/catalogs/invitation-list/data/hooks';
 import { useBulkInviteTaskStatus } from '../data/hooks';
 import { groupInviteErrors } from '../utils';
 import InviteLearnersModal from './InviteLearnersModal';
@@ -49,7 +48,7 @@ const InviteLearnerAction = ({ catalogId }: { catalogId: string }) => {
           ),
           'success',
         );
-        queryClient.invalidateQueries({ queryKey: invitationsQueryKey.catalogInvitations() });
+        queryClient.invalidateQueries({ queryKey: [appId, 'catalogs', 'invitations'] });
       }
 
       if (duplicateErrors.length > 0) {

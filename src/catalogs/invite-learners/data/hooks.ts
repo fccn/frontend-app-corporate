@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { CatalogInviteResponse, CatalogBulkInviteResponse } from '@src/types';
-import { CELERY_STATUS } from '@src/constants';
-import { queryKey as invitationsQueryKey } from '@src/catalogs/invitation-list/data/hooks';
+import { appId, CELERY_STATUS } from '@src/constants';
 import {
   getBulkInviteTaskStatus,
   postBulkCatalogInviteLearners,
@@ -31,7 +30,7 @@ export const useInviteLearners = () => {
     onSuccess: (_data) => {
       const response = _data as CatalogInviteResponse;
       if (!('taskId' in response)) {
-        queryClient.invalidateQueries({ queryKey: invitationsQueryKey.catalogInvitations() });
+        queryClient.invalidateQueries({ queryKey: [appId, 'catalogs', 'invitations'] });
       }
     },
   });
