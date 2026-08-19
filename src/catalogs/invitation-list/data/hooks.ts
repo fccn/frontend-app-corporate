@@ -1,8 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { appId } from '@src/constants';
-import { queryKey as catalogsQueryKey } from '@src/catalogs/data/hooks';
 import { queryKey as learnersQueryKey } from '@src/catalogs/learner-list/data/hooks';
-import { useParams } from 'wouter';
 import { getCatalogInvitations, resendInvitation, cancelInvitation } from './api';
 
 export const queryKey = {
@@ -54,7 +52,6 @@ export const useResendInvitation = () => {
 
 export const useCancelInvitation = () => {
   const queryClient = useQueryClient();
-  const { catalogSlug } = useParams<{ catalogSlug: string }>();
 
   return useMutation({
     mutationFn: async ({ catalogId, invitationId }: { catalogId: string; invitationId: number }) => (
@@ -63,7 +60,6 @@ export const useCancelInvitation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKey.catalogInvitations() });
       queryClient.invalidateQueries({ queryKey: learnersQueryKey.catalogLearners() });
-      queryClient.invalidateQueries({ queryKey: catalogsQueryKey.catalogDetail(catalogSlug) });
     },
   });
 };
