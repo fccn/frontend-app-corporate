@@ -172,8 +172,8 @@ describe('CatalogDetailPage', () => {
       expect(contentTabs).toHaveLength(4);
       expect(contentTabs[0]).toHaveTextContent('Courses');
       expect(contentTabs[1]).toHaveTextContent('Learners');
-      expect(contentTabs[2]).toHaveTextContent('Enrollments');
-      expect(contentTabs[3]).toHaveTextContent('Invitations');
+      expect(contentTabs[2]).toHaveTextContent('Invitations');
+      expect(contentTabs[3]).toHaveTextContent('Enrollments');
     });
   });
 
