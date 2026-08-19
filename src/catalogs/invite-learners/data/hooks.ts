@@ -1,6 +1,8 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { CatalogInviteResponse, CatalogBulkInviteResponse } from '@src/types';
 import { CELERY_STATUS } from '@src/constants';
+import { useQueryClient } from '@tanstack/react-query';
+import { queryKey as invitationsQueryKey } from '@src/catalogs/invitation-list/data/hooks';
 import {
   getBulkInviteTaskStatus,
   postBulkCatalogInviteLearners,
@@ -15,16 +17,26 @@ type InvitePayload = {
 /**
  * Hook to invite learners to a catalog.
  */
-export const useInviteLearners = () => useMutation({
-  mutationFn: async (
-    { catalogId, data }: { catalogId: string; data: InvitePayload },
-  ): Promise<CatalogInviteResponse | CatalogBulkInviteResponse> => {
-    if (data.csvFile) {
-      return postBulkCatalogInviteLearners(catalogId, { csvFile: data.csvFile });
-    }
-    return postCatalogInviteLearners(catalogId, { inviteEmail: data.emails || [], catalogId });
-  },
-});
+export const useInviteLearners = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (
+      { catalogId, data }: { catalogId: string; data: InvitePayload },
+    ): Promise<CatalogInviteResponse | CatalogBulkInviteResponse> => {
+      if (data.csvFile) {
+        return postBulkCatalogInviteLearners(catalogId, { csvFile: data.csvFile });
+      }
+      return postCatalogInviteLearners(catalogId, { inviteEmail: data.emails || [], catalogId });
+    },
+    onSuccess: (_data, variables) => {
+      const response = _data as CatalogInviteResponse;
+      if (!('taskId' in response)) {
+        queryClient.invalidateQueries({ queryKey: invitationsQueryKey.catalogInvitations() });
+      }
+    },
+  });
+};
 
 export const useBulkInviteTaskStatus = (
   catalogId: string,

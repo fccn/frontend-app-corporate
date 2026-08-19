@@ -41,6 +41,31 @@ const messages = defineMessages({
     defaultMessage: 'Inactive',
     description: 'Inactive learner status',
   },
+  'table.invitation.status.pending': {
+    id: 'table.invitation.status.pending',
+    defaultMessage: 'Pending',
+    description: 'Pending invitation status',
+  },
+  'table.invitation.status.accepted': {
+    id: 'table.invitation.status.accepted',
+    defaultMessage: 'Accepted',
+    description: 'Accepted invitation status',
+  },
+  'table.invitation.status.declined': {
+    id: 'table.invitation.status.declined',
+    defaultMessage: 'Declined',
+    description: 'Declined invitation status',
+  },
+  'table.invitation.status.removed': {
+    id: 'table.invitation.status.removed',
+    defaultMessage: 'Removed',
+    description: 'Removed invitation status',
+  },
+  'table.invitation.status.cancelled': {
+    id: 'table.invitation.status.cancelled',
+    defaultMessage: 'Cancelled',
+    description: 'Cancelled invitation status',
+  },
 });
 
 export default messages;

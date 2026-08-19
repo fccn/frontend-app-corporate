@@ -2,9 +2,11 @@ import { useState, useEffect, useRef } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Button } from '@openedx/paragon';
 import { PersonAddAlt } from '@openedx/paragon/icons';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { CELERY_STATUS } from '@src/constants';
 import { useNotification } from '@src/notification';
+import { queryKey as invitationsQueryKey } from '@src/catalogs/invitation-list/data/hooks';
 import { useBulkInviteTaskStatus } from '../data/hooks';
 import { groupInviteErrors } from '../utils';
 import InviteLearnersModal from './InviteLearnersModal';
@@ -14,6 +16,7 @@ import messages from '../messages';
 const InviteLearnerAction = ({ catalogId }: { catalogId: string }) => {
   const intl = useIntl();
   const { showNotification } = useNotification();
+  const queryClient = useQueryClient();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [inviteTaskId, setInviteTaskId] = useState<string | null>(null);
@@ -46,6 +49,7 @@ const InviteLearnerAction = ({ catalogId }: { catalogId: string }) => {
           ),
           'success',
         );
+        queryClient.invalidateQueries({ queryKey: invitationsQueryKey.catalogInvitations() });
       }
 
       if (duplicateErrors.length > 0) {

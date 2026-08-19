@@ -12,6 +12,7 @@ import { paths } from '@src/constants';
 import AppLayout from '@src/components/AppLayout';
 import { CatalogSettingsModal } from './catalog-settings';
 import { LearnerList } from './learner-list';
+import { InvitationList } from './invitation-list';
 import { EnrollmentList } from './enrollment-list';
 import { CourseList } from './course-list';
 
@@ -46,7 +47,10 @@ const CatalogDetailPage = () => {
                 copyableDescription: true,
               }}
               info={[
-                { title: intl.formatMessage(messages['corporate.catalog.header.info.seats']), value: `${catalogDetails.userLimit - catalogDetails.activeLearners} / ${catalogDetails.userLimit}` },
+                {
+                  title: intl.formatMessage(messages['corporate.catalog.header.info.seats']),
+                  value: `${catalogDetails.activeLearners} ${intl.formatMessage(messages['corporate.catalog.header.info.seats.accepted'])} · ${catalogDetails.pendingInvitations ?? 0} ${intl.formatMessage(messages['corporate.catalog.header.info.seats.pending'])} · ${Math.max(0, catalogDetails.userLimit - catalogDetails.activeLearners - (catalogDetails.pendingInvitations ?? 0))} ${intl.formatMessage(messages['corporate.catalog.header.info.seats.free'])} / ${catalogDetails.userLimit}`,
+                },
                 { title: intl.formatMessage(messages['corporate.catalog.header.info.learners']), value: catalogDetails.totalLearners },
                 { title: intl.formatMessage(messages['corporate.catalog.header.info.courses']), value: catalogDetails.courses },
                 { title: intl.formatMessage(messages['corporate.catalog.header.info.enrollments']), value: catalogDetails.enrollments },
@@ -66,6 +70,9 @@ const CatalogDetailPage = () => {
               </Tab>
               <Tab eventKey="learners" title={intl.formatMessage(messages['corporate.catalog.detail.page.tab.learners'])} alt="Learners Tab">
                 <LearnerList catalogId={catalogDetails.id} catalogName={catalogDetails.name} />
+              </Tab>
+              <Tab eventKey="invitations" title={intl.formatMessage(messages['corporate.catalog.detail.page.tab.invitations'])} alt="Invitations Tab">
+                <InvitationList catalogId={catalogDetails.id} catalogName={catalogDetails.name} />
               </Tab>
               <Tab eventKey="enrollments" title={intl.formatMessage(messages['corporate.catalog.detail.page.tab.enrollments'])} alt="Enrollments Tab">
                 <EnrollmentList catalogId={catalogDetails.id} />
