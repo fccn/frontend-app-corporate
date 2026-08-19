@@ -1,7 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { appId } from '@src/constants';
-import { queryKey as learnersQueryKey } from '@src/catalogs/learner-list/data/hooks';
 import { getCatalogInvitations, resendInvitation, cancelInvitation } from './api';
+
+const learnersQueryKeyBase = [appId, 'catalogs', 'learners'];
 
 export const queryKey = {
   all: [appId, 'catalogs'],
@@ -59,7 +60,7 @@ export const useCancelInvitation = () => {
     ),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKey.catalogInvitations() });
-      queryClient.invalidateQueries({ queryKey: learnersQueryKey.catalogLearners() });
+      queryClient.invalidateQueries({ queryKey: learnersQueryKeyBase });
     },
   });
 };
