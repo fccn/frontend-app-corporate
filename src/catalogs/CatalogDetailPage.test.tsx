@@ -94,6 +94,16 @@ jest.mock('@src/catalogs/invite-learners/data/hooks', () => ({
   })),
 }));
 
+jest.mock('@src/catalogs/invitation-list/data/hooks', () => ({
+  useCatalogInvitations: jest.fn(() => ({
+    data: { results: [], count: 0, numPages: 1 },
+    isLoading: false,
+  })),
+  useResendInvitation: jest.fn(() => ({ mutate: jest.fn(), isPending: false })),
+  useCancelInvitation: jest.fn(() => ({ mutate: jest.fn(), isPending: false })),
+  queryKey: { catalogInvitations: jest.fn(() => []) },
+}));
+
 jest.mock('@src/notification', () => ({
   useNotification: () => ({
     showNotification: jest.fn(),
@@ -145,24 +155,25 @@ describe('CatalogDetailPage', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Test Catalog')).toBeInTheDocument();
-      expect(screen.getByText('Available Seats')).toBeInTheDocument();
-      expect(screen.getByText('50 / 100')).toBeInTheDocument();
+      expect(screen.getByText('Seats')).toBeInTheDocument();
+      expect(screen.getByText('50 accepted · 0 pending · 50 free / 100')).toBeInTheDocument();
       expect(screen.getByText('Learners', { selector: 'span' })).toBeInTheDocument();
       expect(screen.getByText('75')).toBeInTheDocument();
     });
   });
 
-  it('renders tabs for courses, learners, and enrollments', async () => {
+  it('renders tabs for courses, learners, enrollments, and invitations', async () => {
     renderCatalogDetailPage();
 
     await waitFor(() => {
       const tabElements = screen.getAllByRole('tab');
       // Filter out the "More..." dropdown tab
       const contentTabs = tabElements.filter(tab => !tab.textContent?.includes('More...'));
-      expect(contentTabs).toHaveLength(3);
+      expect(contentTabs).toHaveLength(4);
       expect(contentTabs[0]).toHaveTextContent('Courses');
       expect(contentTabs[1]).toHaveTextContent('Learners');
       expect(contentTabs[2]).toHaveTextContent('Enrollments');
+      expect(contentTabs[3]).toHaveTextContent('Invitations');
     });
   });
 
