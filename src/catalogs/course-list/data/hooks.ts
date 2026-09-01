@@ -3,6 +3,7 @@ import { appId } from '@src/constants';
 import { Course, UseQueryResult } from '@src/types';
 import { queryKey as catalogsQueryKey } from '@src/catalogs/data/hooks';
 import { queryKey as enrollmentsQueryKey } from '@src/catalogs/enrollment-list';
+import { catalogListQueryKey } from '@src/catalogs/catalog-list';
 import { useParams } from 'wouter';
 import {
   getCourses, deleteCourse, updateCourse, getAvailableCourses,
@@ -123,6 +124,9 @@ export const useDeleteCatalogCourse = () => {
       queryClient.invalidateQueries({
         queryKey: enrollmentsQueryKey.catalogEnrollments(),
       });
+      queryClient.invalidateQueries({
+        queryKey: catalogListQueryKey.catalogLists(),
+      });
     },
   });
 };
@@ -236,6 +240,9 @@ export const useAddCoursesToCatalog = () => {
       });
       queryClient.invalidateQueries({
         queryKey: catalogsQueryKey.catalogDetail(catalogSlug),
+      });
+      queryClient.invalidateQueries({
+        queryKey: catalogListQueryKey.catalogLists(),
       });
     },
     onSettled: (_, __, variables) => {

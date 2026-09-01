@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { appId } from '@src/constants';
 import { queryKey as catalogsQueryKey } from '@src/catalogs/data/hooks';
+import { catalogListQueryKey } from '@src/catalogs/catalog-list';
 import { useParams } from 'wouter';
 import { deleteLearnersFromCatalog, getCatalogsLearners } from './api';
 
@@ -68,6 +69,7 @@ export const useRemoveLearners = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKey.catalogLearners() });
       queryClient.invalidateQueries({ queryKey: catalogsQueryKey.catalogDetail(catalogSlug) });
+      queryClient.invalidateQueries({ queryKey: catalogListQueryKey.catalogLists() });
     },
   });
 };

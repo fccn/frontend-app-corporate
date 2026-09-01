@@ -3,7 +3,7 @@ import { Catalog, UseQueryResult } from '@src/types';
 import { appId } from '@src/constants';
 import { getPartnerCatalogs } from './api';
 
-const queryKey = {
+export const queryKey = {
   all: [appId, 'catalogs'],
   catalogLists: () => [...queryKey.all, 'list'],
   catalogList: (
