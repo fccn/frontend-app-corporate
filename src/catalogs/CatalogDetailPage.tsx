@@ -47,7 +47,7 @@ const CatalogDetailPage = () => {
               }}
               info={[
                 { title: intl.formatMessage(messages['corporate.catalog.header.info.seats']), value: `${catalogDetails.userLimit - catalogDetails.activeLearners} / ${catalogDetails.userLimit}` },
-                { title: intl.formatMessage(messages['corporate.catalog.header.info.learners']), value: catalogDetails.totalLearners },
+                { title: intl.formatMessage(messages['corporate.catalog.header.info.learners']), value: catalogDetails.activeLearners },
                 { title: intl.formatMessage(messages['corporate.catalog.header.info.courses']), value: catalogDetails.courses },
                 { title: intl.formatMessage(messages['corporate.catalog.header.info.enrollments']), value: catalogDetails.enrollments },
                 { title: intl.formatMessage(messages['corporate.catalog.header.info.certified']), value: catalogDetails.certified },
