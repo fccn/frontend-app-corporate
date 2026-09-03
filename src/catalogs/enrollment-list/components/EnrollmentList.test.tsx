@@ -12,6 +12,11 @@ jest.mock('@src/hooks', () => ({
 
 jest.mock('@src/catalogs/components', () => ({
   DownloadReportButton: jest.fn(() => <button type="button">Download Report</button>),
+}));
+
+// EnrollmentList imports InviteLearnerAction from invite-learners, not from catalogs/components.
+// Mock the correct module so that the real hook (useBulkInviteTaskStatus) is never invoked.
+jest.mock('@src/catalogs/invite-learners', () => ({
   InviteLearnerAction: jest.fn(() => <button type="button">Invite Learner</button>),
 }));
 
