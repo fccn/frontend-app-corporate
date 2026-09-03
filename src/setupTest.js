@@ -12,8 +12,9 @@ import { NotificationProvider } from './notification';
 //   • react-bootstrap uses findDOMNode internally
 //   • React Router v6 future-flag warnings surfaced by AppProvider
 // ---------------------------------------------------------------------------
-const _origError = console.error.bind(console);
-const _origWarn = console.warn.bind(console);
+/* eslint-disable no-console */
+const origConsoleError = console.error.bind(console);
+const origConsoleWarn = console.warn.bind(console);
 
 console.error = (...args) => {
   const msg = String(args[0] ?? '');
@@ -21,15 +22,20 @@ console.error = (...args) => {
     msg.includes('Support for defaultProps will be removed from function components')
     || msg.includes('findDOMNode is deprecated')
     || msg.includes('forwardRef render functions do not support propTypes or defaultProps')
-  ) return;
-  _origError(...args);
+  ) {
+    return;
+  }
+  origConsoleError(...args);
 };
 
 console.warn = (...args) => {
   const msg = String(args[0] ?? '');
-  if (msg.includes('React Router Future Flag Warning')) return;
-  _origWarn(...args);
+  if (msg.includes('React Router Future Flag Warning')) {
+    return;
+  }
+  origConsoleWarn(...args);
 };
+/* eslint-enable no-console */
 
 export const renderWrapper = (children) => {
   const queryClient = new QueryClient({
