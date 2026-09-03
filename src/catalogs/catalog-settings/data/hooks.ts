@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { CatalogUpdateRequest } from '@src/types';
 import { queryKey as catalogsQueryKey } from '@src/catalogs/data/hooks';
+import { catalogListQueryKey } from '@src/catalogs/catalog-list';
 import { updateCatalog } from './api';
 
 /**
@@ -27,6 +28,9 @@ export const useUpdateCatalog = () => {
           catalogsQueryKey.catalogDetail(data.slug),
           data,
         );
+        queryClient.invalidateQueries({
+          queryKey: catalogListQueryKey.catalogLists(),
+        });
       }
     },
   });

@@ -3,7 +3,7 @@ import { Partner, UseQueryResult } from '@src/types';
 import { appId } from '@src/constants';
 import { getPartnerDetails, getPartners } from './api';
 
-const queryKey = {
+export const queryKey = {
   all: [appId, 'partners'],
   partnerLists: () => [...queryKey.all, 'list'],
   partnerList: (

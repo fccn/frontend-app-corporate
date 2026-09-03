@@ -4,6 +4,7 @@ import { Course, UseQueryResult } from '@src/types';
 import { queryKey as catalogsQueryKey } from '@src/catalogs/data/hooks';
 import { queryKey as enrollmentsQueryKey } from '@src/catalogs/enrollment-list';
 import { catalogListQueryKey } from '@src/catalogs/catalog-list';
+import { queryKey as partnerQueryKey } from '@src/partner/data/hooks';
 import { useParams } from 'wouter';
 import {
   getCourses, deleteCourse, updateCourse, getAvailableCourses,
@@ -100,7 +101,7 @@ export const useCatalogCourses = (
 
 export const useDeleteCatalogCourse = () => {
   const queryClient = useQueryClient();
-  const { catalogSlug } = useParams<{ catalogSlug: string; }>();
+  const { catalogSlug, partnerSlug } = useParams<{ catalogSlug: string; partnerSlug: string }>();
 
   return useMutation({
     mutationFn: async ({
@@ -126,6 +127,9 @@ export const useDeleteCatalogCourse = () => {
       });
       queryClient.invalidateQueries({
         queryKey: catalogListQueryKey.catalogLists(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: partnerQueryKey.partnerDetails(partnerSlug),
       });
     },
   });
@@ -227,7 +231,7 @@ export const useAvailableCourses = (catalogId: string, isOpen: boolean) => useQu
 
 export const useAddCoursesToCatalog = () => {
   const queryClient = useQueryClient();
-  const { catalogSlug } = useParams<{ catalogSlug: string; }>();
+  const { catalogSlug, partnerSlug } = useParams<{ catalogSlug: string; partnerSlug: string }>();
 
   return useMutation({
     mutationFn: ({ catalogId, courseIds }: {
@@ -243,6 +247,9 @@ export const useAddCoursesToCatalog = () => {
       });
       queryClient.invalidateQueries({
         queryKey: catalogListQueryKey.catalogLists(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: partnerQueryKey.partnerDetails(partnerSlug),
       });
     },
     onSettled: (_, __, variables) => {
