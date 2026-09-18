@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react';
+import { screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { renderWrapper } from '@src/setupTest';
@@ -22,7 +22,13 @@ describe('InviteLearnersModal', () => {
     });
   });
 
-  it('renders modal when isOpen is true', () => {
+  // Drain async effects from react-hook-form and Dropzone after each test to
+  // prevent "not wrapped in act(...)" warnings from firing during cleanup.
+  afterEach(async () => {
+    await act(async () => {});
+  });
+
+  it('renders modal when isOpen is true', async () => {
     renderWrapper(
       <InviteLearnersModal
         isOpen
@@ -32,7 +38,9 @@ describe('InviteLearnersModal', () => {
       />,
     );
 
-    expect(screen.getByText(/invite learners/i)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(/invite learners/i)).toBeInTheDocument();
+    });
   });
 
   it('does not render modal when isOpen is false', () => {
@@ -48,7 +56,7 @@ describe('InviteLearnersModal', () => {
     expect(screen.queryByText(/invite learners/i)).not.toBeInTheDocument();
   });
 
-  it('displays manual invite section', () => {
+  it('displays manual invite section', async () => {
     renderWrapper(
       <InviteLearnersModal
         isOpen
@@ -58,11 +66,13 @@ describe('InviteLearnersModal', () => {
       />,
     );
 
-    expect(screen.getByText(/manually/i)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(/manually/i)).toBeInTheDocument();
+    });
     expect(screen.getByPlaceholderText(/enter email/i)).toBeInTheDocument();
   });
 
-  it('displays bulk upload section', () => {
+  it('displays bulk upload section', async () => {
     renderWrapper(
       <InviteLearnersModal
         isOpen
@@ -72,7 +82,9 @@ describe('InviteLearnersModal', () => {
       />,
     );
 
-    expect(screen.getByText(/bulk/i)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(/bulk/i)).toBeInTheDocument();
+    });
   });
 
   it('allows entering email addresses manually', async () => {
@@ -237,7 +249,7 @@ describe('InviteLearnersModal', () => {
     expect(newEmailInput).toHaveValue('');
   });
 
-  it('disables submit button when form is invalid', () => {
+  it('disables submit button when form is invalid', async () => {
     renderWrapper(
       <InviteLearnersModal
         isOpen
@@ -247,11 +259,16 @@ describe('InviteLearnersModal', () => {
       />,
     );
 
+    // Assert synchronously: the button must be disabled before any async
+    // react-hook-form subscription fires to recalculate isValid.
     const submitButton = screen.getByRole('button', { name: /send invitations/i });
     expect(submitButton).toBeDisabled();
+
+    // Drain any pending async effects so that component state settles before cleanup.
+    await act(async () => {});
   });
 
-  it('disables submit button when mutation is pending', () => {
+  it('disables submit button when mutation is pending', async () => {
     mockUseInviteLearners.mockReturnValue({
       mutate: jest.fn(),
       isPending: true,
@@ -268,6 +285,8 @@ describe('InviteLearnersModal', () => {
 
     const submitButton = screen.getByRole('button', { name: /send invitations/i });
     expect(submitButton).toBeDisabled();
+
+    await act(async () => {});
   });
 
   it('shows validation error for invalid email format', async () => {

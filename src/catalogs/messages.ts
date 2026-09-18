@@ -28,8 +28,23 @@ const messages = defineMessages({
   },
   'corporate.catalog.header.info.seats': {
     id: 'corporate.catalog.table.info.seats',
-    defaultMessage: 'Available Seats',
+    defaultMessage: 'Seats',
     description: 'Info for the number of available seats in the catalog',
+  },
+  'corporate.catalog.header.info.seats.accepted': {
+    id: 'corporate.catalog.table.info.seats.accepted',
+    defaultMessage: 'accepted',
+    description: 'Label for accepted seats count in the seat breakdown',
+  },
+  'corporate.catalog.header.info.seats.pending': {
+    id: 'corporate.catalog.table.info.seats.pending',
+    defaultMessage: 'pending',
+    description: 'Label for pending seats count in the seat breakdown',
+  },
+  'corporate.catalog.header.info.seats.free': {
+    id: 'corporate.catalog.table.info.seats.free',
+    defaultMessage: 'free',
+    description: 'Label for free seats count in the seat breakdown',
   },
   'corporate.catalog.header.info.learners': {
     id: 'corporate.catalog.header.info.learners',
@@ -50,6 +65,11 @@ const messages = defineMessages({
     id: 'corporate.courses.page.tab.enrollments',
     defaultMessage: 'Enrollments',
     description: 'Catalog detail page tab title for enrollments',
+  },
+  'corporate.catalog.detail.page.tab.invitations': {
+    id: 'corporate.courses.page.tab.invitations',
+    defaultMessage: 'Invitations',
+    description: 'Catalog detail page tab title for invitations',
   },
   'corporate.courses.page.tab.analytics': {
     id: 'corporate.courses.page.tab.analytics',
