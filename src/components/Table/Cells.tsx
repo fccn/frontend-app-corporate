@@ -67,3 +67,22 @@ export const LearnerStatus = ({ row }) => {
     </Badge>
   );
 };
+
+const INVITATION_STATUS_VARIANTS: Record<string, string> = {
+  pending: 'warning',
+  accepted: 'success',
+  declined: 'danger',
+  removed: 'danger',
+  cancelled: 'light',
+};
+
+export const InvitationStatus = ({ row }) => {
+  const intl = useIntl();
+  const status: string = row.original.status || 'pending';
+  const variant = INVITATION_STATUS_VARIANTS[status] || 'secondary';
+  return (
+    <Badge variant={variant}>
+      {intl.formatMessage(messages[`table.invitation.status.${status}`] || messages['table.invitation.status.pending'])}
+    </Badge>
+  );
+};

@@ -51,6 +51,12 @@ mergeConfig({
   PUBLIC_PATH: process.env.PUBLIC_PATH || '/',
   LMS_BASE_URL: process.env.LMS_BASE_URL || 'http://localhost:8000',
   BASE_URL: process.env.LMS_BASE_URL || 'http://apps.localhost:8080',
+  // Required by @edx/frontend-platform Auth service (silences LOGIN_URL warnings)
+  LOGIN_URL: process.env.LOGIN_URL || 'http://localhost:8000/login',
+  LOGOUT_URL: process.env.LOGOUT_URL || 'http://localhost:8000/logout',
+  REFRESH_ACCESS_TOKEN_ENDPOINT: process.env.REFRESH_ACCESS_TOKEN_ENDPOINT || 'http://localhost:8000/login_refresh',
+  ACCESS_TOKEN_COOKIE_NAME: process.env.ACCESS_TOKEN_COOKIE_NAME || 'edx-jwt-cookie-header-payload',
+  CSRF_TOKEN_API_PATH: process.env.CSRF_TOKEN_API_PATH || '/csrf/api/v1/token',
 }, 'CorporateManagerConfig');
 
 // Mock ResizeObserver
