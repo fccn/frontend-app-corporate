@@ -23,6 +23,7 @@ jest.mock('@src/catalogs/data/hooks', () => ({
       alternativeLink: 'https://example.com/link',
       userLimit: 100,
       activeLearners: 50,
+      pendingInvitations: 12,
       totalLearners: 75,
       courses: 10,
       enrollments: 200,
@@ -155,8 +156,9 @@ describe('CatalogDetailPage', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Test Catalog')).toBeInTheDocument();
-      expect(screen.getByText('Seats')).toBeInTheDocument();
-      expect(screen.getByText('50 accepted · 0 pending · 50 free / 100')).toBeInTheDocument();
+      expect(screen.getByText('Available Seats')).toBeInTheDocument();
+      // Pending invitations do not reserve seats, so 12 pending leave all 50 free.
+      expect(screen.getByText('50 / 100')).toBeInTheDocument();
       expect(screen.getByText('Learners', { selector: 'span' })).toBeInTheDocument();
       expect(screen.getByText('75')).toBeInTheDocument();
     });

@@ -10,6 +10,7 @@ import { IconButton, Tab, Tabs } from '@openedx/paragon';
 import { Settings } from '@openedx/paragon/icons';
 import { paths } from '@src/constants';
 import AppLayout from '@src/components/AppLayout';
+import { SeatsInfo } from './components';
 import { CatalogSettingsModal } from './catalog-settings';
 import { LearnerList } from './learner-list';
 import { InvitationList } from './invitation-list';
@@ -49,7 +50,13 @@ const CatalogDetailPage = () => {
               info={[
                 {
                   title: intl.formatMessage(messages['corporate.catalog.header.info.seats']),
-                  value: `${catalogDetails.activeLearners} ${intl.formatMessage(messages['corporate.catalog.header.info.seats.accepted'])} · ${catalogDetails.pendingInvitations ?? 0} ${intl.formatMessage(messages['corporate.catalog.header.info.seats.pending'])} · ${Math.max(0, catalogDetails.userLimit - catalogDetails.activeLearners - (catalogDetails.pendingInvitations ?? 0))} ${intl.formatMessage(messages['corporate.catalog.header.info.seats.free'])} / ${catalogDetails.userLimit}`,
+                  value: (
+                    <SeatsInfo
+                      userLimit={catalogDetails.userLimit}
+                      activeLearners={catalogDetails.activeLearners}
+                      pendingInvitations={catalogDetails.pendingInvitations}
+                    />
+                  ),
                 },
                 { title: intl.formatMessage(messages['corporate.catalog.header.info.learners']), value: catalogDetails.totalLearners },
                 { title: intl.formatMessage(messages['corporate.catalog.header.info.courses']), value: catalogDetails.courses },

@@ -24,11 +24,6 @@ jest.mock('@src/catalogs/invite-learners', () => ({
 
 jest.mock('../data/hooks', () => ({
   useCatalogLearners: jest.fn(),
-  useRemoveLearners: jest.fn(() => ({
-    mutate: jest.fn(),
-    isLoading: false,
-  })),
-  useBulkInviteTaskStatus: jest.fn(() => ({ data: undefined })),
 }));
 
 const mockUseNavigate = appHooks.useNavigate as jest.Mock;
