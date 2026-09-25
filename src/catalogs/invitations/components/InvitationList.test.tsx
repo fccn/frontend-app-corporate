@@ -44,6 +44,8 @@ const mockPendingInvitation = {
   username: null,
   fullName: null,
   invitedAt: '2024-01-01T10:00:00Z',
+  resendCount: 0,
+  lastResentAt: null,
   acceptedAt: null,
   declinedAt: null,
   cancelledAt: null,
@@ -60,6 +62,8 @@ const mockAcceptedInvitation = {
   username: 'accepted_user',
   fullName: 'Accepted User',
   invitedAt: '2024-01-01T10:00:00Z',
+  resendCount: 0,
+  lastResentAt: null,
   acceptedAt: '2024-01-05T10:00:00Z',
   declinedAt: null,
   cancelledAt: null,
@@ -158,6 +162,34 @@ describe('InvitationList', () => {
     expect(mockUseCatalogInvitations).toHaveBeenCalledWith(
       expect.objectContaining({ status: 10 }),
     );
+  });
+
+  it('shows the resend history under the original invitation date', async () => {
+    const threeDaysAgo = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString();
+    mockUseCatalogInvitations.mockReturnValue({
+      data: {
+        count: 1,
+        numPages: 1,
+        results: [{ ...mockPendingInvitation, resendCount: 2, lastResentAt: threeDaysAgo }],
+      },
+      isLoading: false,
+    });
+    renderInvitationList();
+
+    const cell = (await screen.findByText('resent 2× · 3 days ago')).parentElement as HTMLElement;
+    expect(cell).toHaveTextContent('2024-01-01 10:00');
+    expect(screen.getByText('resent 2× · 3 days ago')).toHaveClass('x-small', 'text-muted');
+  });
+
+  it('shows only the invitation date when the invitation was never resent', async () => {
+    mockUseCatalogInvitations.mockReturnValue({
+      data: { count: 1, numPages: 1, results: [mockPendingInvitation] },
+      isLoading: false,
+    });
+    renderInvitationList();
+
+    expect(await screen.findByText('2024-01-01 10:00')).toBeInTheDocument();
+    expect(screen.queryByText(/^resent /)).not.toBeInTheDocument();
   });
 
   it('renders empty state', () => {

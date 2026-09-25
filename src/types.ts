@@ -123,6 +123,8 @@ export interface CatalogInvitation {
   username: string | null;
   fullName: string | null;
   invitedAt: string;
+  resendCount: number;
+  lastResentAt: string | null;
   acceptedAt: string | null;
   declinedAt: string | null;
   cancelledAt: string | null;

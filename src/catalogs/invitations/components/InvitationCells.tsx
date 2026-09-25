@@ -4,6 +4,7 @@ import { Badge, Form, IconButtonWithTooltip } from '@openedx/paragon';
 import { Cancel, Replay } from '@openedx/paragon/icons';
 
 import { CatalogInvitation, CellValue } from '@src/types';
+import { dateFormat } from '@src/catalogs/utils';
 import messages from '../messages';
 
 type InvitationStatusKey = CatalogInvitation['status'];
@@ -86,6 +87,43 @@ export const InvitationNameCell = ({ row }: CellValue<CatalogInvitation>) => {
       <span className="d-block truncate-1-line">{username}</span>
       {fullName && fullName !== username && (
         <span className="small text-muted truncate-1-line">{fullName}</span>
+      )}
+    </div>
+  );
+};
+
+const RELATIVE_TIME_UNITS: [Intl.RelativeTimeFormatUnit, number][] = [
+  ['year', 365 * 24 * 60 * 60],
+  ['month', 30 * 24 * 60 * 60],
+  ['day', 24 * 60 * 60],
+  ['hour', 60 * 60],
+  ['minute', 60],
+];
+
+/** Largest whole unit for a past moment, as `formatRelativeTime` expects it (negative = ago). */
+const relativeTimeParts = (date: string): [number, Intl.RelativeTimeFormatUnit] => {
+  const seconds = Math.round((new Date(date).getTime() - Date.now()) / 1000);
+  const match = RELATIVE_TIME_UNITS.find(([, size]) => Math.abs(seconds) >= size);
+  return match ? [Math.round(seconds / match[1]), match[0]] : [seconds, 'second'];
+};
+
+/**
+ * The original invite date, with the resend history under it. invitedAt is never
+ * moved by a resend, so the age of a pending invitation stays readable.
+ */
+export const InvitationInvitedAtCell = ({ row }: CellValue<CatalogInvitation>) => {
+  const { formatMessage, formatRelativeTime } = useIntl();
+  const { invitedAt, resendCount, lastResentAt } = row.original;
+  return (
+    <div>
+      <span className="d-block">{dateFormat(invitedAt)}</span>
+      {resendCount > 0 && lastResentAt && (
+        <span className="x-small text-muted">
+          {formatMessage(messages['corporate.catalog.invitations.table.resent'], {
+            count: resendCount,
+            when: formatRelativeTime(...relativeTimeParts(lastResentAt), { numeric: 'auto' }),
+          })}
+        </span>
       )}
     </div>
   );

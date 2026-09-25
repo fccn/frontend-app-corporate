@@ -101,6 +101,11 @@ const messages = defineMessages({
     defaultMessage: 'Invited At',
     description: 'Header for the invited at column',
   },
+  'corporate.catalog.invitations.table.resent': {
+    id: 'corporate.catalog.invitations.table.resent',
+    defaultMessage: 'resent {count, number}× · {when}',
+    description: 'Shown under the invitation date: how many times the invitation was re-sent and how long ago the last re-send was, e.g. "resent 2× · 3 days ago"',
+  },
   'corporate.catalog.invitations.table.header.accepted.at': {
     id: 'corporate.catalog.invitations.table.header.accepted.at',
     defaultMessage: 'Accepted At',
