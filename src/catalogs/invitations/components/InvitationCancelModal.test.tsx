@@ -19,6 +19,8 @@ const mockInvitation = {
   username: null,
   fullName: null,
   invitedAt: '2024-01-01T10:00:00Z',
+  resendCount: 0,
+  lastResentAt: null,
   acceptedAt: null,
   declinedAt: null,
   cancelledAt: null,
