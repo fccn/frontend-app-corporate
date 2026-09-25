@@ -10,8 +10,10 @@ import { IconButton, Tab, Tabs } from '@openedx/paragon';
 import { Settings } from '@openedx/paragon/icons';
 import { paths } from '@src/constants';
 import AppLayout from '@src/components/AppLayout';
+import { SeatsInfo } from './components';
 import { CatalogSettingsModal } from './catalog-settings';
 import { LearnerList } from './learner-list';
+import { InvitationList } from './invitations';
 import { EnrollmentList } from './enrollment-list';
 import { CourseList } from './course-list';
 
@@ -46,7 +48,16 @@ const CatalogDetailPage = () => {
                 copyableDescription: true,
               }}
               info={[
-                { title: intl.formatMessage(messages['corporate.catalog.header.info.seats']), value: `${catalogDetails.userLimit - catalogDetails.activeLearners} / ${catalogDetails.userLimit}` },
+                {
+                  title: intl.formatMessage(messages['corporate.catalog.header.info.seats']),
+                  value: (
+                    <SeatsInfo
+                      userLimit={catalogDetails.userLimit}
+                      activeLearners={catalogDetails.activeLearners}
+                      pendingInvitations={catalogDetails.pendingInvitations}
+                    />
+                  ),
+                },
                 { title: intl.formatMessage(messages['corporate.catalog.header.info.learners']), value: catalogDetails.totalLearners },
                 { title: intl.formatMessage(messages['corporate.catalog.header.info.courses']), value: catalogDetails.courses },
                 { title: intl.formatMessage(messages['corporate.catalog.header.info.enrollments']), value: catalogDetails.enrollments },
@@ -66,6 +77,9 @@ const CatalogDetailPage = () => {
               </Tab>
               <Tab eventKey="learners" title={intl.formatMessage(messages['corporate.catalog.detail.page.tab.learners'])} alt="Learners Tab">
                 <LearnerList catalogId={catalogDetails.id} catalogName={catalogDetails.name} />
+              </Tab>
+              <Tab eventKey="invitations" title={intl.formatMessage(messages['corporate.catalog.detail.page.tab.invitations'])} alt="Invitations Tab">
+                <InvitationList catalogId={catalogDetails.id} />
               </Tab>
               <Tab eventKey="enrollments" title={intl.formatMessage(messages['corporate.catalog.detail.page.tab.enrollments'])} alt="Enrollments Tab">
                 <EnrollmentList catalogId={catalogDetails.id} />

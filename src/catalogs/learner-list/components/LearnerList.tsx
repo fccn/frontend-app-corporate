@@ -10,7 +10,7 @@ import {
 } from '@src/components/Table/';
 import { usePagination, useTableSortFilter } from '@src/hooks';
 
-import { InviteLearnerAction } from '@src/catalogs/invite-learners';
+import { InviteAction } from '@src/catalogs/invitations';
 import { DownloadReportButton } from '@src/catalogs/components';
 import { dateFormat } from '@src/catalogs/utils';
 import { useCatalogLearners } from '../data/hooks';
@@ -29,7 +29,7 @@ const TableAction = ({
   catalogId: string;
 }) => (
   <>
-    <InviteLearnerAction catalogId={catalogId} />
+    <InviteAction catalogId={catalogId} />
     <DownloadReportButton {...LEARNERS_REPORT_CONFIG(catalogId!)} />
   </>
 );

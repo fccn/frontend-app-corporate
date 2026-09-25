@@ -5,15 +5,16 @@ import { PersonAddAlt } from '@openedx/paragon/icons';
 
 import { CELERY_STATUS } from '@src/constants';
 import { useNotification } from '@src/notification';
-import { useBulkInviteTaskStatus } from '../data/hooks';
+import { useBulkInviteTaskStatus, useInvalidateInvitations } from '../data/hooks';
 import { groupInviteErrors } from '../utils';
 import InviteLearnersModal from './InviteLearnersModal';
 
 import messages from '../messages';
 
-const InviteLearnerAction = ({ catalogId }: { catalogId: string }) => {
+const InviteAction = ({ catalogId }: { catalogId: string }) => {
   const intl = useIntl();
   const { showNotification } = useNotification();
+  const invalidateInvitations = useInvalidateInvitations();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [inviteTaskId, setInviteTaskId] = useState<string | null>(null);
@@ -46,6 +47,7 @@ const InviteLearnerAction = ({ catalogId }: { catalogId: string }) => {
           ),
           'success',
         );
+        invalidateInvitations();
       }
 
       if (duplicateErrors.length > 0) {
@@ -74,7 +76,7 @@ const InviteLearnerAction = ({ catalogId }: { catalogId: string }) => {
 
       setInviteTaskId(null);
     }
-  }, [data, intl, showNotification]);
+  }, [data, intl, showNotification, invalidateInvitations]);
 
   return (
     <>
@@ -95,4 +97,4 @@ const InviteLearnerAction = ({ catalogId }: { catalogId: string }) => {
   );
 };
 
-export default InviteLearnerAction;
+export default InviteAction;

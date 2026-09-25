@@ -23,6 +23,7 @@ jest.mock('@src/catalogs/data/hooks', () => ({
       alternativeLink: 'https://example.com/link',
       userLimit: 100,
       activeLearners: 50,
+      pendingInvitations: 12,
       totalLearners: 75,
       courses: 10,
       enrollments: 200,
@@ -86,12 +87,19 @@ jest.mock('@src/catalogs/enrollment-list/data/hooks', () => ({
   })),
 }));
 
-jest.mock('@src/catalogs/invite-learners/data/hooks', () => ({
+jest.mock('@src/catalogs/invitations/data/hooks', () => ({
   useBulkInviteTaskStatus: jest.fn(() => ({ data: undefined })),
+  useInvalidateInvitations: jest.fn(() => jest.fn()),
   useInviteLearners: jest.fn(() => ({
     mutate: jest.fn(),
     isLoading: false,
   })),
+  useCatalogInvitations: jest.fn(() => ({
+    data: { results: [], count: 0, numPages: 1 },
+    isLoading: false,
+  })),
+  useResendInvitation: jest.fn(() => ({ mutate: jest.fn(), isPending: false })),
+  useCancelInvitation: jest.fn(() => ({ mutate: jest.fn(), isPending: false })),
 }));
 
 jest.mock('@src/notification', () => ({
@@ -146,23 +154,25 @@ describe('CatalogDetailPage', () => {
     await waitFor(() => {
       expect(screen.getByText('Test Catalog')).toBeInTheDocument();
       expect(screen.getByText('Available Seats')).toBeInTheDocument();
+      // Pending invitations do not reserve seats, so 12 pending leave all 50 free.
       expect(screen.getByText('50 / 100')).toBeInTheDocument();
       expect(screen.getByText('Learners', { selector: 'span' })).toBeInTheDocument();
       expect(screen.getByText('75')).toBeInTheDocument();
     });
   });
 
-  it('renders tabs for courses, learners, and enrollments', async () => {
+  it('renders tabs for courses, learners, enrollments, and invitations', async () => {
     renderCatalogDetailPage();
 
     await waitFor(() => {
       const tabElements = screen.getAllByRole('tab');
       // Filter out the "More..." dropdown tab
       const contentTabs = tabElements.filter(tab => !tab.textContent?.includes('More...'));
-      expect(contentTabs).toHaveLength(3);
+      expect(contentTabs).toHaveLength(4);
       expect(contentTabs[0]).toHaveTextContent('Courses');
       expect(contentTabs[1]).toHaveTextContent('Learners');
-      expect(contentTabs[2]).toHaveTextContent('Enrollments');
+      expect(contentTabs[2]).toHaveTextContent('Invitations');
+      expect(contentTabs[3]).toHaveTextContent('Enrollments');
     });
   });
 
