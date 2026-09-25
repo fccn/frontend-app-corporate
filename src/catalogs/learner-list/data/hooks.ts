@@ -4,7 +4,7 @@ import { queryKey as catalogsQueryKey } from '@src/catalogs/data/hooks';
 import { useParams } from 'wouter';
 import { deleteLearnersFromCatalog, getCatalogsLearners } from './api';
 
-const queryKey = {
+export const queryKey = {
   all: [appId, 'catalogs'],
   catalogLearners: () => [...queryKey.all, 'learners'],
   catalogLearnersList: (

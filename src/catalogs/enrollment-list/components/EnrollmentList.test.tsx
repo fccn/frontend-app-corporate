@@ -14,19 +14,13 @@ jest.mock('@src/catalogs/components', () => ({
   DownloadReportButton: jest.fn(() => <button type="button">Download Report</button>),
 }));
 
-// EnrollmentList imports InviteLearnerAction from invite-learners, not from catalogs/components.
-// Mock the correct module so that the real hook (useBulkInviteTaskStatus) is never invoked.
-jest.mock('@src/catalogs/invite-learners', () => ({
-  InviteLearnerAction: jest.fn(() => <button type="button">Invite Learner</button>),
+// Mock InviteAction so its bulk-invite polling hook never runs in these tests.
+jest.mock('@src/catalogs/invitations', () => ({
+  InviteAction: jest.fn(() => <button type="button">Invite Learner</button>),
 }));
 
 jest.mock('../data/hooks', () => ({
   useCatalogEnrollments: jest.fn(),
-  useInviteLearners: jest.fn(() => ({
-    mutate: jest.fn(),
-    isLoading: false,
-  })),
-  useBulkInviteTaskStatus: jest.fn(() => ({ data: undefined })),
 }));
 
 const mockUseNavigate = require('@src/hooks').useNavigate;

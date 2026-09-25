@@ -6,7 +6,7 @@ import {
   TableFooter, FilterStatus, SearchFilter, LearnerName, LearnerEmail, LearnerStatus,
 } from '@src/components/Table/';
 import { usePagination, useTableSortFilter } from '@src/hooks';
-import { InviteLearnerAction } from '@src/catalogs/invite-learners';
+import { InviteAction } from '@src/catalogs/invitations';
 
 import { DownloadReportButton } from '@src/catalogs/components';
 import { useCatalogEnrollments } from '../data/hooks';
@@ -83,7 +83,7 @@ const EnrollmentsList = ({ catalogId }) => {
       pageCount={data?.numPages || 0}
       tableActions={[
         <DownloadReportButton {...ENROLLMENTS_REPORT_CONFIG(catalogId)} />,
-        <InviteLearnerAction catalogId={catalogId} />,
+        <InviteAction catalogId={catalogId} />,
       ]}
       itemCount={data?.count || 0}
       data={data?.results || []}

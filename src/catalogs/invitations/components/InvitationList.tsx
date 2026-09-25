@@ -1,19 +1,19 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import {
-  DataTable, useToggle, CheckboxFilter, IconButton, OverlayTrigger, Tooltip,
-} from '@openedx/paragon';
-import { Email, Close } from '@openedx/paragon/icons';
+import { DataTable, useToggle } from '@openedx/paragon';
 
-import { CatalogInvitation, CellValue } from '@src/types';
-import {
-  FilterStatus, InvitationStatus, SearchFilter, TableFooter,
-} from '@src/components/Table/';
+import { CatalogInvitation } from '@src/types';
+import { FilterStatus, SearchFilter, TableFooter } from '@src/components/Table/';
 import { usePagination, useTableSortFilter } from '@src/hooks';
+import { useNotification } from '@src/notification';
 import { DownloadReportButton } from '@src/catalogs/components';
 import { dateFormat } from '@src/catalogs/utils';
 import { useCatalogInvitations, useResendInvitation } from '../data/hooks';
+import InviteAction from './InviteAction';
 import InvitationCancelModal from './InvitationCancelModal';
+import {
+  INVITATION_STATUS, InvitationActionCell, InvitationNameCell, InvitationStatus, InvitationStatusFilter,
+} from './InvitationCells';
 import messages from '../messages';
 
 const INVITATIONS_REPORT_CONFIG = (catalogId: string) => ({
@@ -27,68 +27,9 @@ const filterMappings = {
   status: 'status',
 };
 
-// Paragon's IconButton props extend HTMLAttributes rather than ButtonHTMLAttributes, so
-// `disabled` is missing from its types even though it is forwarded to the <button>.
-const DisableableIconButton = IconButton as React.ForwardRefExoticComponent<
-React.ComponentProps<typeof IconButton> & { disabled?: boolean }
->;
-
-type ActionCellProps = {
-  row: { original: CatalogInvitation };
-  column: {
-    onResend: (inv: CatalogInvitation) => void;
-    onCancel: (inv: CatalogInvitation) => void;
-  };
-};
-
-const InvitationActionCell = ({ row, column }: ActionCellProps) => {
-  const { formatMessage } = useIntl();
-  const isPending = row.original.status === 'pending';
-  return (
-    <>
-      <OverlayTrigger
-        overlay={<Tooltip id={`resend-${row.original.id}`}>{formatMessage(messages['corporate.catalog.invitations.action.resend'])}</Tooltip>}
-      >
-        <DisableableIconButton
-          src={Email}
-          alt={formatMessage(messages['corporate.catalog.invitations.action.resend'])}
-          disabled={!isPending}
-          onClick={isPending ? () => column.onResend(row.original) : undefined}
-        />
-      </OverlayTrigger>
-      <OverlayTrigger
-        overlay={<Tooltip id={`cancel-${row.original.id}`}>{formatMessage(messages['corporate.catalog.invitations.action.cancel'])}</Tooltip>}
-      >
-        <DisableableIconButton
-          src={Close}
-          alt={formatMessage(messages['corporate.catalog.invitations.action.cancel'])}
-          variant="danger"
-          disabled={!isPending}
-          onClick={isPending ? () => column.onCancel(row.original) : undefined}
-        />
-      </OverlayTrigger>
-    </>
-  );
-};
-
-const InvitationNameCell = ({ row }: CellValue<CatalogInvitation>) => {
-  const { formatMessage } = useIntl();
-  const { username, fullName, isRegistered } = row.original;
-  if (!isRegistered) {
-    return <span className="text-muted">{formatMessage(messages['corporate.catalog.invitations.not.registered'])}</span>;
-  }
-  return (
-    <div>
-      <span className="d-block truncate-1-line">{username}</span>
-      {fullName && fullName !== username && (
-        <span className="small text-muted truncate-1-line">{fullName}</span>
-      )}
-    </div>
-  );
-};
-
 const InvitationList = ({ catalogId }: { catalogId: string }) => {
   const intl = useIntl();
+  const { showNotification } = useNotification();
 
   const [isCancelModalOpen, openCancelModal, closeCancelModal] = useToggle(false);
   const [selectedInvitation, setSelectedInvitation] = useState<CatalogInvitation | null>(null);
@@ -112,13 +53,28 @@ const InvitationList = ({ catalogId }: { catalogId: string }) => {
     pageSize,
     ordering,
     search: searchParams.search,
-    status: searchParams.status,
+    status: searchParams.status === undefined ? undefined : Number(searchParams.status),
   });
 
   const resendMutation = useResendInvitation();
+  // `isPending` only disables the button after a re-render, so a fast double click
+  // would still reach mutate twice and send two emails; the ref blocks it synchronously.
+  const isResendingRef = useRef(false);
 
   const handleResend = (invitation: CatalogInvitation) => {
-    resendMutation.mutate({ catalogId, invitationId: invitation.id });
+    if (isResendingRef.current) { return; }
+    isResendingRef.current = true;
+    resendMutation.mutate({ catalogId, invitationId: invitation.id }, {
+      onSettled: () => { isResendingRef.current = false; },
+      onSuccess: () => showNotification(
+        intl.formatMessage(messages['corporate.catalog.invitations.resend.success']),
+        'success',
+      ),
+      onError: () => showNotification(
+        intl.formatMessage(messages['corporate.catalog.invitations.resend.error']),
+        'error',
+      ),
+    });
   };
 
   const handleCancel = (invitation: CatalogInvitation) => {
@@ -138,7 +94,7 @@ const InvitationList = ({ catalogId }: { catalogId: string }) => {
         initialState={{
           pageSize,
           pageIndex,
-          filters: [{ id: 'status', value: ['10'] }],
+          filters: [{ id: 'status', value: INVITATION_STATUS.pending.code }],
         }}
         manualPagination
         manualSortBy
@@ -147,6 +103,7 @@ const InvitationList = ({ catalogId }: { catalogId: string }) => {
         pageCount={data?.numPages || 0}
         tableActions={[
           <DownloadReportButton {...INVITATIONS_REPORT_CONFIG(catalogId)} />,
+          <InviteAction catalogId={catalogId} />,
         ]}
         additionalColumns={[
           {
@@ -154,6 +111,7 @@ const InvitationList = ({ catalogId }: { catalogId: string }) => {
             Header: intl.formatMessage(messages['corporate.catalog.table.header.action']),
             onResend: handleResend,
             onCancel: handleCancel,
+            isResending: resendMutation.isPending,
             Cell: InvitationActionCell,
           },
         ]}
@@ -177,15 +135,7 @@ const InvitationList = ({ catalogId }: { catalogId: string }) => {
             accessor: 'status',
             disableFilters: false,
             Cell: InvitationStatus,
-            Filter: CheckboxFilter,
-            filter: 'includesValue',
-            filterChoices: [
-              { value: '10', name: intl.formatMessage(messages['corporate.catalog.invitations.filter.pending']) },
-              { value: '20', name: intl.formatMessage(messages['corporate.catalog.invitations.filter.accepted']) },
-              { value: '30', name: intl.formatMessage(messages['corporate.catalog.invitations.filter.declined']) },
-              { value: '40', name: intl.formatMessage(messages['corporate.catalog.invitations.filter.removed']) },
-              { value: '50', name: intl.formatMessage(messages['corporate.catalog.invitations.filter.cancelled']) },
-            ],
+            Filter: InvitationStatusFilter,
           },
           {
             Header: intl.formatMessage(messages['corporate.catalog.invitations.table.header.invited.at']),

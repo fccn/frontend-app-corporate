@@ -2,20 +2,19 @@ import { useState, useEffect, useRef } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Button } from '@openedx/paragon';
 import { PersonAddAlt } from '@openedx/paragon/icons';
-import { useQueryClient } from '@tanstack/react-query';
 
-import { appId, CELERY_STATUS } from '@src/constants';
+import { CELERY_STATUS } from '@src/constants';
 import { useNotification } from '@src/notification';
-import { useBulkInviteTaskStatus } from '../data/hooks';
+import { useBulkInviteTaskStatus, useInvalidateInvitations } from '../data/hooks';
 import { groupInviteErrors } from '../utils';
 import InviteLearnersModal from './InviteLearnersModal';
 
 import messages from '../messages';
 
-const InviteLearnerAction = ({ catalogId }: { catalogId: string }) => {
+const InviteAction = ({ catalogId }: { catalogId: string }) => {
   const intl = useIntl();
   const { showNotification } = useNotification();
-  const queryClient = useQueryClient();
+  const invalidateInvitations = useInvalidateInvitations();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [inviteTaskId, setInviteTaskId] = useState<string | null>(null);
@@ -48,7 +47,7 @@ const InviteLearnerAction = ({ catalogId }: { catalogId: string }) => {
           ),
           'success',
         );
-        queryClient.invalidateQueries({ queryKey: [appId, 'catalogs', 'invitations'] });
+        invalidateInvitations();
       }
 
       if (duplicateErrors.length > 0) {
@@ -77,7 +76,7 @@ const InviteLearnerAction = ({ catalogId }: { catalogId: string }) => {
 
       setInviteTaskId(null);
     }
-  }, [data, intl, showNotification, queryClient]);
+  }, [data, intl, showNotification, invalidateInvitations]);
 
   return (
     <>
@@ -98,4 +97,4 @@ const InviteLearnerAction = ({ catalogId }: { catalogId: string }) => {
   );
 };
 
-export default InviteLearnerAction;
+export default InviteAction;

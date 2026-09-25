@@ -23,6 +23,7 @@ jest.mock('@src/catalogs/data/hooks', () => ({
       alternativeLink: 'https://example.com/link',
       userLimit: 100,
       activeLearners: 50,
+      pendingInvitations: 12,
       totalLearners: 75,
       courses: 10,
       enrollments: 200,
@@ -86,22 +87,19 @@ jest.mock('@src/catalogs/enrollment-list/data/hooks', () => ({
   })),
 }));
 
-jest.mock('@src/catalogs/invite-learners/data/hooks', () => ({
+jest.mock('@src/catalogs/invitations/data/hooks', () => ({
   useBulkInviteTaskStatus: jest.fn(() => ({ data: undefined })),
+  useInvalidateInvitations: jest.fn(() => jest.fn()),
   useInviteLearners: jest.fn(() => ({
     mutate: jest.fn(),
     isLoading: false,
   })),
-}));
-
-jest.mock('@src/catalogs/invitation-list/data/hooks', () => ({
   useCatalogInvitations: jest.fn(() => ({
     data: { results: [], count: 0, numPages: 1 },
     isLoading: false,
   })),
   useResendInvitation: jest.fn(() => ({ mutate: jest.fn(), isPending: false })),
   useCancelInvitation: jest.fn(() => ({ mutate: jest.fn(), isPending: false })),
-  queryKey: { catalogInvitations: jest.fn(() => []) },
 }));
 
 jest.mock('@src/notification', () => ({
@@ -155,8 +153,9 @@ describe('CatalogDetailPage', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Test Catalog')).toBeInTheDocument();
-      expect(screen.getByText('Seats')).toBeInTheDocument();
-      expect(screen.getByText('50 accepted · 0 pending · 50 free / 100')).toBeInTheDocument();
+      expect(screen.getByText('Available Seats')).toBeInTheDocument();
+      // Pending invitations do not reserve seats, so 12 pending leave all 50 free.
+      expect(screen.getByText('50 / 100')).toBeInTheDocument();
       expect(screen.getByText('Learners', { selector: 'span' })).toBeInTheDocument();
       expect(screen.getByText('75')).toBeInTheDocument();
     });
