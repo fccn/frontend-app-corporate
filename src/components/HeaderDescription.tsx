@@ -17,7 +17,8 @@ interface HeaderDescriptionProps {
   },
   info: {
     title: string;
-    value: string | number;
+    // Widened from `string | number` so an entry can render a richer value (see SeatsInfo).
+    value: ReactNode;
   }[],
   children?: ReactNode;
 }

@@ -76,6 +76,7 @@ export interface CatalogStats {
   courses: number;
   totalLearners: number;
   activeLearners: number;
+  pendingInvitations: number;
 }
 
 export interface Catalog extends CatalogBase, CatalogStats {
@@ -111,6 +112,22 @@ export interface Invitation {
   acceptedAt: string | null;
   declinedAt: string | null;
   status: string;
+}
+
+export interface CatalogInvitation {
+  id: number;
+  inviteEmail: string;
+  status: 'pending' | 'accepted' | 'declined' | 'removed' | 'cancelled';
+  statusDisplay: string;
+  isRegistered: boolean;
+  username: string | null;
+  fullName: string | null;
+  invitedAt: string;
+  acceptedAt: string | null;
+  declinedAt: string | null;
+  cancelledAt: string | null;
+  removedAt: string | null;
+  invitedBy: string | null;
 }
 
 export interface InvitationError {
