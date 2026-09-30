@@ -12,7 +12,8 @@ import { useCatalogInvitations, useResendInvitation } from '../data/hooks';
 import InviteAction from './InviteAction';
 import InvitationCancelModal from './InvitationCancelModal';
 import {
-  INVITATION_STATUS, InvitationActionCell, InvitationNameCell, InvitationStatus, InvitationStatusFilter,
+  INVITATION_STATUS, InvitationActionCell, InvitationInvitedAtCell, InvitationNameCell, InvitationStatus,
+  InvitationStatusFilter,
 } from './InvitationCells';
 import messages from '../messages';
 
@@ -141,7 +142,7 @@ const InvitationList = ({ catalogId }: { catalogId: string }) => {
             Header: intl.formatMessage(messages['corporate.catalog.invitations.table.header.invited.at']),
             accessor: 'invitedAt',
             disableSortBy: false,
-            Cell: ({ row }) => dateFormat(row.original.invitedAt),
+            Cell: InvitationInvitedAtCell,
           },
           {
             Header: intl.formatMessage(messages['corporate.catalog.invitations.table.header.accepted.at']),
