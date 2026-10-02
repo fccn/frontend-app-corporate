@@ -1,6 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { appId } from '@src/constants';
 import { queryKey as catalogsQueryKey } from '@src/catalogs/data/hooks';
+import { queryKey as enrollmentsQueryKey } from '@src/catalogs/enrollment-list/data/hooks';
+import { catalogListQueryKey } from '@src/catalogs/catalog-list';
+import { queryKey as partnerQueryKey } from '@src/partner/data/hooks';
 import { useParams } from 'wouter';
 import { deleteLearnersFromCatalog, getCatalogsLearners } from './api';
 
@@ -59,7 +62,7 @@ export const useCatalogLearners = ({
  */
 export const useRemoveLearners = () => {
   const queryClient = useQueryClient();
-  const { catalogSlug } = useParams<{ catalogSlug: string }>();
+  const { catalogSlug, partnerSlug } = useParams<{ catalogSlug: string; partnerSlug: string }>();
 
   return useMutation({
     mutationFn: async ({ catalogId, learnerIds }: {
@@ -68,6 +71,9 @@ export const useRemoveLearners = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKey.catalogLearners() });
       queryClient.invalidateQueries({ queryKey: catalogsQueryKey.catalogDetail(catalogSlug) });
+      queryClient.invalidateQueries({ queryKey: catalogListQueryKey.catalogLists() });
+      queryClient.invalidateQueries({ queryKey: enrollmentsQueryKey.catalogEnrollments() });
+      queryClient.invalidateQueries({ queryKey: partnerQueryKey.partnerDetails(partnerSlug) });
     },
   });
 };

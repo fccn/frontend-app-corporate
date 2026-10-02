@@ -120,7 +120,7 @@ describe('CatalogsList', () => {
       expect(await screen.findByText('15')).toBeInTheDocument(); // courses
       expect(await screen.findByText('250')).toBeInTheDocument(); // enrollments
       expect(await screen.findByText('180')).toBeInTheDocument(); // certified
-      expect(await screen.findByText('72')).toBeInTheDocument(); // completion
+      expect(await screen.findByText('72%')).toBeInTheDocument(); // completion
     });
 
     it('renders View action button for each row', () => {

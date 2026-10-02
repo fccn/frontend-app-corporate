@@ -157,7 +157,8 @@ describe('CatalogDetailPage', () => {
       // Pending invitations do not reserve seats, so 12 pending leave all 50 free.
       expect(screen.getByText('50 / 100')).toBeInTheDocument();
       expect(screen.getByText('Learners', { selector: 'span' })).toBeInTheDocument();
-      expect(screen.getByText('75')).toBeInTheDocument();
+      // header shows active learners (mock: activeLearners=50), not totalLearners
+      expect(screen.getByText('50')).toBeInTheDocument();
     });
   });
 
