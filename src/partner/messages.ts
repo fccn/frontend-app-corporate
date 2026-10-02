@@ -26,10 +26,10 @@ const messages = defineMessages({
     defaultMessage: 'Courses',
     description: 'Header for the courses counter column',
   },
-  'corporate.partner.table.header.enrollments': {
-    id: 'corporate.partner.table.header.enrollments',
-    defaultMessage: 'Enrollments',
-    description: 'Header for the number of enrollments column',
+  'corporate.partner.table.header.seats': {
+    id: 'corporate.partner.table.header.seats',
+    defaultMessage: 'Seats',
+    description: 'Header for the number of seats in use column',
   },
   'corporate.partner.table.header.certified': {
     id: 'corporate.partner.table.header.certified',

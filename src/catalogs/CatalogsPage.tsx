@@ -38,7 +38,7 @@ const PartnerCatalogsPage = () => {
             info={[
               { title: intl.formatMessage(messages['corporate.catalog.header.info.name']), value: partnerDetails.catalogs },
               { title: intl.formatMessage(messages['corporate.catalog.header.info.courses']), value: partnerDetails.courses },
-              { title: intl.formatMessage(messages['corporate.catalog.header.info.enrollments']), value: partnerDetails.enrollments },
+              { title: intl.formatMessage(messages['corporate.partner.header.info.seats']), value: partnerDetails.enrollments },
               { title: intl.formatMessage(messages['corporate.catalog.header.info.certified']), value: partnerDetails.certified },
             ]}
           />
