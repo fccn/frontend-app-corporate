@@ -113,6 +113,7 @@ const CatalogsList = ({ partnerId, partnerSlug }: CatalogsListProps) => {
         {
           Header: intl.formatMessage(messages['corporate.catalog.table.header.completion']),
           accessor: 'completionRate',
+          Cell: ({ row }: CatalogCell) => `${row.original.completionRate}%`,
         },
       ]}
     >

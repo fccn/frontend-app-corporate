@@ -16,6 +16,11 @@ const messages = defineMessages({
     defaultMessage: 'Enrollments',
     description: 'Info for the number of enrollments',
   },
+  'corporate.partner.header.info.seats': {
+    id: 'corporate.partner.header.info.seats',
+    defaultMessage: 'Seats',
+    description: 'Info for the number of seats in use across the partner catalogs',
+  },
   'corporate.catalog.header.info.certified': {
     id: 'corporate.catalog.table.info.certified',
     defaultMessage: 'Certified Learners',

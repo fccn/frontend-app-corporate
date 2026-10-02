@@ -105,7 +105,7 @@ const CorpotatePartnerList = () => {
           accessor: 'courses',
         },
         {
-          Header: intl.formatMessage(messages['corporate.partner.table.header.enrollments']),
+          Header: intl.formatMessage(messages['corporate.partner.table.header.seats']),
           accessor: 'enrollments',
         },
         {
